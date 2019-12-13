@@ -1,0 +1,2 @@
+include ':app', ':taptalklive'
+rootProject.name='TapTalkLiveSample'
