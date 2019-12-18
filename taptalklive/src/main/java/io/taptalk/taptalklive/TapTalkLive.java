@@ -12,12 +12,13 @@ import io.taptalk.TapTalk.Model.TAPMessageModel;
 
 public class TapTalkLive {
     public static TapTalkLive tapLive;
+    public static Context context;
 
-    public TapTalkLive(@NonNull final Context appContext,
-                       @NonNull String tapLiveKey,
-                       int clientAppIcon,
-                       String clientAppName) {
-
+    private TapTalkLive(@NonNull final Context appContext,
+                        @NonNull String tapLiveKey,
+                        int clientAppIcon,
+                        String clientAppName) {
+        context = appContext;
         TapTalk.setLoggingEnabled(true);
         TapTalk.init(appContext, BuildConfig.TAPTALK_SDK_APP_KEY_ID,
                 BuildConfig.TAPTALK_SDK_APP_KEY_SECRET,
@@ -28,8 +29,12 @@ public class TapTalkLive {
         TapUI.getInstance().setLogoutButtonVisible(true);
     }
 
-    public TapTalkLive init(Context context, int clientAppIcon, String clientAppName) {
+    public static TapTalkLive init(Context context, int clientAppIcon, String clientAppName) {
         return tapLive == null ? (tapLive = new TapTalkLive(context, "TAP_LIVE_KEY", clientAppIcon, clientAppName)) : tapLive;
+    }
+
+    public static void openChatRoomList(Context activityContext) {
+        TapUI.getInstance().openRoomList(activityContext);
     }
 
     TapListener tapListener = new TapListener() {
