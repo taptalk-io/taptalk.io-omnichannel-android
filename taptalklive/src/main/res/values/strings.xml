@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">TapTalkLive</string>
+
+    <string name="ttl_create_form_title">Need help with anything?</string>
+    <string name="ttl_create_form_description">Please fill out the form below before you leave a message</string>
+    <string name="ttl_enter_full_name">Enter full name</string>
+    <string name="ttl_enter_email_address">Enter email address</string>
+    <string name="tap_live_topic">Topic</string>
+    <string name="ttl_select_topic">Select topic</string>
+    <string name="ttl_message">Message</string>
+    <string name="ttl_type_message_here">Type message here</string>
+
+    <string name="ttl_error_message_full_name_empty">Please enter your name.</string>
+    <string name="ttl_error_message_email_empty">Please enter your email.</string>
+    <string name="ttl_error_message_topic_empty">Please select a topic.</string>
+    <string name="ttl_error_message_message_empty">Please enter your message.</string>
 </resources>

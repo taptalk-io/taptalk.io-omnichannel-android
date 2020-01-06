@@ -1,0 +1,47 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/tapColorPrimary</item>
+        <item name="colorPrimaryDark">@color/tapColorPrimaryDark</item>
+        <item name="colorAccent">@color/tapColorAccent</item>
+        <item name="android:statusBarColor">@color/tapColorPrimary</item>
+    </style>
+
+    <style name="tapFontFamilyLight">
+        <item name="android:fontFamily">@font/tap_font_pt_root_light</item>
+    </style>
+
+    <style name="tapFontFamilyRegular">
+        <item name="android:fontFamily">@font/tap_font_pt_root_regular</item>
+    </style>
+
+    <style name="tapFontFamilyMedium">
+        <item name="android:fontFamily">@font/tap_font_pt_root_medium</item>
+    </style>
+
+    <style name="tapFontFamilyBold">
+        <item name="android:fontFamily">@font/tap_font_pt_root_bold</item>
+    </style>
+
+    <style name="tapLiveCreateFormTitleLabelStyle" parent="tapFontFamilyBold">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/tapColorTextLight</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="tapLiveCreateFormDescriptionLabelStyle" parent="tapFontFamilyRegular">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">@color/tapColorTextLight</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="tapFormLabelStyle" parent="tapFontFamilyBold">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/tapFormLabelColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+</resources>

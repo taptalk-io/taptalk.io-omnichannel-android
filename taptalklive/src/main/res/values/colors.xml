@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--TapLive Default Colors-->
+    <color name="tapColorPrimaryExtraLight">@color/tapLiveLightOrange</color>
+    <color name="tapColorPrimaryLight">@color/tapMango</color>  <!--    -->
+    <color name="tapColorPrimary">@color/tapLiveDarkOrange</color>
+    <color name="tapColorPrimaryDark">@color/tapPumpkinOrangeDark</color> <!--    -->
+    <color name="tapColorAccent">@color/tapColorPrimary</color>
+
+    <color name="tapColorTextLight">@color/tapWhite</color>
+    <color name="tapColorTextMedium">@color/tapLiveTextDark60</color>
+    <color name="tapColorTextDark">@color/tapBlack19</color>
+
+    <color name="tapColorSuccess">@color/tapAppleGreen</color>
+    <color name="tapColorError">@color/tapWatermelonRed</color>
+
+    <color name="tapColorPrimaryIcon">@color/tapLiveDarkOrange</color>
+    <color name="tapColorWhiteIcon">@color/tapWhite</color>
+    <color name="tapColorGrayIcon">@color/tapGrey9b</color>
+    <color name="tapColorSuccessIcon">@color/tapAppleGreen</color>
+    <color name="tapColorDestructiveIcon">@color/tapWatermelonRed</color>
+
+    <!--Override TapTalk Component Colors-->
+    <color name="tapDefaultNavBarBackgroundColor">@color/tapColorPrimary</color>
+
+    <color name="tapTextFieldBorderInactiveColor">@color/tapLiveTextDark10</color>
+
+    <color name="tapButtonInactiveBackgroundGradientLightColor">@color/tapLiveTextDark10</color>
+    <color name="tapButtonInactiveBackgroundGradientDarkColor">@color/tapLiveTextDark10</color>
+    <color name="tapButtonInactiveBorderColor">@color/tapLiveTextDark10</color>
+    <color name="tapButtonActiveBackgroundGradientLightColor">@color/tapColorPrimaryLight</color>
+    <color name="tapButtonActiveBackgroundGradientDarkColor">@color/tapColorPrimary</color>
+    <color name="tapButtonActiveBorderColor">@color/tapColorPrimary</color>
+
+    <color name="tapFormTextFieldPlaceholderColor">@color/tapColorTextMedium</color>
+
+    <!--Color Palette-->
+    <color name="tapLiveLightOrange">#ffe7d0</color>
+    <color name="tapLiveDarkOrange">#ff7d00</color>
+
+    <color name="tapLiveTextDark10">#1a191919</color>
+    <color name="tapLiveTextDark60">#99191919</color>
+
+</resources>
