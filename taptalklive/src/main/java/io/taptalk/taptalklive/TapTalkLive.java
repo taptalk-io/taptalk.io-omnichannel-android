@@ -9,6 +9,7 @@ import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
+import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 
 public class TapTalkLive {
     public static TapTalkLive tapLive;
@@ -27,6 +28,12 @@ public class TapTalkLive {
                 tapListener);
         TapTalk.initializeGooglePlacesApiKey(BuildConfig.GOOGLE_MAPS_API_KEY);
         TapUI.getInstance().setLogoutButtonVisible(true);
+
+        TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
+                R.layout.ttl_cell_chat_bubble_review,
+                3001, (context, sender) -> {
+            // TODO: 7 Jan 2020 OPEN REVIEW LAYOUT
+        }));
     }
 
     public static TapTalkLive init(Context context, int clientAppIcon, String clientAppName) {

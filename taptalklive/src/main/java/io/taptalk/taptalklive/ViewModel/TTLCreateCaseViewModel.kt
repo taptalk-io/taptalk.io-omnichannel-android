@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import io.taptalk.TapTalk.Manager.TAPChatManager
 import io.taptalk.TapTalk.Model.TAPUserModel
 
+// TODO IMPLEMENT VIEW MODEL
 class TTLCreateCaseViewModel(application: Application) : AndroidViewModel(application) {
     var formCheck = intArrayOf(0, 0, 0, 0)
     var countryID = 0
