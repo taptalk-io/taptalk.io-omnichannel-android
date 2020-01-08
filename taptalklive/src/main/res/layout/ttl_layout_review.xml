@@ -118,6 +118,7 @@
         android:hint="@string/ttl_type_message_here"
         android:inputType="textMultiLine"
         android:minLines="2"
+        android:maxLines="8"
         android:padding="16dp"
         android:textCursorDrawable="@drawable/tap_cursor_color"
         app:layout_constraintEnd_toEndOf="parent"
@@ -134,22 +135,23 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
-        android:background="@drawable/tap_bg_button_active_ripple"
+        android:background="@drawable/tap_bg_button_inactive_ripple"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_review_comment">
 
         <ImageView
-            android:id="@+id/iv_button_send_message"
+            android:id="@+id/iv_button_submit_review_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/tap_ic_loading_progress_circle_white"
-            android:tint="@color/tapIconLoadingProgressWhite" />
+            android:tint="@color/tapIconLoadingProgressWhite"
+            android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/tv_button_send_message"
+            android:id="@+id/tv_button_submit_review"
             style="@style/tapButtonLabelStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

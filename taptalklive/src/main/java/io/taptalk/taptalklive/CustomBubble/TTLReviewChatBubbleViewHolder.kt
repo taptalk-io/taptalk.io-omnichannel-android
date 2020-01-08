@@ -1,5 +1,6 @@
 package io.taptalk.taptalklive.CustomBubble
 
+import android.app.Activity
 import android.content.res.ColorStateList
 import android.os.Handler
 import android.view.View
@@ -111,7 +112,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
         markMessageAsRead(item, TapTalk.getTaptalkActiveUser())
 
-        tvButtonReview.setOnClickListener { listener.onReviewButtonTapped(itemView.context, item.user) }
+        tvButtonReview.setOnClickListener { onReviewButtonTapped() }
     }
 
     override fun receiveSentEvent(message: TAPMessageModel?) {
@@ -183,6 +184,14 @@ class TTLReviewChatBubbleViewHolder internal constructor(
                         }
                         .start()
             }, 200L)
+        }
+    }
+
+    private fun onReviewButtonTapped() {
+        if (itemView.context is Activity) {
+            listener.onReviewButtonTapped(itemView.context as Activity, item.user)
+        } else {
+            listener.onReviewButtonTapped(itemView.context, item.user)
         }
     }
 }

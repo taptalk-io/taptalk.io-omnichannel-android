@@ -1,6 +1,5 @@
 package io.taptalk.taptalklive.Activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -47,13 +46,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         et_email_address.onFocusChangeListener = formFocusListener
         et_message.onFocusChangeListener = formFocusListener
 
-//        ll_button_send_message.setOnClickListener{ validateSendMessage() }
-        ll_button_send_message.setOnClickListener{
-            // TODO TESTING
-            val intent = Intent(this, TTLReviewActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay)
-        }
+        ll_button_send_message.setOnClickListener{ validateSendMessage() }
     }
 
     private fun validateFullName() : Boolean {
