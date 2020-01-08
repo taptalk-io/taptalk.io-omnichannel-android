@@ -34,11 +34,18 @@
 
     <color name="tapFormTextFieldPlaceholderColor">@color/tapColorTextMedium</color>
 
+    <!--TapLive Component Colors-->
+    <color name="ttlCreateFormTitleLabelColor">@color/tapColorTextLight</color>
+    <color name="ttlCreateFormDescriptionLabelColor">@color/tapColorTextLight</color>
+    <color name="ttlReviewTitleLabelColor">@color/tapColorTextDark</color>
+    <color name="ttlReviewRatingLabelColor">@color/tapColorPrimary</color>
+
     <!--Color Palette-->
     <color name="tapLiveLightOrange">#ffe7d0</color>
     <color name="tapLiveDarkOrange">#ff7d00</color>
 
     <color name="tapLiveTextDark10">#1a191919</color>
     <color name="tapLiveTextDark60">#99191919</color>
+    <color name="tapLiveTextDark80">#cc191919</color>
 
 </resources>

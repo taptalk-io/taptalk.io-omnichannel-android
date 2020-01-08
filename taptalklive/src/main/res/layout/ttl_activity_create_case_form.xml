@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/tv_label_title"
-            style="@style/tapLiveCreateFormTitleLabelStyle"
+            style="@style/ttlCreateFormTitleLabelStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -51,7 +51,7 @@
 
         <TextView
             android:id="@+id/tv_label_description"
-            style="@style/tapLiveCreateFormDescriptionLabelStyle"
+            style="@style/ttlCreateFormDescriptionLabelStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"

@@ -15,4 +15,5 @@
     <string name="ttl_error_message_topic_empty">Please select a topic.</string>
     <string name="ttl_error_message_message_empty">Please enter your message.</string>
     <string name="ttl_leave_a_review">Leave a review</string>
+    <string name="ttl_submit_review">Submit review</string>
 </resources>

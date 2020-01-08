@@ -9,6 +9,13 @@
         <item name="android:statusBarColor">@color/tapColorPrimary</item>
     </style>
 
+    <style name="Theme.AppCompat.Transparent.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <style name="tapFontFamilyLight">
         <item name="android:fontFamily">@font/tap_font_pt_root_light</item>
     </style>
@@ -25,22 +32,35 @@
         <item name="android:fontFamily">@font/tap_font_pt_root_bold</item>
     </style>
 
-    <style name="tapLiveCreateFormTitleLabelStyle" parent="tapFontFamilyBold">
-        <item name="android:letterSpacing">-0.02</item>
-        <item name="android:textColor">@color/tapColorTextLight</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="tapLiveCreateFormDescriptionLabelStyle" parent="tapFontFamilyRegular">
-        <item name="android:letterSpacing">-0.01</item>
-        <item name="android:lineSpacingExtra">4sp</item>
-        <item name="android:textColor">@color/tapColorTextLight</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
     <style name="tapFormLabelStyle" parent="tapFontFamilyBold">
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">@color/tapFormLabelColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ttlCreateFormTitleLabelStyle" parent="tapFontFamilyBold">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlCreateFormTitleLabelColor</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="ttlCreateFormDescriptionLabelStyle" parent="tapFontFamilyRegular">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">@color/ttlCreateFormDescriptionLabelColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ttlReviewTitleLabelStyle" parent="tapFontFamilyBold">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">@color/ttlReviewTitleLabelColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ttlReviewRatingLabelStyle" parent="tapFontFamilyBold">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:textColor">@color/ttlReviewRatingLabelColor</item>
         <item name="android:textSize">14sp</item>
     </style>
 

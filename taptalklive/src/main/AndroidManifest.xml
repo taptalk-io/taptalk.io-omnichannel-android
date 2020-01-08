@@ -9,6 +9,10 @@
         <activity
             android:name=".Activity.TTLCreateCaseFormActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.TTLReviewActivity"
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
