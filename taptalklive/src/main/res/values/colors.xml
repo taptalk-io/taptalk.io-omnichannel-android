@@ -45,6 +45,7 @@
     <color name="tapLiveDarkOrange">#ff7d00</color>
 
     <color name="tapLiveTextDark10">#1a191919</color>
+    <color name="tapLiveTextDark20">#33191919</color>
     <color name="tapLiveTextDark60">#99191919</color>
     <color name="tapLiveTextDark80">#cc191919</color>
 

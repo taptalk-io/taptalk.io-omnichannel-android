@@ -2,6 +2,7 @@ package io.taptalk.taptalklive;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
@@ -9,7 +10,11 @@ import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
+import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
+
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
+import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 
 public class TapTalkLive {
     public static TapTalkLive tapLive;
@@ -31,8 +36,14 @@ public class TapTalkLive {
 
         TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
                 R.layout.ttl_cell_chat_bubble_review,
-                3001, (context, sender) -> {
-            // TODO: 7 Jan 2020 OPEN REVIEW LAYOUT
+                TYPE_REVIEW, (context, sender) -> {
+            Intent intent = new Intent(context, TTLReviewActivity.class);
+            if (context instanceof Activity) {
+                ((Activity) context).startActivityForResult(intent, REVIEW);
+                ((Activity) context).overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay);
+            } else {
+                context.startActivity(intent);
+            }
         }));
     }
 

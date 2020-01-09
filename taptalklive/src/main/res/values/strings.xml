@@ -16,6 +16,7 @@
     <string name="ttl_error_message_message_empty">Please enter your message.</string>
     <string name="ttl_leave_a_review">Leave a review</string>
     <string name="ttl_submit_review">Submit review</string>
+    <string name="ttl_review_submitted">Review submitted</string>
 
     <!--TODO DUMMY RATING TEXT-->
     <string name="ttl_rating_1">Bad</string>

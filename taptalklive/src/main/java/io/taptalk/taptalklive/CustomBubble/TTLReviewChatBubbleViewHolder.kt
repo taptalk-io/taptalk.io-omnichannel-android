@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -29,9 +30,11 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
     private val clBubble: ConstraintLayout = itemView.findViewById(R.id.cl_bubble)
     private val flBubble: FrameLayout = itemView.findViewById(R.id.fl_bubble)
+    private val llButtonReview: LinearLayout = itemView.findViewById(R.id.ll_button_review)
     private val civAvatar: CircleImageView = itemView.findViewById(R.id.civ_avatar)
     private val ivMessageStatus: ImageView = itemView.findViewById(R.id.iv_message_status)
     private val ivSending: ImageView = itemView.findViewById(R.id.iv_sending)
+    private val ivButtonReview: ImageView = itemView.findViewById(R.id.iv_button_review)
     private val tvAvatarLabel: TextView = itemView.findViewById(R.id.tv_avatar_label)
     private val tvUserName: TextView = itemView.findViewById(R.id.tv_user_name)
     private val tvMessageBody: TextView = itemView.findViewById(R.id.tv_message_body)
@@ -54,7 +57,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             civAvatar.visibility = View.GONE
             tvAvatarLabel.visibility = View.GONE
             tvUserName.visibility = View.GONE
-            tvButtonReview.visibility = View.GONE
+            llButtonReview.visibility = View.GONE
             ivMessageStatus.visibility = View.VISIBLE
             vMarginRight.visibility = View.GONE
             vMarginLeft.visibility = View.VISIBLE
@@ -74,7 +77,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             // Message from others
             clBubble.background = ContextCompat.getDrawable(itemView.context, R.drawable.tap_bg_chat_bubble_left_default)
             tvMessageBody.setTextColor(ContextCompat.getColor(itemView.context, R.color.tapColorTextDark))
-            tvButtonReview.visibility = View.VISIBLE
+            llButtonReview.visibility = View.VISIBLE
             ivMessageStatus.visibility = View.GONE
             vMarginRight.visibility = View.VISIBLE
             vMarginLeft.visibility = View.GONE
@@ -106,13 +109,24 @@ class TTLReviewChatBubbleViewHolder internal constructor(
                 tvAvatarLabel.visibility = View.GONE
                 tvUserName.visibility = View.GONE
             }
+
+            // TODO CHECK IF REVIEW IS ALREADY SUBMITTED
+//            if (item.data?.get("review_status") as Boolean) {
+//                llButtonReview.background = ContextCompat.getDrawable(itemView.context, io.taptalk.Taptalk.R.drawable.tap_bg_button_inactive_ripple)
+//                tvButtonReview.text = itemView.context.getString(R.string.ttl_review_submitted)
+//                ivButtonReview.visibility = View.VISIBLE
+//                llButtonReview.setOnClickListener { }
+//            } else {
+                llButtonReview.background = ContextCompat.getDrawable(itemView.context, io.taptalk.Taptalk.R.drawable.tap_bg_button_active_ripple)
+                tvButtonReview.text = itemView.context.getString(R.string.ttl_leave_a_review)
+                ivButtonReview.visibility = View.GONE
+                llButtonReview.setOnClickListener { onReviewButtonTapped() }
+//            }
         }
 
         tvMessageBody.text = item.body
 
         markMessageAsRead(item, TapTalk.getTaptalkActiveUser())
-
-        tvButtonReview.setOnClickListener { onReviewButtonTapped() }
     }
 
     override fun receiveSentEvent(message: TAPMessageModel?) {
@@ -147,7 +161,6 @@ class TTLReviewChatBubbleViewHolder internal constructor(
         flBubble.translationX = 0f
         tvMessageStatus.visibility = View.VISIBLE
     }
-
 
     private fun animateSend(item: TAPMessageModel, flBubble: FrameLayout,
                                  ivSending: ImageView, ivMessageStatus: ImageView) {

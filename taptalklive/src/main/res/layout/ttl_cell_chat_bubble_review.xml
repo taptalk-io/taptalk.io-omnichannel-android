@@ -116,28 +116,49 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toTopOf="@id/tv_button_review"
+                app:layout_constraintBottom_toTopOf="@id/ll_button_review"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_user_name"
                 tools:text="Hey there, love your work!" />
 
-            <TextView
-                android:id="@+id/tv_button_review"
-                style="@style/tapButtonLabelStyle"
+            <LinearLayout
+                android:id="@+id/ll_button_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/tap_bg_button_active_ripple"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:padding="12dp"
-                android:text="@string/ttl_leave_a_review"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_message_body" />
+                app:layout_constraintTop_toBottomOf="@id/tv_message_body">
+
+                <ImageView
+                    android:id="@+id/iv_button_review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
+                    android:src="@drawable/tap_ic_checklist_pumpkin"
+                    android:tint="@color/tapLiveTextDark20"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_button_review"
+                    style="@style/tapButtonLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="@string/ttl_leave_a_review" />
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
