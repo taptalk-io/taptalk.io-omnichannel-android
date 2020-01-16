@@ -8,8 +8,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import io.taptalk.TapTalk.API.Interceptor.TAPHeaderRequestInterceptor;
 import io.taptalk.TapTalk.Helper.TapTalk;
+import io.taptalk.taptalklive.API.Interceptor.TTLHeaderRequestInterceptor;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
 import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
 import okhttp3.OkHttpClient;
@@ -17,9 +17,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.TokenHeaderConst.NOT_USE_REFRESH_TOKEN;
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.TokenHeaderConst.USE_REFRESH_TOKEN;
 
 
 public class TTLApiConnection {
@@ -40,11 +37,8 @@ public class TTLApiConnection {
     private TTLApiConnection() {
         this.objectMapper = createObjectMapper();
 
-        OkHttpClient httpTtlClientAccessToken = buildHttpTtlClient(NOT_USE_REFRESH_TOKEN);
-        OkHttpClient httpTtlClientRefreshToken = buildHttpTtlClient(USE_REFRESH_TOKEN);
-
-        Retrofit tapLiveAdapter = buildApiAdapter(httpTtlClientAccessToken, TTLApiManager.getBaseUrlApi());
-        Retrofit ttlRefreshTokenAdapter = buildApiAdapter(httpTtlClientRefreshToken, TTLApiManager.getBaseUrlApi());
+        Retrofit tapLiveAdapter = buildApiAdapter(buildHttpTtlClient(), TTLApiManager.getBaseUrlApi());
+        Retrofit ttlRefreshTokenAdapter = buildApiAdapter(buildHttpTtlClient(), TTLApiManager.getBaseUrlApi());
 
         this.ttlApiService = tapLiveAdapter.create(TTLApiService.class);
         this.ttlRefreshTokenApiService = ttlRefreshTokenAdapter.create(TTLRefreshTokenApiService.class);
@@ -68,7 +62,7 @@ public class TTLApiConnection {
         return objectMapper;
     }
 
-    private OkHttpClient buildHttpTtlClient(int headerAuth) {
+    private OkHttpClient buildHttpTtlClient() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(TapTalk.isLoggingEnabled ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
         return new OkHttpClient.Builder()
@@ -78,7 +72,7 @@ public class TTLApiConnection {
                 .writeTimeout(1, TimeUnit.MINUTES)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(loggingInterceptor)
-                .addInterceptor(new TAPHeaderRequestInterceptor(headerAuth))
+                .addInterceptor(new TTLHeaderRequestInterceptor())
                 .build();
     }
 

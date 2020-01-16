@@ -5,6 +5,7 @@ import android.provider.Settings;
 
 import java.io.IOException;
 
+import io.taptalk.taptalklive.BuildConfig;
 import io.taptalk.taptalklive.TapTalkLive;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -28,10 +29,12 @@ public class TTLHeaderRequestInterceptor implements Interceptor {
         Request request = original
                 .newBuilder()
                 .addHeader("Content-Type", contentType)
+                .addHeader("Secret-Key", BuildConfig.TAPLIVE_SDK_APP_KEY_SECRET)
                 .addHeader("Device-Identifier", deviceID)
                 .addHeader("Device-Model", android.os.Build.MODEL)
                 .addHeader("Device-Platform", "android")
                 .addHeader("Device-OS-Version", deviceOsVersion)
+                .addHeader("User-Agent", "Android")
                 .method(original.method(), original.body())
                 .build();
 

@@ -3,6 +3,7 @@ package io.taptalk.taptalklive;
 import com.orhanobut.hawk.Hawk;
 
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
@@ -175,5 +176,9 @@ public class TTLDataManager {
 
     public void requestAccessToken(TTLDefaultDataView<TTLRequestAccessTokenResponse> view) {
         TTLApiManager.getInstance().requestAccessToken(new TTLDefaultSubscriber<>(view));
+    }
+
+    public void createUser(String fullName, String email, TTLDefaultDataView<TTLCreateUserResponse> view) {
+        TTLApiManager.getInstance().createUser(fullName, email, new TTLDefaultSubscriber<>(view));
     }
 }

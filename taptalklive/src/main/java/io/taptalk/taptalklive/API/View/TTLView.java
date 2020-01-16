@@ -8,7 +8,7 @@ public interface TTLView<T> {
 
     void endLoading();
 
-    void onEmpty(String message);
+//    void onEmpty(String message);
 
     void onSuccess(T t);
 

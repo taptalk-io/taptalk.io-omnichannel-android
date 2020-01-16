@@ -36,6 +36,7 @@ public class TTLDefaultSubscriber<T extends TTLBaseResponse<D>, V extends TTLDef
         e.printStackTrace();
         view.onError(e.getMessage());
         view.onError(e);
+        view.endLoading();
     }
 
     @Override
@@ -45,5 +46,6 @@ public class TTLDefaultSubscriber<T extends TTLBaseResponse<D>, V extends TTLDef
         } else {
             view.onSuccess(t.getData());
         }
+        view.endLoading();
     }
 }

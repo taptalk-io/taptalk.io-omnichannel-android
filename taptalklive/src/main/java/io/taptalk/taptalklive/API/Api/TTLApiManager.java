@@ -4,14 +4,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import io.taptalk.TapTalk.Exception.TAPAuthException;
+import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
 import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
 import io.taptalk.taptalklive.BuildConfig;
-import io.taptalk.taptalklive.Exception.TAPApiRefreshTokenRunningException;
-import io.taptalk.taptalklive.Exception.TAPApiSessionExpiredException;
+import io.taptalk.taptalklive.Exception.TTLApiRefreshTokenRunningException;
+import io.taptalk.taptalklive.Exception.TTLApiSessionExpiredException;
+import io.taptalk.taptalklive.Exception.TTLAuthException;
 import io.taptalk.taptalklive.TTLDataManager;
 import io.taptalk.taptalklive.TapTalkLive;
 import rx.Observable;
@@ -111,18 +113,18 @@ public class TTLApiManager {
 
     private Observable validateException(Throwable t) {
         Log.e(TAG, "call: retryWhen(), cause: " + t.getMessage());
-        return (t instanceof TAPApiSessionExpiredException && 1 == isShouldRefreshToken && !isLoggedOut) ? refreshAccessToken() :
-                ((t instanceof TAPApiRefreshTokenRunningException || (t instanceof TAPApiSessionExpiredException && 1 < isShouldRefreshToken)) && !isLoggedOut) ?
+        return (t instanceof TTLApiSessionExpiredException && 1 == isShouldRefreshToken && !isLoggedOut) ? refreshAccessToken() :
+                ((t instanceof TTLApiRefreshTokenRunningException || (t instanceof TTLApiSessionExpiredException && 1 < isShouldRefreshToken)) && !isLoggedOut) ?
                         Observable.just(Boolean.TRUE) : Observable.error(t);
 //        return Observable.just(true);
     }
 
     private Observable<Throwable> raiseApiSessionExpiredException(TTLBaseResponse br) {
-        return Observable.error(new TAPApiSessionExpiredException(br.getError().getMessage()));
+        return Observable.error(new TTLApiSessionExpiredException(br.getError().getMessage()));
     }
 
     private Observable<Throwable> raiseApiRefreshTokenRunningException() {
-        return Observable.error(new TAPApiRefreshTokenRunningException());
+        return Observable.error(new TTLApiRefreshTokenRunningException());
     }
 
     public Observable<TTLBaseResponse<TTLRequestAccessTokenResponse>> refreshAccessToken() {
@@ -131,11 +133,11 @@ public class TTLApiManager {
                 .doOnNext(response -> {
                     if (RESPONSE_SUCCESS == response.getStatus()) {
                         updateSession(response);
-                        Observable.error(new TAPAuthException(response.getError().getMessage()));
+                        Observable.error(new TTLAuthException(response.getError().getMessage()));
                     } else if (UNAUTHORIZED == response.getStatus()) {
                         TapTalkLive.clearAllTapLiveData();
                     } else {
-                        Observable.error(new TAPAuthException(response.getError().getMessage()));
+                        Observable.error(new TTLAuthException(response.getError().getMessage()));
                     }
                 }).doOnError(throwable -> {
 
@@ -152,6 +154,11 @@ public class TTLApiManager {
     }
 
     public void requestAccessToken(Subscriber<TTLBaseResponse<TTLRequestAccessTokenResponse>> subscriber) {
-        execute(ttlApiService.requestAccessToken(/*"Bearer " + TTLDataManager.getInstance().getAuthTicket()*/), subscriber);
+        execute(ttlApiService.requestAccessToken("Bearer " + TTLDataManager.getInstance().getAuthTicket()), subscriber);
+    }
+
+    public void createUser(String fullName, String email, Subscriber<TTLBaseResponse<TTLCreateUserResponse>> subscriber) {
+        TTLCreateUserRequest request = new TTLCreateUserRequest(fullName, email);
+        execute(ttlApiService.createUser(request), subscriber);
     }
 }

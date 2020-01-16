@@ -7,8 +7,8 @@ public abstract class TTLDefaultDataView<T> implements TTLView<T> {
     public void startLoading() {}
     @Override
     public void endLoading() {}
-    @Override
-    public void onEmpty(String message) {}
+//    @Override
+//    public void onEmpty(String message) {}
     @Override
     public void onSuccess(T response) {}
     @Override
