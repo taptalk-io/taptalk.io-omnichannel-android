@@ -4,24 +4,24 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import io.taptalk.taptalklive.API.deserializer.TAPErrorEmptyAsNullDeserializer;
+import io.taptalk.taptalklive.API.deserializer.TTLErrorEmptyAsNullDeserializer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class TAPBaseResponse<T> {
-    @JsonDeserialize(using = TAPErrorEmptyAsNullDeserializer.class)
+public class TTLBaseResponse<T> {
+    @JsonDeserialize(using = TTLErrorEmptyAsNullDeserializer.class)
     @JsonProperty("error")
-    private TAPErrorModel error;
+    private TTLErrorModel error;
 
     @JsonProperty("data") private T data;
 
     @JsonProperty("status") private int status;
 
-    public TAPErrorModel getError() {
+    public TTLErrorModel getError() {
         return error;
     }
 
-    public void setError(TAPErrorModel error) {
+    public void setError(TTLErrorModel error) {
         this.error = error;
     }
 

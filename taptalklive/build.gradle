@@ -25,6 +25,10 @@ android {
             buildConfigField("String", "TAPTALK_SDK_APP_KEY_ID", '"ddf6fc9507a3a4f6386c3d6b8"')
             buildConfigField("String", "TAPTALK_SDK_APP_KEY_SECRET", '"MzMzMTQ0QDUuMjMuMTEwQDE1Njg4MjIzMTk/OWRjYmU2YzI/NGIyMjQyMzdiMzIy/MmYwODE4NWU0Nzc2"')
             buildConfigField("String", "TAPTALK_SDK_BASE_URL", '"https://e-dev-43588589a565102ffa8d6a92bff6b4f4.io.taptalk.io"')
+
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
+            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-dev.taptalk.io/api/visitor"')
+            buildConfigField("String", "TAPLIVE_SDK_API_VERSION", '"/v1/"')
         }
         debug {
             minifyEnabled false
@@ -33,6 +37,10 @@ android {
             buildConfigField("String", "TAPTALK_SDK_APP_KEY_ID", '"ddf6fc9507a3a4f6386c3d6b8"')
             buildConfigField("String", "TAPTALK_SDK_APP_KEY_SECRET", '"MzMzMTQ0QDUuMjMuMTEwQDE1Njg4MjIzMTk/OWRjYmU2YzI/NGIyMjQyMzdiMzIy/MmYwODE4NWU0Nzc2"')
             buildConfigField("String", "TAPTALK_SDK_BASE_URL", '"https://e-dev-43588589a565102ffa8d6a92bff6b4f4.io.taptalk.io"')
+
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
+            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-dev.taptalk.io/api/visitor"')
+            buildConfigField("String", "TAPLIVE_SDK_API_VERSION", '"/v1/"')
         }
     }
 

@@ -7,20 +7,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 
-import io.taptalk.taptalklive.API.Model.ResponseModel.TAPErrorModel;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 
 
-public class TAPErrorEmptyAsNullDeserializer extends JsonDeserializer<TAPErrorModel> {
+public class TTLErrorEmptyAsNullDeserializer extends JsonDeserializer<TTLErrorModel> {
 
-    private static final String LOG_TAG = TAPErrorEmptyAsNullDeserializer.class.getSimpleName();
+    private static final String LOG_TAG = TTLErrorEmptyAsNullDeserializer.class.getSimpleName();
 
     @Override
-    public TAPErrorModel deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public TTLErrorModel deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonNode node = p.readValueAsTree();
         if (node.size() == 0) {
             return null;
         }
-        TAPErrorModel error = new TAPErrorModel();
+        TTLErrorModel error = new TTLErrorModel();
         error.setCode(node.get("code").asText());
         error.setMessage(node.get("message").asText());
         return error;

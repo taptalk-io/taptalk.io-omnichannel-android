@@ -10,9 +10,9 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class TAPHeaderRequestInterceptor implements Interceptor {
+public class TTLHeaderRequestInterceptor implements Interceptor {
 
-    public TAPHeaderRequestInterceptor() {
+    public TTLHeaderRequestInterceptor() {
 
     }
 

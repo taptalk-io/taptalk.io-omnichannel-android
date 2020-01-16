@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class TAPErrorModel {
+public class TTLErrorModel {
     @JsonProperty("code") private String code;
     @JsonProperty("message") private String message;
     @JsonProperty("field") private String field;
 
-    public TAPErrorModel() {}
+    public TTLErrorModel() {}
 
-    public TAPErrorModel(String code, String message, String field) {
+    public TTLErrorModel(String code, String message, String field) {
         this.code = code;
         this.message = message;
         this.field = field;

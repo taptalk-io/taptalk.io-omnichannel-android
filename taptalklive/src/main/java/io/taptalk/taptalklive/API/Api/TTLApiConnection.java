@@ -8,38 +8,54 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import io.taptalk.taptalklive.API.Interceptor.TAPHeaderRequestInterceptor;
-import io.taptalk.taptalklive.API.Service.TAPTalkApiService;
+import io.taptalk.TapTalk.API.Interceptor.TAPHeaderRequestInterceptor;
+import io.taptalk.TapTalk.Helper.TapTalk;
+import io.taptalk.taptalklive.API.Service.TTLApiService;
+import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.TokenHeaderConst.NOT_USE_REFRESH_TOKEN;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.TokenHeaderConst.USE_REFRESH_TOKEN;
 
-public class TAPApiConnection {
 
-    private static final String TAG = TAPApiConnection.class.getSimpleName();
+public class TTLApiConnection {
 
-    private TAPTalkApiService homingPigeon;
+    private static final String TAG = TTLApiConnection.class.getSimpleName();
+
+    private TTLApiService ttlApiService;
+    private TTLRefreshTokenApiService ttlRefreshTokenApiService;
 
     public ObjectMapper objectMapper;
 
-    private static TAPApiConnection instance;
+    private static TTLApiConnection instance;
 
-    public static TAPApiConnection getInstance() {
-        return instance == null ? instance = new TAPApiConnection() : instance;
+    public static TTLApiConnection getInstance() {
+        return instance == null ? instance = new TTLApiConnection() : instance;
     }
 
-    private TAPApiConnection() {
+    private TTLApiConnection() {
         this.objectMapper = createObjectMapper();
-        OkHttpClient httpHpClientAccessToken = buildHttpTapClient();
-        Retrofit homingPigeonAdapter = buildApiAdapter(httpHpClientAccessToken, TAPApiManager.getBaseUrlApi());
-        this.homingPigeon = homingPigeonAdapter.create(TAPTalkApiService.class);
+
+        OkHttpClient httpTtlClientAccessToken = buildHttpTtlClient(NOT_USE_REFRESH_TOKEN);
+        OkHttpClient httpTtlClientRefreshToken = buildHttpTtlClient(USE_REFRESH_TOKEN);
+
+        Retrofit tapLiveAdapter = buildApiAdapter(httpTtlClientAccessToken, TTLApiManager.getBaseUrlApi());
+        Retrofit ttlRefreshTokenAdapter = buildApiAdapter(httpTtlClientRefreshToken, TTLApiManager.getBaseUrlApi());
+
+        this.ttlApiService = tapLiveAdapter.create(TTLApiService.class);
+        this.ttlRefreshTokenApiService = ttlRefreshTokenAdapter.create(TTLRefreshTokenApiService.class);
     }
 
-    public TAPTalkApiService getHomingPigeon() {
-        return homingPigeon;
+    public TTLApiService getTtlApiService() {
+        return ttlApiService;
+    }
+
+    public TTLRefreshTokenApiService getTtlRefreshTokenApiService() {
+        return ttlRefreshTokenApiService;
     }
 
     public ObjectMapper createObjectMapper() {
@@ -52,9 +68,9 @@ public class TAPApiConnection {
         return objectMapper;
     }
 
-    private OkHttpClient buildHttpTapClient() {
+    private OkHttpClient buildHttpTtlClient(int headerAuth) {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        loggingInterceptor.setLevel(TapTalk.isLoggingEnabled ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(new StethoInterceptor())
                 .connectTimeout(1, TimeUnit.MINUTES)
@@ -62,7 +78,7 @@ public class TAPApiConnection {
                 .writeTimeout(1, TimeUnit.MINUTES)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(loggingInterceptor)
-                .addInterceptor(new TAPHeaderRequestInterceptor())
+                .addInterceptor(new TAPHeaderRequestInterceptor(headerAuth))
                 .build();
     }
 

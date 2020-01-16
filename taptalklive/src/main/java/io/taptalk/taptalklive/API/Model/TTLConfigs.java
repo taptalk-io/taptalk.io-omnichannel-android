@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
-public class TapConfigs {
+public class TTLConfigs {
 
     @JsonProperty("core")
     private Map<String, String> coreConfigs;

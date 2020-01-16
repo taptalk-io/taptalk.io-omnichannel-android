@@ -6,10 +6,14 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
+import com.orhanobut.hawk.Hawk;
+import com.orhanobut.hawk.NoEncryption;
+
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
+import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 
@@ -25,6 +29,15 @@ public class TapTalkLive {
                         int clientAppIcon,
                         String clientAppName) {
         context = appContext;
+
+        // Init Hawk for preference
+        if (io.taptalk.Taptalk.BuildConfig.BUILD_TYPE.equals("dev")) {
+            // No encryption for dev build
+            Hawk.init(appContext).setEncryption(new NoEncryption()).build();
+        } else {
+            Hawk.init(appContext).build();
+        }
+
         TapTalk.setLoggingEnabled(true);
         TapTalk.init(appContext, BuildConfig.TAPTALK_SDK_APP_KEY_ID,
                 BuildConfig.TAPTALK_SDK_APP_KEY_SECRET,
@@ -53,6 +66,12 @@ public class TapTalkLive {
 
     public static void openChatRoomList(Context activityContext) {
         TapUI.getInstance().openRoomList(activityContext);
+    }
+
+    public static void clearAllTapLiveData() {
+        //checkTapTalkInitialized();
+        TTLDataManager.getInstance().deleteAllPreference();
+        TTLApiManager.getInstance().setLoggedOut(true);
     }
 
     TapListener tapListener = new TapListener() {

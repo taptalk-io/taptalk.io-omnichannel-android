@@ -1,15 +1,15 @@
 package io.taptalk.taptalklive.API.Subscriber;
 
-import io.taptalk.taptalklive.API.View.TAPDefaultDataView;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TAPErrorModel;
+import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 import okhttp3.ResponseBody;
 import rx.Subscriber;
 
-public class TAPBaseSubscriber<V extends TAPDefaultDataView<ResponseBody>> extends Subscriber<ResponseBody> {
+public class TTLBaseSubscriber<V extends TTLDefaultDataView<ResponseBody>> extends Subscriber<ResponseBody> {
 
     protected V view;
 
-    public TAPBaseSubscriber(V view) {
+    public TTLBaseSubscriber(V view) {
         this.view = view;
         if (view == null) throw new IllegalArgumentException("ERR: null view");
     }
@@ -34,7 +34,7 @@ public class TAPBaseSubscriber<V extends TAPDefaultDataView<ResponseBody>> exten
     @Override
     public void onNext(ResponseBody responseBody) {
         if (null == responseBody) {
-            view.onError(new TAPErrorModel("999", "Unknown Error", ""));
+            view.onError(new TTLErrorModel("999", "Unknown Error", ""));
         } else {
             view.onSuccess(responseBody);
         }
