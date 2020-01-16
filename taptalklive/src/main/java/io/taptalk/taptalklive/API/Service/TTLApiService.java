@@ -17,7 +17,7 @@ public interface TTLApiService {
     @POST("auth/access_token/request")
     Observable<TTLBaseResponse<TTLRequestAccessTokenResponse>> requestAccessToken(@Header("Authorization") String authTicket);
 
-    @POST("organization/topic/get_list")
+    @POST("client/topic/get_list")
     Observable<TTLBaseResponse<TTLGetTopicListResponse>> getTopicList();
 
     @POST("client/user/create")

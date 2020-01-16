@@ -17,7 +17,9 @@ import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse
+import io.taptalk.taptalklive.API.Model.TTLTopic
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TTLDataManager
@@ -29,6 +31,8 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private lateinit var vm: TTLCreateCaseViewModel
 
     private lateinit var glide: RequestManager
+
+    private lateinit var topicSpinnerAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,25 +50,30 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private fun initView() {
         window?.setBackgroundDrawable(null)
 
-        initTopicSpinnerAdapter()
-
         et_full_name.onFocusChangeListener = formFocusListener
         et_email_address.onFocusChangeListener = formFocusListener
         et_message.onFocusChangeListener = formFocusListener
 
+        initTopicSpinnerAdapter()
+
         ll_button_send_message.setOnClickListener{ validateSendMessage() }
     }
 
-    private fun initTopicSpinnerAdapter() {
-        val topics: MutableList<String> = ArrayList()
-        // TODO GET TOPICS FROM API
-        topics.add("Select Topic")
-        topics.add("General")
-        topics.add("Technical")
-        topics.add("Finance")
+    private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
+        if (hasFocus) {
+            view.background = ContextCompat.getDrawable(this, R.drawable.tap_bg_text_field_active)
+        } else {
+            view.background = ContextCompat.getDrawable(this, R.drawable.tap_bg_text_field_inactive)
+        }
+    }
 
-        val topicSpinnerAdapter = object : ArrayAdapter<String>(
-                this, R.layout.ttl_cell_default_spinner_item, topics) {
+    private fun initTopicSpinnerAdapter() {
+        vm.topics.add(getString(R.string.ttl_select_topic))
+
+        getTopicList()
+
+        topicSpinnerAdapter = object : ArrayAdapter<String>(
+                this, R.layout.ttl_cell_default_spinner_item, vm.topics) {
             override fun isEnabled(position: Int): Boolean {
                 return position != 0
             }
@@ -90,11 +99,37 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         sp_select_topic.onItemSelectedListener = spinnerAdapterListener
     }
 
-    private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
-        if (hasFocus) {
-            view.background = ContextCompat.getDrawable(this, R.drawable.tap_bg_text_field_active)
-        } else {
-            view.background = ContextCompat.getDrawable(this, R.drawable.tap_bg_text_field_inactive)
+    private fun getTopicList() {
+        TTLDataManager.getInstance().getTopicList(topicListDataView)
+    }
+
+    private val topicListDataView = object : TTLDefaultDataView<TTLGetTopicListResponse>() {
+        override fun startLoading() {
+            TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
+        }
+
+        override fun onSuccess(response: TTLGetTopicListResponse?) {
+            if (null != response) {
+                Toast.makeText(this@TTLCreateCaseFormActivity, "getTopicList onSuccess: ${response.topics.size}", Toast.LENGTH_LONG).show()
+                for (topic in response.topics) {
+                    vm.topicsMap[topic.name] = topic
+                }
+                vm.topics.addAll(vm.topicsMap.keys)
+                topicSpinnerAdapter.notifyDataSetChanged()
+
+                iv_select_topic_loading.clearAnimation()
+                iv_select_topic_loading.visibility = View.GONE
+                iv_select_topic_drop_down.visibility = View.VISIBLE
+            }
+        }
+
+        override fun onError(error: TTLErrorModel?) {
+            Toast.makeText(this@TTLCreateCaseFormActivity, "getTopicList onError: ${error?.message}", Toast.LENGTH_LONG).show()
+        }
+
+        override fun onError(errorMessage: String?) {
+            Toast.makeText(this@TTLCreateCaseFormActivity, "getTopicList onError: $errorMessage", Toast.LENGTH_LONG).show()
+            // TODO CHECK INTERNET
         }
     }
 

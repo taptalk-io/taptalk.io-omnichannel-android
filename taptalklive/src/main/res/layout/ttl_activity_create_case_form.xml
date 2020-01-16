@@ -181,13 +181,25 @@
                     android:paddingBottom="16dp" />
 
                 <ImageView
+                    android:id="@+id/iv_select_topic_drop_down"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
                     android:src="@drawable/tap_ic_chevron_down_orange"
-                    android:tint="@color/tapFormTextFieldColor" />
+                    android:tint="@color/tapFormTextFieldColor"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/iv_select_topic_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/tap_ic_loading_progress_circle_white"
+                    android:tint="@color/tapIconLoadingProgressPrimary" />
 
             </FrameLayout>
 
