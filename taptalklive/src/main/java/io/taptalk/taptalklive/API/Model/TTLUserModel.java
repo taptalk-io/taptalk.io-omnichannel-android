@@ -1,4 +1,4 @@
-package io.taptalk.taptalklive.API.Model.ResponseModel;
+package io.taptalk.taptalklive.API.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

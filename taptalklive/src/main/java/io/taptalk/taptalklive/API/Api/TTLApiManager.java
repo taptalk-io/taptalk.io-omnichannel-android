@@ -6,8 +6,11 @@ import androidx.annotation.NonNull;
 
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
+import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
 import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
 import io.taptalk.taptalklive.BuildConfig;
@@ -157,8 +160,20 @@ public class TTLApiManager {
         execute(ttlApiService.requestAccessToken("Bearer " + TTLDataManager.getInstance().getAuthTicket()), subscriber);
     }
 
+    public void getTopicList(Subscriber<TTLBaseResponse<TTLGetTopicListResponse>> subscriber) {
+        execute(ttlApiService.getTopicList(), subscriber);
+    }
+
     public void createUser(String fullName, String email, Subscriber<TTLBaseResponse<TTLCreateUserResponse>> subscriber) {
         TTLCreateUserRequest request = new TTLCreateUserRequest(fullName, email);
         execute(ttlApiService.createUser(request), subscriber);
+    }
+
+    public void getUserProfile(Subscriber<TTLBaseResponse<TTLUserModel>> subscriber) {
+        execute(ttlApiService.getUserProfile(), subscriber);
+    }
+
+    public void logout(Subscriber<TTLBaseResponse<TTLCommonResponse>> subscriber) {
+        execute(ttlApiService.logout(), subscriber);
     }
 }

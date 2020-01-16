@@ -2,15 +2,14 @@ package io.taptalk.taptalklive.API.Model.ResponseModel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.taptalk.taptalklive.API.Model.TTLUserModel;
+
 public class TTLRequestAccessTokenResponse {
     @JsonProperty("accessToken") private String accessToken;
     @JsonProperty("accessTokenExpiry") private long accessTokenExpiry;
     @JsonProperty("refreshToken") private String refreshToken;
     @JsonProperty("refreshTokenExpiry") private long refreshTokenExpiry;
     @JsonProperty("user") private TTLUserModel user;
-
-    public TTLRequestAccessTokenResponse() {
-    }
 
     public String getAccessToken() {
         return accessToken;
