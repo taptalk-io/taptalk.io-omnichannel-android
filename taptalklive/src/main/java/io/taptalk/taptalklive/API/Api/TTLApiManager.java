@@ -4,11 +4,15 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateCaseRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
+import io.taptalk.taptalklive.API.Model.RequestModel.TTLRateConversationRequest;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
@@ -168,8 +172,18 @@ public class TTLApiManager {
         execute(ttlApiService.createUser(request), subscriber);
     }
 
-    public void getUserProfile(Subscriber<TTLBaseResponse<TTLUserModel>> subscriber) {
+    public void getUserProfile(Subscriber<TTLBaseResponse<TTLGetUserProfileResponse>> subscriber) {
         execute(ttlApiService.getUserProfile(), subscriber);
+    }
+
+    public void createCase(Integer topicID, String message, Subscriber<TTLBaseResponse<TTLCreateCaseResponse>> subscriber) {
+        TTLCreateCaseRequest request = new TTLCreateCaseRequest(topicID, message);
+        execute(ttlApiService.createCase(request), subscriber);
+    }
+
+    public void rateConversation(Integer caseID, Integer rating, String note, Subscriber<TTLBaseResponse<TTLCommonResponse>> subscriber) {
+        TTLRateConversationRequest request = new TTLRateConversationRequest(caseID, rating, note);
+        execute(ttlApiService.rateConversation(request), subscriber);
     }
 
     public void logout(Subscriber<TTLBaseResponse<TTLCommonResponse>> subscriber) {

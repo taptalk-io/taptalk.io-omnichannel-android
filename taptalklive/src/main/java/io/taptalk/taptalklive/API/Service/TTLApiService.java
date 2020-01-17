@@ -1,10 +1,13 @@
 package io.taptalk.taptalklive.API.Service;
 
+import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateCaseRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
+import io.taptalk.taptalklive.API.Model.RequestModel.TTLRateConversationRequest;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
-import io.taptalk.taptalklive.API.Model.TTLUserModel;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import rx.Observable;
@@ -24,7 +27,13 @@ public interface TTLApiService {
     Observable<TTLBaseResponse<TTLCreateUserResponse>> createUser(@Body TTLCreateUserRequest request);
 
     @POST("client/user/get")
-    Observable<TTLBaseResponse<TTLUserModel>> getUserProfile();
+    Observable<TTLBaseResponse<TTLGetUserProfileResponse>> getUserProfile();
+
+    @POST("client/case/create")
+    Observable<TTLBaseResponse<TTLCreateCaseResponse>> createCase(@Body TTLCreateCaseRequest request);
+
+    @POST("client/case/rate")
+    Observable<TTLBaseResponse<TTLCommonResponse>> rateConversation(@Body TTLRateConversationRequest request);
 
     @POST("logout")
     Observable<TTLBaseResponse<TTLCommonResponse>> logout();

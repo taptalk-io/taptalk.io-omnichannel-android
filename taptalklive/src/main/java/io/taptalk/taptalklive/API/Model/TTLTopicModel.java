@@ -8,14 +8,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class TTLTopic implements Parcelable {
+public class TTLTopicModel implements Parcelable {
     @JsonProperty("id") private Integer id;
     @JsonProperty("name") private String name;
     @JsonProperty("createdTime") private Long createdTime;
     @JsonProperty("updatedTime") private Long updatedTime;
     @JsonProperty("deletedTime") private Long deletedTime;
 
-    public TTLTopic() {
+    public TTLTopicModel() {
     }
 
     public Integer getId() {
@@ -72,7 +72,7 @@ public class TTLTopic implements Parcelable {
         dest.writeValue(this.deletedTime);
     }
 
-    protected TTLTopic(Parcel in) {
+    protected TTLTopicModel(Parcel in) {
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.name = in.readString();
         this.createdTime = (Long) in.readValue(Long.class.getClassLoader());
@@ -80,15 +80,15 @@ public class TTLTopic implements Parcelable {
         this.deletedTime = (Long) in.readValue(Long.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<TTLTopic> CREATOR = new Parcelable.Creator<TTLTopic>() {
+    public static final Parcelable.Creator<TTLTopicModel> CREATOR = new Parcelable.Creator<TTLTopicModel>() {
         @Override
-        public TTLTopic createFromParcel(Parcel source) {
-            return new TTLTopic(source);
+        public TTLTopicModel createFromParcel(Parcel source) {
+            return new TTLTopicModel(source);
         }
 
         @Override
-        public TTLTopic[] newArray(int size) {
-            return new TTLTopic[size];
+        public TTLTopicModel[] newArray(int size) {
+            return new TTLTopicModel[size];
         }
     };
 }

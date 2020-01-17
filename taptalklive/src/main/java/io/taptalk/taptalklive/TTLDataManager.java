@@ -4,8 +4,10 @@ import com.orhanobut.hawk.Hawk;
 
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
@@ -188,8 +190,16 @@ public class TTLDataManager {
         TTLApiManager.getInstance().createUser(fullName, email, new TTLDefaultSubscriber<>(view));
     }
 
-    public void getUserProfile(TTLDefaultDataView<TTLUserModel> view) {
+    public void getUserProfile(TTLDefaultDataView<TTLGetUserProfileResponse> view) {
         TTLApiManager.getInstance().getUserProfile(new TTLDefaultSubscriber<>(view));
+    }
+
+    public void createCase(Integer topicID, String message, TTLDefaultDataView<TTLCreateCaseResponse> view) {
+        TTLApiManager.getInstance().createCase(topicID, message, new TTLDefaultSubscriber<>(view));
+    }
+
+    public void rateConversation(Integer caseID, Integer rating, String note, TTLDefaultDataView<TTLCommonResponse> view) {
+        TTLApiManager.getInstance().rateConversation(caseID, rating, note, new TTLDefaultSubscriber<>(view));
     }
 
     public void logout(TTLDefaultDataView<TTLCommonResponse> view) {

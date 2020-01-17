@@ -4,17 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-import io.taptalk.taptalklive.API.Model.TTLTopic;
-import io.taptalk.taptalklive.API.Model.TTLUserModel;
+import io.taptalk.taptalklive.API.Model.TTLTopicModel;
 
 public class TTLGetTopicListResponse {
-    @JsonProperty("topics") private List<TTLTopic> topics;
+    @JsonProperty("topics") private List<TTLTopicModel> topics;
 
-    public List<TTLTopic> getTopics() {
+    public List<TTLTopicModel> getTopics() {
         return topics;
     }
 
-    public void setTopics(List<TTLTopic> topics) {
+    public void setTopics(List<TTLTopicModel> topics) {
         this.topics = topics;
     }
 }
