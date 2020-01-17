@@ -15,12 +15,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Helper.TapTalkDialog
+import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
+import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse
-import io.taptalk.taptalklive.API.Model.TTLTopic
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
+import io.taptalk.taptalklive.BuildConfig
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TTLDataManager
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
@@ -56,7 +58,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
         initTopicSpinnerAdapter()
 
-        ll_button_send_message.setOnClickListener{ validateSendMessage() }
+        ll_button_send_message.setOnClickListener { validateSendMessage() }
     }
 
     private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
@@ -68,24 +70,32 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun initTopicSpinnerAdapter() {
-        vm.topics.add(getString(R.string.ttl_select_topic))
+        val spinnerPlaceholder = getString(R.string.ttl_select_topic)
+        vm.topics.add(spinnerPlaceholder)
+
+        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
 
         getTopicList()
 
         topicSpinnerAdapter = object : ArrayAdapter<String>(
                 this, R.layout.ttl_cell_default_spinner_item, vm.topics) {
             override fun isEnabled(position: Int): Boolean {
-                return position != 0
+                return vm.topics[position] != spinnerPlaceholder
             }
         }
 
         val spinnerAdapterListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val tv = view as TextView
-                if (position == 0) {
+                if (vm.topics[position] == spinnerPlaceholder) {
                     tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.tapFormTextFieldPlaceholderColor))
                 } else {
                     tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.tapFormTextFieldColor))
+                    if (vm.topics.contains(spinnerPlaceholder)) {
+                        vm.topics.remove(spinnerPlaceholder)
+                        sp_select_topic.setSelection(position - 1)
+                        topicSpinnerAdapter.notifyDataSetChanged()
+                    }
                 }
             }
 
@@ -104,13 +114,8 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private val topicListDataView = object : TTLDefaultDataView<TTLGetTopicListResponse>() {
-        override fun startLoading() {
-            TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
-        }
-
         override fun onSuccess(response: TTLGetTopicListResponse?) {
             if (null != response) {
-                Toast.makeText(this@TTLCreateCaseFormActivity, "getTopicList onSuccess: ${response.topics.size}", Toast.LENGTH_LONG).show()
                 for (topic in response.topics) {
                     vm.topicsMap[topic.name] = topic
                 }
@@ -124,16 +129,24 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
 
         override fun onError(error: TTLErrorModel?) {
-            Toast.makeText(this@TTLCreateCaseFormActivity, "getTopicList onError: ${error?.message}", Toast.LENGTH_LONG).show()
+            setGetTopicListAsPending()
         }
 
         override fun onError(errorMessage: String?) {
-            Toast.makeText(this@TTLCreateCaseFormActivity, "getTopicList onError: $errorMessage", Toast.LENGTH_LONG).show()
-            // TODO CHECK INTERNET
+            setGetTopicListAsPending()
         }
     }
 
-    private fun validateFullName() : Boolean {
+    private fun setGetTopicListAsPending() {
+        TAPNetworkStateManager.getInstance().addNetworkListener(object : TapTalkNetworkInterface {
+            override fun onNetworkAvailable() {
+                getTopicList()
+                TAPNetworkStateManager.getInstance().removeNetworkListener(this)
+            }
+        })
+    }
+
+    private fun validateFullName(): Boolean {
         return if (!et_full_name.text.isNullOrEmpty()) {
             true
         } else {
@@ -146,9 +159,9 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateEmail() : Boolean {
+    private fun validateEmail(): Boolean {
         if (et_email_address.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(et_email_address.text).matches()) {
-            return  true
+            return true
         } else if (et_email_address.text.isNotEmpty()) {
             TapTalkDialog.Builder(this)
                     .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
@@ -165,8 +178,8 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         return false
     }
 
-    private fun validateTopic() : Boolean {
-        return if (sp_select_topic.selectedItemPosition != 0) {
+    private fun validateTopic(): Boolean {
+        return if (vm.topics[sp_select_topic.selectedItemPosition] != getString(R.string.ttl_select_topic)) {
             true
         } else {
             TapTalkDialog.Builder(this)
@@ -178,7 +191,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateMessage() : Boolean {
+    private fun validateMessage(): Boolean {
         return if (!et_message.text.isNullOrEmpty()) {
             true
         } else {
@@ -201,14 +214,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         tv_button_send_message.visibility = View.GONE
         iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.tap_ic_loading_progress_circle_white))
         TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
-        ll_button_send_message.setOnClickListener{ }
+        ll_button_send_message.setOnClickListener { }
     }
 
     private fun hideLoading() {
         iv_button_send_message.clearAnimation()
         iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.tap_ic_send_white))
         tv_button_send_message.visibility = View.VISIBLE
-        ll_button_send_message.setOnClickListener{ validateSendMessage() }
+        ll_button_send_message.setOnClickListener { validateSendMessage() }
     }
 
     private fun createUser() {
@@ -220,22 +233,28 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
     private val createUserDataView = object : TTLDefaultDataView<TTLCreateUserResponse>() {
         override fun startLoading() {
+            ll_button_send_message.setOnClickListener { }
             showLoading()
         }
 
         override fun onSuccess(response: TTLCreateUserResponse?) {
             if (null != response) {
                 TTLDataManager.getInstance().saveAuthTicket(response.ticket)
+                TTLDataManager.getInstance().saveActiveUser(response.user)
                 requestAccessToken()
             }
         }
 
         override fun onError(error: TTLErrorModel?) {
-            Toast.makeText(this@TTLCreateCaseFormActivity, "createUser onError: ${error?.message}", Toast.LENGTH_LONG).show()
+            showDefaultErrorDialog(error?.message)
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
         }
 
         override fun onError(errorMessage: String?) {
-            Toast.makeText(this@TTLCreateCaseFormActivity, "createUser onError: $errorMessage", Toast.LENGTH_LONG).show()
+            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
         }
     }
 
@@ -252,16 +271,38 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 TTLDataManager.getInstance().saveRefreshTokenExpiry(response.refreshTokenExpiry)
                 TTLDataManager.getInstance().saveAccessTokenExpiry(response.accessTokenExpiry)
                 TTLDataManager.getInstance().saveActiveUser(response.user)
+                // TODO GET TAPTALK AUTH TICKET, SEND MESSAGE
+                hideLoading()
                 Toast.makeText(this@TTLCreateCaseFormActivity, "requestAccessToken onSuccess: ${response.user.userID}", Toast.LENGTH_LONG).show()
             }
         }
 
         override fun onError(error: TTLErrorModel?) {
-            Toast.makeText(this@TTLCreateCaseFormActivity, "requestAccessToken onError: ${error?.message}", Toast.LENGTH_LONG).show()
+            showDefaultErrorDialog(error?.message)
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
         }
 
         override fun onError(errorMessage: String?) {
-            Toast.makeText(this@TTLCreateCaseFormActivity, "requestAccessToken onError: $errorMessage", Toast.LENGTH_LONG).show()
+            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
         }
+    }
+
+    private fun showDefaultErrorDialog(errorMessage: String?) {
+        val message = if (!TAPNetworkStateManager.getInstance().hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
+            getString(R.string.tap_no_internet_show_error)
+        } else if (!errorMessage.isNullOrEmpty()) {
+            errorMessage
+        } else  {
+            getString(R.string.tap_error_message_general)
+        }
+        TapTalkDialog.Builder(this@TTLCreateCaseFormActivity)
+            .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
+            .setTitle(getString(R.string.tap_error))
+            .setMessage(message)
+            .setPrimaryButtonTitle(getString(R.string.tap_ok))
+            .show()
     }
 }

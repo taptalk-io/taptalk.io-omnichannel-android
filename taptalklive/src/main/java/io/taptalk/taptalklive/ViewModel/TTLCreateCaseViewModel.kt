@@ -6,5 +6,5 @@ import io.taptalk.taptalklive.API.Model.TTLTopic
 
 class TTLCreateCaseViewModel(application: Application) : AndroidViewModel(application) {
     var topicsMap = LinkedHashMap<String, TTLTopic>()
-    var topics: ArrayList<String> = ArrayList()
+    var topics =  ArrayList<String>()
 }
