@@ -10,13 +10,18 @@ import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
 import io.taptalk.TapTalk.Helper.TapTalk;
+import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
+import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 
@@ -66,6 +71,33 @@ public class TapTalkLive {
 
     public static void openChatRoomList(Context activityContext) {
         TapUI.getInstance().openRoomList(activityContext);
+    }
+
+    public static void logoutAndClearAllTapLiveData(TapCommonListener listener) {
+        //checkTapTalkInitialized();
+        TTLDataManager.getInstance().logout(new TTLDefaultDataView<TTLCommonResponse>() {
+            @Override
+            public void onSuccess(TTLCommonResponse response) {
+                clearAllTapLiveData();
+                if (null != listener) {
+                    listener.onSuccess(response.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(TTLErrorModel error) {
+                if (null != listener) {
+                    listener.onError(error.getCode(), error.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                if (null != listener) {
+                    listener.onError(ERROR_CODE_OTHERS, errorMessage);
+                }
+            }
+        });
     }
 
     public static void clearAllTapLiveData() {

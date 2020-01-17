@@ -152,7 +152,6 @@ public class TTLApiManager {
         TTLDataManager.getInstance().saveAccessTokenExpiry(r.getData().getAccessTokenExpiry());
         TTLDataManager.getInstance().saveRefreshToken(r.getData().getRefreshToken());
         TTLDataManager.getInstance().saveRefreshTokenExpiry(r.getData().getRefreshTokenExpiry());
-
         TTLDataManager.getInstance().saveActiveUser(r.getData().getUser());
     }
 
