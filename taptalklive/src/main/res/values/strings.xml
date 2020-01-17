@@ -3,20 +3,28 @@
 
     <string name="ttl_create_form_title">Need help with anything?</string>
     <string name="ttl_create_form_description">Please fill out the form below before you leave a message</string>
+    <string name="ttl_full_name">Full Name</string>
     <string name="ttl_enter_full_name">Enter full name</string>
+    <string name="ttl_email_address">Email Address</string>
     <string name="ttl_enter_email_address">Enter email address</string>
-    <string name="tap_live_topic">Topic</string>
+    <string name="ttl_topic">Topic</string>
     <string name="ttl_select_topic">Select topic</string>
     <string name="ttl_message">Message</string>
     <string name="ttl_type_message_here">Type message here</string>
-
-    <string name="ttl_error_message_full_name_empty">Please enter your name.</string>
-    <string name="ttl_error_message_email_empty">Please enter your email.</string>
-    <string name="ttl_error_message_topic_empty">Please select a topic.</string>
-    <string name="ttl_error_message_message_empty">Please enter your message.</string>
+    <string name="ttl_send_message">Send Message</string>
+    <string name="ttl_ok">OK</string>
     <string name="ttl_leave_a_review">Leave a review</string>
     <string name="ttl_submit_review">Submit review</string>
     <string name="ttl_review_submitted">Review submitted</string>
+
+    <string name="ttl_error">Error</string>
+    <string name="ttl_error_message_full_name_empty">Please enter your name.</string>
+    <string name="ttl_error_message_email_empty">Please enter your email.</string>
+    <string name="ttl_error_invalid_email_address">Invalid email address</string>
+    <string name="ttl_error_message_topic_empty">Please select a topic.</string>
+    <string name="ttl_error_message_message_empty">Please enter your message.</string>
+    <string name="ttl_error_message_general">Something went wrong, please try again.</string>
+    <string name="ttl_error_message_offline">Oops! It seems like you are offline, please check your connection.</string>
 
     <!--TODO DUMMY RATING TEXT-->
     <string name="ttl_rating_1">Bad</string>

@@ -113,15 +113,15 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
                 tvLabelReviewRating. text = context!!.getString(R.string.ttl_rating_5)
             }
         }
-        flButtonSubmitReview.background = ContextCompat.getDrawable(context!!, R.drawable.tap_bg_button_active_ripple)
+        flButtonSubmitReview.background = ContextCompat.getDrawable(context!!, R.drawable.ttl_bg_button_active_ripple)
         flButtonSubmitReview.setOnClickListener { submitReview() }
     }
 
     private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
         if (hasFocus) {
-            view.background = ContextCompat.getDrawable(context!!, R.drawable.tap_bg_text_field_active)
+            view.background = ContextCompat.getDrawable(context!!, R.drawable.ttl_bg_text_field_active)
         } else {
-            view.background = ContextCompat.getDrawable(context!!, R.drawable.tap_bg_text_field_inactive)
+            view.background = ContextCompat.getDrawable(context!!, R.drawable.ttl_bg_text_field_inactive)
         }
     }
 

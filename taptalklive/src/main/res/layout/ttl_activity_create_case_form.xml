@@ -10,12 +10,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/tapDefaultBackgroundColor">
+        android:background="@color/ttlDefaultBackgroundColor">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="244dp"
-            android:background="@color/tapDefaultNavBarBackgroundColor"
+            android:background="@color/ttlDefaultNavBarBackgroundColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +28,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/tap_bg_white_rounded_8dp"
+            android:background="@drawable/ttl_bg_white_rounded_8dp"
             android:padding="8dp"
             android:src="@drawable/tap_ic_taptalk_logo"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +84,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
-            android:background="@color/tapWhite"
+            android:background="@color/ttlWhite"
             android:elevation="2dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -93,17 +93,17 @@
 
             <TextView
                 android:id="@+id/tv_label_full_name"
-                style="@style/tapFormLabelStyle"
+                style="@style/ttlFormLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
-                android:text="@string/tap_full_name" />
+                android:text="@string/ttl_full_name" />
 
             <EditText
                 android:id="@+id/et_full_name"
-                style="@style/tapFormTextFieldStyle"
+                style="@style/ttlFormTextFieldStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -111,27 +111,27 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/tap_bg_text_field_inactive"
+                android:background="@drawable/ttl_bg_text_field_inactive"
                 android:hint="@string/ttl_enter_full_name"
                 android:imeOptions="actionNext"
                 android:inputType="textCapWords"
                 android:maxLines="1"
                 android:padding="16dp"
-                android:textCursorDrawable="@drawable/tap_cursor_color" />
+                android:textCursorDrawable="@drawable/ttl_cursor_color" />
 
             <TextView
                 android:id="@+id/tv_label_email_address"
-                style="@style/tapFormLabelStyle"
+                style="@style/ttlFormLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
-                android:text="@string/tap_email_address" />
+                android:text="@string/ttl_email_address" />
 
             <EditText
                 android:id="@+id/et_email_address"
-                style="@style/tapFormTextFieldStyle"
+                style="@style/ttlFormTextFieldStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -139,23 +139,23 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/tap_bg_text_field_inactive"
+                android:background="@drawable/ttl_bg_text_field_inactive"
                 android:hint="@string/ttl_enter_email_address"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:padding="16dp"
-                android:textCursorDrawable="@drawable/tap_cursor_color" />
+                android:textCursorDrawable="@drawable/ttl_cursor_color" />
 
             <TextView
                 android:id="@+id/tv_label_topic"
-                style="@style/tapFormLabelStyle"
+                style="@style/ttlFormLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
-                android:text="@string/tap_live_topic" />
+                android:text="@string/ttl_topic" />
 
             <FrameLayout
                 android:id="@+id/fl_topic"
@@ -171,7 +171,7 @@
                     android:id="@+id/sp_select_topic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/tap_bg_text_field_inactive"
+                    android:background="@drawable/ttl_bg_text_field_inactive"
                     android:overlapAnchor="false"
                     android:paddingStart="16dp"
                     android:paddingLeft="16dp"
@@ -187,8 +187,8 @@
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:src="@drawable/tap_ic_chevron_down_orange"
-                    android:tint="@color/tapFormTextFieldColor"
+                    android:src="@drawable/ttl_ic_chevron_down_orange"
+                    android:tint="@color/ttlFormTextFieldColor"
                     android:visibility="gone" />
 
                 <ImageView
@@ -198,14 +198,14 @@
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:src="@drawable/tap_ic_loading_progress_circle_white"
-                    android:tint="@color/tapIconLoadingProgressPrimary" />
+                    android:src="@drawable/ttl_ic_loading_progress_circle_white"
+                    android:tint="@color/ttlIconLoadingProgressPrimary" />
 
             </FrameLayout>
 
             <TextView
                 android:id="@+id/tv_label_message"
-                style="@style/tapFormLabelStyle"
+                style="@style/ttlFormLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -215,20 +215,20 @@
 
             <EditText
                 android:id="@+id/et_message"
-                style="@style/tapFormTextFieldStyle"
+                style="@style/ttlFormTextFieldStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/tap_bg_text_field_inactive"
+                android:background="@drawable/ttl_bg_text_field_inactive"
                 android:gravity="top"
                 android:hint="@string/ttl_type_message_here"
                 android:imeOptions="actionNext"
                 android:inputType="textMultiLine"
                 android:minLines="2"
                 android:padding="16dp"
-                android:textCursorDrawable="@drawable/tap_cursor_color" />
+                android:textCursorDrawable="@drawable/ttl_cursor_color" />
 
             <LinearLayout
                 android:id="@+id/ll_button_send_message"
@@ -238,7 +238,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="24dp"
-                android:background="@drawable/tap_bg_button_active_ripple"
+                android:background="@drawable/ttl_bg_button_active_ripple"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -247,17 +247,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/tap_ic_send_white"
-                    android:tint="@color/tapButtonIconColor" />
+                    android:src="@drawable/ttl_ic_send_white"
+                    android:tint="@color/ttlButtonIconColor" />
 
                 <TextView
                     android:id="@+id/tv_button_send_message"
-                    style="@style/tapButtonLabelStyle"
+                    style="@style/ttlButtonLabelStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
-                    android:text="@string/tap_send_message" />
+                    android:text="@string/ttl_send_message" />
 
             </LinearLayout>
 

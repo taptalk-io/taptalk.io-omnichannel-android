@@ -63,9 +63,9 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
     private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
         if (hasFocus) {
-            view.background = ContextCompat.getDrawable(this, R.drawable.tap_bg_text_field_active)
+            view.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_active)
         } else {
-            view.background = ContextCompat.getDrawable(this, R.drawable.tap_bg_text_field_inactive)
+            view.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
         }
     }
 
@@ -88,9 +88,9 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val tv = view as TextView
                 if (vm.topics[position] == spinnerPlaceholder) {
-                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.tapFormTextFieldPlaceholderColor))
+                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.ttlFormTextFieldPlaceholderColor))
                 } else {
-                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.tapFormTextFieldColor))
+                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.ttlFormTextFieldColor))
                     if (vm.topics.contains(spinnerPlaceholder)) {
                         vm.topics.remove(spinnerPlaceholder)
                         sp_select_topic.setSelection(position - 1)
@@ -153,7 +153,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             TapTalkDialog.Builder(this)
                     .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
                     .setMessage(getString(R.string.ttl_error_message_full_name_empty))
-                    .setPrimaryButtonTitle(getString(R.string.tap_ok))
+                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
                     .show()
             false
         }
@@ -165,14 +165,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         } else if (et_email_address.text.isNotEmpty()) {
             TapTalkDialog.Builder(this)
                     .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-                    .setMessage(getString(R.string.tap_error_invalid_email_address))
-                    .setPrimaryButtonTitle(getString(R.string.tap_ok))
+                    .setMessage(getString(R.string.ttl_error_invalid_email_address))
+                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
                     .show()
         } else {
             TapTalkDialog.Builder(this)
                     .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
                     .setMessage(getString(R.string.ttl_error_message_email_empty))
-                    .setPrimaryButtonTitle(getString(R.string.tap_ok))
+                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
                     .show()
         }
         return false
@@ -185,7 +185,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             TapTalkDialog.Builder(this)
                     .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
                     .setMessage(getString(R.string.ttl_error_message_topic_empty))
-                    .setPrimaryButtonTitle(getString(R.string.tap_ok))
+                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
                     .show()
             false
         }
@@ -198,7 +198,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             TapTalkDialog.Builder(this)
                     .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
                     .setMessage(getString(R.string.ttl_error_message_message_empty))
-                    .setPrimaryButtonTitle(getString(R.string.tap_ok))
+                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
                     .show()
             false
         }
@@ -212,14 +212,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
     private fun showLoading() {
         tv_button_send_message.visibility = View.GONE
-        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.tap_ic_loading_progress_circle_white))
+        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_loading_progress_circle_white))
         TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
         ll_button_send_message.setOnClickListener { }
     }
 
     private fun hideLoading() {
         iv_button_send_message.clearAnimation()
-        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.tap_ic_send_white))
+        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_send_white))
         tv_button_send_message.visibility = View.VISIBLE
         ll_button_send_message.setOnClickListener { validateSendMessage() }
     }
@@ -252,7 +252,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
 
         override fun onError(errorMessage: String?) {
-            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
+            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.ttl_error_message_general))
             ll_button_send_message.setOnClickListener { validateSendMessage() }
             hideLoading()
         }
@@ -284,7 +284,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
 
         override fun onError(errorMessage: String?) {
-            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
+            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.ttl_error_message_general))
             ll_button_send_message.setOnClickListener { validateSendMessage() }
             hideLoading()
         }
@@ -292,17 +292,17 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
     private fun showDefaultErrorDialog(errorMessage: String?) {
         val message = if (!TAPNetworkStateManager.getInstance().hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
-            getString(R.string.tap_no_internet_show_error)
+            getString(R.string.ttl_error_message_offline)
         } else if (!errorMessage.isNullOrEmpty()) {
             errorMessage
         } else  {
-            getString(R.string.tap_error_message_general)
+            getString(R.string.ttl_error_message_general)
         }
         TapTalkDialog.Builder(this@TTLCreateCaseFormActivity)
             .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-            .setTitle(getString(R.string.tap_error))
+            .setTitle(getString(R.string.ttl_error))
             .setMessage(message)
-            .setPrimaryButtonTitle(getString(R.string.tap_ok))
+            .setPrimaryButtonTitle(getString(R.string.ttl_ok))
             .show()
     }
 }
