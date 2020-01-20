@@ -15,6 +15,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespon
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
 import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
 import io.taptalk.taptalklive.BuildConfig;
@@ -165,6 +166,10 @@ public class TTLApiManager {
 
     public void getProjectConfigs(Subscriber<TTLBaseResponse<TTLGetProjectConfigsRespone>> subscriber) {
         execute(ttlApiService.getProjectConfigs(), subscriber);
+    }
+
+    public void requestTapTalkAuthTicket(Subscriber<TTLBaseResponse<TTLRequestTicketResponse>> subscriber) {
+        execute(ttlApiService.requestTapTalkAuthTicket(), subscriber);
     }
 
     public void getTopicList(Subscriber<TTLBaseResponse<TTLGetTopicListResponse>> subscriber) {

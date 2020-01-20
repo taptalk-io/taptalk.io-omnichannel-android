@@ -64,7 +64,8 @@ public class TTLApiConnection {
 
     private OkHttpClient buildHttpTtlClient() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(TapTalk.isLoggingEnabled ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        // TODO: 20 Jan 2020 UPDATE HTTP LOGGING INTERCEPTOR
+        loggingInterceptor.setLevel(/*TapTalk.isLoggingEnabled ? */HttpLoggingInterceptor.Level.BODY/* : HttpLoggingInterceptor.Level.NONE*/);
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(new StethoInterceptor())
                 .connectTimeout(1, TimeUnit.MINUTES)

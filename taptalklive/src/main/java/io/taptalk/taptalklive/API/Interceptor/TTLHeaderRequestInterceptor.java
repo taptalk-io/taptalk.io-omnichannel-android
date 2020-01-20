@@ -6,6 +6,7 @@ import android.provider.Settings;
 import java.io.IOException;
 
 import io.taptalk.taptalklive.BuildConfig;
+import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.TapTalkLive;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -37,6 +38,13 @@ public class TTLHeaderRequestInterceptor implements Interceptor {
                 .addHeader("User-Agent", "Android")
                 .method(original.method(), original.body())
                 .build();
+
+        if (null == original.headers().get("Authorization")) {
+            request = request
+                    .newBuilder()
+                    .addHeader("Authorization", "Bearer " + TTLDataManager.getInstance().getAccessToken())
+                    .build();
+        }
 
         return chain.proceed(request);
     }

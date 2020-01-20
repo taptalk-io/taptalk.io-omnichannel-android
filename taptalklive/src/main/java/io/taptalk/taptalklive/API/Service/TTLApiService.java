@@ -9,6 +9,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import rx.Observable;
@@ -23,6 +24,9 @@ public interface TTLApiService {
 
     @POST("client/project/get_configs")
     Observable<TTLBaseResponse<TTLGetProjectConfigsRespone>> getProjectConfigs();
+
+    @POST("client/taptalk/request_auth_ticket")
+    Observable<TTLBaseResponse<TTLRequestTicketResponse>> requestTapTalkAuthTicket();
 
     @POST("client/topic/get_list")
     Observable<TTLBaseResponse<TTLGetTopicListResponse>> getTopicList();

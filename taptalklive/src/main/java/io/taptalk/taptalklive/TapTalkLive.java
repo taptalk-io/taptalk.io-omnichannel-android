@@ -3,12 +3,14 @@ package io.taptalk.taptalklive;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
+import io.taptalk.TapTalk.API.Api.TAPApiManager;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface;
 import io.taptalk.TapTalk.Listener.TapCommonListener;
@@ -44,6 +46,7 @@ public class TapTalkLive {
                         @NonNull String tapLiveKey,
                         int clientAppIcon,
                         String clientAppName) {
+
         context = appContext;
 
         // Init Hawk for preference
@@ -76,6 +79,7 @@ public class TapTalkLive {
     private TTLDefaultDataView<TTLGetProjectConfigsRespone> projectConfigsDataView = new TTLDefaultDataView<TTLGetProjectConfigsRespone>() {
         @Override
         public void onSuccess(TTLGetProjectConfigsRespone response) {
+            Log.e(">>>>", "projectConfigsDataView onSuccess: ");
             TTLTapTalkProjectConfigsModel tapTalk = response.getTapTalkProjectConfigs();
             if (null != tapTalk) {
                 initializeTapTalkSDK(
@@ -90,11 +94,13 @@ public class TapTalkLive {
 
         @Override
         public void onError(TTLErrorModel error) {
+            Log.e(">>>>", "projectConfigsDataView onError: " + error.getMessage());
             onError(error.getMessage());
         }
 
         @Override
         public void onError(String errorMessage) {
+            Log.e(">>>>", "projectConfigsDataView onError: " + errorMessage);
             if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
@@ -111,8 +117,12 @@ public class TapTalkLive {
     };
 
     private static void initializeTapTalkSDK(String tapTalkAppKeyID, String tapTalkAppKeySecret, String tapTalkApiUrl) {
+        Log.e(">>>>", "initializeTapTalkSDK tapTalkAppKeyID: " + tapTalkAppKeyID);
+        Log.e(">>>>", "initializeTapTalkSDK tapTalkAppKeySecret: " + tapTalkAppKeySecret);
+        Log.e(">>>>", "initializeTapTalkSDK tapTalkApiUrl: " + tapTalkApiUrl);
         TapTalk.setLoggingEnabled(true);
-        TapTalk.init(context,
+        TapTalk.init(
+                context,
                 tapTalkAppKeyID,
                 tapTalkAppKeySecret,
                 clientAppIcon,
@@ -121,6 +131,7 @@ public class TapTalkLive {
                 TapTalkImplementationTypeCombine,
                 tapListener);
         TapTalk.initializeGooglePlacesApiKey(BuildConfig.GOOGLE_MAPS_API_KEY);
+        Log.e(">>>>", "initializeTapTalkSDK TAPApiManager.getBaseUrlApi(): " + TAPApiManager.getBaseUrlApi());
 
         TapUI.getInstance().setLogoutButtonVisible(true);
         TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
@@ -134,6 +145,16 @@ public class TapTalkLive {
                 context.startActivity(intent);
             }
         }));
+    }
+
+    public static void authenticateTapTalkSDK(String authTicket, TapCommonListener listener) {
+        if (TapTalk.isAuthenticated()) {
+            Log.e(">>>", "authenticateTapTalkSDK: TapTalk SDK is already initialized");
+            listener.onSuccess("TapTalk SDK is already initialized");
+            return;
+        }
+        Log.e(">>>", "authenticateTapTalkSDK: authenticateWithAuthTicket " + authTicket);
+        TapTalk.authenticateWithAuthTicket(authTicket, true, listener);
     }
 
     private static TapListener tapListener = new TapListener() {

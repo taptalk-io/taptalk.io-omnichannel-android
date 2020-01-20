@@ -10,6 +10,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespon
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
@@ -77,13 +78,14 @@ public class TTLDataManager {
      */
 
     public void deleteAllPreference() {
-        removeTapTalkApiUrl();
-        removeTapTalkAppKeyID();
-        removeTapTalkAppKeySecret();
         removeAuthTicket();
         removeAccessToken();
         removeRefreshToken();
         removeActiveUser();
+        removeTapTalkApiUrl();
+        removeTapTalkAppKeyID();
+        removeTapTalkAppKeySecret();
+        removeTapTalkAuthTicket();
     }
 
     /**
@@ -103,63 +105,6 @@ public class TTLDataManager {
 
     public void removeAuthTicket() {
         removePreference(TTLConstant.PreferenceKey.AUTH_TICKET);
-    }
-
-    /**
-     * TAPTALK API URL
-     */
-    public Boolean checkTapTalkApiUrlAvailable() {
-        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_API_URL);
-    }
-
-    public String getTapTalkApiUrl() {
-        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_API_URL);
-    }
-
-    public void saveTapTalkApiUrl(String tapTalkApiUrl) {
-        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_API_URL, tapTalkApiUrl);
-    }
-
-    public void removeTapTalkApiUrl() {
-        removePreference(TTLConstant.PreferenceKey.TAPTALK_API_URL);
-    }
-
-    /**
-     * TAPTALK API KEY ID
-     */
-    public Boolean checkTapTalkAppKeyIDAvailable() {
-        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
-    }
-
-    public String getTapTalkAppKeyID() {
-        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
-    }
-
-    public void saveTapTalkAppKeyID(String tapTalkAppKeyID) {
-        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID, tapTalkAppKeyID);
-    }
-
-    public void removeTapTalkAppKeyID() {
-        removePreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
-    }
-
-    /**
-     * TAPTALK API KEY SECRET
-     */
-    public Boolean checkTapTalkAppKeySecretAvailable() {
-        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
-    }
-
-    public String getTapTalkAppKeySecret() {
-        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
-    }
-
-    public void saveTapTalkAppKeySecret(String tapTalkAppKeySecret) {
-        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET, tapTalkAppKeySecret);
-    }
-
-    public void removeTapTalkAppKeySecret() {
-        removePreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
     }
 
     /**
@@ -228,6 +173,78 @@ public class TTLDataManager {
     }
 
     /**
+     * TAPTALK API URL
+     */
+    public Boolean checkTapTalkApiUrlAvailable() {
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_API_URL);
+    }
+
+    public String getTapTalkApiUrl() {
+        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_API_URL);
+    }
+
+    public void saveTapTalkApiUrl(String tapTalkApiUrl) {
+        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_API_URL, tapTalkApiUrl);
+    }
+
+    public void removeTapTalkApiUrl() {
+        removePreference(TTLConstant.PreferenceKey.TAPTALK_API_URL);
+    }
+
+    /**
+     * TAPTALK API KEY ID
+     */
+    public Boolean checkTapTalkAppKeyIDAvailable() {
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
+    }
+
+    public String getTapTalkAppKeyID() {
+        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
+    }
+
+    public void saveTapTalkAppKeyID(String tapTalkAppKeyID) {
+        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID, tapTalkAppKeyID);
+    }
+
+    public void removeTapTalkAppKeyID() {
+        removePreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
+    }
+
+    /**
+     * TAPTALK API KEY SECRET
+     */
+    public Boolean checkTapTalkAppKeySecretAvailable() {
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
+    }
+
+    public String getTapTalkAppKeySecret() {
+        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
+    }
+
+    public void saveTapTalkAppKeySecret(String tapTalkAppKeySecret) {
+        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET, tapTalkAppKeySecret);
+    }
+
+    public void removeTapTalkAppKeySecret() {
+        removePreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
+    }
+
+    /**
+     * TAPTALK API AUTH TICKET
+     */
+    public String getTapTalkAuthTicket() {
+        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_AUTH_TICKET);
+    }
+
+    public void saveTapTalkAuthTicket(String tapTalkAuthTicket) {
+        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_AUTH_TICKET, tapTalkAuthTicket);
+    }
+
+    public void removeTapTalkAuthTicket() {
+        removePreference(TTLConstant.PreferenceKey.TAPTALK_AUTH_TICKET);
+    }
+
+    /**
      * =========================================================================================== *
      * API CALLS
      * =========================================================================================== *
@@ -239,6 +256,10 @@ public class TTLDataManager {
 
     public void getProjectConfigs(TTLDefaultDataView<TTLGetProjectConfigsRespone> view) {
         TTLApiManager.getInstance().getProjectConfigs(new TTLDefaultSubscriber<>(view));
+    }
+
+    public void requestTapTalkAuthTicket(TTLDefaultDataView<TTLRequestTicketResponse> view) {
+        TTLApiManager.getInstance().requestTapTalkAuthTicket(new TTLDefaultSubscriber<>(view));
     }
 
     public void getTopicList(TTLDefaultDataView<TTLGetTopicListResponse> view) {

@@ -11,17 +11,17 @@
     <string name="ttl_type_message_here">Type message here</string>
 
     <string name="ttl_error_message_full_name_empty">Please enter your name.</string>
-    <string name="ttl_error_message_email_empty">Please enter your email.</string>
+    <string name="ttl_error_message_email_empty">Please enter your email address.</string>
+    <string name="ttl_error_message_email_invalid">Email address format is invalid.</string>
     <string name="ttl_error_message_topic_empty">Please select a topic.</string>
-    <string name="ttl_error_message_message_empty">Please enter your message.</string>
+    <string name="ttl_error_message_message_empty">Please enter a message.</string>
     <string name="ttl_leave_a_review">Leave a review</string>
     <string name="ttl_submit_review">Submit review</string>
     <string name="ttl_review_submitted">Review submitted</string>
 
-    <!--TODO DUMMY RATING TEXT-->
-    <string name="ttl_rating_1">Bad</string>
-    <string name="ttl_rating_2">Could be better</string>
-    <string name="ttl_rating_3">OK</string>
-    <string name="ttl_rating_4">Very Good</string>
+    <string name="ttl_rating_1">Horrible</string>
+    <string name="ttl_rating_2">Not good</string>
+    <string name="ttl_rating_3">Okay</string>
+    <string name="ttl_rating_4">Good</string>
     <string name="ttl_rating_5">Excellent</string>
 </resources>

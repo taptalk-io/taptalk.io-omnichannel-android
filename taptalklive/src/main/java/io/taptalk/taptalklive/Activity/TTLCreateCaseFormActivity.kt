@@ -1,30 +1,32 @@
 package io.taptalk.taptalklive.Activity
 
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import io.taptalk.TapTalk.Helper.TAPUtils
+import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
+import io.taptalk.TapTalk.Listener.TapCommonListener
 import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse
+import io.taptalk.TapTalk.Manager.TapUI
+import io.taptalk.TapTalk.Model.TAPImageURL
+import io.taptalk.taptalklive.API.Model.ResponseModel.*
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
-import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.Manager.TTLDataManager
+import io.taptalk.taptalklive.R
+import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.*
 
@@ -272,9 +274,11 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 TTLDataManager.getInstance().saveRefreshTokenExpiry(response.refreshTokenExpiry)
                 TTLDataManager.getInstance().saveAccessTokenExpiry(response.accessTokenExpiry)
                 TTLDataManager.getInstance().saveActiveUser(response.user)
-                // TODO GET TAPTALK AUTH TICKET, SEND MESSAGE
-                hideLoading()
-                Toast.makeText(this@TTLCreateCaseFormActivity, "requestAccessToken onSuccess: ${response.user.userID}", Toast.LENGTH_LONG).show()
+                if (!TapTalk.isAuthenticated()) {
+                    requestTapTalkAuthTicket()
+                } else {
+                    createCase()
+                }
             }
         }
 
@@ -290,6 +294,87 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             hideLoading()
         }
     }
+
+    private fun requestTapTalkAuthTicket() {
+        TTLDataManager.getInstance().requestTapTalkAuthTicket(requestTapTalkAuthTicketDataView)
+    }
+
+    private val requestTapTalkAuthTicketDataView = object : TTLDefaultDataView<TTLRequestTicketResponse>() {
+        override fun onSuccess(response: TTLRequestTicketResponse?) {
+            if (null != response) {
+                TTLDataManager.getInstance().saveTapTalkAuthTicket(response.ticket)
+                authenticateTapTalkSDK(response.ticket)
+            } else {
+                onError("Unable to request TapTalk authentication ticket.")
+            }
+        }
+
+        override fun onError(error: TTLErrorModel?) {
+            showDefaultErrorDialog(error?.message)
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
+        }
+
+        override fun onError(errorMessage: String?) {
+            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
+        }
+    }
+
+    private fun authenticateTapTalkSDK(ticket: String) {
+        Log.e(">>>>", "authenticateTapTalkSDK: $ticket")
+        TapTalkLive.authenticateTapTalkSDK(ticket, authenticateTapTalkSDKListener)
+    }
+
+    private val authenticateTapTalkSDKListener = object: TapCommonListener() {
+        override fun onSuccess(p0: String?) {
+            Log.e(">>>>", "authenticateTapTalkSDKListener onSuccess: $p0")
+            TTLDataManager.getInstance().removeTapTalkAuthTicket()
+            createCase()
+        }
+
+        override fun onError(errorCode: String?, errorMessage: String?) {
+            Log.e(">>>>", "authenticateTapTalkSDKListener onError: $errorCode - $errorMessage")
+            showDefaultErrorDialog(errorMessage)
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
+        }
+    }
+
+    private fun createCase() {
+        TTLDataManager.getInstance().createCase(
+                vm.topicsMap[vm.topics[sp_select_topic.selectedItemPosition]]?.id,
+                et_message.text.toString(),
+                createCaseDataView)
+    }
+
+    private val createCaseDataView = object : TTLDefaultDataView<TTLCreateCaseResponse>() {
+        override fun onSuccess(response: TTLCreateCaseResponse?) {
+            // TODO TESTING
+            TapUI.getInstance().openChatRoom(
+                    this@TTLCreateCaseFormActivity,
+                    response?.caseResponse?.tapTalkXCRoomID,
+                    response?.caseResponse?.topicName,
+                    TAPImageURL(),
+                    4,
+                    "")
+        }
+
+        override fun onError(error: TTLErrorModel?) {
+            showDefaultErrorDialog(error?.message)
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
+        }
+
+        override fun onError(errorMessage: String?) {
+            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
+        }
+    }
+
+
 
     private fun showDefaultErrorDialog(errorMessage: String?) {
         val message = if (!TAPNetworkStateManager.getInstance().hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
