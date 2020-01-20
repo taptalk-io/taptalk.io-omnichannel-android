@@ -11,17 +11,17 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
-import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
 import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
 import io.taptalk.taptalklive.BuildConfig;
 import io.taptalk.taptalklive.Exception.TTLApiRefreshTokenRunningException;
 import io.taptalk.taptalklive.Exception.TTLApiSessionExpiredException;
 import io.taptalk.taptalklive.Exception.TTLAuthException;
-import io.taptalk.taptalklive.TTLDataManager;
+import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.TapTalkLive;
 import rx.Observable;
 import rx.Subscriber;
@@ -161,6 +161,10 @@ public class TTLApiManager {
 
     public void requestAccessToken(Subscriber<TTLBaseResponse<TTLRequestAccessTokenResponse>> subscriber) {
         execute(ttlApiService.requestAccessToken("Bearer " + TTLDataManager.getInstance().getAuthTicket()), subscriber);
+    }
+
+    public void getProjectConfigs(Subscriber<TTLBaseResponse<TTLGetProjectConfigsRespone>> subscriber) {
+        execute(ttlApiService.getProjectConfigs(), subscriber);
     }
 
     public void getTopicList(Subscriber<TTLBaseResponse<TTLGetTopicListResponse>> subscriber) {

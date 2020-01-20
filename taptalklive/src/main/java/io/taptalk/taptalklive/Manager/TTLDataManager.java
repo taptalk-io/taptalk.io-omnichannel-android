@@ -1,4 +1,4 @@
-package io.taptalk.taptalklive;
+package io.taptalk.taptalklive.Manager;
 
 import com.orhanobut.hawk.Hawk;
 
@@ -6,19 +6,14 @@ import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
-
-import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN;
-import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN_EXPIRY;
-import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACTIVE_USER;
-import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.AUTH_TICKET;
-import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN;
-import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN_EXPIRY;
+import io.taptalk.taptalklive.Const.TTLConstant;
 
 public class TTLDataManager {
     private static final String TAG = TTLDataManager.class.getSimpleName();
@@ -82,6 +77,9 @@ public class TTLDataManager {
      */
 
     public void deleteAllPreference() {
+        removeTapTalkApiUrl();
+        removeTapTalkAppKeyID();
+        removeTapTalkAppKeySecret();
         removeAuthTicket();
         removeAccessToken();
         removeRefreshToken();
@@ -92,84 +90,141 @@ public class TTLDataManager {
      * AUTH TICKET
      */
     public Boolean checkAuthTicketAvailable() {
-        return checkPreferenceKeyAvailable(AUTH_TICKET);
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.AUTH_TICKET);
     }
 
     public String getAuthTicket() {
-        return getStringPreference(AUTH_TICKET);
+        return getStringPreference(TTLConstant.PreferenceKey.AUTH_TICKET);
     }
 
     public void saveAuthTicket(String authTicket) {
-        saveStringPreference(AUTH_TICKET, authTicket);
+        saveStringPreference(TTLConstant.PreferenceKey.AUTH_TICKET, authTicket);
     }
 
     public void removeAuthTicket() {
-        removePreference(AUTH_TICKET);
+        removePreference(TTLConstant.PreferenceKey.AUTH_TICKET);
+    }
+
+    /**
+     * TAPTALK API URL
+     */
+    public Boolean checkTapTalkApiUrlAvailable() {
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_API_URL);
+    }
+
+    public String getTapTalkApiUrl() {
+        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_API_URL);
+    }
+
+    public void saveTapTalkApiUrl(String tapTalkApiUrl) {
+        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_API_URL, tapTalkApiUrl);
+    }
+
+    public void removeTapTalkApiUrl() {
+        removePreference(TTLConstant.PreferenceKey.TAPTALK_API_URL);
+    }
+
+    /**
+     * TAPTALK API KEY ID
+     */
+    public Boolean checkTapTalkAppKeyIDAvailable() {
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
+    }
+
+    public String getTapTalkAppKeyID() {
+        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
+    }
+
+    public void saveTapTalkAppKeyID(String tapTalkAppKeyID) {
+        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID, tapTalkAppKeyID);
+    }
+
+    public void removeTapTalkAppKeyID() {
+        removePreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID);
+    }
+
+    /**
+     * TAPTALK API KEY SECRET
+     */
+    public Boolean checkTapTalkAppKeySecretAvailable() {
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
+    }
+
+    public String getTapTalkAppKeySecret() {
+        return getStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
+    }
+
+    public void saveTapTalkAppKeySecret(String tapTalkAppKeySecret) {
+        saveStringPreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET, tapTalkAppKeySecret);
+    }
+
+    public void removeTapTalkAppKeySecret() {
+        removePreference(TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET);
     }
 
     /**
      * ACCESS TOKEN
      */
     public Boolean checkAccessTokenAvailable() {
-        return checkPreferenceKeyAvailable(ACCESS_TOKEN);
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.ACCESS_TOKEN);
     }
 
     public String getAccessToken() {
-        return getStringPreference(ACCESS_TOKEN);
+        return getStringPreference(TTLConstant.PreferenceKey.ACCESS_TOKEN);
     }
 
     public void saveAccessToken(String accessToken) {
-        saveStringPreference(ACCESS_TOKEN, accessToken);
+        saveStringPreference(TTLConstant.PreferenceKey.ACCESS_TOKEN, accessToken);
     }
 
     public void saveAccessTokenExpiry(Long accessTokenExpiry) {
-        saveLongTimestampPreference(ACCESS_TOKEN_EXPIRY, accessTokenExpiry);
+        saveLongTimestampPreference(TTLConstant.PreferenceKey.ACCESS_TOKEN_EXPIRY, accessTokenExpiry);
     }
 
     public long getAccessTokenExpiry() {
-        return getLongTimestampPreference(ACCESS_TOKEN_EXPIRY);
+        return getLongTimestampPreference(TTLConstant.PreferenceKey.ACCESS_TOKEN_EXPIRY);
     }
 
     public void removeAccessToken() {
-        removePreference(ACCESS_TOKEN);
+        removePreference(TTLConstant.PreferenceKey.ACCESS_TOKEN);
     }
 
     /**
      * REFRESH TOKEN
      */
     public Boolean checkRefreshTokenAvailable() {
-        return checkPreferenceKeyAvailable(REFRESH_TOKEN);
+        return checkPreferenceKeyAvailable(TTLConstant.PreferenceKey.REFRESH_TOKEN);
     }
 
     public String getRefreshToken() {
-        return getStringPreference(REFRESH_TOKEN);
+        return getStringPreference(TTLConstant.PreferenceKey.REFRESH_TOKEN);
     }
 
     public void saveRefreshToken(String refreshToken) {
-        saveStringPreference(REFRESH_TOKEN, refreshToken);
+        saveStringPreference(TTLConstant.PreferenceKey.REFRESH_TOKEN, refreshToken);
     }
 
     public void saveRefreshTokenExpiry(Long refreshTokenExpiry) {
-        saveLongTimestampPreference(REFRESH_TOKEN_EXPIRY, refreshTokenExpiry);
+        saveLongTimestampPreference(TTLConstant.PreferenceKey.REFRESH_TOKEN_EXPIRY, refreshTokenExpiry);
     }
 
     public void removeRefreshToken() {
-        removePreference(REFRESH_TOKEN);
+        removePreference(TTLConstant.PreferenceKey.REFRESH_TOKEN);
     }
 
     /**
      * ACTIVE USER
      */
     public TTLUserModel getActiveUser() {
-        return Hawk.get(ACTIVE_USER, null);
+        return Hawk.get(TTLConstant.PreferenceKey.ACTIVE_USER, null);
     }
 
     public void saveActiveUser(TTLUserModel user) {
-        Hawk.put(ACTIVE_USER, user);
+        Hawk.put(TTLConstant.PreferenceKey.ACTIVE_USER, user);
     }
 
     public void removeActiveUser() {
-        removePreference(ACTIVE_USER);
+        removePreference(TTLConstant.PreferenceKey.ACTIVE_USER);
     }
 
     /**
@@ -180,6 +235,10 @@ public class TTLDataManager {
 
     public void requestAccessToken(TTLDefaultDataView<TTLRequestAccessTokenResponse> view) {
         TTLApiManager.getInstance().requestAccessToken(new TTLDefaultSubscriber<>(view));
+    }
+
+    public void getProjectConfigs(TTLDefaultDataView<TTLGetProjectConfigsRespone> view) {
+        TTLApiManager.getInstance().getProjectConfigs(new TTLDefaultSubscriber<>(view));
     }
 
     public void getTopicList(TTLDefaultDataView<TTLGetTopicListResponse> view) {

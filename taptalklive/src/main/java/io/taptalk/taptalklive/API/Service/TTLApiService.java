@@ -6,6 +6,7 @@ import io.taptalk.taptalklive.API.Model.RequestModel.TTLRateConversationRequest;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import retrofit2.http.Body;
@@ -19,6 +20,9 @@ import retrofit2.http.POST;
 public interface TTLApiService {
     @POST("auth/access_token/request")
     Observable<TTLBaseResponse<TTLRequestAccessTokenResponse>> requestAccessToken(@Header("Authorization") String authTicket);
+
+    @POST("client/project/get_configs")
+    Observable<TTLBaseResponse<TTLGetProjectConfigsRespone>> getProjectConfigs();
 
     @POST("client/topic/get_list")
     Observable<TTLBaseResponse<TTLGetTopicListResponse>> getTopicList();

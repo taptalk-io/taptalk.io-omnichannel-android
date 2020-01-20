@@ -24,7 +24,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenRespo
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
 import io.taptalk.taptalklive.R
-import io.taptalk.taptalklive.TTLDataManager
+import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.*
 
@@ -224,6 +224,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         ll_button_send_message.setOnClickListener { validateSendMessage() }
     }
 
+    // TODO REQUEST TAPLIVE USER FROM CLIENT
     private fun createUser() {
         TTLDataManager.getInstance().createUser(
                 et_full_name.text.toString(),

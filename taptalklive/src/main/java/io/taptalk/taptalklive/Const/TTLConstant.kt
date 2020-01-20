@@ -14,6 +14,9 @@ class TTLConstant {
     }
 
     object PreferenceKey {
+        const val TAPTALK_API_URL = "kTapTalkLiveTapTalkApiUrl"
+        const val TAPTALK_APP_KEY_ID = "kTapTalkLiveTapTalkAppKeyId"
+        const val TAPTALK_APP_KEY_SECRET = "kTapTalkLiveTapTalkAppKeySecret"
         const val AUTH_TICKET = "kTapTalkLiveAuthenticationTicket"
         const val REFRESH_TOKEN = "kTapTalkLiveRefreshToken"
         const val REFRESH_TOKEN_EXPIRY = "kTapTalkLiveRefreshTokenExpiry"
