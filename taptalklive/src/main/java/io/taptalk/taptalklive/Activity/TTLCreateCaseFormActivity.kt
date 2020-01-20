@@ -75,7 +75,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         val spinnerPlaceholder = getString(R.string.ttl_select_topic)
         vm.topics.add(spinnerPlaceholder)
 
-        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
+//        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
 
         getTopicList()
 
@@ -215,7 +215,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private fun showLoading() {
         tv_button_send_message.visibility = View.GONE
         iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.tap_ic_loading_progress_circle_white))
-        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
+//        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
         ll_button_send_message.setOnClickListener { }
     }
 

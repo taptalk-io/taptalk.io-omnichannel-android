@@ -35,7 +35,7 @@ public class TTLHeaderRequestInterceptor implements Interceptor {
                 .addHeader("Device-Model", android.os.Build.MODEL)
                 .addHeader("Device-Platform", "android")
                 .addHeader("Device-OS-Version", deviceOsVersion)
-                .addHeader("User-Agent", "Android")
+                .addHeader("User-Agent", "android")
                 .method(original.method(), original.body())
                 .build();
 
