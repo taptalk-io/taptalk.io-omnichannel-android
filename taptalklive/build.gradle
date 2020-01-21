@@ -22,10 +22,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
-            buildConfigField("String", "TAPTALK_SDK_APP_KEY_ID", '"ddf6fc9507a3a4f6386c3d6b8"')
-            buildConfigField("String", "TAPTALK_SDK_APP_KEY_SECRET", '"MzMzMTQ0QDUuMjMuMTEwQDE1Njg4MjIzMTk/OWRjYmU2YzI/NGIyMjQyMzdiMzIy/MmYwODE4NWU0Nzc2"')
-            buildConfigField("String", "TAPTALK_SDK_BASE_URL", '"https://e-dev-43588589a565102ffa8d6a92bff6b4f4.io.taptalk.io"')
-
             buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
             buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-dev.taptalk.io/api/visitor"')
             buildConfigField("String", "TAPLIVE_SDK_API_VERSION", '"/v1/"')
@@ -34,10 +30,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
-            buildConfigField("String", "TAPTALK_SDK_APP_KEY_ID", '"ddf6fc9507a3a4f6386c3d6b8"')
-            buildConfigField("String", "TAPTALK_SDK_APP_KEY_SECRET", '"MzMzMTQ0QDUuMjMuMTEwQDE1Njg4MjIzMTk/OWRjYmU2YzI/NGIyMjQyMzdiMzIy/MmYwODE4NWU0Nzc2"')
-            buildConfigField("String", "TAPTALK_SDK_BASE_URL", '"https://e-dev-43588589a565102ffa8d6a92bff6b4f4.io.taptalk.io"')
-
             buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
             buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-dev.taptalk.io/api/visitor"')
             buildConfigField("String", "TAPLIVE_SDK_API_VERSION", '"/v1/"')
@@ -63,7 +55,6 @@ dependencies {
 
     // Lifecycle components
     api "android.arch.lifecycle:extensions:1.1.1"
-    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 
     //Jackson
     implementation "com.fasterxml.jackson.core:jackson-core:2.9.7"
@@ -71,9 +62,9 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:2.9.7"
 
     //GMS
-    implementation 'com.google.android.gms:play-services-vision:17.0.2'
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'com.google.android.libraries.places:places:1.1.0'
+    implementation 'com.google.android.gms:play-services-vision:19.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.1.0'
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
@@ -100,8 +91,8 @@ dependencies {
     implementation "com.orhanobut:hawk:2.0.1"
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.google.firebase:firebase-messaging:18.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.2'
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
 
     implementation 'com.android.support:multidex:1.0.3'
 
@@ -109,7 +100,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.github.jefrylorentono:taptalknew:1.0.20-1'
+    implementation 'com.github.taptalk-io:taptalk.io-android:1.0.21'
 }
 repositories {
     mavenCentral()
