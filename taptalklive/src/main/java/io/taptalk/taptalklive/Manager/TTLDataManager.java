@@ -278,6 +278,14 @@ public class TTLDataManager {
         TTLApiManager.getInstance().createCase(topicID, message, new TTLDefaultSubscriber<>(view));
     }
 
+    public void getCaseDetailsByID(Integer caseID, TTLDefaultDataView<TTLCreateCaseResponse> view) {
+        TTLApiManager.getInstance().getCaseDetailsByID(caseID, new TTLDefaultSubscriber<>(view));
+    }
+
+    public void closeCase(Integer caseID, TTLDefaultDataView<TTLCommonResponse> view) {
+        TTLApiManager.getInstance().closeCase(caseID, new TTLDefaultSubscriber<>(view));
+    }
+
     public void rateConversation(Integer caseID, Integer rating, String note, TTLDefaultDataView<TTLCommonResponse> view) {
         TTLApiManager.getInstance().rateConversation(caseID, rating, note, new TTLDefaultSubscriber<>(view));
     }
