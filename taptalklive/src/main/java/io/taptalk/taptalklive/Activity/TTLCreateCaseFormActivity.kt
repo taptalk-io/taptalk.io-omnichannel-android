@@ -54,25 +54,22 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        setupPage()
         window?.setBackgroundDrawable(null)
 
-        et_full_name.onFocusChangeListener = formFocusListener
-        et_email_address.onFocusChangeListener = formFocusListener
+        if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
+            // Show name and email fields if user does not exist
+            tv_label_full_name.visibility = View.VISIBLE
+            et_full_name.visibility = View.VISIBLE
+            tv_label_email_address.visibility = View.VISIBLE
+            et_email_address.visibility = View.VISIBLE
+            et_full_name.onFocusChangeListener = formFocusListener
+            et_email_address.onFocusChangeListener = formFocusListener
+        }
         et_message.onFocusChangeListener = formFocusListener
 
         initTopicSpinnerAdapter()
 
         ll_button_send_message.setOnClickListener { validateSendMessage() }
-    }
-
-    private fun setupPage() {
-        if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
-            tv_label_full_name.visibility = View.VISIBLE
-            et_full_name.visibility = View.VISIBLE
-            tv_label_email_address.visibility = View.VISIBLE
-            et_email_address.visibility = View.VISIBLE
-        }
     }
 
     private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
@@ -87,7 +84,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         val spinnerPlaceholder = getString(R.string.ttl_select_topic)
         vm.topics.add(spinnerPlaceholder)
 
-//        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
+        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
 
         getTopicList()
 
@@ -179,7 +176,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         } else if (et_email_address.text.isNotEmpty()) {
             TapTalkDialog.Builder(this)
                     .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-                    .setMessage(getString(R.string.ttl_error_invalid_email_address))
+                    .setMessage(getString(R.string.ttl_error_message_email_invalid))
                     .setPrimaryButtonTitle(getString(R.string.ttl_ok))
                     .show()
         } else {
@@ -248,7 +245,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         ll_button_send_message.setOnClickListener { validateSendMessage() }
     }
 
-    // TODO REQUEST TAPLIVE USER FROM CLIENT
     private fun createUser() {
         TTLDataManager.getInstance().createUser(
                 et_full_name.text.toString(),
@@ -322,12 +318,17 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private val requestTapTalkAuthTicketDataView = object : TTLDefaultDataView<TTLRequestTicketResponse>() {
+        override fun startLoading() {
+            ll_button_send_message.setOnClickListener { }
+            showLoading()
+        }
+
         override fun onSuccess(response: TTLRequestTicketResponse?) {
             if (null != response) {
                 TTLDataManager.getInstance().saveTapTalkAuthTicket(response.ticket)
                 authenticateTapTalkSDK(response.ticket)
             } else {
-                onError("Unable to request TapTalk authentication ticket.")
+                onError(getString(R.string.ttl_error_taptalk_auth_ticket_empty))
             }
         }
 
@@ -345,19 +346,16 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun authenticateTapTalkSDK(ticket: String) {
-        Log.e(">>>>", "authenticateTapTalkSDK: $ticket")
         TapTalkLive.authenticateTapTalkSDK(ticket, authenticateTapTalkSDKListener)
     }
 
     private val authenticateTapTalkSDKListener = object : TapCommonListener() {
         override fun onSuccess(p0: String?) {
-            Log.e(">>>>", "authenticateTapTalkSDKListener onSuccess: $p0")
             TTLDataManager.getInstance().removeTapTalkAuthTicket()
             createCase()
         }
 
         override fun onError(errorCode: String?, errorMessage: String?) {
-            Log.e(">>>>", "authenticateTapTalkSDKListener onError: $errorCode - $errorMessage")
             showDefaultErrorDialog(errorMessage)
             ll_button_send_message.setOnClickListener { validateSendMessage() }
             hideLoading()
@@ -372,16 +370,17 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private val createCaseDataView = object : TTLDefaultDataView<TTLCreateCaseResponse>() {
-        override fun onSuccess(response: TTLCreateCaseResponse?) {
-            // TODO TESTING
-            TapCoreChatRoomManager.getInstance().getChatRoomByXcRoomID(response?.caseResponse?.tapTalkXCRoomID, object : TapCoreGetRoomListener() {
-                override fun onSuccess(roomModel: TAPRoomModel?) {
-                    TapUI.getInstance().openRoomList(this@TTLCreateCaseFormActivity)
-                    TapUI.getInstance().openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
-                    finish()
-                }
-            })
+        override fun startLoading() {
+            ll_button_send_message.setOnClickListener { }
+            showLoading()
+        }
 
+        override fun onSuccess(response: TTLCreateCaseResponse?) {
+            if (!response?.caseResponse?.tapTalkXCRoomID.isNullOrEmpty()) {
+                openCaseChatRoom(response?.caseResponse?.tapTalkXCRoomID!!)
+            } else {
+                onError(getString(R.string.ttl_error_xc_room_id_empty))
+            }
         }
 
         override fun onError(error: TTLErrorModel?) {
@@ -397,6 +396,15 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
     }
 
+    private fun openCaseChatRoom(tapTalkXCRoomID: String) {
+        TapCoreChatRoomManager.getInstance().getChatRoomByXcRoomID(tapTalkXCRoomID, object : TapCoreGetRoomListener() {
+            override fun onSuccess(roomModel: TAPRoomModel?) {
+                TapUI.getInstance().openRoomList(this@TTLCreateCaseFormActivity)
+                TapUI.getInstance().openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                finish()
+            }
+        })
+    }
 
     private fun showDefaultErrorDialog(errorMessage: String?) {
         val message = if (!TAPNetworkStateManager.getInstance().hasNetworkConnection(this@TTLCreateCaseFormActivity)) {

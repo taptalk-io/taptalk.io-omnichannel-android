@@ -18,13 +18,15 @@
     <string name="ttl_review_submitted">Review submitted</string>
 
     <string name="ttl_error">Error</string>
+    <string name="ttl_error_message_general">Something went wrong, please try again.</string>
+    <string name="ttl_error_message_offline">Oops! It seems like you are offline, please check your connection.</string>
     <string name="ttl_error_message_full_name_empty">Please enter your name.</string>
     <string name="ttl_error_message_email_empty">Please enter your email address.</string>
     <string name="ttl_error_message_email_invalid">Email address format is invalid.</string>
     <string name="ttl_error_message_topic_empty">Please select a topic.</string>
     <string name="ttl_error_message_message_empty">Please enter a message.</string>
-    <string name="ttl_error_message_general">Something went wrong, please try again.</string>
-    <string name="ttl_error_message_offline">Oops! It seems like you are offline, please check your connection.</string>
+    <string name="ttl_error_xc_room_id_empty">Unable to fetch TapTalk chat room</string>
+    <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
 
     <string name="ttl_rating_1">Horrible</string>
     <string name="ttl_rating_2">Not good</string>
