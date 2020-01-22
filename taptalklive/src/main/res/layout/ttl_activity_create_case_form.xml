@@ -5,6 +5,7 @@
     android:id="@+id/sv_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".Activity.TTLCreateCaseFormActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -99,7 +100,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
-                android:text="@string/tap_full_name" />
+                android:text="@string/tap_full_name"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/et_full_name"
@@ -117,7 +119,8 @@
                 android:inputType="textCapWords"
                 android:maxLines="1"
                 android:padding="16dp"
-                android:textCursorDrawable="@drawable/tap_cursor_color" />
+                android:textCursorDrawable="@drawable/tap_cursor_color"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_label_email_address"
@@ -127,7 +130,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
-                android:text="@string/tap_email_address" />
+                android:text="@string/tap_email_address"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/et_email_address"
@@ -145,7 +149,8 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:padding="16dp"
-                android:textCursorDrawable="@drawable/tap_cursor_color" />
+                android:textCursorDrawable="@drawable/tap_cursor_color"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_label_topic"

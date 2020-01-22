@@ -13,14 +13,15 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
 import io.taptalk.TapTalk.Listener.TapCommonListener
+import io.taptalk.TapTalk.Listener.TapCoreGetRoomListener
 import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
+import io.taptalk.TapTalk.Manager.TapCoreChatRoomManager
 import io.taptalk.TapTalk.Manager.TapUI
-import io.taptalk.TapTalk.Model.TAPImageURL
+import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.taptalklive.API.Model.ResponseModel.*
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
@@ -52,6 +53,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        setupPage()
         window?.setBackgroundDrawable(null)
 
         et_full_name.onFocusChangeListener = formFocusListener
@@ -61,6 +63,15 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         initTopicSpinnerAdapter()
 
         ll_button_send_message.setOnClickListener { validateSendMessage() }
+    }
+
+    private fun setupPage() {
+        if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
+            tv_label_full_name.visibility = View.VISIBLE
+            et_full_name.visibility = View.VISIBLE
+            tv_label_email_address.visibility = View.VISIBLE
+            et_email_address.visibility = View.VISIBLE
+        }
     }
 
     private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
@@ -207,8 +218,18 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun validateSendMessage() {
-        if (validateFullName() && validateEmail() && validateTopic() && validateMessage()) {
-            createUser()
+        if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
+            if (validateFullName() && validateEmail() && validateTopic() && validateMessage()) {
+                createUser()
+            }
+        } else {
+            if (validateTopic() && validateMessage()) {
+                if (!TapTalk.isAuthenticated()) {
+                    requestTapTalkAuthTicket()
+                } else {
+                    createCase()
+                }
+            }
         }
     }
 
@@ -327,7 +348,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         TapTalkLive.authenticateTapTalkSDK(ticket, authenticateTapTalkSDKListener)
     }
 
-    private val authenticateTapTalkSDKListener = object: TapCommonListener() {
+    private val authenticateTapTalkSDKListener = object : TapCommonListener() {
         override fun onSuccess(p0: String?) {
             Log.e(">>>>", "authenticateTapTalkSDKListener onSuccess: $p0")
             TTLDataManager.getInstance().removeTapTalkAuthTicket()
@@ -352,13 +373,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private val createCaseDataView = object : TTLDefaultDataView<TTLCreateCaseResponse>() {
         override fun onSuccess(response: TTLCreateCaseResponse?) {
             // TODO TESTING
-            TapUI.getInstance().openChatRoom(
-                    this@TTLCreateCaseFormActivity,
-                    response?.caseResponse?.tapTalkXCRoomID,
-                    response?.caseResponse?.topicName,
-                    TAPImageURL(),
-                    4,
-                    "")
+            TapCoreChatRoomManager.getInstance().getChatRoomByXcRoomID(response?.caseResponse?.tapTalkXCRoomID, object : TapCoreGetRoomListener() {
+                override fun onSuccess(roomModel: TAPRoomModel?) {
+                    TapUI.getInstance().openRoomList(this@TTLCreateCaseFormActivity)
+                    TapUI.getInstance().openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                    finish()
+                }
+            })
+
         }
 
         override fun onError(error: TTLErrorModel?) {
@@ -375,20 +397,19 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
 
-
     private fun showDefaultErrorDialog(errorMessage: String?) {
         val message = if (!TAPNetworkStateManager.getInstance().hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
             getString(R.string.tap_no_internet_show_error)
         } else if (!errorMessage.isNullOrEmpty()) {
             errorMessage
-        } else  {
+        } else {
             getString(R.string.tap_error_message_general)
         }
         TapTalkDialog.Builder(this@TTLCreateCaseFormActivity)
-            .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-            .setTitle(getString(R.string.tap_error))
-            .setMessage(message)
-            .setPrimaryButtonTitle(getString(R.string.tap_ok))
-            .show()
+                .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
+                .setTitle(getString(R.string.tap_error))
+                .setMessage(message)
+                .setPrimaryButtonTitle(getString(R.string.tap_ok))
+                .show()
     }
 }
