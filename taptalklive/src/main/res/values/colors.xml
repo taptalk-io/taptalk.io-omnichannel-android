@@ -62,6 +62,7 @@
     <color name="ttlLeftBubbleBackgroundColor">@color/ttlWhite</color>
     <color name="ttlRightBubbleBackgroundColor">@color/ttlColorPrimary</color>
 
+    <color name="ttlIconNavBarCloseButton">@color/ttlWhite</color>
     <color name="ttlIconMessageSending">@color/ttlColorGrayIcon</color>
     <color name="ttlIconMessageDelivered">@color/ttlColorGrayIcon</color>
     <color name="ttlIconMessageRead">@color/ttlVibrantGreen</color>

@@ -11,6 +11,10 @@ class TTLConstant {
         const val REVIEW = 1001
     }
 
+    object Extras {
+        const val SHOW_CLOSE_BUTTON = "kTapTalkLiveExtrasShowCloseButton"
+    }
+
     object PreferenceKey {
         const val AUTH_TICKET = "kTapTalkLiveAuthenticationTicket"
         const val REFRESH_TOKEN = "kTapTalkLiveRefreshToken"

@@ -7,4 +7,5 @@ import io.taptalk.taptalklive.API.Model.TTLTopicModel
 class TTLCreateCaseViewModel(application: Application) : AndroidViewModel(application) {
     var topicsMap = LinkedHashMap<String, TTLTopicModel>()
     var topics =  ArrayList<String>()
+    var showCloseButton = false
 }

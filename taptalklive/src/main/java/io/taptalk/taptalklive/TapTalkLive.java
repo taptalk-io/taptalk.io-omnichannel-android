@@ -3,18 +3,17 @@ package io.taptalk.taptalklive;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
-import io.taptalk.TapTalk.API.Api.TAPApiManager;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface;
 import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
+import io.taptalk.TapTalk.Listener.TapUIRoomListListener;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
@@ -31,6 +30,7 @@ import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
+import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 
@@ -42,6 +42,7 @@ public class TapTalkLive {
     private static String clientAppName;
     private static int clientAppIcon;
     private static boolean isNeedToGetProjectConfigs;
+    private static boolean isRoomListOpened;
 
     private TapTalkLive(@NonNull final Context appContext,
                         @NonNull String tapLiveKey,
@@ -62,15 +63,6 @@ public class TapTalkLive {
         TapTalkLive.clientAppName = clientAppName;
 
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
-
-//        TapTalk.setLoggingEnabled(true);
-//        TapTalk.init(appContext, BuildConfig.TAPTALK_SDK_APP_KEY_ID,
-//                BuildConfig.TAPTALK_SDK_APP_KEY_SECRET,
-//                clientAppIcon, clientAppName, BuildConfig.TAPTALK_SDK_BASE_URL,
-//                TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine,
-//                tapListener);
-//        TapTalk.initializeGooglePlacesApiKey(BuildConfig.GOOGLE_MAPS_API_KEY);
-//        TapUI.getInstance().setLogoutButtonVisible(true);
     }
 
     public static TapTalkLive init(Context context, int clientAppIcon, String clientAppName) {
@@ -80,7 +72,6 @@ public class TapTalkLive {
     private TTLDefaultDataView<TTLGetProjectConfigsRespone> projectConfigsDataView = new TTLDefaultDataView<TTLGetProjectConfigsRespone>() {
         @Override
         public void onSuccess(TTLGetProjectConfigsRespone response) {
-            Log.e(">>>>", "projectConfigsDataView onSuccess: ");
             TTLTapTalkProjectConfigsModel tapTalk = response.getTapTalkProjectConfigs();
             if (null != tapTalk) {
                 initializeTapTalkSDK(
@@ -95,13 +86,11 @@ public class TapTalkLive {
 
         @Override
         public void onError(TTLErrorModel error) {
-            Log.e(">>>>", "projectConfigsDataView onError: " + error.getMessage());
             onError(error.getMessage());
         }
 
         @Override
         public void onError(String errorMessage) {
-            Log.e(">>>>", "projectConfigsDataView onError: " + errorMessage);
             if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
@@ -118,9 +107,6 @@ public class TapTalkLive {
     };
 
     private static void initializeTapTalkSDK(String tapTalkAppKeyID, String tapTalkAppKeySecret, String tapTalkApiUrl) {
-        Log.e(">>>>", "initializeTapTalkSDK tapTalkAppKeyID: " + tapTalkAppKeyID);
-        Log.e(">>>>", "initializeTapTalkSDK tapTalkAppKeySecret: " + tapTalkAppKeySecret);
-        Log.e(">>>>", "initializeTapTalkSDK tapTalkApiUrl: " + tapTalkApiUrl);
         TapTalk.setLoggingEnabled(true);
         TapTalk.init(
                 context,
@@ -132,9 +118,13 @@ public class TapTalkLive {
                 TapTalkImplementationTypeCombine,
                 tapListener);
         TapTalk.initializeGooglePlacesApiKey(BuildConfig.GOOGLE_MAPS_API_KEY);
-        Log.e(">>>>", "initializeTapTalkSDK TAPApiManager.getBaseUrlApi(): " + TAPApiManager.getBaseUrlApi());
 
-        TapUI.getInstance().setLogoutButtonVisible(true);
+        TapUI.getInstance().setCloseButtonInRoomListVisible(true);
+        TapUI.getInstance().setProfileButtonInChatRoomVisible(false);
+        TapUI.getInstance().setMyAccountButtonInRoomListVisible(false);
+
+        TapUI.getInstance().addRoomListListener(tapUIRoomListListener);
+
         TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
                 R.layout.ttl_cell_chat_bubble_review,
                 TYPE_REVIEW, (context, sender) -> {
@@ -150,11 +140,9 @@ public class TapTalkLive {
 
     public static void authenticateTapTalkSDK(String authTicket, TapCommonListener listener) {
         if (TapTalk.isAuthenticated()) {
-            Log.e(">>>", "authenticateTapTalkSDK: TapTalk SDK is already initialized");
-            listener.onSuccess("TapTalk SDK is already initialized");
+            listener.onSuccess("TapTalk SDK is already authenticated");
             return;
         }
-        Log.e(">>>", "authenticateTapTalkSDK: authenticateWithAuthTicket " + authTicket);
         TapTalk.authenticateWithAuthTicket(authTicket, true, listener);
     }
 
@@ -185,6 +173,13 @@ public class TapTalkLive {
         }
     };
 
+    private static TapUIRoomListListener tapUIRoomListListener = new TapUIRoomListListener() {
+        @Override
+        public void onNewChatButtonTapped(Activity activity) {
+            openCreateCaseForm(activity, true);
+        }
+    };
+
     private TapTalkNetworkInterface networkListener = new TapTalkNetworkInterface() {
         @Override
         public void onNetworkAvailable() {
@@ -196,8 +191,9 @@ public class TapTalkLive {
         }
     };
 
-    public static void openCreateCaseForm(Context activityContext) {
+    public static void openCreateCaseForm(Context activityContext, boolean showCloseButton) {
         Intent intent = new Intent(activityContext, TTLCreateCaseFormActivity.class);
+        intent.putExtra(SHOW_CLOSE_BUTTON, showCloseButton);
         activityContext.startActivity(intent);
         if (activityContext instanceof Activity) {
             ((Activity) activityContext).overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay);
@@ -205,6 +201,10 @@ public class TapTalkLive {
     }
 
     public static void openChatRoomList(Context activityContext) {
+        if (isRoomListOpened) {
+            return;
+        }
+        isRoomListOpened = true;
         TapUI.getInstance().openRoomList(activityContext);
     }
 

@@ -1,7 +1,6 @@
 package io.taptalk.taptalklive.Activity
 
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.AdapterView
@@ -26,6 +25,7 @@ import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.taptalklive.API.Model.ResponseModel.*
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
+import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
@@ -49,12 +49,24 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         initView()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_down)
+    }
+
     private fun initViewModel() {
         vm = ViewModelProviders.of(this).get(TTLCreateCaseViewModel::class.java)
+
+        vm.showCloseButton = intent.getBooleanExtra(SHOW_CLOSE_BUTTON, false)
     }
 
     private fun initView() {
         window?.setBackgroundDrawable(null)
+
+        if (vm.showCloseButton) {
+            iv_button_close.visibility = View.VISIBLE
+            iv_button_close.setOnClickListener { onBackPressed() }
+        }
 
         if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
             // Show name and email fields if user does not exist
@@ -402,6 +414,12 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 TapUI.getInstance().openRoomList(this@TTLCreateCaseFormActivity)
                 TapUI.getInstance().openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
                 finish()
+            }
+
+            override fun onError(errorCode: String?, errorMessage: String?) {
+                showDefaultErrorDialog(errorMessage)
+                ll_button_send_message.setOnClickListener { validateSendMessage() }
+                hideLoading()
             }
         })
     }
