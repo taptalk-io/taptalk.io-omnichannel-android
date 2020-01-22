@@ -100,7 +100,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.github.taptalk-io:taptalk.io-android:1.0.21'
+//    implementation 'com.github.taptalk-io:taptalk.io-android:1.0.21'
+    implementation 'com.github.jefrylorentono:taptalknew:1.0.22-1'
 }
 repositories {
     mavenCentral()
