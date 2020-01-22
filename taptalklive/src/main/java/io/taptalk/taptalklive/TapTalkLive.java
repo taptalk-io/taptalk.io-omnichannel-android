@@ -23,6 +23,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
+import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
@@ -194,6 +195,14 @@ public class TapTalkLive {
             }
         }
     };
+
+    public static void openCreateCaseForm(Context activityContext) {
+        Intent intent = new Intent(activityContext, TTLCreateCaseFormActivity.class);
+        activityContext.startActivity(intent);
+        if (activityContext instanceof Activity) {
+            ((Activity) activityContext).overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay);
+        }
+    }
 
     public static void openChatRoomList(Context activityContext) {
         TapUI.getInstance().openRoomList(activityContext);

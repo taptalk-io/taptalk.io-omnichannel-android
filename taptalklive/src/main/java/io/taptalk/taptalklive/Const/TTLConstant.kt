@@ -1,12 +1,10 @@
 package io.taptalk.taptalklive.Const
 
 class TTLConstant {
-    object RoomType {
-        const val TYPE_TRANSACTION = 4
-    }
-
     object MessageType {
-        const val TYPE_REVIEW = 3001
+        const val TYPE_CLOSE_CASE = 3001
+        const val TYPE_REOPEN_CASE = 3002
+        const val TYPE_REVIEW = 3003
     }
 
     object RequestCode {
