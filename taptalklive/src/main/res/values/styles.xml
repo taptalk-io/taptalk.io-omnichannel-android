@@ -3,10 +3,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/tapColorPrimary</item>
-        <item name="colorPrimaryDark">@color/tapColorPrimaryDark</item>
-        <item name="colorAccent">@color/tapColorAccent</item>
-        <item name="android:statusBarColor">@color/tapColorPrimary</item>
+        <item name="colorPrimary">@color/ttlColorPrimary</item>
+        <item name="colorPrimaryDark">@color/ttlColorPrimaryDark</item>
+        <item name="colorAccent">@color/ttlColorAccent</item>
+        <item name="android:statusBarColor">@color/ttlColorPrimary</item>
     </style>
 
     <style name="Theme.AppCompat.Transparent.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -16,49 +16,94 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="tapFontFamilyLight">
-        <item name="android:fontFamily">@font/tap_font_pt_root_light</item>
+    <style name="ttlFontFamilyLight">
+        <item name="android:fontFamily">@font/ttl_font_pt_root_light</item>
     </style>
 
-    <style name="tapFontFamilyRegular">
-        <item name="android:fontFamily">@font/tap_font_pt_root_regular</item>
+    <style name="ttlFontFamilyRegular">
+        <item name="android:fontFamily">@font/ttl_font_pt_root_regular</item>
     </style>
 
-    <style name="tapFontFamilyMedium">
-        <item name="android:fontFamily">@font/tap_font_pt_root_medium</item>
+    <style name="ttlFontFamilyMedium">
+        <item name="android:fontFamily">@font/ttl_font_pt_root_medium</item>
     </style>
 
-    <style name="tapFontFamilyBold">
-        <item name="android:fontFamily">@font/tap_font_pt_root_bold</item>
+    <style name="ttlFontFamilyBold">
+        <item name="android:fontFamily">@font/ttl_font_pt_root_bold</item>
     </style>
 
-    <style name="tapFormLabelStyle" parent="tapFontFamilyBold">
+    <style name="ttlFormLabelStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">-0.02</item>
-        <item name="android:textColor">@color/tapFormLabelColor</item>
+        <item name="android:textColor">@color/ttlFormLabelColor</item>
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="ttlCreateFormTitleLabelStyle" parent="tapFontFamilyBold">
+    <style name="ttlFormTextFieldStyle" parent="ttlFontFamilyRegular">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:textColor">@color/ttlFormTextFieldColor</item>
+        <item name="android:textColorHint">@color/ttlFormTextFieldPlaceholderColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ttlCreateFormTitleLabelStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">@color/ttlCreateFormTitleLabelColor</item>
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="ttlCreateFormDescriptionLabelStyle" parent="tapFontFamilyRegular">
+    <style name="ttlCreateFormDescriptionLabelStyle" parent="ttlFontFamilyRegular">
         <item name="android:letterSpacing">-0.01</item>
         <item name="android:lineSpacingExtra">4sp</item>
         <item name="android:textColor">@color/ttlCreateFormDescriptionLabelColor</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="ttlReviewTitleLabelStyle" parent="tapFontFamilyBold">
+    <style name="ttlButtonLabelStyle" parent="ttlFontFamilyBold">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/ttlButtonLabelColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ttlDefaultRoomAvatarSmallFontStyle" parent="ttlFontFamilyBold">
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:textColor">@color/ttlDefaultRoomAvatarSmallFontColor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ttlLeftBubbleSenderNameStyle" parent="ttlFontFamilyBold">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:textColor">@color/ttlLeftBubbleSenderNameColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ttlLeftBubbleMessageBodyStyle" parent="ttlFontFamilyRegular">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:textColor">@color/ttlLeftBubbleMessageBodyColor</item>
+        <item name="android:textColorLink">@color/ttlLeftBubbleMessageBodyURLColor</item>
+        <item name="android:textColorHighlight">@color/ttlLeftBubbleMessageBodyURLHighlightedColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ttlBubbleMessageStatusStyle" parent="ttlFontFamilyRegular">
+        <item name="android:textColor">@color/ttlBubbleMessageStatusColor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ttlPopupDialogTitleStyle" parent="ttlFontFamilyBold">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">@color/ttlPopupDialogTitleColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ttlReviewTitleLabelStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">-0.01</item>
         <item name="android:lineSpacingExtra">4sp</item>
         <item name="android:textColor">@color/ttlReviewTitleLabelColor</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="ttlReviewRatingLabelStyle" parent="tapFontFamilyBold">
+    <style name="ttlReviewRatingLabelStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">-0.01</item>
         <item name="android:textColor">@color/ttlReviewRatingLabelColor</item>
         <item name="android:textSize">14sp</item>

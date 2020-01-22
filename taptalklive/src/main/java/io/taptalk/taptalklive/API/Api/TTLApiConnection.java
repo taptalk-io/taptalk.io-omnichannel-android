@@ -8,7 +8,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.taptalklive.API.Interceptor.TTLHeaderRequestInterceptor;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
 import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
@@ -17,7 +16,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-
 
 public class TTLApiConnection {
 
