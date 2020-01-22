@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/tv_avatar_label"
-        style="@style/tapDefaultRoomAvatarSmallFontStyle"
+        style="@style/ttlDefaultRoomAvatarSmallFontStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -57,12 +57,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            android:background="@drawable/tap_bg_chat_bubble_left_default"
+            android:background="@drawable/ttl_bg_chat_bubble_left_default"
             android:padding="10dp">
 
             <TextView
                 android:id="@+id/tv_user_name"
-                style="@style/tapLeftBubbleSenderNameStyle"
+                style="@style/ttlLeftBubbleSenderNameStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
@@ -112,7 +112,7 @@
 
             <TextView
                 android:id="@+id/tv_message_body"
-                style="@style/tapLeftBubbleMessageBodyStyle"
+                style="@style/ttlLeftBubbleMessageBodyStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constrainedWidth="true"
@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/tap_bg_button_active_ripple"
+                android:background="@drawable/ttl_bg_button_active_ripple"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="12dp"
@@ -145,13 +145,13 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
-                    android:src="@drawable/tap_ic_checklist_pumpkin"
-                    android:tint="@color/tapLiveTextDark20"
+                    android:src="@drawable/ttl_ic_checklist_pumpkin"
+                    android:tint="@color/ttlTextDark20"
                     android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_button_review"
-                    style="@style/tapButtonLabelStyle"
+                    style="@style/ttlButtonLabelStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -184,7 +184,7 @@
 
     <TextView
         android:id="@+id/tv_message_status"
-        style="@style/tapBubbleMessageStatusStyle"
+        style="@style/ttlBubbleMessageStatusStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -209,7 +209,7 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        tools:src="@drawable/tap_ic_sent_grey" />
+        tools:src="@drawable/ttl_ic_sent_grey" />
 
     <ImageView
         android:id="@+id/iv_sending"
@@ -221,8 +221,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="5dp"
         android:alpha="0"
-        android:src="@drawable/tap_ic_sending_grey"
-        android:tint="@color/tapIconMessageSending"
+        android:src="@drawable/ttl_ic_sending_grey"
+        android:tint="@color/ttlIconMessageSending"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/fl_bubble"
         app:layout_constraintEnd_toEndOf="parent"

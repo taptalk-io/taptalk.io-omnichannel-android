@@ -52,8 +52,8 @@ class TTLReviewChatBubbleViewHolder internal constructor(
     override fun onBind(item: TAPMessageModel?, position: Int) {
         if (isMessageFromMySelf(item!!)) {
             // Message from active user
-            clBubble.background = ContextCompat.getDrawable(itemView.context, R.drawable.tap_bg_chat_bubble_right_default)
-            tvMessageBody.setTextColor(ContextCompat.getColor(itemView.context, R.color.tapColorTextLight))
+            clBubble.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_chat_bubble_right_default)
+            tvMessageBody.setTextColor(ContextCompat.getColor(itemView.context, R.color.ttlColorTextLight))
             civAvatar.visibility = View.GONE
             tvAvatarLabel.visibility = View.GONE
             tvUserName.visibility = View.GONE
@@ -75,8 +75,8 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             }
         } else {
             // Message from others
-            clBubble.background = ContextCompat.getDrawable(itemView.context, R.drawable.tap_bg_chat_bubble_left_default)
-            tvMessageBody.setTextColor(ContextCompat.getColor(itemView.context, R.color.tapColorTextDark))
+            clBubble.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_chat_bubble_left_default)
+            tvMessageBody.setTextColor(ContextCompat.getColor(itemView.context, R.color.ttlColorTextDark))
             llButtonReview.visibility = View.VISIBLE
             ivMessageStatus.visibility = View.GONE
             vMarginRight.visibility = View.VISIBLE
@@ -96,7 +96,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
                     tvAvatarLabel.visibility = View.GONE
                 } else {
                     ImageViewCompat.setImageTintList(civAvatar, ColorStateList.valueOf(TAPUtils.getInstance().getRandomColor(item.user.name)))
-                    civAvatar.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.Taptalk.R.drawable.tap_bg_circle_9b9b9b))
+                    civAvatar.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_circle_9b9b9b))
                     tvAvatarLabel.text = TAPUtils.getInstance().getInitials(item.user.name, 2)
                     civAvatar.visibility = View.VISIBLE
                     tvAvatarLabel.visibility = View.VISIBLE
@@ -112,12 +112,12 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
             // TODO CHECK IF REVIEW IS ALREADY SUBMITTED
 //            if (item.data?.get("review_status") as Boolean) {
-//                llButtonReview.background = ContextCompat.getDrawable(itemView.context, io.taptalk.Taptalk.R.drawable.tap_bg_button_inactive_ripple)
+//                llButtonReview.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_button_inactive_ripple)
 //                tvButtonReview.text = itemView.context.getString(R.string.ttl_review_submitted)
 //                ivButtonReview.visibility = View.VISIBLE
 //                llButtonReview.setOnClickListener { }
 //            } else {
-                llButtonReview.background = ContextCompat.getDrawable(itemView.context, io.taptalk.Taptalk.R.drawable.tap_bg_button_active_ripple)
+                llButtonReview.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_button_active_ripple)
                 tvButtonReview.text = itemView.context.getString(R.string.ttl_leave_a_review)
                 ivButtonReview.visibility = View.GONE
                 llButtonReview.setOnClickListener { onReviewButtonTapped() }
@@ -133,8 +133,8 @@ class TTLReviewChatBubbleViewHolder internal constructor(
         if (!isMessageFromMySelf(message!!)) {
             return
         }
-        ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.Taptalk.R.drawable.tap_ic_sent_grey))
-        ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, io.taptalk.Taptalk.R.color.tapIconMessageSent)))
+        ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_sent_grey))
+        ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.ttlIconMessageSent)))
         ivMessageStatus.visibility = View.VISIBLE
             tvMessageStatus.visibility = View.VISIBLE
         animateSend(item, flBubble, ivSending, ivMessageStatus)
@@ -142,8 +142,8 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
     override fun receiveDeliveredEvent(message: TAPMessageModel?) {
         if (isMessageFromMySelf(message!!)) {
-            ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.Taptalk.R.drawable.tap_ic_delivered_grey))
-            ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, io.taptalk.Taptalk.R.color.tapIconMessageDelivered)))
+            ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_delivered_grey))
+            ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.ttlIconMessageDelivered)))
             ivMessageStatus.visibility = View.VISIBLE
             ivSending.alpha = 0f
         }
@@ -153,8 +153,8 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
     override fun receiveReadEvent(message: TAPMessageModel?) {
         if (isMessageFromMySelf(message!!)) {
-            ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.Taptalk.R.drawable.tap_ic_read_orange))
-            ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, io.taptalk.Taptalk.R.color.tapIconMessageRead)))
+            ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_read_orange))
+            ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.ttlIconMessageRead)))
             ivMessageStatus.visibility = View.VISIBLE
             ivSending.alpha = 0f
         }
