@@ -1,6 +1,7 @@
 package io.taptalk.taptalklive.Activity
 
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.AdapterView
@@ -68,7 +69,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             iv_button_close.setOnClickListener { onBackPressed() }
         }
 
-        if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
+        if (!TTLDataManager.getInstance().checkActiveUserExists() || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
             // Show name and email fields if user does not exist
             tv_label_full_name.visibility = View.VISIBLE
             et_full_name.visibility = View.VISIBLE
@@ -96,7 +97,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         val spinnerPlaceholder = getString(R.string.ttl_select_topic)
         vm.topics.add(spinnerPlaceholder)
 
-        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
+        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
 
         getTopicList()
 
@@ -228,7 +229,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun validateSendMessage() {
-        if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
+        if (!TTLDataManager.getInstance().checkActiveUserExists() || !TTLDataManager.getInstance().checkAccessTokenAvailable()) {
             if (validateFullName() && validateEmail() && validateTopic() && validateMessage()) {
                 createUser()
             }
@@ -246,7 +247,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private fun showLoading() {
         tv_button_send_message.visibility = View.GONE
         iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_loading_progress_circle_white))
-        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
+        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
         ll_button_send_message.setOnClickListener { }
     }
 
@@ -364,6 +365,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private val authenticateTapTalkSDKListener = object : TapCommonListener() {
         override fun onSuccess(p0: String?) {
             TTLDataManager.getInstance().removeTapTalkAuthTicket()
+            Log.e(">>>>", "authenticateTapTalkSDKListener onSuccess: TapTalk is connected  ${TapTalk.isConnected()}")
             createCase()
         }
 
@@ -411,8 +413,20 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private fun openCaseChatRoom(tapTalkXCRoomID: String) {
         TapCoreChatRoomManager.getInstance().getChatRoomByXcRoomID(tapTalkXCRoomID, object : TapCoreGetRoomListener() {
             override fun onSuccess(roomModel: TAPRoomModel?) {
-                TapUI.getInstance().openRoomList(this@TTLCreateCaseFormActivity)
+                TapTalkLive.openChatRoomList(this@TTLCreateCaseFormActivity)
                 TapUI.getInstance().openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                Log.e(">>>>", "openCaseChatRoom onSuccess: TapTalk is connected  ${TapTalk.isConnected()}")
+                if (!TapTalk.isConnected()) {
+                    TapTalk.connect(object : TapCommonListener() {
+                        override fun onSuccess(p0: String?) {
+                            Log.e(">>>>", "openCaseChatRoom connect onSuccess: $p0")
+                        }
+
+                        override fun onError(p0: String?, p1: String?) {
+                            Log.e(">>>>", "openCaseChatRoom connect onError: $p1")
+                        }
+                    })
+                }
                 finish()
             }
 

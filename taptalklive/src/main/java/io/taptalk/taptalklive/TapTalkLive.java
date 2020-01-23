@@ -3,6 +3,7 @@ package io.taptalk.taptalklive;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +20,7 @@ import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
@@ -63,9 +65,28 @@ public class TapTalkLive {
         TapTalkLive.clientAppName = clientAppName;
 
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
+        if (TTLDataManager.getInstance().checkActiveUserExists()) {
+            TTLDataManager.getInstance().getCaseList(caseListDataView);
+
+            // TODO: 023, 23 Jan 2020 TESTING
+            if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
+                    TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
+                    TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
+                Log.e(">>>>", "TapTalkLive: init TapTalk");
+                initializeTapTalkSDK(
+                        TTLDataManager.getInstance().getTapTalkAppKeyID(),
+                        TTLDataManager.getInstance().getTapTalkAppKeySecret(),
+                        TTLDataManager.getInstance().getTapTalkApiUrl());
+            } else {
+                isNeedToGetProjectConfigs = true;
+                TTLNetworkStateManager.getInstance().registerCallback(context);
+                TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
+            }
+        }
     }
 
     public static TapTalkLive init(Context context, int clientAppIcon, String clientAppName) {
+        isRoomListOpened = false; // FIXME: 23 Jan 2020
         return tapLive == null ? (tapLive = new TapTalkLive(context, "TAP_LIVE_KEY", clientAppIcon, clientAppName)) : tapLive;
     }
 
@@ -103,6 +124,16 @@ public class TapTalkLive {
                 TTLNetworkStateManager.getInstance().registerCallback(context);
                 TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
             }
+        }
+    };
+
+    private TTLDefaultDataView<TTLGetCaseListResponse> caseListDataView = new TTLDefaultDataView<TTLGetCaseListResponse>() {
+        @Override
+        public void onSuccess(TTLGetCaseListResponse response) {
+            TTLDataManager.getInstance().saveActiveUserHasExistingCase(
+                    null != response &&
+                            null != response.getCases() &&
+                            !response.getCases().isEmpty());
         }
     };
 

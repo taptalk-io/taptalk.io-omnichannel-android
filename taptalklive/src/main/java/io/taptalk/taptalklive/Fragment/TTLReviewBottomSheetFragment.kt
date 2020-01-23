@@ -129,7 +129,7 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
         tvButtonSubmitReview.visibility = View.GONE
         ivButtonSubmitReviewLoading.visibility = View.VISIBLE
         context?.let {
-            TAPUtils.getInstance().rotateAnimateInfinitely(context, ivButtonSubmitReviewLoading)
+            TAPUtils.rotateAnimateInfinitely(context, ivButtonSubmitReviewLoading)
         }
         reviewBottomSheetListener.onSubmitReviewButtonTapped(rating, etReviewComment.text.toString())
     }

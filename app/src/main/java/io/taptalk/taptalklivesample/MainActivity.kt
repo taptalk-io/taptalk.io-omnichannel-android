@@ -1,6 +1,7 @@
 package io.taptalk.taptalklivesample
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import io.taptalk.taptalklive.Manager.TTLDataManager
@@ -19,7 +20,9 @@ class MainActivity : AppCompatActivity() {
 
     private val buttonListener = View.OnClickListener {
         TapTalkLive.openChatRoomList(this@MainActivity)
-        if (null == TTLDataManager.getInstance().activeUser || null == TTLDataManager.getInstance().checkAccessTokenAvailable()) {
+        if (!TTLDataManager.getInstance().checkActiveUserExists() ||
+                !TTLDataManager.getInstance().checkAccessTokenAvailable() ||
+                !TTLDataManager.getInstance().activeUserHasExistingCase()) {
             TapTalkLive.openCreateCaseForm(this@MainActivity, false)
         }
         finish()

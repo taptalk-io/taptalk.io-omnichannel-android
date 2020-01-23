@@ -95,9 +95,9 @@ class TTLReviewChatBubbleViewHolder internal constructor(
                     civAvatar.visibility = View.VISIBLE
                     tvAvatarLabel.visibility = View.GONE
                 } else {
-                    ImageViewCompat.setImageTintList(civAvatar, ColorStateList.valueOf(TAPUtils.getInstance().getRandomColor(item.user.name)))
+                    ImageViewCompat.setImageTintList(civAvatar, ColorStateList.valueOf(TAPUtils.getRandomColor(itemView.context, item.user.name)))
                     civAvatar.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_circle_9b9b9b))
-                    tvAvatarLabel.text = TAPUtils.getInstance().getInitials(item.user.name, 2)
+                    tvAvatarLabel.text = TAPUtils.getInitials(item.user.name, 2)
                     civAvatar.visibility = View.VISIBLE
                     tvAvatarLabel.visibility = View.VISIBLE
                 }
@@ -173,7 +173,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             // Animate bubble
             item.isNeedAnimateSend = false
             item.isAnimating = true
-            flBubble.translationX = TAPUtils.getInstance().dpToPx(-22).toFloat()
+            flBubble.translationX = TAPUtils.dpToPx(-22).toFloat()
             ivSending.translationX = 0f
             ivSending.translationY = 0f
             Handler().postDelayed({
@@ -182,8 +182,8 @@ class TTLReviewChatBubbleViewHolder internal constructor(
                         .setDuration(160L)
                         .start()
                 ivSending.animate()
-                        .translationX(TAPUtils.getInstance().dpToPx(36).toFloat())
-                        .translationY(TAPUtils.getInstance().dpToPx(-23).toFloat())
+                        .translationX(TAPUtils.dpToPx(36).toFloat())
+                        .translationY(TAPUtils.dpToPx(-23).toFloat())
                         .setDuration(360L)
                         .setInterpolator(AccelerateInterpolator(0.5f))
                         .withEndAction {

@@ -101,7 +101,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 //    implementation 'com.github.taptalk-io:taptalk.io-android:1.0.21'
-    implementation 'com.github.jefrylorentono:taptalknew:1.0.22-2'
+    implementation 'com.github.jefrylorentono:taptalknew:1.0.22-6'
 }
 repositories {
     mavenCentral()

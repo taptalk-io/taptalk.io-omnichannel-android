@@ -12,6 +12,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
@@ -189,6 +190,10 @@ public class TTLApiManager {
     public void createCase(Integer topicID, String message, Subscriber<TTLBaseResponse<TTLCreateCaseResponse>> subscriber) {
         TTLCreateCaseRequest request = new TTLCreateCaseRequest(topicID, message);
         execute(ttlApiService.createCase(request), subscriber);
+    }
+
+    public void getCaseList(Subscriber<TTLBaseResponse<TTLGetCaseListResponse>> subscriber) {
+        execute(ttlApiService.getCaseList(), subscriber);
     }
 
     public void getCaseDetailsByID(Integer caseID, Subscriber<TTLBaseResponse<TTLCreateCaseResponse>> subscriber) {
