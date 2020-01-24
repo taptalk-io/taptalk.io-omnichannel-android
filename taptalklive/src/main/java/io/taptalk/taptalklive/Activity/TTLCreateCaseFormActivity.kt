@@ -50,6 +50,9 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        if (!vm.showCloseButton) {
+            return
+        }
         super.onBackPressed()
         overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_down)
     }
@@ -96,7 +99,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         val spinnerPlaceholder = getString(R.string.ttl_select_topic)
         vm.topics.add(spinnerPlaceholder)
 
-        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
+        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
 
         getTopicList()
 
@@ -246,7 +249,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private fun showLoading() {
         tv_button_send_message.visibility = View.GONE
         iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_loading_progress_circle_white))
-        TAPUtils.getInstance().rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
+        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
         ll_button_send_message.setOnClickListener { }
     }
 
@@ -411,7 +414,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private fun openCaseChatRoom(tapTalkXCRoomID: String) {
         TapCoreChatRoomManager.getInstance().getChatRoomByXcRoomID(tapTalkXCRoomID, object : TapCoreGetRoomListener() {
             override fun onSuccess(roomModel: TAPRoomModel?) {
-                TapUI.getInstance().openRoomList(this@TTLCreateCaseFormActivity)
+                //TapUI.getInstance().openRoomList(this@TTLCreateCaseFormActivity)
                 TapUI.getInstance().openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
                 finish()
             }

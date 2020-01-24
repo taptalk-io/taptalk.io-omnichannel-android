@@ -42,7 +42,7 @@ public class TapTalkLive {
     private static String clientAppName;
     private static int clientAppIcon;
     private static boolean isNeedToGetProjectConfigs;
-    private static boolean isRoomListOpened;
+    private static boolean isTapTalkInitialized; // TODO TEMPORARY
 
     private TapTalkLive(@NonNull final Context appContext,
                         @NonNull String tapLiveKey,
@@ -66,6 +66,7 @@ public class TapTalkLive {
     }
 
     public static TapTalkLive init(Context context, int clientAppIcon, String clientAppName) {
+        isTapTalkInitialized = false; // TODO TEMPORARY
         return tapLive == null ? (tapLive = new TapTalkLive(context, "TAP_LIVE_KEY", clientAppIcon, clientAppName)) : tapLive;
     }
 
@@ -118,6 +119,7 @@ public class TapTalkLive {
                 TapTalkImplementationTypeCombine,
                 tapListener);
         TapTalk.initializeGooglePlacesApiKey(BuildConfig.GOOGLE_MAPS_API_KEY);
+        isTapTalkInitialized = true; // TODO TEMPORARY
 
         TapUI.getInstance().setCloseButtonInRoomListVisible(true);
         TapUI.getInstance().setProfileButtonInChatRoomVisible(false);
@@ -200,12 +202,12 @@ public class TapTalkLive {
         }
     }
 
-    public static void openChatRoomList(Context activityContext) {
-        if (isRoomListOpened) {
-            return;
+    public static boolean openChatRoomList(Context activityContext) {
+        if (!isTapTalkInitialized) { // TODO CALL TapTalk.checkTapTalkInitialized
+            return false;
         }
-        isRoomListOpened = true;
         TapUI.getInstance().openRoomList(activityContext);
+        return true;
     }
 
     public static void logoutAndClearAllTapLiveData(TapCommonListener listener) {

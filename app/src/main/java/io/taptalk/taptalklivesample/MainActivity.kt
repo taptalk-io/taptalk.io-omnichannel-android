@@ -18,10 +18,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val buttonListener = View.OnClickListener {
-        TapTalkLive.openChatRoomList(this@MainActivity)
-        if (null == TTLDataManager.getInstance().activeUser || null == TTLDataManager.getInstance().checkAccessTokenAvailable()) {
-            TapTalkLive.openCreateCaseForm(this@MainActivity, false)
+        if (TapTalkLive.openChatRoomList(this@MainActivity)) {
+            if (null == TTLDataManager.getInstance().activeUser || null == TTLDataManager.getInstance().checkAccessTokenAvailable()) {
+                TapTalkLive.openCreateCaseForm(this@MainActivity, false)
+            }
+            finish()
         }
-        finish()
     }
 }
