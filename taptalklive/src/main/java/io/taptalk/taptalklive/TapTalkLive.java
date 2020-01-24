@@ -3,19 +3,30 @@ package io.taptalk.taptalklive;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.taptalk.TapTalk.Helper.TapTalk;
+import io.taptalk.TapTalk.Helper.TapTalkDialog;
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface;
 import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
+import io.taptalk.TapTalk.Listener.TapUICustomKeyboardListener;
 import io.taptalk.TapTalk.Listener.TapUIRoomListListener;
 import io.taptalk.TapTalk.Manager.TapUI;
+import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
+import io.taptalk.TapTalk.Model.TAPRoomModel;
+import io.taptalk.TapTalk.Model.TAPUserModel;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
@@ -25,12 +36,16 @@ import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
+import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
+import static io.taptalk.taptalklive.Const.TTLConstant.CustomKeyboard.MARK_AS_SOLVED;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 
@@ -39,6 +54,7 @@ public class TapTalkLive {
     public static TapTalkLive tapLive;
     public static Context context;
 
+    private static final String TAG = TapTalkLive.class.getSimpleName();
     private static String clientAppName;
     private static int clientAppIcon;
     private static boolean isNeedToGetProjectConfigs;
@@ -127,6 +143,12 @@ public class TapTalkLive {
 
         TapUI.getInstance().addRoomListListener(tapUIRoomListListener);
 
+        TapUI.getInstance().addCustomBubble(new TTLSystemMessageBubbleClass(
+                R.layout.ttl_cell_chat_system_message,
+                TYPE_CLOSE_CASE, (context, message) -> {}));
+        TapUI.getInstance().addCustomBubble(new TTLSystemMessageBubbleClass(
+                R.layout.ttl_cell_chat_system_message,
+                TYPE_REOPEN_CASE, (context, message) -> {}));
         TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
                 R.layout.ttl_cell_chat_bubble_review,
                 TYPE_REVIEW, (context, sender) -> {
@@ -138,6 +160,32 @@ public class TapTalkLive {
                 context.startActivity(intent);
             }
         }));
+
+        TapUI.getInstance().addCustomKeyboardListener(new TapUICustomKeyboardListener() {
+            @Override
+            public List<TAPCustomKeyboardItemModel> setCustomKeyboardItems(TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
+                List<TAPCustomKeyboardItemModel> keyboardItemModelList = new ArrayList<>();
+                TAPCustomKeyboardItemModel markAsSolvedCustomKeyboard = new TAPCustomKeyboardItemModel(
+                        MARK_AS_SOLVED,
+                        ContextCompat.getDrawable(context, R.drawable.ttl_ic_checklist_black_19),
+                        MARK_AS_SOLVED
+                );
+                keyboardItemModelList.add(markAsSolvedCustomKeyboard);
+                return keyboardItemModelList;
+            }
+
+            @Override
+            public void onCustomKeyboardItemTapped(Activity activity, TAPCustomKeyboardItemModel customKeyboardItem, TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
+                new TapTalkDialog.Builder(activity)
+                        .setDialogType(TapTalkDialog.DialogType.DEFAULT)
+                        .setTitle(activity.getString(R.string.ttl_close_case))
+                        .setMessage(activity.getString(R.string.ttl_close_case_dialog_message))
+                        .setPrimaryButtonTitle(activity.getString(R.string.ttl_ok))
+                        .setPrimaryButtonListener(v -> closeCase(room.getXcRoomID()))
+                        .setSecondaryButtonTitle(activity.getString(R.string.ttl_cancel))
+                        .show();
+            }
+        });
     }
 
     public static void authenticateTapTalkSDK(String authTicket, TapCommonListener listener) {
@@ -208,6 +256,35 @@ public class TapTalkLive {
         }
         TapUI.getInstance().openRoomList(activityContext);
         return true;
+    }
+
+    private static void closeCase(String xcRoomID) {
+        try {
+            int caseID = Integer.valueOf(xcRoomID.replace("case:", ""));
+            TTLDataManager.getInstance().closeCase(caseID, new TTLDefaultDataView<TTLCommonResponse>() {
+                @Override
+                public void startLoading() {
+                    Log.e(TAG, "closeCase startLoading: ");
+                }
+
+                @Override
+                public void onSuccess(TTLCommonResponse response) {
+                    Log.e(TAG, "closeCase onSuccess: " + response.getSuccess() + " " + response.getMessage());
+                }
+
+                @Override
+                public void onError(TTLErrorModel error) {
+                    Log.e(TAG, "closeCase onError: " + error.getMessage());
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    Log.e(TAG, "closeCase onError: " + errorMessage);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void logoutAndClearAllTapLiveData(TapCommonListener listener) {

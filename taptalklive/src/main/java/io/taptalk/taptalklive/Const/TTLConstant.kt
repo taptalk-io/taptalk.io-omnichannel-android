@@ -27,4 +27,8 @@ class TTLConstant {
         const val TAPTALK_APP_KEY_SECRET = "kTapTalkLiveTapTalkAppKeySecret"
         const val TAPTALK_AUTH_TICKET = "kTapTalkLiveTapTalkAuthenticationTicket"
     }
+
+    object CustomKeyboard {
+        const val MARK_AS_SOLVED = "Mark as solved"
+    }
 }

@@ -13,6 +13,7 @@
     <string name="ttl_type_message_here">Type message here</string>
     <string name="ttl_send_message">Send Message</string>
     <string name="ttl_ok">OK</string>
+    <string name="ttl_cancel">Cancel</string>
     <string name="ttl_leave_a_review">Leave a review</string>
     <string name="ttl_submit_review">Submit review</string>
     <string name="ttl_review_submitted">Review submitted</string>
@@ -33,4 +34,6 @@
     <string name="ttl_rating_3">Okay</string>
     <string name="ttl_rating_4">Good</string>
     <string name="ttl_rating_5">Excellent</string>
+    <string name="ttl_close_case">Close Case</string>
+    <string name="ttl_close_case_dialog_message">This case will be closed and you wont be able to further send messages or receive assistance regarding this case. Would you like to proceed?</string>
 </resources>

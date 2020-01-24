@@ -56,6 +56,7 @@
     <color name="ttlLeftBubbleMessageBodyColor">@color/ttlColorTextDark</color>
     <color name="ttlLeftBubbleMessageBodyURLColor">@color/ttlColorPrimary</color>
     <color name="ttlLeftBubbleMessageBodyURLHighlightedColor">@color/ttlHighlightBlue</color>
+    <color name="ttlSystemMessageBodyColor">@color/ttlColorTextMedium</color>
 
     <color name="ttlBubbleMessageStatusColor">@color/ttlColorTextMedium</color>
 

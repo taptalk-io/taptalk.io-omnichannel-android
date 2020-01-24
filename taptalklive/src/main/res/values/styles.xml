@@ -96,6 +96,12 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="ttlSystemMessageBodyStyle" parent="ttlFontFamilyMedium">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlSystemMessageBodyColor</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
     <style name="ttlReviewTitleLabelStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">-0.01</item>
         <item name="android:lineSpacingExtra">4sp</item>

@@ -145,7 +145,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
-                    android:src="@drawable/ttl_ic_checklist_pumpkin"
+                    android:src="@drawable/ttl_ic_checklist_black_19"
                     android:tint="@color/ttlTextDark20"
                     android:visibility="gone" />
 
