@@ -1,6 +1,7 @@
 package io.taptalk.taptalklivesample
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import io.taptalk.taptalklive.Manager.TTLDataManager

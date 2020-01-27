@@ -1,6 +1,7 @@
 package io.taptalk.taptalklive.Activity
 
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.AdapterView
@@ -71,7 +72,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             iv_button_close.setOnClickListener { onBackPressed() }
         }
 
-        if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
+        if (!TTLDataManager.getInstance().checkActiveUserExists() || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
             // Show name and email fields if user does not exist
             tv_label_full_name.visibility = View.VISIBLE
             et_full_name.visibility = View.VISIBLE
@@ -231,7 +232,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun validateSendMessage() {
-        if (null == TTLDataManager.getInstance().activeUser || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
+        if (!TTLDataManager.getInstance().checkActiveUserExists() || !TTLDataManager.getInstance().checkAccessTokenAvailable()) {
             if (validateFullName() && validateEmail() && validateTopic() && validateMessage()) {
                 createUser()
             }
@@ -414,7 +415,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private fun openCaseChatRoom(tapTalkXCRoomID: String) {
         TapCoreChatRoomManager.getInstance().getChatRoomByXcRoomID(tapTalkXCRoomID, object : TapCoreGetRoomListener() {
             override fun onSuccess(roomModel: TAPRoomModel?) {
-                //TapUI.getInstance().openRoomList(this@TTLCreateCaseFormActivity)
                 TapUI.getInstance().openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
                 finish()
             }

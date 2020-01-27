@@ -27,9 +27,11 @@ import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.TapTalk.Model.TAPRoomModel;
 import io.taptalk.TapTalk.Model.TAPUserModel;
+import io.taptalk.TapTalk.View.Fragment.TapUIMainRoomListFragment;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
@@ -79,6 +81,24 @@ public class TapTalkLive {
         TapTalkLive.clientAppName = clientAppName;
 
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
+        if (TTLDataManager.getInstance().checkActiveUserExists()) {
+            TTLDataManager.getInstance().getCaseList(caseListDataView);
+
+            // TODO: 023, 23 Jan 2020 TESTING
+            if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
+                    TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
+                    TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
+                Log.e(">>>>", "TapTalkLive: init TapTalk");
+                initializeTapTalkSDK(
+                        TTLDataManager.getInstance().getTapTalkAppKeyID(),
+                        TTLDataManager.getInstance().getTapTalkAppKeySecret(),
+                        TTLDataManager.getInstance().getTapTalkApiUrl());
+            } else {
+                isNeedToGetProjectConfigs = true;
+                TTLNetworkStateManager.getInstance().registerCallback(context);
+                TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
+            }
+        }
     }
 
     public static TapTalkLive init(Context context, int clientAppIcon, String clientAppName) {
@@ -123,7 +143,20 @@ public class TapTalkLive {
         }
     };
 
+    private TTLDefaultDataView<TTLGetCaseListResponse> caseListDataView = new TTLDefaultDataView<TTLGetCaseListResponse>() {
+        @Override
+        public void onSuccess(TTLGetCaseListResponse response) {
+            TTLDataManager.getInstance().saveActiveUserHasExistingCase(
+                    null != response &&
+                            null != response.getCases() &&
+                            !response.getCases().isEmpty());
+        }
+    };
+
     private static void initializeTapTalkSDK(String tapTalkAppKeyID, String tapTalkAppKeySecret, String tapTalkApiUrl) {
+        if (isTapTalkInitialized) { // TODO TEMPORARY
+            return;
+        }
         TapTalk.setLoggingEnabled(true);
         TapTalk.init(
                 context,

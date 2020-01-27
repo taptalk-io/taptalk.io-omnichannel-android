@@ -7,6 +7,7 @@ import io.taptalk.taptalklive.API.Model.RequestModel.TTLRateConversationRequest;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
@@ -40,6 +41,9 @@ public interface TTLApiService {
 
     @POST("client/case/create")
     Observable<TTLBaseResponse<TTLCreateCaseResponse>> createCase(@Body TTLCreateCaseRequest request);
+
+    @POST("client/case/get_list")
+    Observable<TTLBaseResponse<TTLGetCaseListResponse>> getCaseList();
 
     @POST("client/case/get_by_id")
     Observable<TTLBaseResponse<TTLCreateCaseResponse>> getCaseDetailsByID(@Body TTLIdRequest request);
