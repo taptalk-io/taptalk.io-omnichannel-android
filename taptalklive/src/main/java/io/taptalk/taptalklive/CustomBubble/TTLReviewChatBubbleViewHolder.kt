@@ -202,9 +202,9 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
     private fun onReviewButtonTapped() {
         if (itemView.context is Activity) {
-            listener.onReviewButtonTapped(itemView.context as Activity, item.user)
+            listener.onReviewButtonTapped(itemView.context as Activity, item)
         } else {
-            listener.onReviewButtonTapped(itemView.context, item.user)
+            listener.onReviewButtonTapped(itemView.context, item)
         }
     }
 }

@@ -126,12 +126,20 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
     }
 
     private fun submitReview() {
+        flButtonSubmitReview.setOnClickListener { }
         tvButtonSubmitReview.visibility = View.GONE
         ivButtonSubmitReviewLoading.visibility = View.VISIBLE
         context?.let {
             TAPUtils.rotateAnimateInfinitely(context, ivButtonSubmitReviewLoading)
         }
         reviewBottomSheetListener.onSubmitReviewButtonTapped(rating, etReviewComment.text.toString())
+    }
+
+    fun onSubmitReviewFailed() {
+        flButtonSubmitReview.setOnClickListener { submitReview() }
+        ivButtonSubmitReviewLoading.clearAnimation()
+        ivButtonSubmitReviewLoading.visibility = View.GONE
+        tvButtonSubmitReview.visibility = View.VISIBLE
     }
 
     interface ReviewBottomSheetListener {

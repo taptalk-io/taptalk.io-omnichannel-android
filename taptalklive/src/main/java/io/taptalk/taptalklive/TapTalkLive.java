@@ -45,6 +45,7 @@ import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
 import static io.taptalk.taptalklive.Const.TTLConstant.CustomKeyboard.MARK_AS_SOLVED;
+import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
@@ -184,8 +185,9 @@ public class TapTalkLive {
                 TYPE_REOPEN_CASE, (context, message) -> {}));
         TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
                 R.layout.ttl_cell_chat_bubble_review,
-                TYPE_REVIEW, (context, sender) -> {
+                TYPE_REVIEW, (context, message) -> {
             Intent intent = new Intent(context, TTLReviewActivity.class);
+            intent.putExtra(MESSAGE, message);
             if (context instanceof Activity) {
                 ((Activity) context).startActivityForResult(intent, REVIEW);
                 ((Activity) context).overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay);
