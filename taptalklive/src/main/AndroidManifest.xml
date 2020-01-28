@@ -11,8 +11,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.TTLReviewActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

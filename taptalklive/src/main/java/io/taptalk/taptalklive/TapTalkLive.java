@@ -279,7 +279,7 @@ public class TapTalkLive {
         }
     };
 
-    public static void openCreateCaseForm(Context activityContext, boolean showCloseButton) {
+    private static void openCreateCaseForm(Context activityContext, boolean showCloseButton) {
         Intent intent = new Intent(activityContext, TTLCreateCaseFormActivity.class);
         intent.putExtra(SHOW_CLOSE_BUTTON, showCloseButton);
         activityContext.startActivity(intent);
@@ -288,11 +288,14 @@ public class TapTalkLive {
         }
     }
 
-    public static boolean openChatRoomList(Context activityContext) {
+    public static boolean openTapTalkLiveView(Context activityContext) {
         if (!isTapTalkInitialized) { // TODO CALL TapTalk.checkTapTalkInitialized
             return false;
         }
         TapUI.getInstance().openRoomList(activityContext);
+        if (!TTLDataManager.getInstance().checkActiveUserExists() || null == TTLDataManager.getInstance().checkAccessTokenAvailable()) {
+            TapTalkLive.openCreateCaseForm(activityContext, false);
+        }
         return true;
     }
 

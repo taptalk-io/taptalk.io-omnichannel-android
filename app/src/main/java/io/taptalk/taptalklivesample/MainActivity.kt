@@ -1,10 +1,8 @@
 package io.taptalk.taptalklivesample
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.TapTalkLive
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,10 +17,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val buttonListener = View.OnClickListener {
-        if (TapTalkLive.openChatRoomList(this@MainActivity)) {
-            if (null == TTLDataManager.getInstance().activeUser || null == TTLDataManager.getInstance().checkAccessTokenAvailable()) {
-                TapTalkLive.openCreateCaseForm(this@MainActivity, false)
-            }
+        if (TapTalkLive.openTapTalkLiveView(this@MainActivity)) {
             finish()
         }
     }
