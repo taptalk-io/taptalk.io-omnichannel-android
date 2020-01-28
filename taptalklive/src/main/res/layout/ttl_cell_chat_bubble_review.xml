@@ -13,7 +13,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:scaleType="centerCrop"
-        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/fl_bubble"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -66,10 +65,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:visibility="gone"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@id/tv_message_body"
-                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -146,7 +144,7 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:src="@drawable/ttl_ic_checklist_black_19"
-                    android:tint="@color/ttlTextDark20"
+                    android:tint="@color/ttlWhite"
                     android:visibility="gone" />
 
                 <TextView

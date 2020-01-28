@@ -5,6 +5,7 @@ class TTLConstant {
         const val TYPE_CLOSE_CASE = 3001
         const val TYPE_REOPEN_CASE = 3002
         const val TYPE_REVIEW = 3003
+        const val TYPE_REVIEW_SUBMITTED = 3004
     }
 
     object RequestCode {

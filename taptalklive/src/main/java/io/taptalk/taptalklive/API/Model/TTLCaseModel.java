@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashMap;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class TTLCaseModel implements Parcelable {
@@ -30,6 +32,28 @@ public class TTLCaseModel implements Parcelable {
     @JsonProperty("deletedTime") private Long deletedTime;
 
     public TTLCaseModel() {
+    }
+
+    public TTLCaseModel(HashMap<String, Object> caseDataMap) {
+        this.id = (Integer) caseDataMap.get("id");
+        this.stringID = (String) caseDataMap.get("stringID");
+        this.userID = (String) caseDataMap.get("userID");
+        this.userFullName = (String) caseDataMap.get("userFullName");
+        this.topicID = (Integer) caseDataMap.get("topicID");
+        this.topicName = (String) caseDataMap.get("topicName");
+        this.agentAccountID = (Integer) caseDataMap.get("agentAccountID");
+        this.agentFullName = (String) caseDataMap.get("agentFullName");
+        this.tapTalkXCRoomID = (String) caseDataMap.get("tapTalkXCRoomID");
+        this.medium = (String) caseDataMap.get("medium");
+        this.firstMessage = (String) caseDataMap.get("firstMessage");
+        this.firstResponseTime = (Long) caseDataMap.get("firstResponseTime");
+        this.firstResponseAgentAccountID = (Integer) caseDataMap.get("firstResponseAgentAccountID");
+        this.firstResponseAgentFullName = (String) caseDataMap.get("firstResponseAgentFullName");
+        this.isClosed = (Boolean) caseDataMap.get("isClosed");
+        this.closedTime = (Long) caseDataMap.get("closedTime");
+        this.createdTime = (Long) caseDataMap.get("createdTime");
+        this.updatedTime = (Long) caseDataMap.get("updatedTime");
+        this.deletedTime = (Long) caseDataMap.get("deletedTime");
     }
 
     public Integer getId() {

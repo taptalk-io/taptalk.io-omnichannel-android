@@ -27,7 +27,6 @@ import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.TapTalk.Model.TAPRoomModel;
 import io.taptalk.TapTalk.Model.TAPUserModel;
-import io.taptalk.TapTalk.View.Fragment.TapUIMainRoomListFragment;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
@@ -50,6 +49,7 @@ import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED;
 import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 
 public class TapTalkLive {
@@ -195,6 +195,9 @@ public class TapTalkLive {
                 context.startActivity(intent);
             }
         }));
+        TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
+                R.layout.ttl_cell_chat_bubble_review,
+                TYPE_REVIEW_SUBMITTED, (context, message) -> {}));
 
         TapUI.getInstance().addCustomKeyboardListener(new TapUICustomKeyboardListener() {
             @Override

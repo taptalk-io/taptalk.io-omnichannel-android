@@ -3,6 +3,7 @@ package io.taptalk.taptalklive.CustomBubble
 import android.app.Activity
 import android.content.res.ColorStateList
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
@@ -14,12 +15,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import com.bumptech.glide.Glide
-import io.taptalk.TapTalk.Const.TAPDefaultConstant.RoomType
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.RoomType.TYPE_PERSONAL
 import io.taptalk.TapTalk.Helper.CircleImageView
 import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Adapter.TAPBaseChatViewHolder
+import io.taptalk.taptalklive.BuildConfig
+import io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW
+import io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED
 import io.taptalk.taptalklive.R
 
 class TTLReviewChatBubbleViewHolder internal constructor(
@@ -45,12 +49,17 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
     private val user = TapTalk.getTaptalkActiveUser()
 
+//    private lateinit var caseModel: TTLCaseModel
+
     private fun isMessageFromMySelf(messageModel: TAPMessageModel): Boolean {
-        return user.userID == messageModel.user.userID
+        return user.userID == messageModel.user.xcUserID
     }
 
     override fun onBind(item: TAPMessageModel?, position: Int) {
-        if (isMessageFromMySelf(item!!)) {
+        if (null == item) {
+            return
+        }
+        if (isMessageFromMySelf(item)) {
             // Message from active user
             clBubble.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_chat_bubble_right_default)
             tvMessageBody.setTextColor(ContextCompat.getColor(itemView.context, R.color.ttlColorTextLight))
@@ -82,8 +91,13 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             vMarginRight.visibility = View.VISIBLE
             vMarginLeft.visibility = View.GONE
 
-            if (item.room.roomType == RoomType.TYPE_GROUP) {
-                // Load avatar and name if room type is group
+            if (item.room.roomType == TYPE_PERSONAL) {
+                // Hide avatar and name for personal room
+                civAvatar.visibility = View.GONE
+                tvAvatarLabel.visibility = View.GONE
+                tvUserName.visibility = View.GONE
+            } else {
+                // Load avatar and name for other room types
                 if (null != user && null != user.avatarURL && user.avatarURL.thumbnail.isNotEmpty()) {
                     Glide.with(itemView.context).load(user.avatarURL.thumbnail).into(civAvatar)
                     ImageViewCompat.setImageTintList(civAvatar, null)
@@ -103,30 +117,42 @@ class TTLReviewChatBubbleViewHolder internal constructor(
                 }
                 tvUserName.text = item.user.name
                 tvUserName.visibility = View.VISIBLE
-            } else {
-                // Hide avatar and name
-                civAvatar.visibility = View.GONE
-                tvAvatarLabel.visibility = View.GONE
-                tvUserName.visibility = View.GONE
             }
 
-            // TODO CHECK IF REVIEW IS ALREADY SUBMITTED
-//            if (item.data?.get("review_status") as Boolean) {
-//                llButtonReview.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_button_inactive_ripple)
-//                tvButtonReview.text = itemView.context.getString(R.string.ttl_review_submitted)
-//                ivButtonReview.visibility = View.VISIBLE
-//                llButtonReview.setOnClickListener { }
-//            } else {
+//            try {
+//                caseModel = TTLCaseModel(item.data)
+//            } catch (e: Exception) {
+//                caseModel = TTLCaseModel()
+//                e.printStackTrace()
+//            }
+
+            if (item.type == TYPE_REVIEW_SUBMITTED) {
+                // Show review submitted
+                llButtonReview.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_button_inactive_ripple)
+                tvButtonReview.text = itemView.context.getString(R.string.ttl_review_submitted)
+                ivButtonReview.visibility = View.VISIBLE
+                llButtonReview.setOnClickListener { }
+            } else if (item.type == TYPE_REVIEW) {
+                // Show review button available
                 llButtonReview.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_button_active_ripple)
                 tvButtonReview.text = itemView.context.getString(R.string.ttl_leave_a_review)
                 ivButtonReview.visibility = View.GONE
                 llButtonReview.setOnClickListener { onReviewButtonTapped() }
-//            }
+            }
         }
 
         tvMessageBody.text = item.body
 
+        tvMessageStatus.text = item.messageStatusText
+
         markMessageAsRead(item, TapTalk.getTaptalkActiveUser())
+
+        if (BuildConfig.DEBUG) {
+            itemView.setOnLongClickListener{
+                Log.d(this.javaClass.simpleName, "Message model: " + TAPUtils.toJsonString(item))
+                return@setOnLongClickListener true
+            }
+        }
     }
 
     override fun receiveSentEvent(message: TAPMessageModel?) {
@@ -136,7 +162,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
         ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_sent_grey))
         ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.ttlIconMessageSent)))
         ivMessageStatus.visibility = View.VISIBLE
-            tvMessageStatus.visibility = View.VISIBLE
+        tvMessageStatus.visibility = View.VISIBLE
         animateSend(item, flBubble, ivSending, ivMessageStatus)
     }
 

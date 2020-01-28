@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class TTLRateConversationRequest {
-    @JsonProperty("caseID") private Integer caseID;
+    @JsonProperty("id") private Integer caseID;
     @JsonProperty("rating") private Integer rating;
     @JsonProperty("note") private String note;
 
