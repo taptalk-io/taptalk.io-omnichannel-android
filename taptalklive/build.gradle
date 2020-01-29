@@ -18,20 +18,18 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            debuggable false
+            consumerProguardFiles 'proguard-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
-            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-dev.taptalk.io/api/visitor"')
-            buildConfigField("String", "TAPLIVE_SDK_API_VERSION", '"/v1/"')
         }
-        debug {
+        staging {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
-            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-dev.taptalk.io/api/visitor"')
-            buildConfigField("String", "TAPLIVE_SDK_API_VERSION", '"/v1/"')
+            debuggable true
+        }
+        dev {
+            minifyEnabled false
+            debuggable true
         }
     }
 

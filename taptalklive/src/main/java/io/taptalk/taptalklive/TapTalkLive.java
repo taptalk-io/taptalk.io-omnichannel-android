@@ -43,6 +43,7 @@ import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
+import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
 import static io.taptalk.taptalklive.Const.TTLConstant.CustomKeyboard.MARK_AS_SOLVED;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
@@ -64,7 +65,8 @@ public class TapTalkLive {
     private static boolean isTapTalkInitialized; // TODO TEMPORARY
 
     private TapTalkLive(@NonNull final Context appContext,
-                        @NonNull String tapLiveKey,
+                        @NonNull String appKeySecret,
+                        @NonNull String apiBaseUrl,
                         int clientAppIcon,
                         String clientAppName) {
 
@@ -78,6 +80,9 @@ public class TapTalkLive {
             Hawk.init(appContext).build();
         }
 
+        TTLDataManager.getInstance().saveAppKeySecret(appKeySecret);
+        TTLApiManager.setApiBaseUrl(generateApiBaseUrl(apiBaseUrl));
+
         TapTalkLive.clientAppIcon = clientAppIcon;
         TapTalkLive.clientAppName = clientAppName;
 
@@ -89,7 +94,6 @@ public class TapTalkLive {
             if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
-                Log.e(">>>>", "TapTalkLive: init TapTalk");
                 initializeTapTalkSDK(
                         TTLDataManager.getInstance().getTapTalkAppKeyID(),
                         TTLDataManager.getInstance().getTapTalkAppKeySecret(),
@@ -102,9 +106,13 @@ public class TapTalkLive {
         }
     }
 
-    public static TapTalkLive init(Context context, int clientAppIcon, String clientAppName) {
+    public static TapTalkLive init(Context context, String appKeySecret, String apiBaseUrl, int clientAppIcon, String clientAppName) {
         isTapTalkInitialized = false; // TODO TEMPORARY
-        return tapLive == null ? (tapLive = new TapTalkLive(context, "TAP_LIVE_KEY", clientAppIcon, clientAppName)) : tapLive;
+        return tapLive == null ? (tapLive = new TapTalkLive(context, appKeySecret, apiBaseUrl, clientAppIcon, clientAppName)) : tapLive;
+    }
+
+    private static String generateApiBaseUrl(String apiBaseUrl) {
+        return apiBaseUrl + "/" + API_VERSION + "/";
     }
 
     private TTLDefaultDataView<TTLGetProjectConfigsRespone> projectConfigsDataView = new TTLDefaultDataView<TTLGetProjectConfigsRespone>() {
@@ -168,7 +176,6 @@ public class TapTalkLive {
                 tapTalkApiUrl,
                 TapTalkImplementationTypeCombine,
                 tapListener);
-        TapTalk.initializeGooglePlacesApiKey(BuildConfig.GOOGLE_MAPS_API_KEY);
         isTapTalkInitialized = true; // TODO TEMPORARY
 
         TapUI.getInstance().setCloseButtonInRoomListVisible(true);
@@ -232,6 +239,13 @@ public class TapTalkLive {
             return;
         }
         TapTalk.authenticateWithAuthTicket(authTicket, true, listener);
+    }
+
+    public static void initializeGooglePlacesApiKey(String apiKey) {
+        if (!isTapTalkInitialized) {
+            return;
+        }
+        TapTalk.initializeGooglePlacesApiKey(apiKey);
     }
 
     private static TapListener tapListener = new TapListener() {
@@ -302,27 +316,7 @@ public class TapTalkLive {
     private static void closeCase(String xcRoomID) {
         try {
             int caseID = Integer.valueOf(xcRoomID.replace("case:", ""));
-            TTLDataManager.getInstance().closeCase(caseID, new TTLDefaultDataView<TTLCommonResponse>() {
-                @Override
-                public void startLoading() {
-                    Log.e(TAG, "closeCase startLoading: ");
-                }
-
-                @Override
-                public void onSuccess(TTLCommonResponse response) {
-                    Log.e(TAG, "closeCase onSuccess: " + response.getSuccess() + " " + response.getMessage());
-                }
-
-                @Override
-                public void onError(TTLErrorModel error) {
-                    Log.e(TAG, "closeCase onError: " + error.getMessage());
-                }
-
-                @Override
-                public void onError(String errorMessage) {
-                    Log.e(TAG, "closeCase onError: " + errorMessage);
-                }
-            });
+            TTLDataManager.getInstance().closeCase(caseID, new TTLDefaultDataView<TTLCommonResponse>() {});
         } catch (Exception e) {
             e.printStackTrace();
         }

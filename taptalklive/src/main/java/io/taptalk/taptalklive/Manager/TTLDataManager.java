@@ -19,6 +19,7 @@ import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN_EXPIRY;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACTIVE_USER;
+import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.APP_KEY_SECRET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.AUTH_TICKET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.CASE_EXISTS;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN;
@@ -90,6 +91,7 @@ public class TTLDataManager {
      */
 
     public void deleteAllPreference() {
+        removeAppKeySecret();
         removeAuthTicket();
         removeAccessToken();
         removeRefreshToken();
@@ -99,6 +101,22 @@ public class TTLDataManager {
         removeTapTalkAppKeySecret();
         removeTapTalkAuthTicket();
         removeActiveUserHasExistingCase();
+    }
+
+    /**
+     * APP KEY SECRET
+     */
+
+    public String getAppKeySecret() {
+        return getStringPreference(APP_KEY_SECRET);
+    }
+
+    public void saveAppKeySecret(String authTicket) {
+        saveStringPreference(APP_KEY_SECRET, authTicket);
+    }
+
+    public void removeAppKeySecret() {
+        removePreference(APP_KEY_SECRET);
     }
 
     /**

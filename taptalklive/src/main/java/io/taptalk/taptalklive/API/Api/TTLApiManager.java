@@ -34,14 +34,11 @@ import rx.schedulers.Schedulers;
 
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.HttpResponseStatusCode.RESPONSE_SUCCESS;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.HttpResponseStatusCode.UNAUTHORIZED;
-import static io.taptalk.taptalklive.BuildConfig.TAPLIVE_SDK_API_VERSION;
-import static io.taptalk.taptalklive.BuildConfig.TAPLIVE_SDK_BASE_URL;
 
 public class TTLApiManager {
     private static final String TAG = TTLApiManager.class.getSimpleName();
 
-    @NonNull private static String BaseUrlApi = TAPLIVE_SDK_BASE_URL + TAPLIVE_SDK_API_VERSION;
-    //@NonNull private static String BaseUrlSocket = "https://hp.moselo.com:8080/";
+    @NonNull private static String apiBaseUrl = "";
 
     private TTLApiService ttlApiService;
     private TTLRefreshTokenApiService ttlRefreshTokenApiService;
@@ -68,12 +65,12 @@ public class TTLApiManager {
     }
 
     @NonNull
-    public static String getBaseUrlApi() {
-        return BaseUrlApi;
+    public static String getApiBaseUrl() {
+        return apiBaseUrl;
     }
 
-    public static void setBaseUrlApi(@NonNull String baseUrlApi) {
-        BaseUrlApi = baseUrlApi;
+    public static void setApiBaseUrl(@NonNull String apiBaseUrl) {
+        TTLApiManager.apiBaseUrl = apiBaseUrl;
     }
 
     private Observable.Transformer ioToMainThreadSchedulerTransformer

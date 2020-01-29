@@ -35,8 +35,8 @@ public class TTLApiConnection {
     private TTLApiConnection() {
         this.objectMapper = createObjectMapper();
 
-        Retrofit tapLiveAdapter = buildApiAdapter(buildHttpTtlClient(), TTLApiManager.getBaseUrlApi());
-        Retrofit ttlRefreshTokenAdapter = buildApiAdapter(buildHttpTtlClient(), TTLApiManager.getBaseUrlApi());
+        Retrofit tapLiveAdapter = buildApiAdapter(buildHttpTtlClient(), TTLApiManager.getApiBaseUrl());
+        Retrofit ttlRefreshTokenAdapter = buildApiAdapter(buildHttpTtlClient(), TTLApiManager.getApiBaseUrl());
 
         this.ttlApiService = tapLiveAdapter.create(TTLApiService.class);
         this.ttlRefreshTokenApiService = ttlRefreshTokenAdapter.create(TTLRefreshTokenApiService.class);

@@ -1,6 +1,10 @@
 package io.taptalk.taptalklive.Const
 
 class TTLConstant {
+    object Api {
+        const val API_VERSION = "v1"
+    }
+
     object MessageType {
         const val TYPE_CLOSE_CASE = 3001
         const val TYPE_REOPEN_CASE = 3002
@@ -18,6 +22,7 @@ class TTLConstant {
     }
 
     object PreferenceKey {
+        const val APP_KEY_SECRET = "kTapTalkLiveApplicationKeySecret"
         const val AUTH_TICKET = "kTapTalkLiveAuthenticationTicket"
         const val REFRESH_TOKEN = "kTapTalkLiveRefreshToken"
         const val REFRESH_TOKEN_EXPIRY = "kTapTalkLiveRefreshTokenExpiry"

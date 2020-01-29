@@ -30,7 +30,7 @@ public class TTLHeaderRequestInterceptor implements Interceptor {
         Request request = original
                 .newBuilder()
                 .addHeader("Content-Type", contentType)
-                .addHeader("Secret-Key", BuildConfig.TAPLIVE_SDK_APP_KEY_SECRET)
+                .addHeader("Secret-Key", TTLDataManager.getInstance().getAppKeySecret())
                 .addHeader("Device-Identifier", deviceID)
                 .addHeader("Device-Model", android.os.Build.MODEL)
                 .addHeader("Device-Platform", "android")

@@ -13,10 +13,43 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
+    signingConfigs {
+        release {
+
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            debuggable false
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
+            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api.taptalk.io/api/visitor"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
+        }
+        staging {
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            debuggable true
+            applicationIdSuffix '.staging'
+            versionNameSuffix '-STAGING'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
+            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-staging.taptalk.io/api/visitor"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
+        }
+        dev {
+            signingConfig signingConfigs.debug
+            debuggable true
+            minifyEnabled false
+            applicationIdSuffix '.dev'
+            versionNameSuffix '-DEV'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"8d1878d33a49983232a84398157bf941b178cb4e6b2fdff778f48ff7209c2ec5"')
+            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-dev.taptalk.io/api/visitor"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
         }
     }
     compileOptions {
