@@ -1,7 +1,6 @@
 package io.taptalk.taptalklivesample
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener
 import io.taptalk.taptalklive.TapTalkLive
@@ -29,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val tapTalkLiveListener = object : TapTalkLiveListener() {
         override fun onInitializationCompleted() {
             if (isOpenTapTalkLiveViewPending) {
+                isOpenTapTalkLiveViewPending = false
                 openTapTalkLiveView()
             }
         }
