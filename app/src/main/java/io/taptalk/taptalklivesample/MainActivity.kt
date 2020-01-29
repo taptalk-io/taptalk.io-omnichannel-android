@@ -1,26 +1,45 @@
 package io.taptalk.taptalklivesample
 
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import io.taptalk.taptalklive.Listener.TapTalkLiveListener
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklivesample.BuildConfig.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private var isOpenTapTalkLiveViewPending = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        TapTalkLive.init(applicationContext, TAPLIVE_SDK_APP_KEY_SECRET, TAPLIVE_SDK_BASE_URL, R.drawable.ic_taptalk_logo, "TapTalk.live Sample App")
+        TapTalkLive.init(applicationContext,
+                TAPLIVE_SDK_APP_KEY_SECRET,
+                TAPLIVE_SDK_BASE_URL,
+                R.drawable.ic_taptalk_logo,
+                "TapTalk.live Sample App",
+                tapTalkLiveListener)
 
-        ll_button_launch_live_chat.setOnClickListener(buttonListener)
+        ll_button_launch_live_chat.setOnClickListener{ openTapTalkLiveView() }
     }
 
-    private val buttonListener = View.OnClickListener {
+    private val tapTalkLiveListener = object : TapTalkLiveListener() {
+        override fun onInitializationCompleted() {
+            if (isOpenTapTalkLiveViewPending) {
+                openTapTalkLiveView()
+            }
+        }
+    }
+
+    private fun openTapTalkLiveView() {
         if (TapTalkLive.openTapTalkLiveView(this@MainActivity)) {
             TapTalkLive.initializeGooglePlacesApiKey(GOOGLE_MAPS_API_KEY)
             finish()
+        } else {
+            isOpenTapTalkLiveViewPending = true
         }
     }
 }

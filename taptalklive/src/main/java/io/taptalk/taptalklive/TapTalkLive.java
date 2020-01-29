@@ -38,6 +38,7 @@ import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
+import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 
@@ -63,12 +64,14 @@ public class TapTalkLive {
     private static int clientAppIcon;
     private static boolean isNeedToGetProjectConfigs;
     private static boolean isTapTalkInitialized; // TODO TEMPORARY
+    private static TapTalkLiveListener tapTalkLiveListener;
 
     private TapTalkLive(@NonNull final Context appContext,
                         @NonNull String appKeySecret,
                         @NonNull String apiBaseUrl,
                         int clientAppIcon,
-                        String clientAppName) {
+                        String clientAppName,
+                        @NonNull TapTalkLiveListener tapTalkLiveListener) {
 
         context = appContext;
 
@@ -85,12 +88,44 @@ public class TapTalkLive {
 
         TapTalkLive.clientAppIcon = clientAppIcon;
         TapTalkLive.clientAppName = clientAppName;
+        TapTalkLive.tapTalkLiveListener = tapTalkLiveListener;
 
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
         if (TTLDataManager.getInstance().checkActiveUserExists()) {
             TTLDataManager.getInstance().getCaseList(caseListDataView);
 
             // TODO: 023, 23 Jan 2020 TESTING
+//            if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
+//                    TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
+//                    TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
+//                initializeTapTalkSDK(
+//                        TTLDataManager.getInstance().getTapTalkAppKeyID(),
+//                        TTLDataManager.getInstance().getTapTalkAppKeySecret(),
+//                        TTLDataManager.getInstance().getTapTalkApiUrl());
+//            } else {
+//                isNeedToGetProjectConfigs = true;
+//                TTLNetworkStateManager.getInstance().registerCallback(context);
+//                TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
+//            }
+        }
+    }
+
+    public static TapTalkLive init(Context context,
+                                   String appKeySecret,
+                                   String apiBaseUrl,
+                                   int clientAppIcon,
+                                   String clientAppName,
+                                   TapTalkLiveListener tapTalkLiveListener) {
+        isTapTalkInitialized = false; // TODO TEMPORARY
+        if (null == tapLive) {
+            tapLive = new TapTalkLive(
+                    context,
+                    appKeySecret,
+                    apiBaseUrl,
+                    clientAppIcon,
+                    clientAppName,
+                    tapTalkLiveListener);
+        } else {
             if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
@@ -104,18 +139,14 @@ public class TapTalkLive {
                 TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
             }
         }
-    }
-
-    public static TapTalkLive init(Context context, String appKeySecret, String apiBaseUrl, int clientAppIcon, String clientAppName) {
-        isTapTalkInitialized = false; // TODO TEMPORARY
-        return tapLive == null ? (tapLive = new TapTalkLive(context, appKeySecret, apiBaseUrl, clientAppIcon, clientAppName)) : tapLive;
+        return tapLive;
     }
 
     private static String generateApiBaseUrl(String apiBaseUrl) {
         return apiBaseUrl + "/" + API_VERSION + "/";
     }
 
-    private TTLDefaultDataView<TTLGetProjectConfigsRespone> projectConfigsDataView = new TTLDefaultDataView<TTLGetProjectConfigsRespone>() {
+    private static TTLDefaultDataView<TTLGetProjectConfigsRespone> projectConfigsDataView = new TTLDefaultDataView<TTLGetProjectConfigsRespone>() {
         @Override
         public void onSuccess(TTLGetProjectConfigsRespone response) {
             TTLTapTalkProjectConfigsModel tapTalk = response.getTapTalkProjectConfigs();
@@ -231,6 +262,8 @@ public class TapTalkLive {
                         .show();
             }
         });
+
+        tapTalkLiveListener.onInitializationCompleted();
     }
 
     public static void authenticateTapTalkSDK(String authTicket, TapCommonListener listener) {
@@ -282,7 +315,7 @@ public class TapTalkLive {
         }
     };
 
-    private TapTalkNetworkInterface networkListener = new TapTalkNetworkInterface() {
+    private static TapTalkNetworkInterface networkListener = new TapTalkNetworkInterface() {
         @Override
         public void onNetworkAvailable() {
             if (isNeedToGetProjectConfigs) {
