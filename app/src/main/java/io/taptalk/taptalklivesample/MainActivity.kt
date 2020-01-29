@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        TapTalkLive.init(applicationContext, TAPLIVE_SDK_APP_KEY_SECRET, TAPLIVE_SDK_BASE_URL, R.mipmap.ic_launcher, "TapTalk.live Sample App")
+        TapTalkLive.init(applicationContext, TAPLIVE_SDK_APP_KEY_SECRET, TAPLIVE_SDK_BASE_URL, R.drawable.ic_taptalk_logo, "TapTalk.live Sample App")
 
         ll_button_launch_live_chat.setOnClickListener(buttonListener)
     }
