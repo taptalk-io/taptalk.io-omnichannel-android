@@ -284,7 +284,8 @@ public class TapTalkLive {
     private static TapListener tapListener = new TapListener() {
         @Override
         public void onTapTalkRefreshTokenExpired() {
-
+            clearAllTapLiveData();
+            // TODO: 30 Jan 2020 HANDLE UI FOR FORCED LOG OUT
         }
 
         @Override
@@ -340,7 +341,9 @@ public class TapTalkLive {
             return false;
         }
         TapUI.getInstance().openRoomList(activityContext);
-        if (!TTLDataManager.getInstance().checkActiveUserExists() || null == TTLDataManager.getInstance().checkAccessTokenAvailable()) {
+        if (!TTLDataManager.getInstance().checkActiveUserExists() ||
+                !TTLDataManager.getInstance().checkAccessTokenAvailable() ||
+                !TTLDataManager.getInstance().activeUserHasExistingCase()) {
             TapTalkLive.openCreateCaseForm(activityContext, false);
         }
         return true;
