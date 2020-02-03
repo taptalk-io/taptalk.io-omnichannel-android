@@ -4,15 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ttlDefaultBackgroundColor"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/ttl_bg_white_rounded_8dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_taptalk_logo"
+        app:layout_constraintBottom_toTopOf="@id/tv_get_started"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_get_started"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/ttl_font_pt_root_bold"
+        android:gravity="center"
+        android:text="Get started with TapTalk.io"
+        android:textColor="@color/ttlColorTextDark"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/ll_button_launch_live_chat"
+        app:layout_constraintTop_toBottomOf="@id/iv_logo" />
+
+    <LinearLayout
+        android:id="@+id/ll_button_launch_live_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/ttl_bg_button_active_ripple"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="32dp"
+        android:paddingLeft="32dp"
+        android:paddingEnd="32dp"
+        android:paddingRight="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_get_started">
+
+        <ImageView
+            android:id="@+id/iv_button_launch_live_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ttl_ic_arrow_top_right"
+            android:tint="@color/ttlButtonIconColor" />
+
+        <TextView
+            android:id="@+id/tv_button_launch_live_chat"
+            style="@style/ttlButtonLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:gravity="center"
+            android:text="Launch live chat" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
