@@ -25,7 +25,7 @@ class TTLCaseListActivity : AppCompatActivity() {
 
     private fun initView() {
         iv_button_close.setOnClickListener { onBackPressed() }
-        iv_button_send_message.setOnClickListener { openCreateCaseForm() }
+        ll_button_new_conversation.setOnClickListener { openCreateCaseForm() }
     }
 
     private fun openCreateCaseForm() {

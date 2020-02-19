@@ -74,6 +74,7 @@
     <!--Color Palette-->
     <color name="ttlWhite">#ffffff</color>
     <color name="ttlWhiteF3">#f3f3f3</color>
+    <color name="ttlGreyDc">#dcdcdc</color>
     <color name="ttlGreyCe">#cecece</color>
     <color name="ttlGrey9b">#9b9b9b</color>
     <color name="ttlBlack19">#191919</color>
