@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/tv_label_title"
-            style="@style/ttlCreateFormTitleLabelStyle"
+            style="@style/ttlTitleLabelStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"

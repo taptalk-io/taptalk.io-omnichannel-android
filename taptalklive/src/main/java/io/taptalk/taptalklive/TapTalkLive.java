@@ -34,6 +34,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
+import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
@@ -197,7 +198,7 @@ public class TapTalkLive {
         if (isTapTalkInitialized) { // TODO TEMPORARY
             return;
         }
-        TapTalk.setLoggingEnabled(true);
+        TapTalk.setLoggingEnabled(BuildConfig.DEBUG);
         TapTalk.init(
                 context,
                 tapTalkAppKeyID,
@@ -209,11 +210,13 @@ public class TapTalkLive {
                 tapListener);
         isTapTalkInitialized = true; // TODO TEMPORARY
 
-        TapUI.getInstance().setCloseButtonInRoomListVisible(true);
-        TapUI.getInstance().setProfileButtonInChatRoomVisible(false);
-        TapUI.getInstance().setMyAccountButtonInRoomListVisible(false);
+        //TapUI.getInstance().setCloseButtonInRoomListVisible(true);
+        //TapUI.getInstance().setProfileButtonInChatRoomVisible(false);
+        //TapUI.getInstance().setMyAccountButtonInRoomListVisible(false);
+        TapUI.getInstance().setSearchChatBarInRoomListVisible(false);
+        TapUI.getInstance().setNewChatButtonInRoomListVisible(false);
 
-        TapUI.getInstance().addRoomListListener(tapUIRoomListListener);
+        //TapUI.getInstance().addRoomListListener(tapUIRoomListListener);
 
         TapUI.getInstance().addCustomBubble(new TTLSystemMessageBubbleClass(
                 R.layout.ttl_cell_chat_system_message,
@@ -309,12 +312,12 @@ public class TapTalkLive {
         }
     };
 
-    private static TapUIRoomListListener tapUIRoomListListener = new TapUIRoomListListener() {
-        @Override
-        public void onNewChatButtonTapped(Activity activity) {
-            openCreateCaseForm(activity, true);
-        }
-    };
+    //private static TapUIRoomListListener tapUIRoomListListener = new TapUIRoomListListener() {
+    //    @Override
+    //    public void onNewChatButtonTapped(Activity activity) {
+    //        openCreateCaseForm(activity, true);
+    //    }
+    //};
 
     private static TapTalkNetworkInterface networkListener = new TapTalkNetworkInterface() {
         @Override
@@ -326,6 +329,14 @@ public class TapTalkLive {
             }
         }
     };
+
+    private static void openCaseList(Context activityContext) {
+        Intent intent = new Intent(activityContext, TTLCaseListActivity.class);
+        activityContext.startActivity(intent);
+        if (activityContext instanceof Activity) {
+            ((Activity) activityContext).overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay);
+        }
+    }
 
     private static void openCreateCaseForm(Context activityContext, boolean showCloseButton) {
         Intent intent = new Intent(activityContext, TTLCreateCaseFormActivity.class);
@@ -340,11 +351,12 @@ public class TapTalkLive {
         if (!isTapTalkInitialized) { // TODO CALL TapTalk.checkTapTalkInitialized
             return false;
         }
-        TapUI.getInstance().openRoomList(activityContext);
+        //TapUI.getInstance().openRoomList(activityContext);
+        openCaseList(activityContext);
         if (!TTLDataManager.getInstance().checkActiveUserExists() ||
                 !TTLDataManager.getInstance().checkAccessTokenAvailable() ||
                 !TTLDataManager.getInstance().activeUserHasExistingCase()) {
-            TapTalkLive.openCreateCaseForm(activityContext, false);
+            openCreateCaseForm(activityContext, false);
         }
         return true;
     }
