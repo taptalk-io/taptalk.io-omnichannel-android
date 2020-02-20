@@ -81,14 +81,28 @@
             app:layout_constraintTop_toBottomOf="@id/tv_label_title" />
 
         <View
-            android:id="@+id/v_form_header_decoration"
+            android:id="@+id/v_form_header_decoration_background"
             android:layout_width="match_parent"
-            android:layout_height="12dp"
+            android:layout_height="8dp"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
+            android:background="@drawable/ttl_bg_form_header_decoration_white"
+            android:elevation="2dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_label_description" />
+
+        <View
+            android:id="@+id/v_form_header_decoration"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:alpha="0.1"
             android:background="@drawable/ttl_bg_form_header_decoration"
             android:elevation="2dp"
             app:layout_constraintTop_toBottomOf="@id/tv_label_description" />
