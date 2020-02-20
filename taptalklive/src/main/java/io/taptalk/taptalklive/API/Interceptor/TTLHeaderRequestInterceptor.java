@@ -30,12 +30,13 @@ public class TTLHeaderRequestInterceptor implements Interceptor {
         Request request = original
                 .newBuilder()
                 .addHeader("Content-Type", contentType)
-                .addHeader("Secret-Key", TTLDataManager.getInstance().getAppKeySecret())
+                .addHeader("App-Identifier", TapTalkLive.context.getPackageName())
                 .addHeader("Device-Identifier", deviceID)
                 .addHeader("Device-Model", android.os.Build.MODEL)
-                .addHeader("Device-Platform", "android")
                 .addHeader("Device-OS-Version", deviceOsVersion)
+                .addHeader("Device-Platform", "android")
                 .addHeader("SDK-Version", BuildConfig.VERSION_NAME)
+                .addHeader("Secret-Key", TTLDataManager.getInstance().getAppKeySecret())
                 .addHeader("User-Agent", "android")
                 .method(original.method(), original.body())
                 .build();
