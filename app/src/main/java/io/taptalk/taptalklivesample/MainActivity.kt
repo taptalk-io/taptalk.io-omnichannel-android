@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
 
         TapTalkLive.init(applicationContext,
                 TAPLIVE_SDK_APP_KEY_SECRET,
-                TAPLIVE_SDK_BASE_URL,
                 R.drawable.ic_taptalk_logo,
                 "TapTalk.live Sample App",
                 tapTalkLiveListener)

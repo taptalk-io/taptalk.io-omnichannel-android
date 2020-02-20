@@ -27,6 +27,8 @@ android {
             debuggable false
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"12cda760535ce7d4de1df6f896e8568d3f874467b5339c93ab2b029d66cff319"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
         }
         staging {
             signingConfig signingConfigs.debug
@@ -34,6 +36,8 @@ android {
             debuggable true
             applicationIdSuffix '.staging'
             versionNameSuffix '-STAGING'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"12cda760535ce7d4de1df6f896e8568d3f874467b5339c93ab2b029d66cff319"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
         }
         dev {
             signingConfig signingConfigs.debug
@@ -41,6 +45,8 @@ android {
             minifyEnabled false
             applicationIdSuffix '.dev'
             versionNameSuffix '-DEV'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"12cda760535ce7d4de1df6f896e8568d3f874467b5339c93ab2b029d66cff319"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
         }
     }
     compileOptions {
