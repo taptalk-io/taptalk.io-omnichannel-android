@@ -211,6 +211,7 @@ public class TapTalkLive {
         TapUI.getInstance().setCloseButtonInRoomListVisible(true);
         TapUI.getInstance().setProfileButtonInChatRoomVisible(false);
         TapUI.getInstance().setMyAccountButtonInRoomListVisible(false);
+        TapUI.getInstance().removeRoomListListener(tapUIRoomListListener);
         TapUI.getInstance().addRoomListListener(tapUIRoomListListener);
 
         // TODO: 20 Feb 2020 TEMPORARILY DISABLED CASE LIST PAGE
