@@ -22,12 +22,12 @@ android {
             debuggable false
             consumerProguardFiles 'proguard-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api.taptalk.io/api/visitor"')
+            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-cstd.taptalk.io/api/visitor"')
         }
         staging {
             minifyEnabled false
             debuggable true
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-api-staging.taptalk.io/api/visitor"')
+            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", '"https://taplive-cstd-stg.taptalk.io/api/visitor"')
         }
         dev {
             minifyEnabled false

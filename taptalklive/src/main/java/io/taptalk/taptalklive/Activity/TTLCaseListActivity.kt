@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.R
@@ -26,6 +27,9 @@ class TTLCaseListActivity : AppCompatActivity() {
     private fun initView() {
         iv_button_close.setOnClickListener { onBackPressed() }
         ll_button_new_conversation.setOnClickListener { openCreateCaseForm() }
+
+        // TODO SET CLIENT LOGO
+        iv_logo.visibility = View.INVISIBLE
     }
 
     private fun openCreateCaseForm() {
