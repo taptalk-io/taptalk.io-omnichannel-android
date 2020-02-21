@@ -208,6 +208,7 @@ public class TapTalkLive {
                 tapListener);
         isTapTalkInitialized = true; // TODO TEMPORARY
 
+        TapUI.getInstance().setReadStatusHidden(true);
         TapUI.getInstance().setCloseButtonInRoomListVisible(true);
         TapUI.getInstance().setProfileButtonInChatRoomVisible(false);
         TapUI.getInstance().setMyAccountButtonInRoomListVisible(false);
