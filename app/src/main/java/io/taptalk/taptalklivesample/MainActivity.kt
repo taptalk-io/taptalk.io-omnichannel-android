@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
 
         TapTalkLive.init(applicationContext,
                 TAPLIVE_SDK_APP_KEY_SECRET,
-                TAPLIVE_SDK_BASE_URL,
                 R.drawable.ic_taptalk_logo,
                 "TapTalk.live Sample App",
                 tapTalkLiveListener)
@@ -36,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openTapTalkLiveView() {
         if (TapTalkLive.openTapTalkLiveView(this@MainActivity)) {
+            isOpenTapTalkLiveViewPending = false
             TapTalkLive.initializeGooglePlacesApiKey(GOOGLE_MAPS_API_KEY)
             finish()
         } else {

@@ -8,8 +8,8 @@ android {
         applicationId "io.taptalk.taptalklivesample"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -27,6 +27,8 @@ android {
             debuggable false
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"12cda760535ce7d4de1df6f896e8568d3f874467b5339c93ab2b029d66cff319"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
         }
         staging {
             signingConfig signingConfigs.debug
@@ -34,6 +36,8 @@ android {
             debuggable true
             applicationIdSuffix '.staging'
             versionNameSuffix '-STAGING'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"12cda760535ce7d4de1df6f896e8568d3f874467b5339c93ab2b029d66cff319"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
         }
         dev {
             signingConfig signingConfigs.debug
@@ -41,6 +45,8 @@ android {
             minifyEnabled false
             applicationIdSuffix '.dev'
             versionNameSuffix '-DEV'
+            buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", '"12cda760535ce7d4de1df6f896e8568d3f874467b5339c93ab2b029d66cff319"')
+            buildConfigField("String", "GOOGLE_MAPS_API_KEY", '"AIzaSyDqRal61I487_PK7V2kiQnVebcrM7QnTW0"')
         }
     }
     compileOptions {
@@ -56,7 +62,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation "androidx.core:core-ktx:1.1.0"
+    implementation "androidx.core:core-ktx:1.2.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(":taptalklive")
     implementation 'com.android.support:multidex:1.0.3'

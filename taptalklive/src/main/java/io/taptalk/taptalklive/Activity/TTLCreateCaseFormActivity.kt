@@ -86,6 +86,9 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         initTopicSpinnerAdapter()
 
         ll_button_send_message.setOnClickListener { validateSendMessage() }
+
+        // TODO SET CLIENT LOGO
+        iv_logo.visibility = View.INVISIBLE
     }
 
     private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->

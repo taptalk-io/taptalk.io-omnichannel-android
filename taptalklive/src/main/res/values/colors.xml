@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--TapLive Default Colors-->
-    <color name="ttlColorPrimaryExtraLight">@color/ttlLiveLightOrange</color>
     <color name="ttlColorPrimaryLight">@color/ttlMango</color>  <!--    -->
-    <color name="ttlColorPrimary">@color/ttlLiveDarkOrange</color>
+    <color name="ttlColorPrimary">@color/ttlDarkOrange</color>
     <color name="ttlColorPrimaryDark">@color/ttlPumpkinOrangeDark</color> <!--    -->
     <color name="ttlColorAccent">@color/ttlColorPrimary</color>
 
@@ -14,7 +13,7 @@
     <color name="ttlColorSuccess">@color/ttlAppleGreen</color>
     <color name="ttlColorError">@color/ttlWatermelonRed</color>
 
-    <color name="ttlColorPrimaryIcon">@color/ttlLiveDarkOrange</color>
+    <color name="ttlColorPrimaryIcon">@color/ttlDarkOrange</color>
     <color name="ttlColorWhiteIcon">@color/ttlWhite</color>
     <color name="ttlColorGrayIcon">@color/ttlGrey9b</color>
     <color name="ttlColorSuccessIcon">@color/ttlAppleGreen</color>
@@ -74,12 +73,12 @@
     <!--Color Palette-->
     <color name="ttlWhite">#ffffff</color>
     <color name="ttlWhiteF3">#f3f3f3</color>
+    <color name="ttlGreyDc">#dcdcdc</color>
     <color name="ttlGreyCe">#cecece</color>
     <color name="ttlGrey9b">#9b9b9b</color>
     <color name="ttlBlack19">#191919</color>
 
-    <color name="ttlLiveLightOrange">#ffe7d0</color>
-    <color name="ttlLiveDarkOrange">#ff7d00</color>
+    <color name="ttlDarkOrange">#ff7e00</color>
     <color name="ttlMango">#ff9833</color>
     <color name="ttlPumpkinOrangeDark">#e87200</color>
     <color name="ttlAppleGreen">#7ec82a</color>

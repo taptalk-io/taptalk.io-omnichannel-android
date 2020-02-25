@@ -34,6 +34,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
+import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
@@ -44,6 +45,7 @@ import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
+import static io.taptalk.taptalklive.BuildConfig.TAPLIVE_SDK_BASE_URL;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
 import static io.taptalk.taptalklive.Const.TTLConstant.CustomKeyboard.MARK_AS_SOLVED;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
@@ -68,7 +70,6 @@ public class TapTalkLive {
 
     private TapTalkLive(@NonNull final Context appContext,
                         @NonNull String appKeySecret,
-                        @NonNull String apiBaseUrl,
                         int clientAppIcon,
                         String clientAppName,
                         @NonNull TapTalkLiveListener tapTalkLiveListener) {
@@ -84,7 +85,7 @@ public class TapTalkLive {
         }
 
         TTLDataManager.getInstance().saveAppKeySecret(appKeySecret);
-        TTLApiManager.setApiBaseUrl(generateApiBaseUrl(apiBaseUrl));
+        TTLApiManager.setApiBaseUrl(generateApiBaseUrl(TAPLIVE_SDK_BASE_URL));
 
         TapTalkLive.clientAppIcon = clientAppIcon;
         TapTalkLive.clientAppName = clientAppName;
@@ -112,7 +113,6 @@ public class TapTalkLive {
 
     public static TapTalkLive init(Context context,
                                    String appKeySecret,
-                                   String apiBaseUrl,
                                    int clientAppIcon,
                                    String clientAppName,
                                    TapTalkLiveListener tapTalkLiveListener) {
@@ -121,7 +121,6 @@ public class TapTalkLive {
             tapLive = new TapTalkLive(
                     context,
                     appKeySecret,
-                    apiBaseUrl,
                     clientAppIcon,
                     clientAppName,
                     tapTalkLiveListener);
@@ -197,7 +196,7 @@ public class TapTalkLive {
         if (isTapTalkInitialized) { // TODO TEMPORARY
             return;
         }
-        TapTalk.setLoggingEnabled(true);
+        TapTalk.setLoggingEnabled(BuildConfig.DEBUG);
         TapTalk.init(
                 context,
                 tapTalkAppKeyID,
@@ -209,11 +208,16 @@ public class TapTalkLive {
                 tapListener);
         isTapTalkInitialized = true; // TODO TEMPORARY
 
+        TapUI.getInstance().setReadStatusHidden(true);
         TapUI.getInstance().setCloseButtonInRoomListVisible(true);
         TapUI.getInstance().setProfileButtonInChatRoomVisible(false);
         TapUI.getInstance().setMyAccountButtonInRoomListVisible(false);
-
+        TapUI.getInstance().removeRoomListListener(tapUIRoomListListener);
         TapUI.getInstance().addRoomListListener(tapUIRoomListListener);
+
+        // TODO: 20 Feb 2020 TEMPORARILY DISABLED CASE LIST PAGE
+//        TapUI.getInstance().setSearchChatBarInRoomListVisible(false);
+//        TapUI.getInstance().setNewChatButtonInRoomListVisible(false);
 
         TapUI.getInstance().addCustomBubble(new TTLSystemMessageBubbleClass(
                 R.layout.ttl_cell_chat_system_message,
@@ -327,6 +331,14 @@ public class TapTalkLive {
         }
     };
 
+    private static void openCaseList(Context activityContext) {
+        Intent intent = new Intent(activityContext, TTLCaseListActivity.class);
+        activityContext.startActivity(intent);
+        if (activityContext instanceof Activity) {
+            ((Activity) activityContext).overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay);
+        }
+    }
+
     private static void openCreateCaseForm(Context activityContext, boolean showCloseButton) {
         Intent intent = new Intent(activityContext, TTLCreateCaseFormActivity.class);
         intent.putExtra(SHOW_CLOSE_BUTTON, showCloseButton);
@@ -341,10 +353,11 @@ public class TapTalkLive {
             return false;
         }
         TapUI.getInstance().openRoomList(activityContext);
+//        openCaseList(activityContext); // TODO: 20 Feb 2020 TEMPORARILY DISABLED CASE LIST PAGE
         if (!TTLDataManager.getInstance().checkActiveUserExists() ||
                 !TTLDataManager.getInstance().checkAccessTokenAvailable() ||
                 !TTLDataManager.getInstance().activeUserHasExistingCase()) {
-            TapTalkLive.openCreateCaseForm(activityContext, false);
+            openCreateCaseForm(activityContext, false);
         }
         return true;
     }
