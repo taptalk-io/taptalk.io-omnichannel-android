@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openTapTalkLiveView() {
         if (TapTalkLive.openTapTalkLiveView(this@MainActivity)) {
+            isOpenTapTalkLiveViewPending = false
             TapTalkLive.initializeGooglePlacesApiKey(GOOGLE_MAPS_API_KEY)
             finish()
         } else {
