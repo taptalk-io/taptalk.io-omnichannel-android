@@ -74,10 +74,10 @@ public class TapTalkLive {
                         String clientAppName,
                         @NonNull TapTalkLiveListener tapTalkLiveListener) {
 
-        context = appContext;
+        TapTalkLive.context = appContext;
 
         // Init Hawk for preference
-        if (io.taptalk.Taptalk.BuildConfig.BUILD_TYPE.equals("dev")) {
+        if (BuildConfig.BUILD_TYPE.equals("dev")) {
             // No encryption for dev build
             Hawk.init(appContext).setEncryption(new NoEncryption()).build();
         } else {
