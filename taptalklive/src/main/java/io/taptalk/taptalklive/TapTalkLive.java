@@ -32,6 +32,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
@@ -299,8 +300,7 @@ public class TapTalkLive {
     private static TapListener tapListener = new TapListener() {
         @Override
         public void onTapTalkRefreshTokenExpired() {
-            clearAllTapLiveData();
-            // TODO: 30 Jan 2020 HANDLE UI FOR FORCED LOG OUT
+            requestTapTalkAuthTicket();
         }
 
         @Override
@@ -321,6 +321,44 @@ public class TapTalkLive {
         @Override
         public void onTaskRootChatRoomClosed(Activity activity) {
 
+        }
+    };
+
+    private static void requestTapTalkAuthTicket() {
+        TTLDataManager.getInstance().requestTapTalkAuthTicket(requestTapTalkAuthTicketDataView);
+    }
+
+    private static TTLDefaultDataView<TTLRequestTicketResponse> requestTapTalkAuthTicketDataView = new TTLDefaultDataView<TTLRequestTicketResponse>() {
+        @Override
+        public void onSuccess(TTLRequestTicketResponse response) {
+            if (null != response) {
+                TTLDataManager.getInstance().saveTapTalkAuthTicket(response.getTicket());
+                authenticateTapTalkSDK(response.getTicket(), authenticateTapTalkSDKListener);
+            } else {
+                clearAllTapLiveData();
+            }
+        }
+
+        @Override
+        public void onError(TTLErrorModel error) {
+            clearAllTapLiveData();
+        }
+
+        @Override
+        public void onError(String errorMessage) {
+            clearAllTapLiveData();
+        }
+    };
+
+    private static TapCommonListener authenticateTapTalkSDKListener = new TapCommonListener() {
+        @Override
+        public void onSuccess(String s) {
+            TTLDataManager.getInstance().removeTapTalkAuthTicket();
+        }
+
+        @Override
+        public void onError(String s, String s1) {
+            clearAllTapLiveData();
         }
     };
 
