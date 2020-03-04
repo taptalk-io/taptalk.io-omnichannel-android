@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.facebook.stetho.Stetho;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
@@ -63,6 +64,7 @@ public class TapTalkLive {
 
     private static final String TAG = TapTalkLive.class.getSimpleName();
     private static String clientAppName;
+    private static String appKeySecret = "";
     private static int clientAppIcon;
     private static boolean isNeedToGetProjectConfigs;
     private static boolean isTapTalkInitialized; // TODO TEMPORARY
@@ -87,6 +89,7 @@ public class TapTalkLive {
         TTLDataManager.getInstance().saveAppKeySecret(appKeySecret);
         TTLApiManager.setApiBaseUrl(generateApiBaseUrl(TAPLIVE_SDK_BASE_URL));
 
+        TapTalkLive.appKeySecret = appKeySecret; // FIXME APP KEY SECRET CURRENTLY SAVED AS STATIC
         TapTalkLive.clientAppIcon = clientAppIcon;
         TapTalkLive.clientAppName = clientAppName;
         TapTalkLive.tapTalkLiveListener = tapTalkLiveListener;
@@ -138,6 +141,16 @@ public class TapTalkLive {
                 TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
             }
         }
+
+        if (BuildConfig.DEBUG) {
+            Stetho.initialize(
+                    Stetho.newInitializerBuilder(context)
+                            .enableDumpapp(Stetho.defaultDumperPluginsProvider(context))
+                            .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(context))
+                            .build()
+            );
+        }
+
         return tapLive;
     }
 
@@ -369,6 +382,10 @@ public class TapTalkLive {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getAppKeySecret() {
+        return appKeySecret;
     }
 
     public static void logoutAndClearAllTapLiveData(TapCommonListener listener) {
