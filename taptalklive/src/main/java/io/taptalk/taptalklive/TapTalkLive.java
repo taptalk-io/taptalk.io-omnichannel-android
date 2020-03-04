@@ -3,7 +3,6 @@ package io.taptalk.taptalklive;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,7 +47,6 @@ import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
 import static io.taptalk.taptalklive.BuildConfig.TAPLIVE_SDK_BASE_URL;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
-import static io.taptalk.taptalklive.Const.TTLConstant.CustomKeyboard.MARK_AS_SOLVED;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
@@ -259,9 +257,9 @@ public class TapTalkLive {
             public List<TAPCustomKeyboardItemModel> setCustomKeyboardItems(TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
                 List<TAPCustomKeyboardItemModel> keyboardItemModelList = new ArrayList<>();
                 TAPCustomKeyboardItemModel markAsSolvedCustomKeyboard = new TAPCustomKeyboardItemModel(
-                        MARK_AS_SOLVED,
+                        context.getString(R.string.ttl_mark_as_solved),
                         ContextCompat.getDrawable(context, R.drawable.ttl_ic_checklist_black_19),
-                        MARK_AS_SOLVED
+                        context.getString(R.string.ttl_mark_as_solved)
                 );
                 keyboardItemModelList.add(markAsSolvedCustomKeyboard);
                 return keyboardItemModelList;

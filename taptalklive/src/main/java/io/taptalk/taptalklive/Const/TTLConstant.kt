@@ -35,8 +35,4 @@ class TTLConstant {
         const val TAPTALK_AUTH_TICKET = "kTapTalkLiveTapTalkAuthenticationTicket"
         const val CASE_EXISTS = "kTapTalkLiveCaseExists"
     }
-
-    object CustomKeyboard {
-        const val MARK_AS_SOLVED = "Mark as solved"
-    }
 }

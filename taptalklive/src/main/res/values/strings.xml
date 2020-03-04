@@ -38,4 +38,6 @@
     <string name="ttl_rating_5">Excellent</string>
     <string name="ttl_close_case">Close Case</string>
     <string name="ttl_close_case_dialog_message">This case will be closed and you wont be able to further send messages or receive assistance regarding this case. Would you like to proceed?</string>
+
+    <string name="ttl_mark_as_solved">Mark as solved</string>
 </resources>

@@ -23,7 +23,7 @@
     <string name="ttl_error">Error</string>
     <string name="ttl_error_message_general">Terjadi kesalahan, silakan coba lagi.</string>
     <string name="ttl_error_message_offline">Oops! Sepertinya Anda sedang offline, silakan periksa koneksi Anda.</string>
-    <string name="ttl_error_message_full_name_empty">Mohon isi name Anda.</string>
+    <string name="ttl_error_message_full_name_empty">Mohon isi nama Anda.</string>
     <string name="ttl_error_message_email_empty">Mohon isi alamat email Anda.</string>
     <string name="ttl_error_message_email_invalid">Format alamat email tidak valid.</string>
     <string name="ttl_error_message_topic_empty">Mohon pilih salah satu topik.</string>
@@ -31,11 +31,13 @@
     <string name="ttl_error_xc_room_id_empty">Unable to fetch TapTalk chat room</string>
     <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
 
-    <string name="ttl_rating_1">Buruk</string>
+    <string name="ttl_rating_1">Mengecewakan</string>
     <string name="ttl_rating_2">Kurang baik</string>
-    <string name="ttl_rating_3">Cukup</string>
+    <string name="ttl_rating_3">Cukup baik</string>
     <string name="ttl_rating_4">Baik</string>
     <string name="ttl_rating_5">Luar biasa</string>
     <string name="ttl_close_case">Tutup percakapan</string>
     <string name="ttl_close_case_dialog_message">Percakapan ini akan ditutup dan Anda tidak akan dapat mengirim pesan atau menerima bantuan terkait kasus ini. Apa Anda yakin ingin melanjutkan?</string>
+
+    <string name="ttl_mark_as_solved">Akhiri percakapan</string>
 </resources>
