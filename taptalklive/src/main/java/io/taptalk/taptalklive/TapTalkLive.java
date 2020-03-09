@@ -1,6 +1,7 @@
 package io.taptalk.taptalklive;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
@@ -22,6 +23,7 @@ import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Listener.TapUICustomKeyboardListener;
 import io.taptalk.TapTalk.Listener.TapUIRoomListListener;
+import io.taptalk.TapTalk.Manager.TapLocaleManager;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
@@ -422,6 +424,29 @@ public class TapTalkLive {
 
     public static String getAppKeySecret() {
         return appKeySecret;
+    }
+
+    /**
+     * =============================================================================================
+     * LANGUAGE
+     * =============================================================================================
+     */
+
+    public enum Language {ENGLISH, INDONESIAN}
+
+    public static void setDefaultLanguage(Language language) {
+        String defaultLanguage;
+        switch (language) {
+            case INDONESIAN:
+                defaultLanguage = "in";
+                break;
+            default:
+                defaultLanguage = "en";
+                break;
+        }
+        TapLocaleManager.setLocale((Application) context, defaultLanguage);
+
+        // TODO: 27 Feb 2020 RESTART OPEN ACTIVITIES TO APPLY CHANGED RESOURCES
     }
 
     public static void logoutAndClearAllTapLiveData(TapCommonListener listener) {
