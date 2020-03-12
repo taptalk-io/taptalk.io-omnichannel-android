@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +36,6 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
-import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
@@ -58,7 +56,6 @@ import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CA
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED;
-import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.APP_KEY_SECRET;
 import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 
 public class TapTalkLive {
@@ -83,11 +80,13 @@ public class TapTalkLive {
         TapTalkLive.context = appContext;
 
         // Init Hawk for preference
-        if (BuildConfig.BUILD_TYPE.equals("dev")) {
-            // No encryption for dev build
-            Hawk.init(appContext).setEncryption(new NoEncryption()).build();
-        } else {
-            Hawk.init(appContext).build();
+        if (!Hawk.isBuilt()) {
+            if (BuildConfig.BUILD_TYPE.equals("dev")) {
+                // No encryption for dev build
+                Hawk.init(appContext).setEncryption(new NoEncryption()).build();
+            } else {
+                Hawk.init(appContext).build();
+            }
         }
 
         TTLDataManager.getInstance().saveAppKeySecret(appKeySecret);
@@ -98,34 +97,12 @@ public class TapTalkLive {
         TapTalkLive.clientAppName = clientAppName;
         TapTalkLive.tapTalkLiveListener = tapTalkLiveListener;
 
+        // Get project configs for TapTalk SDK
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
 
-        Log.e(TAG, "TapTalkLive init APP_KEY_SECRET: " + Hawk.get(APP_KEY_SECRET, ""));
-        TTLUserModel user = TTLDataManager.getInstance().getActiveUser();
-        if (null != user) {
-            Log.e(TAG, "TapTalkLive init: user name " + user.getFullName());
-        } else {
-            Log.e(TAG, "TapTalkLive init: user NULL");
-        }
         if (TTLDataManager.getInstance().checkActiveUserExists()) {
-            Log.e(TAG, "TapTalkLive init: checkActiveUserExists TRUE -> get case list");
+            // Check if user has active case
             TTLDataManager.getInstance().getCaseList(caseListDataView);
-
-            // TODO: 023, 23 Jan 2020 TESTING
-//            if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
-//                    TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
-//                    TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
-//                initializeTapTalkSDK(
-//                        TTLDataManager.getInstance().getTapTalkAppKeyID(),
-//                        TTLDataManager.getInstance().getTapTalkAppKeySecret(),
-//                        TTLDataManager.getInstance().getTapTalkApiUrl());
-//            } else {
-//                isNeedToGetProjectConfigs = true;
-//                TTLNetworkStateManager.getInstance().registerCallback(context);
-//                TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
-//            }
-        } else {
-            Log.e(TAG, "TapTalkLive init: checkActiveUserExists FALSE");
         }
     }
 
@@ -210,7 +187,7 @@ public class TapTalkLive {
         }
     };
 
-    private TTLDefaultDataView<TTLGetCaseListResponse> caseListDataView = new TTLDefaultDataView<TTLGetCaseListResponse>() {
+    private static TTLDefaultDataView<TTLGetCaseListResponse> caseListDataView = new TTLDefaultDataView<TTLGetCaseListResponse>() {
         @Override
         public void onSuccess(TTLGetCaseListResponse response) {
             TTLDataManager.getInstance().saveActiveUserHasExistingCase(
@@ -247,65 +224,69 @@ public class TapTalkLive {
 //        TapUI.getInstance().setSearchChatBarInRoomListVisible(false);
 //        TapUI.getInstance().setNewChatButtonInRoomListVisible(false);
 
-        TapUI.getInstance().addCustomBubble(new TTLSystemMessageBubbleClass(
-                R.layout.ttl_cell_chat_system_message,
-                TYPE_CLOSE_CASE, (context, message) -> {}));
-        TapUI.getInstance().addCustomBubble(new TTLSystemMessageBubbleClass(
-                R.layout.ttl_cell_chat_system_message,
-                TYPE_REOPEN_CASE, (context, message) -> {}));
-        TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
-                R.layout.ttl_cell_chat_bubble_review,
-                TYPE_REVIEW, (context, message) -> {
-            Intent intent = new Intent(context, TTLReviewActivity.class);
-            intent.putExtra(MESSAGE, message);
-            if (context instanceof Activity) {
-                ((Activity) context).startActivityForResult(intent, REVIEW);
-                ((Activity) context).overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay);
-            } else {
-                context.startActivity(intent);
-            }
-        }));
-        TapUI.getInstance().addCustomBubble(new TTLReviewChatBubbleClass(
-                R.layout.ttl_cell_chat_bubble_review,
-                TYPE_REVIEW_SUBMITTED, (context, message) -> {}));
-
-        TapUI.getInstance().addCustomKeyboardListener(new TapUICustomKeyboardListener() {
-            @Override
-            public List<TAPCustomKeyboardItemModel> setCustomKeyboardItems(TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
-                List<TAPCustomKeyboardItemModel> keyboardItemModelList = new ArrayList<>();
-                TAPCustomKeyboardItemModel markAsSolvedCustomKeyboard = new TAPCustomKeyboardItemModel(
-                        context.getString(R.string.ttl_mark_as_solved),
-                        ContextCompat.getDrawable(context, R.drawable.ttl_ic_checklist_black_19),
-                        context.getString(R.string.ttl_mark_as_solved)
-                );
-                keyboardItemModelList.add(markAsSolvedCustomKeyboard);
-                return keyboardItemModelList;
-            }
-
-            @Override
-            public void onCustomKeyboardItemTapped(Activity activity, TAPCustomKeyboardItemModel customKeyboardItem, TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
-                new TapTalkDialog.Builder(activity)
-                        .setDialogType(TapTalkDialog.DialogType.DEFAULT)
-                        .setTitle(activity.getString(R.string.ttl_close_case))
-                        .setMessage(activity.getString(R.string.ttl_close_case_dialog_message))
-                        .setPrimaryButtonTitle(activity.getString(R.string.ttl_ok))
-                        .setPrimaryButtonListener(v -> closeCase(room.getXcRoomID()))
-                        .setSecondaryButtonTitle(activity.getString(R.string.ttl_cancel))
-                        .show();
-            }
-        });
+        TapUI.getInstance().addCustomBubble(closeCaseCustomBubble);
+        TapUI.getInstance().addCustomBubble(reopenCaseCustomBubble);
+        TapUI.getInstance().addCustomBubble(reviewCustomBubble);
+        TapUI.getInstance().addCustomBubble(reviewSubmittedCustomBubble);
+        TapUI.getInstance().removeCustomKeyboardListener(customKeyboardListener);
+        TapUI.getInstance().addCustomKeyboardListener(customKeyboardListener);
 
         tapTalkLiveListener.onInitializationCompleted();
-
-
-        Log.e(TAG, "TapTalk init APP_KEY_SECRET: " + Hawk.get(APP_KEY_SECRET, ""));
-        TTLUserModel user = TTLDataManager.getInstance().getActiveUser();
-        if (null != user) {
-            Log.e(TAG, "TapTalk init: user" + user.getFullName());
-        } else {
-            Log.e(TAG, "TapTalk init: user NULL");
-        }
     }
+
+    private static TTLSystemMessageBubbleClass closeCaseCustomBubble = new TTLSystemMessageBubbleClass(
+            R.layout.ttl_cell_chat_system_message,
+            TYPE_CLOSE_CASE, (context, message) -> {}
+    );
+
+    private static TTLSystemMessageBubbleClass reopenCaseCustomBubble = new TTLSystemMessageBubbleClass(
+            R.layout.ttl_cell_chat_system_message,
+            TYPE_REOPEN_CASE, (context, message) -> {}
+    );
+
+    private static TTLReviewChatBubbleClass reviewCustomBubble = new TTLReviewChatBubbleClass(
+            R.layout.ttl_cell_chat_bubble_review,
+            TYPE_REVIEW, (context, message) -> {
+        Intent intent = new Intent(context, TTLReviewActivity.class);
+        intent.putExtra(MESSAGE, message);
+        if (context instanceof Activity) {
+            ((Activity) context).startActivityForResult(intent, REVIEW);
+            ((Activity) context).overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay);
+        } else {
+            context.startActivity(intent);
+        }
+    });
+
+    private static TapUICustomKeyboardListener customKeyboardListener = new TapUICustomKeyboardListener() {
+        @Override
+        public List<TAPCustomKeyboardItemModel> setCustomKeyboardItems(TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
+            List<TAPCustomKeyboardItemModel> keyboardItemModelList = new ArrayList<>();
+            TAPCustomKeyboardItemModel markAsSolvedCustomKeyboard = new TAPCustomKeyboardItemModel(
+                    context.getString(R.string.ttl_mark_as_solved),
+                    ContextCompat.getDrawable(context, R.drawable.ttl_ic_checklist_black_19),
+                    context.getString(R.string.ttl_mark_as_solved)
+            );
+            keyboardItemModelList.add(markAsSolvedCustomKeyboard);
+            return keyboardItemModelList;
+        }
+
+        @Override
+        public void onCustomKeyboardItemTapped(Activity activity, TAPCustomKeyboardItemModel customKeyboardItem, TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
+            new TapTalkDialog.Builder(activity)
+                    .setDialogType(TapTalkDialog.DialogType.DEFAULT)
+                    .setTitle(activity.getString(R.string.ttl_close_case))
+                    .setMessage(activity.getString(R.string.ttl_close_case_dialog_message))
+                    .setPrimaryButtonTitle(activity.getString(R.string.ttl_ok))
+                    .setPrimaryButtonListener(v -> closeCase(room.getXcRoomID()))
+                    .setSecondaryButtonTitle(activity.getString(R.string.ttl_cancel))
+                    .show();
+        }
+    };
+
+    private static TTLReviewChatBubbleClass reviewSubmittedCustomBubble = new TTLReviewChatBubbleClass(
+            R.layout.ttl_cell_chat_bubble_review,
+            TYPE_REVIEW_SUBMITTED, (context, message) -> {}
+    );
 
     public static void authenticateTapTalkSDK(String authTicket, TapCommonListener listener) {
         if (TapTalk.isAuthenticated()) {
@@ -501,7 +482,6 @@ public class TapTalkLive {
 
     public static void clearAllTapLiveData() {
         //checkTapTalkInitialized();
-        Log.e(TAG, "clearAllTapLiveData: ");
         TTLDataManager.getInstance().deleteAllPreference();
         TTLApiManager.getInstance().setLoggedOut(true);
     }

@@ -1,7 +1,6 @@
 package io.taptalk.taptalklive.Activity
 
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.AdapterView
@@ -72,8 +71,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             iv_button_close.setOnClickListener { onBackPressed() }
         }
 
-        Log.e("Case Form", "checkActiveUserExists: ${TTLDataManager.getInstance().checkActiveUserExists()}")
-        Log.e("Case Form", "accessToken: ${TTLDataManager.getInstance().accessToken}")
         if (!TTLDataManager.getInstance().checkActiveUserExists() || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
             // Show name and email fields if user does not exist
             tv_label_full_name.visibility = View.VISIBLE
@@ -139,6 +136,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         topicSpinnerAdapter.setDropDownViewResource(R.layout.ttl_cell_default_spinner_dropdown_item)
         sp_select_topic.adapter = topicSpinnerAdapter
         sp_select_topic.onItemSelectedListener = spinnerAdapterListener
+        sp_select_topic.setOnTouchListener { view, motionEvent ->
+            TAPUtils.dismissKeyboard(this@TTLCreateCaseFormActivity)
+            false
+        }
     }
 
     private fun getTopicList() {

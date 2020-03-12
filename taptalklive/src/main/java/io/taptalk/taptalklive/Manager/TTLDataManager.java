@@ -201,12 +201,10 @@ public class TTLDataManager {
     }
 
     public TTLUserModel getActiveUser() {
-        Log.e(TAG, "getActiveUser: " + TAPUtils.toJsonString(Hawk.get(ACTIVE_USER)));
         return Hawk.get(ACTIVE_USER, null);
     }
 
     public void saveActiveUser(TTLUserModel user) {
-        Log.e(TAG, "saveActiveUser: " + user.getFullName());
         Hawk.put(ACTIVE_USER, user);
     }
 
