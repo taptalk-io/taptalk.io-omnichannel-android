@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
+import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
@@ -56,6 +58,7 @@ import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CA
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED;
+import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.APP_KEY_SECRET;
 import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 
 public class TapTalkLive {
@@ -96,7 +99,16 @@ public class TapTalkLive {
         TapTalkLive.tapTalkLiveListener = tapTalkLiveListener;
 
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
+
+        Log.e(TAG, "TapTalkLive init APP_KEY_SECRET: " + Hawk.get(APP_KEY_SECRET, ""));
+        TTLUserModel user = TTLDataManager.getInstance().getActiveUser();
+        if (null != user) {
+            Log.e(TAG, "TapTalkLive init: user name " + user.getFullName());
+        } else {
+            Log.e(TAG, "TapTalkLive init: user NULL");
+        }
         if (TTLDataManager.getInstance().checkActiveUserExists()) {
+            Log.e(TAG, "TapTalkLive init: checkActiveUserExists TRUE -> get case list");
             TTLDataManager.getInstance().getCaseList(caseListDataView);
 
             // TODO: 023, 23 Jan 2020 TESTING
@@ -112,6 +124,8 @@ public class TapTalkLive {
 //                TTLNetworkStateManager.getInstance().registerCallback(context);
 //                TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
 //            }
+        } else {
+            Log.e(TAG, "TapTalkLive init: checkActiveUserExists FALSE");
         }
     }
 
@@ -282,6 +296,15 @@ public class TapTalkLive {
         });
 
         tapTalkLiveListener.onInitializationCompleted();
+
+
+        Log.e(TAG, "TapTalk init APP_KEY_SECRET: " + Hawk.get(APP_KEY_SECRET, ""));
+        TTLUserModel user = TTLDataManager.getInstance().getActiveUser();
+        if (null != user) {
+            Log.e(TAG, "TapTalk init: user" + user.getFullName());
+        } else {
+            Log.e(TAG, "TapTalk init: user NULL");
+        }
     }
 
     public static void authenticateTapTalkSDK(String authTicket, TapCommonListener listener) {
@@ -478,6 +501,7 @@ public class TapTalkLive {
 
     public static void clearAllTapLiveData() {
         //checkTapTalkInitialized();
+        Log.e(TAG, "clearAllTapLiveData: ");
         TTLDataManager.getInstance().deleteAllPreference();
         TTLApiManager.getInstance().setLoggedOut(true);
     }

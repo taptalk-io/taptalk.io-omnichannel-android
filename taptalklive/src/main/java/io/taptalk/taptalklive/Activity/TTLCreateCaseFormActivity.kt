@@ -72,6 +72,8 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             iv_button_close.setOnClickListener { onBackPressed() }
         }
 
+        Log.e("Case Form", "checkActiveUserExists: ${TTLDataManager.getInstance().checkActiveUserExists()}")
+        Log.e("Case Form", "accessToken: ${TTLDataManager.getInstance().accessToken}")
         if (!TTLDataManager.getInstance().checkActiveUserExists() || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
             // Show name and email fields if user does not exist
             tv_label_full_name.visibility = View.VISIBLE
