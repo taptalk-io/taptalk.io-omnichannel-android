@@ -8,4 +8,5 @@ class TTLCreateCaseViewModel(application: Application) : AndroidViewModel(applic
     var topicsMap = LinkedHashMap<String, TTLTopicModel>()
     var topics =  ArrayList<String>()
     var showCloseButton = false
+    var openRoomListOnComplete = false
 }

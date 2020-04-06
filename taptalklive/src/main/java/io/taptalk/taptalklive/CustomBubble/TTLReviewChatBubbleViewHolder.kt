@@ -24,6 +24,7 @@ import io.taptalk.TapTalk.View.Adapter.TAPBaseChatViewHolder
 import io.taptalk.taptalklive.BuildConfig
 import io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW
 import io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED
+import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.R
 
 class TTLReviewChatBubbleViewHolder internal constructor(
@@ -47,7 +48,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
     private val vMarginLeft: View = itemView.findViewById(R.id.v_margin_left)
     private val vMarginRight: View = itemView.findViewById(R.id.v_margin_right)
 
-    private val user = TapTalk.getTaptalkActiveUser()
+    private val user = TapTalk.getTapTalkActiveUser(TAPTALK_INSTANCE_KEY)
 
 //    private lateinit var caseModel: TTLCaseModel
 
@@ -145,7 +146,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
         tvMessageStatus.text = item.messageStatusText
 
-        markMessageAsRead(item, TapTalk.getTaptalkActiveUser())
+        markMessageAsRead(item, TapTalk.getTapTalkActiveUser(TAPTALK_INSTANCE_KEY))
 
         if (BuildConfig.DEBUG) {
             itemView.setOnLongClickListener{

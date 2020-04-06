@@ -5,6 +5,10 @@ class TTLConstant {
         const val API_VERSION = "v1"
     }
 
+    object TapTalkInstanceKey {
+        const val TAPTALK_INSTANCE_KEY = "TapTalkOmniChannelInstanceKey"
+    }
+
     object MessageType {
         const val TYPE_CLOSE_CASE = 3001
         const val TYPE_REOPEN_CASE = 3002

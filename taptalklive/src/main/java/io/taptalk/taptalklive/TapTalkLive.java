@@ -57,6 +57,7 @@ import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_C
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED;
 import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
+import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
 
 public class TapTalkLive {
 
@@ -68,7 +69,8 @@ public class TapTalkLive {
     private static String appKeySecret = "";
     private static int clientAppIcon;
     private static boolean isNeedToGetProjectConfigs;
-    private static boolean isTapTalkInitialized; // TODO TEMPORARY
+    private static boolean isTapTalkInitialized;
+    private static boolean isGetCaseListCompleted;
     private static TapTalkLiveListener tapTalkLiveListener;
 
     private TapTalkLive(@NonNull final Context appContext,
@@ -103,6 +105,11 @@ public class TapTalkLive {
         if (TTLDataManager.getInstance().checkActiveUserExists()) {
             // Check if user has active case
             TTLDataManager.getInstance().getCaseList(caseListDataView);
+        } else {
+            isGetCaseListCompleted = true;
+            if (isTapTalkInitialized) {
+                tapTalkLiveListener.onInitializationCompleted();
+            }
         }
     }
 
@@ -111,7 +118,7 @@ public class TapTalkLive {
                                    int clientAppIcon,
                                    String clientAppName,
                                    TapTalkLiveListener tapTalkLiveListener) {
-        isTapTalkInitialized = false; // TODO TEMPORARY
+        isTapTalkInitialized = false;
         if (null == tapLive) {
             tapLive = new TapTalkLive(
                     context,
@@ -194,15 +201,34 @@ public class TapTalkLive {
                     null != response &&
                             null != response.getCases() &&
                             !response.getCases().isEmpty());
+            onFinish();
+        }
+
+        @Override
+        public void onError(TTLErrorModel error) {
+            onFinish();
+        }
+
+        @Override
+        public void onError(String errorMessage) {
+            onFinish();
+        }
+
+        private void onFinish() {
+            isGetCaseListCompleted = true;
+            if (isTapTalkInitialized) {
+                tapTalkLiveListener.onInitializationCompleted();
+            }
         }
     };
 
     private static void initializeTapTalkSDK(String tapTalkAppKeyID, String tapTalkAppKeySecret, String tapTalkApiUrl) {
-        if (isTapTalkInitialized) { // TODO TEMPORARY
+        if (isTapTalkInitialized) {
             return;
         }
         TapTalk.setLoggingEnabled(BuildConfig.DEBUG);
-        TapTalk.init(
+        TapTalk.initNewInstance(
+                TAPTALK_INSTANCE_KEY,
                 context,
                 tapTalkAppKeyID,
                 tapTalkAppKeySecret,
@@ -211,27 +237,49 @@ public class TapTalkLive {
                 tapTalkApiUrl,
                 TapTalkImplementationTypeCombine,
                 tapListener);
-        isTapTalkInitialized = true; // TODO TEMPORARY
 
-        TapUI.getInstance().setReadStatusHidden(true);
-        TapUI.getInstance().setCloseButtonInRoomListVisible(true);
-        TapUI.getInstance().setProfileButtonInChatRoomVisible(false);
-        TapUI.getInstance().setMyAccountButtonInRoomListVisible(false);
-        TapUI.getInstance().removeRoomListListener(tapUIRoomListListener);
-        TapUI.getInstance().addRoomListListener(tapUIRoomListListener);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReadStatusHidden(true);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setCloseButtonInRoomListVisible(true);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setProfileButtonInChatRoomVisible(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMyAccountButtonInRoomListVisible(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).removeRoomListListener(tapUIRoomListListener);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addRoomListListener(tapUIRoomListListener);
 
         // TODO: 20 Feb 2020 TEMPORARILY DISABLED CASE LIST PAGE
-//        TapUI.getInstance().setSearchChatBarInRoomListVisible(false);
-//        TapUI.getInstance().setNewChatButtonInRoomListVisible(false);
+//        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setSearchChatBarInRoomListVisible(false);
+//        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setNewChatButtonInRoomListVisible(false);
 
-        TapUI.getInstance().addCustomBubble(closeCaseCustomBubble);
-        TapUI.getInstance().addCustomBubble(reopenCaseCustomBubble);
-        TapUI.getInstance().addCustomBubble(reviewCustomBubble);
-        TapUI.getInstance().addCustomBubble(reviewSubmittedCustomBubble);
-        TapUI.getInstance().removeCustomKeyboardListener(customKeyboardListener);
-        TapUI.getInstance().addCustomKeyboardListener(customKeyboardListener);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(closeCaseCustomBubble);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reopenCaseCustomBubble);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reviewCustomBubble);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reviewSubmittedCustomBubble);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).removeCustomKeyboardListener(customKeyboardListener);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomKeyboardListener(customKeyboardListener);
 
-        tapTalkLiveListener.onInitializationCompleted();
+        if (!TapTalk.isConnected(TAPTALK_INSTANCE_KEY)) {
+            TapTalk.connect(TAPTALK_INSTANCE_KEY, new TapCommonListener() {
+                @Override
+                public void onSuccess(String s) {
+                    isTapTalkInitialized = true;
+                    if (isGetCaseListCompleted) {
+                        tapTalkLiveListener.onInitializationCompleted();
+                    }
+                }
+
+                @Override
+                public void onError(String s, String s1) {
+                    isTapTalkInitialized = true;
+                    if (isGetCaseListCompleted) {
+                        tapTalkLiveListener.onInitializationCompleted();
+                    }
+                }
+            });
+        } else {
+            isTapTalkInitialized = true;
+            if (isGetCaseListCompleted) {
+                tapTalkLiveListener.onInitializationCompleted();
+            }
+        }
     }
 
     private static TTLSystemMessageBubbleClass closeCaseCustomBubble = new TTLSystemMessageBubbleClass(
@@ -289,11 +337,11 @@ public class TapTalkLive {
     );
 
     public static void authenticateTapTalkSDK(String authTicket, TapCommonListener listener) {
-        if (TapTalk.isAuthenticated()) {
+        if (TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
             listener.onSuccess("TapTalk SDK is already authenticated");
             return;
         }
-        TapTalk.authenticateWithAuthTicket(authTicket, true, listener);
+        TapTalk.authenticateWithAuthTicket(TAPTALK_INSTANCE_KEY, authTicket, true, listener);
     }
 
     public static void initializeGooglePlacesApiKey(String apiKey) {
@@ -316,7 +364,7 @@ public class TapTalkLive {
 
         @Override
         public void onNotificationReceived(TAPMessageModel message) {
-            TapTalk.showTapTalkNotification(message);
+            TapTalk.showTapTalkNotification(TAPTALK_INSTANCE_KEY, message);
         }
 
         @Override
@@ -404,15 +452,16 @@ public class TapTalkLive {
     }
 
     public static boolean openTapTalkLiveView(Context activityContext) {
-        if (!isTapTalkInitialized) { // TODO CALL TapTalk.checkTapTalkInitialized
+        if (!isTapTalkInitialized) {
             return false;
         }
-        TapUI.getInstance().openRoomList(activityContext);
+        if (TTLDataManager.getInstance().checkActiveUserExists() ||
+                TTLDataManager.getInstance().checkAccessTokenAvailable()) {
+            TapUI.getInstance(TAPTALK_INSTANCE_KEY).openRoomList(activityContext);
 //        openCaseList(activityContext); // TODO: 20 Feb 2020 TEMPORARILY DISABLED CASE LIST PAGE
-        if (!TTLDataManager.getInstance().checkActiveUserExists() ||
-                !TTLDataManager.getInstance().checkAccessTokenAvailable() ||
-                !TTLDataManager.getInstance().activeUserHasExistingCase()) {
-            openCreateCaseForm(activityContext, false);
+        }
+        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
+            openCreateCaseForm(activityContext, true);
         }
         return true;
     }

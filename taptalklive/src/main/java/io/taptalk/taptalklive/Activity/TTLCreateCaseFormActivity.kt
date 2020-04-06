@@ -18,7 +18,6 @@ import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
 import io.taptalk.TapTalk.Listener.TapCommonListener
 import io.taptalk.TapTalk.Listener.TapCoreGetRoomListener
-import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
 import io.taptalk.TapTalk.Manager.TapCoreChatRoomManager
 import io.taptalk.TapTalk.Manager.TapUI
 import io.taptalk.TapTalk.Model.TAPRoomModel
@@ -26,7 +25,9 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.*
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
+import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Manager.TTLDataManager
+import io.taptalk.taptalklive.Manager.TTLNetworkStateManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
@@ -79,6 +80,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             et_email_address.visibility = View.VISIBLE
             et_full_name.onFocusChangeListener = formFocusListener
             et_email_address.onFocusChangeListener = formFocusListener
+            vm.openRoomListOnComplete = true
         }
         et_message.onFocusChangeListener = formFocusListener
 
@@ -171,10 +173,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun setGetTopicListAsPending() {
-        TAPNetworkStateManager.getInstance().addNetworkListener(object : TapTalkNetworkInterface {
+        TTLNetworkStateManager.getInstance().addNetworkListener(object : TapTalkNetworkInterface {
             override fun onNetworkAvailable() {
                 getTopicList()
-                TAPNetworkStateManager.getInstance().removeNetworkListener(this)
+                TTLNetworkStateManager.getInstance().removeNetworkListener(this)
             }
         })
     }
@@ -244,7 +246,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             }
         } else {
             if (validateTopic() && validateMessage()) {
-                if (!TapTalk.isAuthenticated()) {
+                if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
                     requestTapTalkAuthTicket()
                 } else {
                     createCase()
@@ -314,7 +316,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 TTLDataManager.getInstance().saveRefreshTokenExpiry(response.refreshTokenExpiry)
                 TTLDataManager.getInstance().saveAccessTokenExpiry(response.accessTokenExpiry)
                 TTLDataManager.getInstance().saveActiveUser(response.user)
-                if (!TapTalk.isAuthenticated()) {
+                if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
                     requestTapTalkAuthTicket()
                 } else {
                     createCase()
@@ -419,9 +421,13 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun openCaseChatRoom(tapTalkXCRoomID: String) {
-        TapCoreChatRoomManager.getInstance().getChatRoomByXcRoomID(tapTalkXCRoomID, object : TapCoreGetRoomListener() {
+        TTLDataManager.getInstance().saveActiveUserHasExistingCase(true)
+        TapCoreChatRoomManager.getInstance(TAPTALK_INSTANCE_KEY).getChatRoomByXcRoomID(tapTalkXCRoomID, object : TapCoreGetRoomListener() {
             override fun onSuccess(roomModel: TAPRoomModel?) {
-                TapUI.getInstance().openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                if (vm.openRoomListOnComplete) {
+                    TapUI.getInstance(TAPTALK_INSTANCE_KEY).openRoomList(this@TTLCreateCaseFormActivity)
+                }
+                TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
                 finish()
             }
 
@@ -434,7 +440,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun showDefaultErrorDialog(errorMessage: String?) {
-        val message = if (!TAPNetworkStateManager.getInstance().hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
+        val message = if (!TTLNetworkStateManager.getInstance().hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
             getString(R.string.ttl_error_message_offline)
         } else if (!errorMessage.isNullOrEmpty()) {
             errorMessage
