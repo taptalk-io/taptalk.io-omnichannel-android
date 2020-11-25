@@ -5,6 +5,10 @@ class TTLConstant {
         const val API_VERSION = "v1"
     }
 
+    object TapTalkInstanceKey {
+        const val TAPTALK_INSTANCE_KEY = "TapTalkOmniChannelInstanceKey"
+    }
+
     object MessageType {
         const val TYPE_CLOSE_CASE = 3001
         const val TYPE_REOPEN_CASE = 3002
@@ -34,9 +38,5 @@ class TTLConstant {
         const val TAPTALK_APP_KEY_SECRET = "kTapTalkLiveTapTalkAppKeySecret"
         const val TAPTALK_AUTH_TICKET = "kTapTalkLiveTapTalkAuthenticationTicket"
         const val CASE_EXISTS = "kTapTalkLiveCaseExists"
-    }
-
-    object CustomKeyboard {
-        const val MARK_AS_SOLVED = "Mark as solved"
     }
 }

@@ -1,7 +1,10 @@
 package io.taptalk.taptalklive.Manager;
 
+import android.util.Log;
+
 import com.orhanobut.hawk.Hawk;
 
+import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
@@ -15,6 +18,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
+import io.taptalk.taptalklive.TapTalkLive;
 
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN_EXPIRY;
@@ -106,13 +110,14 @@ public class TTLDataManager {
     /**
      * APP KEY SECRET
      */
-
     public String getAppKeySecret() {
-        return getStringPreference(APP_KEY_SECRET);
+        return !TapTalkLive.getAppKeySecret().isEmpty() ?
+                TapTalkLive.getAppKeySecret() :
+                getStringPreference(APP_KEY_SECRET);
     }
 
-    public void saveAppKeySecret(String authTicket) {
-        saveStringPreference(APP_KEY_SECRET, authTicket);
+    public void saveAppKeySecret(String appKeySecret) {
+        saveStringPreference(APP_KEY_SECRET, appKeySecret);
     }
 
     public void removeAppKeySecret() {
@@ -227,7 +232,7 @@ public class TTLDataManager {
     }
 
     /**
-     * TAPTALK API KEY ID
+     * TAPTALK APP KEY ID
      */
     public Boolean checkTapTalkAppKeyIDAvailable() {
         return checkPreferenceKeyAvailable(TAPTALK_APP_KEY_ID);
@@ -246,7 +251,7 @@ public class TTLDataManager {
     }
 
     /**
-     * TAPTALK API KEY SECRET
+     * TAPTALK APP KEY SECRET
      */
     public Boolean checkTapTalkAppKeySecretAvailable() {
         return checkPreferenceKeyAvailable(TAPTALK_APP_KEY_SECRET);
@@ -265,7 +270,7 @@ public class TTLDataManager {
     }
 
     /**
-     * TAPTALK API AUTH TICKET
+     * TAPTALK AUTH TICKET
      */
     public String getTapTalkAuthTicket() {
         return getStringPreference(TAPTALK_AUTH_TICKET);

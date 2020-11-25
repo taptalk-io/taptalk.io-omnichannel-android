@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">TapTalkLive</string>
+
+    <!--Sample App-->
+    <string name="ttl_get_started">Memulai dengan TapTalk.io</string>
+    <string name="ttl_launch_live_chat">Tampilkan live chat</string>
+
+    <string name="ttl_create_form_title">Butuh Bantuan?</string>
+    <string name="ttl_create_form_description">Harap isi formulir di bawah sebelum meninggalkan pesan</string>
+    <string name="ttl_full_name">Nama Lengkap</string>
+    <string name="ttl_enter_full_name">Masukkan nama lengkap</string>
+    <string name="ttl_email_address">Alamat Email</string>
+    <string name="ttl_enter_email_address">Masukkan alamat email</string>
+    <string name="ttl_topic">Topik</string>
+    <string name="ttl_select_topic">Pilih topik</string>
+    <string name="ttl_message">Pesan</string>
+    <string name="ttl_conversations">Percakapan</string>
+    <string name="ttl_type_message_here">Masukkan pesan</string>
+    <string name="ttl_send_message">Kirim Pesan</string>
+    <string name="ttl_new_conversation">Percakapan Baru</string>
+    <string name="ttl_ok">OK</string>
+    <string name="ttl_cancel">Batal</string>
+    <string name="ttl_leave_a_review">Berikan Ulasan</string>
+    <string name="ttl_submit_review">Kirim ulasan</string>
+    <string name="ttl_review_submitted">Ulasan terkirim</string>
+
+    <string name="ttl_error">Error</string>
+    <string name="ttl_error_message_general">Terjadi kesalahan, silakan coba lagi.</string>
+    <string name="ttl_error_message_offline">Oops! Sepertinya Anda sedang offline, silakan periksa koneksi Anda.</string>
+    <string name="ttl_error_message_full_name_empty">Mohon isi nama Anda.</string>
+    <string name="ttl_error_message_email_empty">Mohon isi alamat email Anda.</string>
+    <string name="ttl_error_message_email_invalid">Format alamat email tidak valid.</string>
+    <string name="ttl_error_message_topic_empty">Mohon pilih salah satu topik.</string>
+    <string name="ttl_error_message_message_empty">Mohon masukkan pesan.</string>
+    <string name="ttl_error_xc_room_id_empty">Unable to fetch TapTalk chat room</string>
+    <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
+
+    <string name="ttl_rating_1">Mengecewakan</string>
+    <string name="ttl_rating_2">Kurang baik</string>
+    <string name="ttl_rating_3">Cukup baik</string>
+    <string name="ttl_rating_4">Baik</string>
+    <string name="ttl_rating_5">Luar biasa</string>
+    <string name="ttl_close_case">Tutup percakapan</string>
+    <string name="ttl_close_case_dialog_message">Percakapan ini akan ditutup dan Anda tidak akan dapat mengirim pesan atau menerima bantuan terkait kasus ini. Apa Anda yakin ingin melanjutkan?</string>
+
+    <string name="ttl_mark_as_solved">Akhiri percakapan</string>
+</resources>

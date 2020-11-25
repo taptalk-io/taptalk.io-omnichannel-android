@@ -19,6 +19,8 @@ import io.taptalk.TapTalk.Manager.TAPConnectionManager;
 import io.taptalk.TapTalk.Manager.TAPDataManager;
 import io.taptalk.TapTalk.ViewModel.TAPRoomListViewModel;
 
+import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
+
 public class TTLNetworkStateManager {
     private static TTLNetworkStateManager instance;
     private List<TapTalkNetworkInterface> listeners;
@@ -110,9 +112,9 @@ public class TTLNetworkStateManager {
     }
 
     private void onNetworkLost() {
-        TAPRoomListViewModel.setShouldNotLoadFromAPI(false);
-        TAPDataManager.getInstance().setNeedToQueryUpdateRoomList(true);
-        TAPConnectionManager.getInstance().close();
+        TAPRoomListViewModel.setShouldNotLoadFromAPI(TAPTALK_INSTANCE_KEY,false);
+        TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).setNeedToQueryUpdateRoomList(true);
+        TAPConnectionManager.getInstance(TAPTALK_INSTANCE_KEY).close();
     }
 
     public class TapNetworkCallback extends ConnectivityManager.NetworkCallback {

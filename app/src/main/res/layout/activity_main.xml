@@ -28,7 +28,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/ttl_font_pt_root_bold"
         android:gravity="center"
-        android:text="Get started with TapTalk.io"
+        android:text="@string/ttl_get_started"
         android:textColor="@color/ttlColorTextDark"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/ll_button_launch_live_chat"
@@ -68,7 +68,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:gravity="center"
-            android:text="Launch live chat" />
+            android:text="@string/ttl_launch_live_chat" />
 
     </LinearLayout>
 

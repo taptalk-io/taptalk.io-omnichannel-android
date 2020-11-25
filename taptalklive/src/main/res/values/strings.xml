@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">TapTalkLive</string>
 
+    <!--Sample App-->
+    <string name="ttl_get_started">Get started with TapTalk.io</string>
+    <string name="ttl_launch_live_chat">Launch live chat</string>
+
     <string name="ttl_create_form_title">Need help with anything?</string>
     <string name="ttl_create_form_description">Please fill out the form below before you leave a message</string>
     <string name="ttl_full_name">Full Name</string>
@@ -38,4 +42,6 @@
     <string name="ttl_rating_5">Excellent</string>
     <string name="ttl_close_case">Close Case</string>
     <string name="ttl_close_case_dialog_message">This case will be closed and you wont be able to further send messages or receive assistance regarding this case. Would you like to proceed?</string>
+
+    <string name="ttl_mark_as_solved">Mark as solved</string>
 </resources>

@@ -5,6 +5,7 @@ import android.widget.TextView
 import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Adapter.TAPBaseChatViewHolder
+import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.R
 
 class TTLSystemMessageViewHolder internal constructor(
@@ -19,6 +20,6 @@ class TTLSystemMessageViewHolder internal constructor(
 
         tvMessageBody.text = item!!.body
 
-        markMessageAsRead(item, TapTalk.getTaptalkActiveUser())
+        markMessageAsRead(item, TapTalk.getTapTalkActiveUser(TAPTALK_INSTANCE_KEY))
     }
 }
