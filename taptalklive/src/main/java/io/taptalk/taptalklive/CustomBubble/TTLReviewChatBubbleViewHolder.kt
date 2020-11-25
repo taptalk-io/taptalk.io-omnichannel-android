@@ -77,11 +77,11 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             } else if (null != item.delivered && item.delivered!!) {
                 receiveDeliveredEvent(item)
             } else if (null != item.failedSend && item.failedSend!!) {
-                setMessage(item)
+//                setMessage(item)
             } else if (null != item.sending && !item.sending!!) {
                 receiveSentEvent(item)
             } else {
-                setMessage(item)
+//                setMessage(item)
             }
         } else {
             // Message from others
@@ -156,7 +156,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
         }
     }
 
-    override fun receiveSentEvent(message: TAPMessageModel?) {
+    fun receiveSentEvent(message: TAPMessageModel?) {
         if (!isMessageFromMySelf(message!!)) {
             return
         }
@@ -164,10 +164,10 @@ class TTLReviewChatBubbleViewHolder internal constructor(
         ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.ttlIconMessageSent)))
         ivMessageStatus.visibility = View.VISIBLE
         tvMessageStatus.visibility = View.VISIBLE
-        animateSend(item, flBubble, ivSending, ivMessageStatus)
+//        animateSend(item, flBubble, ivSending, ivMessageStatus)
     }
 
-    override fun receiveDeliveredEvent(message: TAPMessageModel?) {
+    fun receiveDeliveredEvent(message: TAPMessageModel?) {
         if (isMessageFromMySelf(message!!)) {
             ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_delivered_grey))
             ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.ttlIconMessageDelivered)))
@@ -178,7 +178,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
         tvMessageStatus.visibility = View.VISIBLE
     }
 
-    override fun receiveReadEvent(message: TAPMessageModel?) {
+    fun receiveReadEvent(message: TAPMessageModel?) {
         if (isMessageFromMySelf(message!!)) {
             ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_read_orange))
             ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.ttlIconMessageRead)))
@@ -189,43 +189,42 @@ class TTLReviewChatBubbleViewHolder internal constructor(
         tvMessageStatus.visibility = View.VISIBLE
     }
 
-    private fun animateSend(item: TAPMessageModel, flBubble: FrameLayout,
-                                 ivSending: ImageView, ivMessageStatus: ImageView) {
-        if (!item.isNeedAnimateSend) {
-            // Set bubble state to post-animation
-            flBubble.translationX = 0f
-            ivMessageStatus.translationX = 0f
-            ivSending.alpha = 0f
-        } else {
-            // Animate bubble
-            item.isNeedAnimateSend = false
-            item.isAnimating = true
-            flBubble.translationX = TAPUtils.dpToPx(-22).toFloat()
-            ivSending.translationX = 0f
-            ivSending.translationY = 0f
-            Handler().postDelayed({
-                flBubble.animate()
-                        .translationX(0f)
-                        .setDuration(160L)
-                        .start()
-                ivSending.animate()
-                        .translationX(TAPUtils.dpToPx(36).toFloat())
-                        .translationY(TAPUtils.dpToPx(-23).toFloat())
-                        .setDuration(360L)
-                        .setInterpolator(AccelerateInterpolator(0.5f))
-                        .withEndAction {
-                            ivSending.alpha = 0f
-                            item.isAnimating = false
-                            if (null != item.isRead && item.isRead!! ||
-                                    null != item.delivered && item.delivered!!) {
-                                //notifyItemChanged(getItems().indexOf(item))
-                                onBind(item, position)
-                            }
-                        }
-                        .start()
-            }, 200L)
-        }
-    }
+//    private fun animateSend(item: TAPMessageModel, flBubble: FrameLayout, ivSending: ImageView, ivMessageStatus: ImageView) {
+//        if (!item.isNeedAnimateSend) {
+//            // Set bubble state to post-animation
+//            flBubble.translationX = 0f
+//            ivMessageStatus.translationX = 0f
+//            ivSending.alpha = 0f
+//        } else {
+//            // Animate bubble
+//            item.isNeedAnimateSend = false
+//            item.isAnimating = true
+//            flBubble.translationX = TAPUtils.dpToPx(-22).toFloat()
+//            ivSending.translationX = 0f
+//            ivSending.translationY = 0f
+//            Handler().postDelayed({
+//                flBubble.animate()
+//                        .translationX(0f)
+//                        .setDuration(160L)
+//                        .start()
+//                ivSending.animate()
+//                        .translationX(TAPUtils.dpToPx(36).toFloat())
+//                        .translationY(TAPUtils.dpToPx(-23).toFloat())
+//                        .setDuration(360L)
+//                        .setInterpolator(AccelerateInterpolator(0.5f))
+//                        .withEndAction {
+//                            ivSending.alpha = 0f
+//                            item.isAnimating = false
+//                            if (null != item.isRead && item.isRead!! ||
+//                                    null != item.delivered && item.delivered!!) {
+//                                //notifyItemChanged(getItems().indexOf(item))
+//                                onBind(item, position)
+//                            }
+//                        }
+//                        .start()
+//            }, 200L)
+//        }
+//    }
 
     private fun onReviewButtonTapped() {
         if (itemView.context is Activity) {
