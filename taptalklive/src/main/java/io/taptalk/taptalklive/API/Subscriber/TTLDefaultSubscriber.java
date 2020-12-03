@@ -1,8 +1,8 @@
 package io.taptalk.taptalklive.API.Subscriber;
 
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.API.View.TTLView;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
 import rx.Subscriber;
 
 public class TTLDefaultSubscriber<T extends TTLBaseResponse<D>, V extends TTLDefaultDataView<D> &

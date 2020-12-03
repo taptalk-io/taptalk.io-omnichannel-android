@@ -69,7 +69,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
         if (vm.showCloseButton) {
             iv_button_close.visibility = View.VISIBLE
-            iv_button_close.setOnClickListener { onBackPressed() }
+            iv_button_close.setOnClickListener {
+                TapTalkLive.tapTalkLiveListener.onCloseButtonInCreateCaseFormTapped()
+                onBackPressed()
+            }
         }
 
         if (!TTLDataManager.getInstance().checkActiveUserExists() || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
