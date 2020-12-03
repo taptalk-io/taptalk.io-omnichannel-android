@@ -16,7 +16,6 @@ import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.ViewModel.TTLReviewViewModel
-import java.lang.Exception
 
 class TTLReviewActivity : AppCompatActivity() {
 

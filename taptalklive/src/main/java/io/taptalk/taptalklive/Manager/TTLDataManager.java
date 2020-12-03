@@ -1,10 +1,7 @@
 package io.taptalk.taptalklive.Manager;
 
-import android.util.Log;
-
 import com.orhanobut.hawk.Hawk;
 
-import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
