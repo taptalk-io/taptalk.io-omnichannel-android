@@ -71,7 +71,7 @@ public class TapTalkLive {
     private static boolean isNeedToGetProjectConfigs;
     private static boolean isTapTalkInitialized;
     private static boolean isGetCaseListCompleted;
-    private static TapTalkLiveListener tapTalkLiveListener;
+    public static TapTalkLiveListener tapTalkLiveListener;
 
     private TapTalkLive(@NonNull final Context appContext,
                         @NonNull String appKeySecret,
@@ -376,6 +376,7 @@ public class TapTalkLive {
         public void onTaskRootChatRoomClosed(Activity activity) {
 
         }
+
     };
 
     private static void requestTapTalkAuthTicket() {
@@ -420,6 +421,12 @@ public class TapTalkLive {
         @Override
         public void onNewChatButtonTapped(Activity activity) {
             openCreateCaseForm(activity, true);
+        }
+
+        @Override
+        public void onCloseRoomListTapped(Activity activity) {
+            super.onCloseRoomListTapped(activity);
+            TapTalkLive.tapTalkLiveListener.onCloseButtonInCaseListTapped();
         }
     };
 

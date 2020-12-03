@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
                 "TapTalk.live Sample App",
                 tapTalkLiveListener)
 
-        ll_button_launch_live_chat.setOnClickListener{ openTapTalkLiveView() }
+        ll_button_launch_live_chat.setOnClickListener { openTapTalkLiveView() }
     }
 
     private val tapTalkLiveListener = object : TapTalkLiveListener() {
