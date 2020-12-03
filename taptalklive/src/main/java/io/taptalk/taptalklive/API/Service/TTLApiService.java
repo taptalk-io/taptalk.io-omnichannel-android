@@ -4,6 +4,7 @@ import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateCaseRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLIdRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLRateConversationRequest;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
@@ -11,14 +12,12 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
-import rx.Observable;
-
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import retrofit2.http.POST;
+import rx.Observable;
 
 public interface TTLApiService {
     @POST("auth/access_token/request")

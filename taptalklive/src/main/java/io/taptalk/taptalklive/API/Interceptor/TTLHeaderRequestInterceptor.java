@@ -5,7 +5,6 @@ import android.provider.Settings;
 
 import java.io.IOException;
 
-import io.taptalk.taptalklive.BuildConfig;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.TapTalkLive;
 import okhttp3.Interceptor;
