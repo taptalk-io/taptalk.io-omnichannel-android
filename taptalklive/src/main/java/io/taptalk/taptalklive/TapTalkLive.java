@@ -443,6 +443,9 @@ public class TapTalkLive {
 
     private static void openCaseList(Context activityContext) {
         Intent intent = new Intent(activityContext, TTLCaseListActivity.class);
+        if (!(activityContext instanceof Activity)) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         activityContext.startActivity(intent);
         if (activityContext instanceof Activity) {
             ((Activity) activityContext).overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay);
@@ -452,6 +455,9 @@ public class TapTalkLive {
     private static void openCreateCaseForm(Context activityContext, boolean showCloseButton) {
         Intent intent = new Intent(activityContext, TTLCreateCaseFormActivity.class);
         intent.putExtra(SHOW_CLOSE_BUTTON, showCloseButton);
+        if (!(activityContext instanceof Activity)) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         activityContext.startActivity(intent);
         if (activityContext instanceof Activity) {
             ((Activity) activityContext).overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay);
