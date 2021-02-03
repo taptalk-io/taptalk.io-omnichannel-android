@@ -256,7 +256,10 @@ public class TapTalkLive {
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).removeCustomKeyboardListener(customKeyboardListener);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomKeyboardListener(customKeyboardListener);
 
-        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setAllTapTalkActivityActionBarEnabled(false);
+        // Remove disabled features from chat room
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReplyMessageMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setForwardMessageMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMentionUsernameEnabled(false);
 
         if (!TapTalk.isConnected(TAPTALK_INSTANCE_KEY)) {
             TapTalk.connect(TAPTALK_INSTANCE_KEY, new TapCommonListener() {
