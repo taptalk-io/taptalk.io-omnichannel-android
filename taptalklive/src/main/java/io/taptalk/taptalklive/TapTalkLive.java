@@ -238,7 +238,7 @@ public class TapTalkLive {
                 TapTalkImplementationTypeCombine,
                 tapListener);
 
-        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReadStatusHidden(true);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReadStatusVisible(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setCloseButtonInRoomListVisible(true);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setProfileButtonInChatRoomVisible(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMyAccountButtonInRoomListVisible(false);
@@ -255,6 +255,8 @@ public class TapTalkLive {
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reviewSubmittedCustomBubble);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).removeCustomKeyboardListener(customKeyboardListener);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomKeyboardListener(customKeyboardListener);
+
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setAllTapTalkActivityActionBarEnabled(false);
 
         if (!TapTalk.isConnected(TAPTALK_INSTANCE_KEY)) {
             TapTalk.connect(TAPTALK_INSTANCE_KEY, new TapCommonListener() {
