@@ -257,7 +257,7 @@ public class TapTalkLive {
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomKeyboardListener(customKeyboardListener);
 
         // Remove disabled features from chat room
-        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReplyMessageMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReplyMessageMenuEnabled(true);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setForwardMessageMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMentionUsernameEnabled(false);
 
