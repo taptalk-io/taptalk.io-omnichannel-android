@@ -16,7 +16,6 @@ import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
-import io.taptalk.TapTalk.Listener.TapCommonListener
 import io.taptalk.TapTalk.Listener.TapCoreGetRoomListener
 import io.taptalk.TapTalk.Manager.TapCoreChatRoomManager
 import io.taptalk.TapTalk.Manager.TapUI
@@ -26,6 +25,7 @@ import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
+import io.taptalk.taptalklive.Listener.TTLCommonListener
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager
 import io.taptalk.taptalklive.R
@@ -376,7 +376,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         TapTalkLive.authenticateTapTalkSDK(ticket, authenticateTapTalkSDKListener)
     }
 
-    private val authenticateTapTalkSDKListener = object : TapCommonListener() {
+    private val authenticateTapTalkSDKListener = object : TTLCommonListener() {
         override fun onSuccess(p0: String?) {
             TTLDataManager.getInstance().removeTapTalkAuthTicket()
             createCase()

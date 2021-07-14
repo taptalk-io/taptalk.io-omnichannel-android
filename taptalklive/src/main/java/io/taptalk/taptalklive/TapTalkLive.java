@@ -42,6 +42,7 @@ import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
+import io.taptalk.taptalklive.Listener.TTLCommonListener;
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
@@ -341,12 +342,22 @@ public class TapTalkLive {
             TYPE_REVIEW_SUBMITTED, (context, message) -> {}
     );
 
-    public static void authenticateTapTalkSDK(String authTicket, TapCommonListener listener) {
+    public static void authenticateTapTalkSDK(String authTicket, TTLCommonListener listener) {
         if (TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
             listener.onSuccess("TapTalk SDK is already authenticated");
             return;
         }
-        TapTalk.authenticateWithAuthTicket(TAPTALK_INSTANCE_KEY, authTicket, true, listener);
+        TapTalk.authenticateWithAuthTicket(TAPTALK_INSTANCE_KEY, authTicket, true, new TapCommonListener() {
+            @Override
+            public void onSuccess(String successMessage) {
+                listener.onSuccess(successMessage);
+            }
+
+            @Override
+            public void onError(String errorCode, String errorMessage) {
+                listener.onError(errorCode, errorMessage);
+            }
+        });
     }
 
     public static void initializeGooglePlacesApiKey(String apiKey) {
@@ -388,7 +399,7 @@ public class TapTalkLive {
         TTLDataManager.getInstance().requestTapTalkAuthTicket(requestTapTalkAuthTicketDataView);
     }
 
-    private static TTLDefaultDataView<TTLRequestTicketResponse> requestTapTalkAuthTicketDataView = new TTLDefaultDataView<TTLRequestTicketResponse>() {
+    private static final TTLDefaultDataView<TTLRequestTicketResponse> requestTapTalkAuthTicketDataView = new TTLDefaultDataView<TTLRequestTicketResponse>() {
         @Override
         public void onSuccess(TTLRequestTicketResponse response) {
             if (null != response) {
@@ -410,7 +421,7 @@ public class TapTalkLive {
         }
     };
 
-    private static TapCommonListener authenticateTapTalkSDKListener = new TapCommonListener() {
+    private static final TTLCommonListener authenticateTapTalkSDKListener = new TTLCommonListener() {
         @Override
         public void onSuccess(String s) {
             TTLDataManager.getInstance().removeTapTalkAuthTicket();
@@ -422,7 +433,7 @@ public class TapTalkLive {
         }
     };
 
-    private static TapUIRoomListListener tapUIRoomListListener = new TapUIRoomListListener() {
+    private static final TapUIRoomListListener tapUIRoomListListener = new TapUIRoomListListener() {
         @Override
         public void onNewChatButtonTapped(Activity activity) {
             openCreateCaseForm(activity, true);
@@ -435,7 +446,7 @@ public class TapTalkLive {
         }
     };
 
-    private static TapTalkNetworkInterface networkListener = new TapTalkNetworkInterface() {
+    private static final TapTalkNetworkInterface networkListener = new TapTalkNetworkInterface() {
         @Override
         public void onNetworkAvailable() {
             if (isNeedToGetProjectConfigs) {
@@ -520,7 +531,7 @@ public class TapTalkLive {
         // TODO: 27 Feb 2020 RESTART OPEN ACTIVITIES TO APPLY CHANGED RESOURCES
     }
 
-    public static void logoutAndClearAllTapLiveData(TapCommonListener listener) {
+    public static void logoutAndClearAllTapLiveData(TTLCommonListener listener) {
         //checkTapTalkInitialized();
         TTLDataManager.getInstance().logout(new TTLDefaultDataView<TTLCommonResponse>() {
             @Override
@@ -533,6 +544,7 @@ public class TapTalkLive {
 
             @Override
             public void onError(TTLErrorModel error) {
+                clearAllTapLiveData();
                 if (null != listener) {
                     listener.onError(error.getCode(), error.getMessage());
                 }
@@ -540,6 +552,7 @@ public class TapTalkLive {
 
             @Override
             public void onError(String errorMessage) {
+                clearAllTapLiveData();
                 if (null != listener) {
                     listener.onError(ERROR_CODE_OTHERS, errorMessage);
                 }
@@ -551,5 +564,6 @@ public class TapTalkLive {
         //checkTapTalkInitialized();
         TTLDataManager.getInstance().deleteAllPreference();
         TTLApiManager.getInstance().setLoggedOut(true);
+        TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
     }
 }

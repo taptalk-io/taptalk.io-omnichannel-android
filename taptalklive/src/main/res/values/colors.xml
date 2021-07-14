@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--TapLive Default Colors-->
-    <color name="ttlColorPrimaryLight">@color/ttlMango</color>  <!--    -->
+    <color name="ttlColorPrimaryExtraLight">@color/ttlLightOrange</color>
+    <color name="ttlColorPrimaryLight">@color/ttlMango</color>
     <color name="ttlColorPrimary">@color/ttlDarkOrange</color>
-    <color name="ttlColorPrimaryDark">@color/ttlPumpkinOrangeDark</color> <!--    -->
+    <color name="ttlColorPrimaryDark">@color/ttlPumpkinOrangeDark</color>
     <color name="ttlColorAccent">@color/ttlColorPrimary</color>
 
     <color name="ttlColorTextLight">@color/ttlWhite</color>
@@ -18,6 +19,28 @@
     <color name="ttlColorGrayIcon">@color/ttlGrey9b</color>
     <color name="ttlColorSuccessIcon">@color/ttlAppleGreen</color>
     <color name="ttlColorDestructiveIcon">@color/ttlWatermelonRed</color>
+
+    <!--Override TapTalk Colors-->
+    <color name="tapColorPrimaryExtraLight">@color/ttlColorPrimaryExtraLight</color>
+    <color name="tapColorPrimaryLight">@color/ttlColorPrimaryLight</color>
+    <color name="tapColorPrimary">@color/ttlColorPrimary</color>
+    <color name="tapColorPrimaryDark">@color/ttlColorPrimaryDark</color>
+    <color name="tapColorAccent">@color/ttlColorAccent</color>
+
+    <color name="tapColorTextLight">@color/ttlColorTextLight</color>
+    <color name="tapColorTextMedium">@color/ttlColorTextMedium</color>
+    <color name="tapColorTextDark">@color/ttlColorTextDark</color>
+
+    <color name="tapColorSuccess">@color/ttlColorSuccess</color>
+    <color name="tapColorError">@color/ttlColorError</color>
+
+    <color name="tapColorPrimaryIcon">@color/ttlColorPrimaryIcon</color>
+    <color name="tapColorWhiteIcon">@color/ttlColorWhiteIcon</color>
+    <color name="tapColorGrayIcon">@color/ttlColorGrayIcon</color>
+    <color name="tapColorSuccessIcon">@color/ttlColorSuccessIcon</color>
+    <color name="tapColorDestructiveIcon">@color/ttlColorDestructiveIcon</color>
+
+    <color name="tapDefaultRightBubbleBackgroundColor">@color/ttlColorPrimary</color>
 
     <!--TapLive Component Colors-->
     <color name="ttlDefaultBackgroundColor">@color/ttlWhiteF3</color>
@@ -78,6 +101,7 @@
     <color name="ttlGrey9b">#9b9b9b</color>
     <color name="ttlBlack19">#191919</color>
 
+    <color name="ttlLightOrange">#ffa045</color>
     <color name="ttlDarkOrange">#ff7e00</color>
     <color name="ttlMango">#ff9833</color>
     <color name="ttlPumpkinOrangeDark">#e87200</color>
