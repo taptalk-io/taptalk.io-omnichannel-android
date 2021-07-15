@@ -243,18 +243,33 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun validateSendMessage() {
+        ll_button_send_message.setOnClickListener { }
+        showLoading()
+
         if (!TTLDataManager.getInstance().checkActiveUserExists() || !TTLDataManager.getInstance().checkAccessTokenAvailable()) {
             if (validateFullName() && validateEmail() && validateTopic() && validateMessage()) {
-                createUser()
+                TapTalkLive.authenticateUser(et_full_name.text.toString(), et_email_address.text.toString(), authenticationListener)
             }
         } else {
             if (validateTopic() && validateMessage()) {
                 if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
-                    requestTapTalkAuthTicket()
+                    TapTalkLive.requestTapTalkAuthTicket(authenticationListener)
                 } else {
                     createCase()
                 }
             }
+        }
+    }
+
+    private val authenticationListener = object : TTLCommonListener() {
+        override fun onSuccess(successMessage: String?) {
+            createCase()
+        }
+
+        override fun onError(errorCode: String?, errorMessage: String?) {
+            showDefaultErrorDialog(errorMessage)
+            ll_button_send_message.setOnClickListener { validateSendMessage() }
+            hideLoading()
         }
     }
 
@@ -270,123 +285,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_send_white))
         tv_button_send_message.visibility = View.VISIBLE
         ll_button_send_message.setOnClickListener { validateSendMessage() }
-    }
-
-    private fun createUser() {
-        TTLDataManager.getInstance().createUser(
-                et_full_name.text.toString(),
-                et_email_address.text.toString(),
-                createUserDataView)
-    }
-
-    private val createUserDataView = object : TTLDefaultDataView<TTLCreateUserResponse>() {
-        override fun startLoading() {
-            ll_button_send_message.setOnClickListener { }
-            showLoading()
-        }
-
-        override fun onSuccess(response: TTLCreateUserResponse?) {
-            if (null != response) {
-                TTLDataManager.getInstance().saveAuthTicket(response.ticket)
-                TTLDataManager.getInstance().saveActiveUser(response.user)
-                requestAccessToken()
-            }
-        }
-
-        override fun onError(error: TTLErrorModel?) {
-            showDefaultErrorDialog(error?.message)
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
-        }
-
-        override fun onError(errorMessage: String?) {
-            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.ttl_error_message_general))
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
-        }
-    }
-
-    private fun requestAccessToken() {
-        TTLDataManager.getInstance().requestAccessToken(requestAccessTokenDataView)
-    }
-
-    private val requestAccessTokenDataView = object : TTLDefaultDataView<TTLRequestAccessTokenResponse>() {
-        override fun onSuccess(response: TTLRequestAccessTokenResponse?) {
-            if (null != response) {
-                TTLDataManager.getInstance().removeAuthTicket()
-                TTLDataManager.getInstance().saveAccessToken(response.accessToken)
-                TTLDataManager.getInstance().saveRefreshToken(response.refreshToken)
-                TTLDataManager.getInstance().saveRefreshTokenExpiry(response.refreshTokenExpiry)
-                TTLDataManager.getInstance().saveAccessTokenExpiry(response.accessTokenExpiry)
-                TTLDataManager.getInstance().saveActiveUser(response.user)
-                if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
-                    requestTapTalkAuthTicket()
-                } else {
-                    createCase()
-                }
-            }
-        }
-
-        override fun onError(error: TTLErrorModel?) {
-            showDefaultErrorDialog(error?.message)
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
-        }
-
-        override fun onError(errorMessage: String?) {
-            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
-        }
-    }
-
-    private fun requestTapTalkAuthTicket() {
-        TTLDataManager.getInstance().requestTapTalkAuthTicket(requestTapTalkAuthTicketDataView)
-    }
-
-    private val requestTapTalkAuthTicketDataView = object : TTLDefaultDataView<TTLRequestTicketResponse>() {
-        override fun startLoading() {
-            ll_button_send_message.setOnClickListener { }
-            showLoading()
-        }
-
-        override fun onSuccess(response: TTLRequestTicketResponse?) {
-            if (null != response) {
-                TTLDataManager.getInstance().saveTapTalkAuthTicket(response.ticket)
-                authenticateTapTalkSDK(response.ticket)
-            } else {
-                onError(getString(R.string.ttl_error_taptalk_auth_ticket_empty))
-            }
-        }
-
-        override fun onError(error: TTLErrorModel?) {
-            showDefaultErrorDialog(error?.message)
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
-        }
-
-        override fun onError(errorMessage: String?) {
-            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.ttl_error_message_general))
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
-        }
-    }
-
-    private fun authenticateTapTalkSDK(ticket: String) {
-        TapTalkLive.authenticateTapTalkSDK(ticket, authenticateTapTalkSDKListener)
-    }
-
-    private val authenticateTapTalkSDKListener = object : TTLCommonListener() {
-        override fun onSuccess(p0: String?) {
-            TTLDataManager.getInstance().removeTapTalkAuthTicket()
-            createCase()
-        }
-
-        override fun onError(errorCode: String?, errorMessage: String?) {
-            showDefaultErrorDialog(errorMessage)
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
-        }
     }
 
     private fun createCase() {

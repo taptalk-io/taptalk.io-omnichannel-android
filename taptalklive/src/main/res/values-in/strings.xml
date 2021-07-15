@@ -23,6 +23,7 @@
     <string name="ttl_leave_a_review">Berikan Ulasan</string>
     <string name="ttl_submit_review">Kirim ulasan</string>
     <string name="ttl_review_submitted">Ulasan terkirim</string>
+    <string name="ttl_successfully_logged_in">Berhasil log in.</string>
 
     <string name="ttl_error">Error</string>
     <string name="ttl_error_message_general">Terjadi kesalahan, silakan coba lagi.</string>

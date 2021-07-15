@@ -31,9 +31,11 @@ import io.taptalk.TapTalk.Model.TAPRoomModel;
 import io.taptalk.TapTalk.Model.TAPUserModel;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
@@ -47,9 +49,9 @@ import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ApiErrorCode.OTHER_ERRORS;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
-import static io.taptalk.taptalklive.BuildConfig.*;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
@@ -356,13 +358,15 @@ public class TapTalkLive {
 
     public static void authenticateTapTalkSDK(String authTicket, TTLCommonListener listener) {
         if (TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
-            listener.onSuccess("TapTalk SDK is already authenticated");
+            listener.onSuccess("TapTalk SDK is already authenticated.");
+            TTLDataManager.getInstance().removeTapTalkAuthTicket();
             return;
         }
         TapTalk.authenticateWithAuthTicket(TAPTALK_INSTANCE_KEY, authTicket, true, new TapCommonListener() {
             @Override
             public void onSuccess(String successMessage) {
                 listener.onSuccess(successMessage);
+                TTLDataManager.getInstance().removeTapTalkAuthTicket();
             }
 
             @Override
@@ -407,6 +411,7 @@ public class TapTalkLive {
 
     };
 
+    // For expired refresh token
     private static void requestTapTalkAuthTicket() {
         TTLDataManager.getInstance().requestTapTalkAuthTicket(requestTapTalkAuthTicketDataView);
     }
@@ -518,6 +523,89 @@ public class TapTalkLive {
 
     public static String getAppKeySecret() {
         return appKeySecret;
+    }
+
+    public static void authenticateUser(String fullName, String email, TTLCommonListener listener) {
+        TTLDataManager.getInstance().createUser(fullName, email, new TTLDefaultDataView<TTLCreateUserResponse>() {
+            @Override
+            public void onSuccess(TTLCreateUserResponse response) {
+                if (null != response) {
+                    TTLDataManager.getInstance().saveAuthTicket(response.getTicket());
+                    TTLDataManager.getInstance().saveActiveUser(response.getUser());
+                    requestAccessToken(listener);
+                } else {
+                    onError("No response when registering user.");
+                }
+            }
+
+            @Override
+            public void onError(TTLErrorModel error) {
+                listener.onError(error.getCode(), error.getMessage());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                listener.onError(String.valueOf(OTHER_ERRORS), errorMessage);
+            }
+        });
+    }
+
+    private static void requestAccessToken(TTLCommonListener listener) {
+        TTLDataManager.getInstance().requestAccessToken(new TTLDefaultDataView<TTLRequestAccessTokenResponse>() {
+            @Override
+            public void onSuccess(TTLRequestAccessTokenResponse response) {
+                if (null != response) {
+                    TTLDataManager.getInstance().removeAuthTicket();
+                    TTLDataManager.getInstance().saveAccessToken(response.getAccessToken());
+                    TTLDataManager.getInstance().saveRefreshToken(response.getRefreshToken());
+                    TTLDataManager.getInstance().saveRefreshTokenExpiry(response.getRefreshTokenExpiry());
+                    TTLDataManager.getInstance().saveAccessTokenExpiry(response.getAccessTokenExpiry());
+                    TTLDataManager.getInstance().saveActiveUser(response.getUser());
+                    if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
+                        requestTapTalkAuthTicket(listener);
+                    } else {
+                        listener.onSuccess(context.getString(R.string.ttl_successfully_logged_in));
+                    }
+                } else {
+                    onError("No response when requesting access token.");
+                }
+            }
+
+            @Override
+            public void onError(TTLErrorModel error) {
+                listener.onError(error.getCode(), error.getMessage());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                listener.onError(String.valueOf(OTHER_ERRORS), errorMessage);
+            }
+        });
+    }
+
+    // For register
+    public static void requestTapTalkAuthTicket(TTLCommonListener listener) {
+        TTLDataManager.getInstance().requestTapTalkAuthTicket(new TTLDefaultDataView<TTLRequestTicketResponse>() {
+            @Override
+            public void onSuccess(TTLRequestTicketResponse response) {
+                if (null != response) {
+                    TTLDataManager.getInstance().saveTapTalkAuthTicket(response.getTicket());
+                    authenticateTapTalkSDK(response.getTicket(), listener);
+                } else {
+                    onError(context.getString(R.string.ttl_error_taptalk_auth_ticket_empty));
+                }
+            }
+
+            @Override
+            public void onError(TTLErrorModel error) {
+                listener.onError(error.getCode(), error.getMessage());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                listener.onError(String.valueOf(OTHER_ERRORS), errorMessage);
+            }
+        });
     }
 
     /**
