@@ -3,20 +3,61 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
+    def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion 30
     defaultConfig {
         applicationId "io.taptalk.taptalklivesample"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 8
-        versionName "1.0.7"
+        versionCode 9
+        versionName "1.0.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
 
     signingConfigs {
         release {
+            try {
+                Properties props = new Properties()
+                def propFile = file(globalConfig.signingProps)
+                if (propFile.canRead()) {
+                    props.load(new FileInputStream(propFile))
 
+                    if (props != null
+                            && props.containsKey(globalConfig.keystoreFileName)
+                            && props.containsKey(globalConfig.keystorePasswordName)
+                            && props.containsKey(globalConfig.keyAliasName)
+                            && props.containsKey(globalConfig.keyPasswordName)) {
+
+                        def keystoreFile = file(props[globalConfig.keystoreFileName])
+                        if (keystoreFile.canRead()) {
+                            storeFile keystoreFile
+                            storePassword props[globalConfig.keystorePasswordName]
+                            keyAlias props[globalConfig.keyAliasName]
+                            keyPassword props[globalConfig.keyPasswordName]
+                        } else {
+                            println("[GRADLE BUILD ERR]: Keystore file not found: " + props[globalConfig.keystoreFileName])
+                            android.buildTypes.release.signingConfig = null
+                        }
+                    } else {
+                        println("[GRADLE BUILD ERR]: File signing.properties found but some entries missing")
+                        android.buildTypes.release.signingConfig = null
+                    }
+                } else {
+                    println("[GRADLE BUILD ERR]: File signing.properties not found")
+                    android.buildTypes.release.signingConfig = null
+                }
+            } catch (ex) {
+                try {
+                    // Bitrise keystore
+                    storeFile file(System.getenv("HOME") + "/keystores/taptalklive.jks")
+                    storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
+                    keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
+                    keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+                } catch (ex2) {
+                    throw new InvalidUserDataException("[GRADLE BUILD ERR]: Signing FAILED. Check signing config." + ex2.message)
+                }
+            }
         }
     }
 
