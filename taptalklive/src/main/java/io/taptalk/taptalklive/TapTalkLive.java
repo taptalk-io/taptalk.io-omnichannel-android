@@ -74,6 +74,10 @@ public class TapTalkLive {
     private static boolean isGetCaseListCompleted;
     public static TapTalkLiveListener tapTalkLiveListener;
 
+    private static final String releaseBaseApiUrl = "https://taplive-cstd.taptalk.io/api/visitor";
+    private static final String stagingBaseApiUrl = "https://taplive-cstd-stg.taptalk.io/api/visitor";
+    private static final String devBaseApiUrl = "https://taplive-api-dev.taptalk.io/api/visitor";
+
     private TapTalkLive(@NonNull final Context appContext,
                         @NonNull String appKeySecret,
                         int clientAppIcon,
@@ -93,7 +97,15 @@ public class TapTalkLive {
         }
 
         TTLDataManager.getInstance().saveAppKeySecret(appKeySecret);
-        TTLApiManager.setApiBaseUrl(generateApiBaseUrl(TAPLIVE_SDK_BASE_URL));
+//        TTLApiManager.setApiBaseUrl(generateApiBaseUrl(TAPLIVE_SDK_BASE_URL));
+        // FIXME: TAPLIVE_SDK_BASE_URL NOT FOUND IN BUILD CONFIG WHEN BUILDING JITPACK LIBRARY
+        if (BuildConfig.BUILD_TYPE.equals("release")) {
+            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(releaseBaseApiUrl));
+        } else if (BuildConfig.BUILD_TYPE.equals("staging")) {
+            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(stagingBaseApiUrl));
+        } else {
+            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(devBaseApiUrl));
+        }
 
         TapTalkLive.appKeySecret = appKeySecret; // FIXME APP KEY SECRET CURRENTLY SAVED AS STATIC
         TapTalkLive.clientAppIcon = clientAppIcon;

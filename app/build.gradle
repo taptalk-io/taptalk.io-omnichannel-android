@@ -10,8 +10,8 @@ android {
         applicationId "io.taptalk.taptalklivesample"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 10
-        versionName "1.0.9"
+        versionCode 11
+        versionName "1.0.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -71,7 +71,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${RELEASE_GOOGLE_MAPS_API_KEY}\"")
             buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"${RELEASE_TAPLIVE_SDK_APP_KEY_SECRET}\"")
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${RELEASE_TAPLIVE_SDK_BASE_URL}\"")
         }
         staging {
             signingConfig signingConfigs.debug
@@ -81,7 +80,6 @@ android {
             versionNameSuffix '-STAGING'
             buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${STAGING_GOOGLE_MAPS_API_KEY}\"")
             buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"${STAGING_TAPLIVE_SDK_APP_KEY_SECRET}\"")
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${STAGING_TAPLIVE_SDK_BASE_URL}\"")
         }
         dev {
             signingConfig signingConfigs.debug
@@ -91,7 +89,6 @@ android {
             versionNameSuffix '-DEV'
             buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${DEV_GOOGLE_MAPS_API_KEY}\"")
             buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"${DEV_TAPLIVE_SDK_APP_KEY_SECRET}\"")
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${DEV_TAPLIVE_SDK_BASE_URL}\"")
         }
     }
     compileOptions {
