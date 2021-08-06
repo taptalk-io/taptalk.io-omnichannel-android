@@ -561,6 +561,15 @@ public class TapTalkLive {
                     TTLDataManager.getInstance().saveRefreshTokenExpiry(response.getRefreshTokenExpiry());
                     TTLDataManager.getInstance().saveAccessTokenExpiry(response.getAccessTokenExpiry());
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
+                    TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<TTLGetCaseListResponse>() {
+                        @Override
+                        public void onSuccess(TTLGetCaseListResponse response) {
+                            TTLDataManager.getInstance().saveActiveUserHasExistingCase(
+                                    null != response &&
+                                            null != response.getCases() &&
+                                            !response.getCases().isEmpty());
+                        }
+                    });
                     if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
                         requestTapTalkAuthTicket(listener);
                     } else {
