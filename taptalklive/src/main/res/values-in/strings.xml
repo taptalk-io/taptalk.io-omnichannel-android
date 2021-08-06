@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">TapTalkLive</string>
-
     <!--Sample App-->
     <string name="ttl_get_started">Memulai dengan TapTalk.io</string>
     <string name="ttl_launch_live_chat">Tampilkan live chat</string>
