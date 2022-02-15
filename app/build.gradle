@@ -109,6 +109,7 @@ dependencies {
     implementation project(":taptalklive")
     implementation 'com.android.support:multidex:1.0.3'
 }
+
 repositories {
     mavenCentral()
 }

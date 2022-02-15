@@ -188,11 +188,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         return if (!et_full_name.text.isNullOrEmpty()) {
             true
         } else {
-            TapTalkDialog.Builder(this)
-                    .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-                    .setMessage(getString(R.string.ttl_error_message_full_name_empty))
-                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
-                    .show()
+            showValidationErrorDialog(getString(R.string.ttl_error_message_full_name_empty))
             false
         }
     }
@@ -201,17 +197,9 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         if (et_email_address.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(et_email_address.text).matches()) {
             return true
         } else if (et_email_address.text.isNotEmpty()) {
-            TapTalkDialog.Builder(this)
-                    .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-                    .setMessage(getString(R.string.ttl_error_message_email_invalid))
-                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
-                    .show()
+            showValidationErrorDialog(getString(R.string.ttl_error_message_email_invalid))
         } else {
-            TapTalkDialog.Builder(this)
-                    .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-                    .setMessage(getString(R.string.ttl_error_message_email_empty))
-                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
-                    .show()
+            showValidationErrorDialog(getString(R.string.ttl_error_message_email_empty))
         }
         return false
     }
@@ -220,11 +208,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         return if (vm.topics[sp_select_topic.selectedItemPosition] != getString(R.string.ttl_select_topic)) {
             true
         } else {
-            TapTalkDialog.Builder(this)
-                    .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-                    .setMessage(getString(R.string.ttl_error_message_topic_empty))
-                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
-                    .show()
+            showValidationErrorDialog(getString(R.string.ttl_error_message_topic_empty))
             false
         }
     }
@@ -233,11 +217,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         return if (!et_message.text.isNullOrEmpty()) {
             true
         } else {
-            TapTalkDialog.Builder(this)
-                    .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-                    .setMessage(getString(R.string.ttl_error_message_message_empty))
-                    .setPrimaryButtonTitle(getString(R.string.ttl_ok))
-                    .show()
+            showValidationErrorDialog(getString(R.string.ttl_error_message_message_empty))
             false
         }
     }
@@ -268,8 +248,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
         override fun onError(errorCode: String?, errorMessage: String?) {
             showDefaultErrorDialog(errorMessage)
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
         }
     }
 
@@ -310,14 +288,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
         override fun onError(error: TTLErrorModel?) {
             showDefaultErrorDialog(error?.message)
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
         }
 
         override fun onError(errorMessage: String?) {
             showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
-            ll_button_send_message.setOnClickListener { validateSendMessage() }
-            hideLoading()
         }
     }
 
@@ -334,8 +308,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
             override fun onError(errorCode: String?, errorMessage: String?) {
                 showDefaultErrorDialog(errorMessage)
-                ll_button_send_message.setOnClickListener { validateSendMessage() }
-                hideLoading()
             }
         })
     }
@@ -354,5 +326,17 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             .setMessage(message)
             .setPrimaryButtonTitle(getString(R.string.ttl_ok))
             .show()
+        ll_button_send_message.setOnClickListener { validateSendMessage() }
+        hideLoading()
+    }
+
+    private fun showValidationErrorDialog(errorMessage: String?) {
+        TapTalkDialog.Builder(this@TTLCreateCaseFormActivity)
+            .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
+            .setMessage(errorMessage)
+            .setPrimaryButtonTitle(getString(R.string.ttl_ok))
+            .show()
+        ll_button_send_message.setOnClickListener { validateSendMessage() }
+        hideLoading()
     }
 }
