@@ -1,5 +1,18 @@
 package io.taptalk.taptalklive;
 
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ApiErrorCode.OTHER_ERRORS;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
+import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
+import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
+import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED;
+import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
+import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -48,19 +61,6 @@ import io.taptalk.taptalklive.Listener.TTLCommonListener;
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
-
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ApiErrorCode.OTHER_ERRORS;
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
-import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
-import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
-import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
-import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
-import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
-import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
-import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
-import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED;
-import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
-import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
 
 public class TapTalkLive {
 

@@ -1,19 +1,24 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-android'
-apply from: "${rootProject.rootDir}/environment.properties"
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'maven-publish'
+}
+
+if (file("${rootProject.rootDir}/environment.properties").exists()) {
+    apply from: "${rootProject.rootDir}/environment.properties"
+}
 
 android {
-    compileSdkVersion 30
+    compileSdk 31
 
     publishNonDefault true
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdk 16
+        targetSdk 31
         versionCode 15
         versionName "1.0.14"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
         multiDexEnabled true
@@ -25,37 +30,48 @@ android {
             debuggable false
             consumerProguardFiles 'proguard-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${RELEASE_TAPLIVE_SDK_BASE_URL}\"")
+            if (project.hasProperty('RELEASE_TAPLIVE_SDK_BASE_URL')) {
+                buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${RELEASE_TAPLIVE_SDK_BASE_URL}\"")
+            } else {
+                buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"\"")
+            }
         }
         staging {
             minifyEnabled false
             debuggable true
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${STAGING_TAPLIVE_SDK_BASE_URL}\"")
+            if (project.hasProperty('STAGING_TAPLIVE_SDK_BASE_URL')) {
+                buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${STAGING_TAPLIVE_SDK_BASE_URL}\"")
+            } else {
+                buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"\"")
+            }
         }
         dev {
             minifyEnabled false
             debuggable true
-            buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${DEV_TAPLIVE_SDK_BASE_URL}\"")
+            if (project.hasProperty('DEV_TAPLIVE_SDK_BASE_URL')) {
+                buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${DEV_TAPLIVE_SDK_BASE_URL}\"")
+            } else {
+                buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"\"")
+            }
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    testImplementation 'junit:junit:4.13.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
@@ -102,9 +118,24 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation "androidx.core:core-ktx:1.6.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.github.taptalk-io:taptalk.io-android:1.4.1'
+}
 
-    implementation 'com.github.taptalk-io:taptalk.io-android:1.3.10'
+task androidSourcesJar(type: Jar) {
+    classifier 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                artifact androidSourcesJar // optional sources
+//                groupId = 'com.github.taptalk-io'
+//                artifactId = 'taptalk.io-omnichannel-android'
+//                version = "\"${defaultConfig.versionName}\""
+            }
+        }
+    }
 }
