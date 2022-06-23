@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateCaseRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
+import io.taptalk.taptalklive.API.Model.RequestModel.TTLGetCaseListRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLIdRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLRateConversationRequest;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLBaseResponse;
@@ -190,7 +191,8 @@ public class TTLApiManager {
     }
 
     public void getCaseList(Subscriber<TTLBaseResponse<TTLGetCaseListResponse>> subscriber) {
-        execute(ttlApiService.getCaseList(), subscriber);
+        TTLGetCaseListRequest request = new TTLGetCaseListRequest(true);
+        execute(ttlApiService.getCaseList(request), subscriber);
     }
 
     public void getCaseDetailsByID(Integer caseID, Subscriber<TTLBaseResponse<TTLCreateCaseResponse>> subscriber) {
