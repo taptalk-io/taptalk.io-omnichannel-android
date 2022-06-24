@@ -33,6 +33,7 @@ import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_AUT
 public class TTLDataManager {
     private static final String TAG = TTLDataManager.class.getSimpleName();
     private static TTLDataManager instance;
+    private String appKeySecret;
 
     public static TTLDataManager getInstance() {
         return instance == null ? (instance = new TTLDataManager()) : instance;
@@ -108,9 +109,10 @@ public class TTLDataManager {
      * APP KEY SECRET
      */
     public String getAppKeySecret() {
-        return !TapTalkLive.getAppKeySecret().isEmpty() ?
-                TapTalkLive.getAppKeySecret() :
-                getStringPreference(APP_KEY_SECRET);
+//        return !TapTalkLive.getAppKeySecret().isEmpty() ?
+//                TapTalkLive.getAppKeySecret() :
+//                getStringPreference(APP_KEY_SECRET);
+        return getStringPreference(APP_KEY_SECRET);
     }
 
     public void saveAppKeySecret(String appKeySecret) {

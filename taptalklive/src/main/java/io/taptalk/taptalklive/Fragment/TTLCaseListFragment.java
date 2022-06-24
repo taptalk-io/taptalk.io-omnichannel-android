@@ -103,13 +103,11 @@ public class TTLCaseListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e(TAG, "onCreateView: ");
         return inflater.inflate(R.layout.ttl_fragment_case_list, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.e(TAG, "onViewCreated: ");
         super.onViewCreated(view, savedInstanceState);
         initListener();
         initData();
@@ -252,7 +250,15 @@ public class TTLCaseListFragment extends Fragment {
 
         adapter = new TTLCaseListAdapter(caseLists, glide, (caseListModel, position) -> {
             if (caseListModel != null) {
-                openChatRoom(caseListModel.getLastMessage().getRoom(), "");
+                TAPRoomModel room = caseListModel.getLastMessage().getRoom();
+                TapUIChatActivity.start(
+                        activity,
+                        TAPTALK_INSTANCE_KEY,
+                        room.getRoomID(),
+                        room.getName(),
+                        room.getImageURL(),
+                        room.getType(),
+                        room.getColor());
             }
         });
         llm = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) {
@@ -268,7 +274,6 @@ public class TTLCaseListFragment extends Fragment {
         rvCaseList.setAdapter(adapter);
         rvCaseList.setLayoutManager(llm);
         rvCaseList.setHasFixedSize(true);
-        Log.e(TAG, "initView: setAdapter");
 //        float clamp;
 //        try {
 //            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
@@ -304,18 +309,15 @@ public class TTLCaseListFragment extends Fragment {
     private void viewLoadedSequence() {
         if (TAPRoomListViewModel.isShouldNotLoadFromAPI(TAPTALK_INSTANCE_KEY) && null != TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).getActiveUser()) {
             // Load room list from database if app is on foreground
-            Log.e(TAG, "viewLoadedSequence: Load room list from database");
             TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).getRoomList(true, dbListener);
         }
         else if (null != TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).getActiveUser()) {
             // Run full cycle if app is on background or on first open
             // TODO: 18 Feb 2020 DATABASE FIRST QUERY CALLED TWICE WHEN CLOSING APP (NOT KILLED)
-            Log.e(TAG, "viewLoadedSequence: Run full cycle if app is on background or on first open");
             runFullRefreshSequence();
         }
         else if (TapTalk.checkTapTalkInitialized() && TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
             // Clear data when refresh token is expired
-            Log.e(TAG, "viewLoadedSequence: Clear data");
             AnalyticsManager.getInstance(TAPTALK_INSTANCE_KEY).trackEvent("View Loaded Sequence Failed");
             TapTalk.clearAllTapTalkData(TAPTALK_INSTANCE_KEY);
             for (TapListener listener : TapTalk.getTapTalkListeners(TAPTALK_INSTANCE_KEY)) {
@@ -323,7 +325,6 @@ public class TTLCaseListFragment extends Fragment {
             }
         }
         else if (null == TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).getActiveUser()) {
-            Log.e(TAG, "viewLoadedSequence: Show setup failed");
             // Show setup failed if active user is null
             if (BuildConfig.DEBUG && null != activity) {
                 if (null == userNullErrorDialog) {
@@ -366,7 +367,6 @@ public class TTLCaseListFragment extends Fragment {
             activity.runOnUiThread(() -> {
                 if (adapter != null) {
                     adapter.setItems(caseLists, false);
-                    Log.e(TAG, "reloadLocalDataAndUpdateUILogic: adapter.setItems " + adapter.getItems().size());
                 }
                 if (!TAPRoomListViewModel.isShouldNotLoadFromAPI(TAPTALK_INSTANCE_KEY)) {
                     fetchDataFromAPI();
@@ -572,7 +572,6 @@ public class TTLCaseListFragment extends Fragment {
                     }
                 });
             } else {
-                Log.e(TAG, "roomListView onSuccess: reloadLocalDataAndUpdateUILogic");
                 reloadLocalDataAndUpdateUILogic(true);
             }
 
@@ -605,7 +604,6 @@ public class TTLCaseListFragment extends Fragment {
                 }
             }
             caseLists = selectedCaseLists;
-            Log.e(TAG, "onSelectFinishedWithUnreadCount: " + caseLists.size());
             reloadLocalDataAndUpdateUILogic(false);
             getUnreadRoomList();
         }
@@ -639,7 +637,6 @@ public class TTLCaseListFragment extends Fragment {
             }
 
             caseLists = selectedCaseLists;
-            Log.e(TAG, "onSelectedRoomList: " + caseLists.size());
             reloadLocalDataAndUpdateUILogic(false);
             calculateBadgeCount();
         }
@@ -803,18 +800,6 @@ public class TTLCaseListFragment extends Fragment {
             }
         }
     };
-
-    private void openChatRoom(TAPRoomModel room, String jumpToMessageLocalID) {
-        TapUIChatActivity.start(
-                activity,
-                TAPTALK_INSTANCE_KEY,
-                room.getRoomID(),
-                room.getName(),
-                room.getImageURL(),
-                room.getType(),
-                room.getColor(),
-                jumpToMessageLocalID);
-    }
 
     private void calculateBadgeCount() {
         roomBadgeCount = 0;

@@ -15,22 +15,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import io.taptalk.TapTalk.API.View.TAPDefaultDataView
-import io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes
-import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
-import io.taptalk.TapTalk.Listener.TAPDatabaseListener
-import io.taptalk.TapTalk.Listener.TapCommonListener
 import io.taptalk.TapTalk.Listener.TapCoreGetRoomListener
-import io.taptalk.TapTalk.Manager.TAPDataManager
-import io.taptalk.TapTalk.Manager.TAPEncryptorManager
 import io.taptalk.TapTalk.Manager.TapCoreChatRoomManager
 import io.taptalk.TapTalk.Manager.TapUI
-import io.taptalk.TapTalk.Model.ResponseModel.TAPGetRoomListResponse
-import io.taptalk.TapTalk.Model.TAPErrorModel
 import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.taptalklive.API.Model.ResponseModel.*
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
@@ -43,7 +34,6 @@ import io.taptalk.taptalklive.Manager.TTLNetworkStateManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
-import io.taptalk.taptalklive.helper.TTLUtil
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.*
 
 class TTLCreateCaseFormActivity : AppCompatActivity() {
@@ -95,7 +85,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         if (vm.showCloseButton) {
             iv_button_close.visibility = View.VISIBLE
             iv_button_close.setOnClickListener {
-                TapTalkLive.tapTalkLiveListener.onCloseButtonInCreateCaseFormTapped()
+                TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped()
                 onBackPressed()
             }
         }
@@ -326,7 +316,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             override fun onSuccess(roomModel: TAPRoomModel?) {
                 if (vm.openRoomListOnComplete) {
 //                    TapUI.getInstance(TAPTALK_INSTANCE_KEY).openRoomList(this@TTLCreateCaseFormActivity)
-                    TapTalkLive.openCaseList(this@TTLCreateCaseFormActivity)
+                    TTLCaseListActivity.start(this@TTLCreateCaseFormActivity);
                 }
                 TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
                 finish()

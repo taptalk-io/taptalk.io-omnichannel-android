@@ -33,6 +33,7 @@
     <string name="ttl_error_message_email_invalid">Email address format is invalid.</string>
     <string name="ttl_error_message_topic_empty">Please select a topic.</string>
     <string name="ttl_error_message_message_empty">Please enter a message.</string>
+    <string name="ttl_error_not_initialized">TapTalkLive is not initialized. Please call TapTalkLive.init()</string>
     <string name="ttl_error_xc_room_id_empty">Unable to fetch TapTalk chat room</string>
     <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
 

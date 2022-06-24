@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
@@ -48,7 +47,7 @@ class TTLCaseListActivity : TAPBaseActivity() {
 
     private fun initFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_case_list, TapTalkLive.getCaseListFragment())
+            .replace(R.id.fcv_case_list, TapTalkLive.getCaseListFragment() ?: return)
             .commit()
     }
 
