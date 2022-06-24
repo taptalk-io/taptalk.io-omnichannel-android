@@ -35,7 +35,7 @@ public class TTLCaseModel implements Parcelable {
     @JsonProperty("creatorAgentAccountID") private Long creatorAgentAccountID;
     @JsonProperty("firstUserReplyTime") private Long firstUserReplyTime;
     @JsonProperty("isJunk") private Boolean isJunk;
-    @JsonProperty("labelIDs") private ArrayList<Long> labelIDs;
+    //@JsonProperty("labelIDs") private ArrayList<Long> labelIDs;
     @JsonProperty("isClosed") private Boolean isClosed;
     @JsonProperty("closedTime") private Long closedTime;
     @JsonProperty("createdTime") private Long createdTime;
@@ -70,7 +70,7 @@ public class TTLCaseModel implements Parcelable {
             this.firstResponseAgentFullName = (String) caseDataMap.get("firstResponseAgentFullName");
             this.agentRemark = (String) caseDataMap.get("agentRemark");
             this.isCreatedByAgent = (Boolean) caseDataMap.get("isCreatedByAgent");
-            this.labelIDs = (ArrayList<Long>) caseDataMap.get("labelIDs");
+            //this.labelIDs = (ArrayList<Long>) caseDataMap.get("labelIDs");
             this.isJunk = (Boolean) caseDataMap.get("isJunk");
             this.isClosed = (Boolean) caseDataMap.get("isClosed");
             this.closedTime = (Long) caseDataMap.get("closedTime");
@@ -266,13 +266,13 @@ public class TTLCaseModel implements Parcelable {
         isJunk = junk;
     }
 
-    public ArrayList<Long> getLabelIDs() {
-        return labelIDs;
-    }
-
-    public void setLabelIDs(ArrayList<Long> labelIDs) {
-        this.labelIDs = labelIDs;
-    }
+//    public ArrayList<Long> getLabelIDs() {
+//        return labelIDs;
+//    }
+//
+//    public void setLabelIDs(ArrayList<Long> labelIDs) {
+//        this.labelIDs = labelIDs;
+//    }
 
     public Boolean getClosed() {
         return isClosed;
@@ -352,7 +352,7 @@ public class TTLCaseModel implements Parcelable {
         dest.writeValue(this.creatorAgentAccountID);
         dest.writeValue(this.firstUserReplyTime);
         dest.writeValue(this.isJunk);
-        dest.writeList(this.labelIDs);
+        //dest.writeList(this.labelIDs);
         dest.writeValue(this.isClosed);
         dest.writeValue(this.closedTime);
         dest.writeValue(this.createdTime);
@@ -385,8 +385,8 @@ public class TTLCaseModel implements Parcelable {
         this.creatorAgentAccountID = (Long) source.readValue(Long.class.getClassLoader());
         this.firstUserReplyTime = (Long) source.readValue(Long.class.getClassLoader());
         this.isJunk = (Boolean) source.readValue(Boolean.class.getClassLoader());
-        this.labelIDs = new ArrayList<Long>();
-        source.readList(this.labelIDs, Long.class.getClassLoader());
+        //this.labelIDs = new ArrayList<Long>();
+        //source.readList(this.labelIDs, Long.class.getClassLoader());
         this.isClosed = (Boolean) source.readValue(Boolean.class.getClassLoader());
         this.closedTime = (Long) source.readValue(Long.class.getClassLoader());
         this.createdTime = (Long) source.readValue(Long.class.getClassLoader());
@@ -419,8 +419,8 @@ public class TTLCaseModel implements Parcelable {
         this.creatorAgentAccountID = (Long) in.readValue(Long.class.getClassLoader());
         this.firstUserReplyTime = (Long) in.readValue(Long.class.getClassLoader());
         this.isJunk = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.labelIDs = new ArrayList<Long>();
-        in.readList(this.labelIDs, Long.class.getClassLoader());
+        //this.labelIDs = new ArrayList<Long>();
+        //in.readList(this.labelIDs, Long.class.getClassLoader());
         this.isClosed = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.closedTime = (Long) in.readValue(Long.class.getClassLoader());
         this.createdTime = (Long) in.readValue(Long.class.getClassLoader());

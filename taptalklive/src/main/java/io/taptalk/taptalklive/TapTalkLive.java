@@ -5,7 +5,6 @@ import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
-import static io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
@@ -64,12 +63,15 @@ import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
+import io.taptalk.taptalklive.Fragment.TTLCaseListFragment;
 import io.taptalk.taptalklive.Listener.TTLCommonListener;
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
+import io.taptalk.taptalklive.helper.TTLUtil;
 
 public class TapTalkLive {
+
     public static Context context;
 
     private static final String TAG = TapTalkLive.class.getSimpleName();
@@ -78,20 +80,28 @@ public class TapTalkLive {
     private static int clientAppIcon;
     private static boolean isNeedToGetProjectConfigs;
     private static boolean isTapTalkInitialized;
-    private static boolean isTapTalkLiveInitialized;
     private static boolean isGetCaseListCompleted;
+    private static TTLCaseListFragment caseListFragment;
     private static HashMap<String /*xcRoomID*/, TTLCaseModel> caseMap;
     public static TapTalkLiveListener tapTalkLiveListener;
+    public static boolean isTapTalkLiveInitialized;
 
     private static final String releaseBaseApiUrl = "https://taplive-cstd.taptalk.io/api/visitor";
     private static final String stagingBaseApiUrl = "https://taplive-cstd-stg.taptalk.io/api/visitor";
     private static final String devBaseApiUrl = "https://taplive-api-dev.taptalk.io/api/visitor";
 
+    public static HashMap<String, TTLCaseModel> getCaseMap() {
+        if (caseMap == null) {
+            caseMap = new HashMap<>();
+        }
+        return caseMap;
+    }
+
     private static void initTapTalkLiveData(@NonNull final Context appContext,
-                                     @NonNull String appKeySecret,
-                                     int clientAppIcon,
-                                     String clientAppName,
-                                     @NonNull TapTalkLiveListener tapTalkLiveListener
+                                            @NonNull String appKeySecret,
+                                            int clientAppIcon,
+                                            String clientAppName,
+                                            @NonNull TapTalkLiveListener tapTalkLiveListener
     ) {
         TapTalkLive.context = appContext;
 
@@ -121,13 +131,11 @@ public class TapTalkLive {
         TapTalkLive.clientAppName = clientAppName;
         TapTalkLive.tapTalkLiveListener = tapTalkLiveListener;
 
-        caseMap = new HashMap<>();
-
         // Get project configs for TapTalk SDK
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
 
         Log.e(">>>>>", "TapTalkLive init");
-        if (TTLDataManager.getInstance().checkActiveUserExists()) {
+        if (TTLDataManager.getInstance().checkActiveUserExists() && !isGetCaseListCompleted) {
             // Check if user has active case
             Log.e(">>>>>", "TapTalkLive init: Check if user has active case");
             TTLDataManager.getInstance().getCaseList(initCaseListDataView);
@@ -225,7 +233,7 @@ public class TapTalkLive {
         @Override
         public void onSuccess(TTLGetCaseListResponse response) {
             Log.e(">>>>>", "getCaseList onSuccess: " + response.getCases().size());
-            processGetCaseListResponse(response, new TapCommonListener() {
+            TTLUtil.processGetCaseListResponse(response, new TapCommonListener() {
                 @Override
                 public void onSuccess(String successMessage) {
                     onFinish();
@@ -262,55 +270,11 @@ public class TapTalkLive {
     private static TTLDefaultDataView<TTLGetCaseListResponse> accessTokenCaseListDataView = new TTLDefaultDataView<>() {
         @Override
         public void onSuccess(TTLGetCaseListResponse response) {
-            processGetCaseListResponse(response, null);
+            Log.e(">>>>>", "getCaseList access token onSuccess: " + response.getCases().size());
+            isGetCaseListCompleted = true;
+            TTLUtil.processGetCaseListResponse(response, null);
         }
     };
-
-    private static void processGetCaseListResponse(TTLGetCaseListResponse response, TapCommonListener listener) {
-        if (response == null) {
-            if (listener != null) {
-                listener.onError(ERROR_CODE_OTHERS, "Response is null");
-            }
-            return;
-        }
-        List<TTLCaseModel> cases = response.getCases();
-        boolean hasActiveCase = null != cases && !cases.isEmpty();
-        TTLDataManager.getInstance().saveActiveUserHasExistingCase(hasActiveCase);
-        if (hasActiveCase) {
-            ArrayList<TAPMessageEntity> entities = new ArrayList<>();
-            for (TTLCaseModel caseModel : cases) {
-                caseMap.put(caseModel.getTapTalkXCRoomID(), caseModel);
-                TAPMessageModel lastMessage = TAPEncryptorManager.getInstance().decryptMessage(caseModel.getTapTalkRoom().getLastMessage());
-                entities.add(TAPMessageEntity.fromMessageModel(lastMessage));
-                Log.e(">>>>>", String.format("processGetCaseListResponse: case %s lastMessage %d - %s",
-                        caseModel.getFirstMessage(),
-                        lastMessage.getType(),
-                        lastMessage.getBody()));
-            }
-            TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).insertToDatabase(entities, false, new TAPDatabaseListener() {
-                @Override
-                public void onInsertFinished() {
-                    if (listener != null) {
-                        listener.onSuccess("Successfully saved messages.");
-                    }
-                    Log.e(">>>>>", "Successfully saved messages.");
-                }
-
-                @Override
-                public void onInsertFailed(String errorMessage) {
-                    if (listener != null) {
-                        listener.onError(ERROR_CODE_OTHERS, "Failed to save messages.");
-                    }
-                    Log.e(">>>>>", "Failed to save messages.");
-                }
-            });
-        } else {
-            if (listener != null) {
-                listener.onSuccess("Result is empty.");
-            }
-            Log.e(">>>>>", "Result is empty.");
-        }
-    }
 
     private static void initializeTapTalkSDK(String tapTalkAppKeyID, String tapTalkAppKeySecret, String tapTalkApiUrl) {
         if (isTapTalkInitialized) {
@@ -549,27 +513,12 @@ public class TapTalkLive {
         }
     };
 
-    private static void openCaseList(Context activityContext) {
-        Intent intent = new Intent(activityContext, TTLCaseListActivity.class);
-        if (!(activityContext instanceof Activity)) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        activityContext.startActivity(intent);
-        if (activityContext instanceof Activity) {
-            ((Activity) activityContext).overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay);
-        }
+    public static void openCaseList(Context activityContext) {
+        TTLCaseListActivity.Companion.start(activityContext);
     }
 
     private static void openCreateCaseForm(Context activityContext, boolean showCloseButton) {
-        Intent intent = new Intent(activityContext, TTLCreateCaseFormActivity.class);
-        intent.putExtra(SHOW_CLOSE_BUTTON, showCloseButton);
-        if (!(activityContext instanceof Activity)) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        activityContext.startActivity(intent);
-        if (activityContext instanceof Activity) {
-            ((Activity) activityContext).overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay);
-        }
+        TTLCreateCaseFormActivity.Companion.start(activityContext, showCloseButton);
     }
 
     public static boolean openTapTalkLiveView(Context activityContext) {
@@ -577,14 +526,22 @@ public class TapTalkLive {
             return false;
         }
         if (TTLDataManager.getInstance().checkActiveUserExists() ||
-                TTLDataManager.getInstance().checkAccessTokenAvailable()) {
-            TapUI.getInstance(TAPTALK_INSTANCE_KEY).openRoomList(activityContext);
-//        openCaseList(activityContext); // TODO: 20 Feb 2020 TEMPORARILY DISABLED CASE LIST PAGE
+            TTLDataManager.getInstance().checkAccessTokenAvailable()
+        ) {
+//            TapUI.getInstance(TAPTALK_INSTANCE_KEY).openRoomList(activityContext);
+        openCaseList(activityContext);
         }
         if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
             openCreateCaseForm(activityContext, true);
         }
         return true;
+    }
+
+    public static TTLCaseListFragment getCaseListFragment() {
+        if (caseListFragment == null) {
+            caseListFragment = new TTLCaseListFragment();
+        }
+        return caseListFragment;
     }
 
     private static void closeCase(String xcRoomID) {
@@ -620,7 +577,7 @@ public class TapTalkLive {
 
             @Override
             public void onError(String errorMessage) {
-                listener.onError(String.valueOf(OTHER_ERRORS), errorMessage);
+                listener.onError(OTHER_ERRORS, errorMessage);
             }
         });
     }

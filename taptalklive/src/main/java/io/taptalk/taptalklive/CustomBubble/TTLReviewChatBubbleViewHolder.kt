@@ -63,7 +63,6 @@ class TTLReviewChatBubbleViewHolder internal constructor(
         if (null == item) {
             return
         }
-        Log.e(">>>>>>>>>>>>>", "onBind: " + TAPUtils.toJsonString(item))
         if (isMessageFromMySelf(item)) {
             // Message from active user
             clBubble.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_chat_bubble_right_default)
