@@ -391,6 +391,11 @@ public class TapTalkLive {
         }
     };
 
+    public static void requestAccessToken(String authTicket, TTLCommonListener listener) {
+        TTLDataManager.getInstance().saveAuthTicket(authTicket);
+        requestAccessToken(listener);
+    }
+
     private static void requestAccessToken(TTLCommonListener listener) {
         TTLDataManager.getInstance().requestAccessToken(new TTLDefaultDataView<>() {
             @Override
@@ -576,9 +581,8 @@ public class TapTalkLive {
             @Override
             public void onSuccess(TTLCreateUserResponse response) {
                 if (null != response) {
-                    TTLDataManager.getInstance().saveAuthTicket(response.getTicket());
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
-                    requestAccessToken(listener);
+                    requestAccessToken(response.getTicket(), listener);
                 } else {
                     onError("No response when registering user.");
                 }
