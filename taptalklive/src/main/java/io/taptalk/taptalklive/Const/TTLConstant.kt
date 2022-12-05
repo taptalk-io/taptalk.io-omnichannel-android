@@ -14,6 +14,17 @@ class TTLConstant {
         const val TYPE_REOPEN_CASE = 3002
         const val TYPE_REVIEW = 3003
         const val TYPE_REVIEW_SUBMITTED = 3004
+        const val TYPE_CASE_CREATED = 3005
+        const val TYPE_CASE_AGENT_CHANGED = 3006
+        const val TYPE_CASE_DETAILS_UPDATED = 3007
+        const val TYPE_BROADCAST_TEXT_MESSAGE = 3011 // Also used for WABA broadcast template
+        const val TYPE_BROADCAST_IMAGE_MESSAGE = 3012
+        const val TYPE_BROADCAST_VIDEO_MESSAGE = 3013
+        const val TYPE_BROADCAST_FILE_MESSAGE = 3014
+        const val TYPE_WABA_TEMPLATE_TEXT_MESSAGE = 3021
+        const val TYPE_WABA_TEMPLATE_IMAGE_MESSAGE = 3022
+        const val TYPE_WABA_TEMPLATE_VIDEO_MESSAGE = 3023
+        const val TYPE_WABA_TEMPLATE_FILE_MESSAGE = 3024
     }
 
     object RequestCode {

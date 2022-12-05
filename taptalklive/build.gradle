@@ -17,8 +17,8 @@ android {
     defaultConfig {
         minSdk 16
         targetSdk 31
-        versionCode 17
-        versionName "1.2.0"
+        versionCode 18
+        versionName "1.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
         multiDexEnabled true
@@ -119,7 +119,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // TapTalk
-    implementation 'com.github.taptalk-io:taptalk.io-android:2.1.1'
+    implementation 'com.github.taptalk-io:taptalk.io-android:2.8.3'
 }
 
 task androidSourcesJar(type: Jar) {

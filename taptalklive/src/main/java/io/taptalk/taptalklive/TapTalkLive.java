@@ -5,10 +5,18 @@ import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_FILE_MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_IMAGE_MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_TEXT_MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_VIDEO_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW_SUBMITTED;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_FILE_MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_IMAGE_MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_TEXT_MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_VIDEO_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
 
@@ -254,13 +262,23 @@ public class TapTalkLive {
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomKeyboardListener(customKeyboardListener);
 
         // Remove disabled features from chat room
-        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReplyMessageMenuEnabled(true);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setForwardMessageMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMentionUsernameEnabled(false);
-        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setStarMessageMenuEnabled(false);
-        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setSendVoiceNoteMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setDeleteMessageMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setEditMessageMenuEnabled(false);
-        TapUI.getInstance().setSendVoiceNoteMenuEnabled(false); // FIXME: REMOVE AFTER TAPTALK UPDATE
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLocationAttachmentEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setSendVoiceNoteMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setStarMessageMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setPinMessageMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setSavedMessagesMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_TEXT_MESSAGE, TapUI.LongPressMenuType.TYPE_TEXT_MESSAGE);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_IMAGE_MESSAGE, TapUI.LongPressMenuType.TYPE_IMAGE_MESSAGE);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_VIDEO_MESSAGE, TapUI.LongPressMenuType.TYPE_VIDEO_MESSAGE);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_FILE_MESSAGE, TapUI.LongPressMenuType.TYPE_FILE_MESSAGE);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_WABA_TEMPLATE_TEXT_MESSAGE, TapUI.LongPressMenuType.TYPE_TEXT_MESSAGE);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_WABA_TEMPLATE_IMAGE_MESSAGE, TapUI.LongPressMenuType.TYPE_IMAGE_MESSAGE);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_WABA_TEMPLATE_VIDEO_MESSAGE, TapUI.LongPressMenuType.TYPE_VIDEO_MESSAGE);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_WABA_TEMPLATE_FILE_MESSAGE, TapUI.LongPressMenuType.TYPE_FILE_MESSAGE);
 
         if (!TapTalk.isConnected(TAPTALK_INSTANCE_KEY)) {
             TapTalk.connect(TAPTALK_INSTANCE_KEY, new TapCommonListener() {
@@ -390,6 +408,11 @@ public class TapTalkLive {
             clearAllTapLiveData();
         }
     };
+
+    public static void requestAccessToken(String authTicket, TTLCommonListener listener) {
+        TTLDataManager.getInstance().saveAuthTicket(authTicket);
+        requestAccessToken(listener);
+    }
 
     private static void requestAccessToken(TTLCommonListener listener) {
         TTLDataManager.getInstance().requestAccessToken(new TTLDefaultDataView<>() {
@@ -576,9 +599,8 @@ public class TapTalkLive {
             @Override
             public void onSuccess(TTLCreateUserResponse response) {
                 if (null != response) {
-                    TTLDataManager.getInstance().saveAuthTicket(response.getTicket());
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
-                    requestAccessToken(listener);
+                    requestAccessToken(response.getTicket(), listener);
                 } else {
                     onError("No response when registering user.");
                 }
