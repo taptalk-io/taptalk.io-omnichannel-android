@@ -271,6 +271,10 @@ public class TapTalkLive {
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setStarMessageMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setPinMessageMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setSavedMessagesMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setScheduledMessageFeatureEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReportMessageMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setBlockUserMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMessageInfoMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_TEXT_MESSAGE, TapUI.LongPressMenuType.TYPE_TEXT_MESSAGE);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_IMAGE_MESSAGE, TapUI.LongPressMenuType.TYPE_IMAGE_MESSAGE);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_VIDEO_MESSAGE, TapUI.LongPressMenuType.TYPE_VIDEO_MESSAGE);
