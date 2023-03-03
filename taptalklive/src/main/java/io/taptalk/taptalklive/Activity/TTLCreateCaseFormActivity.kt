@@ -6,13 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import io.taptalk.TapTalk.Helper.TAPUtils
@@ -29,18 +29,23 @@ import io.taptalk.taptalklive.BuildConfig
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLCommonListener
+import io.taptalk.taptalklive.Listener.TTLItemListInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.Manager.TTLNetworkStateManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
+import io.taptalk.taptalklive.adapter.TTLItemDropdownAdapter
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.*
 
 class TTLCreateCaseFormActivity : AppCompatActivity() {
 
     private lateinit var vm: TTLCreateCaseViewModel
     private lateinit var glide: RequestManager
-    private lateinit var topicSpinnerAdapter: ArrayAdapter<String>
+    private lateinit var topicAdapter: TTLItemDropdownAdapter
+//    private lateinit var topicSpinnerAdapter: ArrayAdapter<String>
+
+    private var selectedTopicIndex = -1
 
     companion object {
         fun start(context: Context, showCloseButton: Boolean) {
@@ -51,7 +56,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             }
             context.startActivity(intent)
             if (context is Activity) {
-                context.overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay)
+                context.overridePendingTransition(R.anim.tap_slide_left, R.anim.tap_stay)
             }
         }
     }
@@ -70,7 +75,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             return
         }
         super.onBackPressed()
-        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_down)
+        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_right)
     }
 
     private fun initViewModel() {
@@ -92,73 +97,109 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
         if (!TTLDataManager.getInstance().checkActiveUserExists() || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
             // Show name and email fields if user does not exist
-            tv_label_full_name.visibility = View.VISIBLE
-            et_full_name.visibility = View.VISIBLE
-            tv_label_email_address.visibility = View.VISIBLE
-            et_email_address.visibility = View.VISIBLE
+            ll_full_name.visibility = View.VISIBLE
+            ll_email_address.visibility = View.VISIBLE
             et_full_name.onFocusChangeListener = formFocusListener
             et_email_address.onFocusChangeListener = formFocusListener
             vm.openRoomListOnComplete = true
+        }
+        else {
+            ll_full_name.visibility = View.GONE
+            ll_email_address.visibility = View.GONE
         }
         et_message.onFocusChangeListener = formFocusListener
 
         initTopicSpinnerAdapter()
 
         ll_button_send_message.setOnClickListener { validateSendMessage() }
-
-        // TODO SET CLIENT LOGO
-        iv_logo.visibility = View.INVISIBLE
     }
 
     private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
         if (hasFocus) {
             view.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_active)
-        } else {
+            hideTopicDropdown()
+        }
+        else {
             view.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        }
+        if (view == et_full_name) {
+            cl_full_name_error.visibility = View.GONE
+        }
+        else if (view == et_email_address) {
+            cl_email_address_error.visibility = View.GONE
+        }
+        else if (view == et_message) {
+            cl_message_error.visibility = View.GONE
         }
     }
 
     private fun initTopicSpinnerAdapter() {
-        val spinnerPlaceholder = getString(R.string.ttl_select_topic)
-        vm.topics.add(spinnerPlaceholder)
+//        val spinnerPlaceholder = getString(R.string.ttl_select_topic)
+//        vm.topics.add(spinnerPlaceholder)
 
-        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
+//        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
 
         getTopicList()
 
-        topicSpinnerAdapter = object : ArrayAdapter<String>(
-                this, R.layout.ttl_cell_default_spinner_item, vm.topics) {
-            override fun isEnabled(position: Int): Boolean {
-                return vm.topics[position] != spinnerPlaceholder
-            }
-        }
-
-        val spinnerAdapterListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val tv = view as TextView
-                if (vm.topics[position] == spinnerPlaceholder) {
-                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.ttlFormTextFieldPlaceholderColor))
-                } else {
-                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.ttlFormTextFieldColor))
-                    if (vm.topics.contains(spinnerPlaceholder)) {
-                        vm.topics.remove(spinnerPlaceholder)
-                        sp_select_topic.setSelection(position - 1)
-                        topicSpinnerAdapter.notifyDataSetChanged()
+        topicAdapter = TTLItemDropdownAdapter(
+            vm.topics,
+            object : TTLItemListInterface {
+                override fun onItemSelected(position: Int) {
+                    if (position > -1 && position <= vm.topics.size) {
+                        selectedTopicIndex = position
+                        tv_topic.text = vm.topics[selectedTopicIndex]
+                        hideTopicDropdown()
+                        cl_topic_error.visibility = View.GONE
                     }
                 }
             }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
+        )
+        val layoutManager: LinearLayoutManager =
+            object : LinearLayoutManager(this, VERTICAL, false) {
+                override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
+                    try {
+                        super.onLayoutChildren(recycler, state)
+                    } catch (e: IndexOutOfBoundsException) {
+                        e.printStackTrace()
+                    }
+                }
             }
-        }
+        rv_topic_dropdown.adapter = topicAdapter
+        rv_topic_dropdown.layoutManager = layoutManager
+        rv_topic_dropdown.setMaxHeight(TAPUtils.dpToPx(resources, 144f))
 
-        topicSpinnerAdapter.setDropDownViewResource(R.layout.ttl_cell_default_spinner_dropdown_item)
-        sp_select_topic.adapter = topicSpinnerAdapter
-        sp_select_topic.onItemSelectedListener = spinnerAdapterListener
-        sp_select_topic.setOnTouchListener { view, motionEvent ->
-            TAPUtils.dismissKeyboard(this@TTLCreateCaseFormActivity)
-            false
+//        topicSpinnerAdapter = object : ArrayAdapter<String>(
+//                this, R.layout.ttl_cell_default_spinner_item, vm.topics) {
+//            override fun isEnabled(position: Int): Boolean {
+//                return vm.topics[position] != spinnerPlaceholder
+//            }
+//        }
+
+//        val spinnerAdapterListener = object : OnItemSelectedListener {
+//            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+//                val tv = view as TextView
+//                if (vm.topics[position] == spinnerPlaceholder) {
+//                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.ttlFormTextFieldPlaceholderColor))
+//                } else {
+//                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.ttlFormTextFieldColor))
+//                    if (vm.topics.contains(spinnerPlaceholder)) {
+//                        vm.topics.remove(spinnerPlaceholder)
+//                        sp_select_topic.setSelection(position - 1)
+//                        topicSpinnerAdapter.notifyDataSetChanged()
+//                    }
+//                }
+//            }
+//
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//
+//            }
+//        }
+
+//        topicSpinnerAdapter.setDropDownViewResource(R.layout.ttl_cell_default_spinner_dropdown_item)
+//        sp_select_topic.adapter = topicSpinnerAdapter
+//        sp_select_topic.onItemSelectedListener = spinnerAdapterListener
+        cl_topic.setOnClickListener {
+            showTopicDropdown()
         }
     }
 
@@ -173,10 +214,13 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                     vm.topicsMap[topic.name] = topic
                 }
                 vm.topics.addAll(vm.topicsMap.keys)
-                topicSpinnerAdapter.notifyDataSetChanged()
+                topicAdapter.items = vm.topics
 
-                iv_select_topic_loading.clearAnimation()
-                iv_select_topic_loading.visibility = View.GONE
+//                topicSpinnerAdapter.notifyDataSetChanged()
+
+//                iv_select_topic_loading.clearAnimation()
+                cl_topic.background = ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_bg_text_field_inactive)
+                pb_select_topic_loading.visibility = View.GONE
                 iv_select_topic_drop_down.visibility = View.VISIBLE
             }
         }
@@ -199,31 +243,82 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         })
     }
 
+    private fun showTopicDropdown() {
+        TAPUtils.dismissKeyboard(this)
+        val location = IntArray(2)
+        cl_topic.getLocationInWindow(location)
+        rv_topic_dropdown.translationY = location[1].toFloat() + (cl_topic.height.toFloat() / 2)
+        rv_topic_dropdown.visibility = View.VISIBLE
+        cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_active)
+        cl_topic.setOnClickListener {
+            hideTopicDropdown()
+        }
+        iv_select_topic_drop_down.animate()
+            .rotation(180f)
+            .setDuration(200L)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .withEndAction {
+                v_dismiss_dropdown.visibility = View.VISIBLE
+                v_dismiss_dropdown.setOnClickListener {
+                    hideTopicDropdown()
+                }
+            }
+            .start()
+    }
+
+    private fun hideTopicDropdown() {
+        rv_topic_dropdown.visibility = View.INVISIBLE
+        v_dismiss_dropdown.visibility = View.GONE
+        v_dismiss_dropdown.setOnClickListener(null)
+        cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        cl_topic.setOnClickListener {
+            showTopicDropdown()
+        }
+        iv_select_topic_drop_down.animate()
+            .rotation(0f)
+            .setDuration(200L)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .start()
+    }
+
     private fun validateFullName(): Boolean {
         return if (!et_full_name.text.isNullOrEmpty()) {
             true
         } else {
-            showValidationErrorDialog(getString(R.string.ttl_error_message_full_name_empty))
+//            showValidationErrorDialog(getString(R.string.ttl_error_message_full_name_empty))
+            et_full_name.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+            cl_full_name_error.visibility = View.VISIBLE
             false
         }
     }
 
     private fun validateEmail(): Boolean {
+//        if (et_email_address.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(et_email_address.text).matches()) {
+//            return true
+//        } else if (et_email_address.text.isNotEmpty()) {
+//            showValidationErrorDialog(getString(R.string.ttl_error_message_email_invalid))
+//        } else {
+//            showValidationErrorDialog(getString(R.string.ttl_error_message_email_empty))
+//        }
         if (et_email_address.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(et_email_address.text).matches()) {
             return true
         } else if (et_email_address.text.isNotEmpty()) {
-            showValidationErrorDialog(getString(R.string.ttl_error_message_email_invalid))
+            tv_email_address_error_message.text = getString(R.string.ttl_error_message_email_invalid)
         } else {
-            showValidationErrorDialog(getString(R.string.ttl_error_message_email_empty))
+            tv_email_address_error_message.text = getString(R.string.ttl_error_field_required)
         }
+        et_email_address.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+        cl_email_address_error.visibility = View.VISIBLE
         return false
     }
 
     private fun validateTopic(): Boolean {
-        return if (vm.topics[sp_select_topic.selectedItemPosition] != getString(R.string.ttl_select_topic)) {
+        return if (selectedTopicIndex >= 0 && selectedTopicIndex < vm.topics.size) {
             true
         } else {
-            showValidationErrorDialog(getString(R.string.ttl_error_message_topic_empty))
+//            showValidationErrorDialog(getString(R.string.ttl_error_message_topic_empty))
+            cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+            cl_topic_error.visibility = View.VISIBLE
             false
         }
     }
@@ -232,21 +327,29 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         return if (!et_message.text.isNullOrEmpty()) {
             true
         } else {
-            showValidationErrorDialog(getString(R.string.ttl_error_message_message_empty))
+//            showValidationErrorDialog(getString(R.string.ttl_error_message_message_empty))
+            et_message.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+            cl_message_error.visibility = View.VISIBLE
             false
         }
     }
 
     private fun validateSendMessage() {
-        ll_button_send_message.setOnClickListener { }
-        showLoading()
+        val topicValidated = validateTopic()
+        val messageValidated = validateMessage()
 
         if (!TTLDataManager.getInstance().checkActiveUserExists() || !TTLDataManager.getInstance().checkAccessTokenAvailable()) {
-            if (validateFullName() && validateEmail() && validateTopic() && validateMessage()) {
+            val fullNameValidated = validateFullName()
+            val emailValidated = validateEmail()
+            if (fullNameValidated && emailValidated && topicValidated && messageValidated) {
+                ll_button_send_message.setOnClickListener(null)
+                showLoading()
                 TapTalkLive.authenticateUser(et_full_name.text.toString(), et_email_address.text.toString(), authenticationListener)
             }
         } else {
-            if (validateTopic() && validateMessage()) {
+            if (topicValidated && messageValidated) {
+                ll_button_send_message.setOnClickListener(null)
+                showLoading()
                 if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
                     TapTalkLive.requestTapTalkAuthTicket(authenticationListener)
                 } else {
@@ -268,31 +371,47 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
     private fun showLoading() {
         tv_button_send_message.visibility = View.GONE
-        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_loading_progress_circle_white))
-        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
+        pb_button_send_message_loading.visibility = View.VISIBLE
+        et_full_name.isEnabled = false
+        et_email_address.isEnabled = false
+        et_message.isEnabled = false
+        cl_topic.setOnClickListener(null)
+        et_full_name.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
+        et_email_address.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
+        et_message.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
+        cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
+//        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_loading_progress_circle_white))
+//        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
         ll_button_send_message.setOnClickListener { }
     }
 
     private fun hideLoading() {
-        iv_button_send_message.clearAnimation()
-        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_send_white))
+//        iv_button_send_message.clearAnimation()
+//        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_send_white))
         tv_button_send_message.visibility = View.VISIBLE
+        pb_button_send_message_loading.visibility = View.GONE
+        et_full_name.isEnabled = true
+        et_email_address.isEnabled = true
+        et_message.isEnabled = true
+        et_full_name.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        et_email_address.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        et_message.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        cl_topic.setOnClickListener {
+            showTopicDropdown()
+        }
         ll_button_send_message.setOnClickListener { validateSendMessage() }
     }
 
     private fun createCase() {
         TTLDataManager.getInstance().createCase(
-                vm.topicsMap[vm.topics[sp_select_topic.selectedItemPosition]]?.id,
-                et_message.text.toString(),
-                createCaseDataView)
+            vm.topicsMap[vm.topics[selectedTopicIndex]]?.id,
+            et_message.text.toString(),
+            createCaseDataView
+        )
     }
 
     private val createCaseDataView = object : TTLDefaultDataView<TTLCreateCaseResponse>() {
-        override fun startLoading() {
-            ll_button_send_message.setOnClickListener { }
-            showLoading()
-        }
-
         override fun onSuccess(response: TTLCreateCaseResponse?) {
             if (!response?.caseResponse?.tapTalkXCRoomID.isNullOrEmpty()) {
                 openCaseChatRoom(response?.caseResponse?.tapTalkXCRoomID!!)

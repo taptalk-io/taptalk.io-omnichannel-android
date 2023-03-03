@@ -54,7 +54,7 @@
     <style name="ttlTitleLabelStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">@color/ttlCreateFormTitleLabelColor</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="ttlCreateFormDescriptionLabelStyle" parent="ttlFontFamilyRegular">
@@ -119,6 +119,12 @@
         <item name="android:letterSpacing">-0.01</item>
         <item name="android:textColor">@color/ttlReviewRatingLabelColor</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ttlErrorInfoLabelStyle" parent="ttlFontFamilyBold">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlErrorInfoLabelColor</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

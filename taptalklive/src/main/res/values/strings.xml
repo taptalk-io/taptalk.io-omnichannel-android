@@ -3,7 +3,7 @@
     <string name="ttl_get_started">Get started with TapTalk.io</string>
     <string name="ttl_launch_live_chat">Launch live chat</string>
 
-    <string name="ttl_create_form_title">Need help with anything?</string>
+    <string name="ttl_create_form_title">New Message</string>
     <string name="ttl_create_form_description">Please fill out the form below before you leave a message</string>
     <string name="ttl_full_name">Full Name</string>
     <string name="ttl_enter_full_name">Enter full name</string>
@@ -15,6 +15,7 @@
     <string name="ttl_conversations">Conversations</string>
     <string name="ttl_messages">Messages</string>
     <string name="ttl_type_message_here">Type message here</string>
+    <string name="ttl_enter_your_message">Enter your message</string>
     <string name="ttl_send_message">Send Message</string>
     <string name="ttl_new_conversation">New Conversation</string>
     <string name="ttl_new_message">New Message</string>
@@ -36,6 +37,7 @@
     <string name="ttl_error_not_initialized">TapTalkLive is not initialized. Please call TapTalkLive.init()</string>
     <string name="ttl_error_xc_room_id_empty">Unable to fetch TapTalk chat room</string>
     <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
+    <string name="ttl_error_field_required">This field is required</string>
 
     <string name="ttl_rating_1">Horrible</string>
     <string name="ttl_rating_2">Not good</string>

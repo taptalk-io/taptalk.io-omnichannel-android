@@ -60,12 +60,13 @@
 
     <color name="ttlFormLabelColor">@color/ttlColorTextDark</color>
     <color name="ttlFormTextFieldColor">@color/ttlColorTextDark</color>
-    <color name="ttlFormTextFieldPlaceholderColor">@color/ttlColorTextMedium</color>
+    <color name="ttlFormTextFieldPlaceholderColor">@color/ttlTextDark40</color>
 
     <color name="ttlCreateFormTitleLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlCreateFormDescriptionLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlReviewTitleLabelColor">@color/ttlColorTextDark</color>
     <color name="ttlReviewRatingLabelColor">@color/ttlColorPrimary</color>
+    <color name="ttlErrorInfoLabelColor">@color/ttlColorError</color>
 
     <color name="ttlButtonLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlButtonIconColor">@color/ttlColorTextLight</color>
@@ -112,6 +113,7 @@
 
     <color name="ttlTextDark10">#1a191919</color>
     <color name="ttlTextDark20">#33191919</color>
+    <color name="ttlTextDark40">#66191919</color>
     <color name="ttlTextDark60">#99191919</color>
     <color name="ttlTextDark80">#cc191919</color>
 

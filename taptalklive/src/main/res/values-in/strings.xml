@@ -3,7 +3,7 @@
     <string name="ttl_get_started">Memulai dengan TapTalk.io</string>
     <string name="ttl_launch_live_chat">Tampilkan live chat</string>
 
-    <string name="ttl_create_form_title">Butuh Bantuan?</string>
+    <string name="ttl_create_form_title">Pesan Baru</string>
     <string name="ttl_create_form_description">Harap isi formulir di bawah sebelum meninggalkan pesan</string>
     <string name="ttl_full_name">Nama Lengkap</string>
     <string name="ttl_enter_full_name">Masukkan nama lengkap</string>
@@ -15,6 +15,7 @@
     <string name="ttl_conversations">Percakapan</string>
     <string name="ttl_messages">Pesan</string>
     <string name="ttl_type_message_here">Masukkan pesan</string>
+    <string name="ttl_enter_your_message">Masukkan pesan</string>
     <string name="ttl_send_message">Kirim Pesan</string>
     <string name="ttl_new_conversation">Percakapan Baru</string>
     <string name="ttl_new_message">Pesan Baru</string>
@@ -36,6 +37,7 @@
     <string name="ttl_error_not_initialized">TapTalkLive is not initialized. Please call TapTalkLive.init()</string>
     <string name="ttl_error_xc_room_id_empty">Unable to fetch TapTalk chat room</string>
     <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
+    <string name="ttl_error_field_required">Bagian ini diperlukan</string>
 
     <string name="ttl_rating_1">Mengecewakan</string>
     <string name="ttl_rating_2">Kurang baik</string>
