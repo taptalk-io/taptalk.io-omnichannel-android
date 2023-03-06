@@ -1,7 +1,7 @@
 package io.taptalk.taptalklive.Listener
 
-import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
+import io.taptalk.taptalklive.model.TTLCaseListModel
 
 interface TTLHomeAdapterInterface {
     fun onCloseButtonTapped() {
@@ -20,7 +20,7 @@ interface TTLHomeAdapterInterface {
 
     }
 
-    fun onChatRoomTapped(lastMessage: TAPMessageModel) {
+    fun onCaseListTapped(caseList: TTLCaseListModel) {
 
     }
 }

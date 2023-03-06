@@ -9,15 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import io.taptalk.TapTalk.Helper.TAPUtils
-import io.taptalk.TapTalk.Model.TAPMessageModel
+import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
+import io.taptalk.TapTalk.View.Activity.TapUIChatActivity
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
-import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.adapter.TTLHomeAdapter
+import io.taptalk.taptalklive.model.TTLCaseListModel
 import kotlinx.android.synthetic.main.ttl_activity_home.*
 
 class TTLHomeActivity : TAPBaseActivity() {
@@ -81,11 +82,11 @@ class TTLHomeActivity : TAPBaseActivity() {
         }
 
         override fun onSeeAllMessagesButtonTapped() {
-            super.onSeeAllMessagesButtonTapped()
+            openCaseList()
         }
 
-        override fun onChatRoomTapped(lastMessage: TAPMessageModel) {
-            super.onChatRoomTapped(lastMessage)
+        override fun onCaseListTapped(caseList: TTLCaseListModel) {
+            openChatRoom(caseList)
         }
     }
 
@@ -99,5 +100,18 @@ class TTLHomeActivity : TAPBaseActivity() {
 
     private fun openCaseList() {
         TTLCaseListActivity.start(this)
+    }
+
+    private fun openChatRoom(caseList: TTLCaseListModel) {
+        val room: TAPRoomModel = caseList.lastMessage.room
+        TapUIChatActivity.start(
+            this@TTLHomeActivity,
+            TAPTALK_INSTANCE_KEY,
+            room.roomID,
+            room.name,
+            room.imageURL,
+            room.type,
+            room.color
+        )
     }
 }

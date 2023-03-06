@@ -204,15 +204,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_message"
+        <io.taptalk.TapTalk.Helper.TAPChatRecyclerView
+            android:id="@+id/rv_case_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toTopOf="@id/fl_or"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_button_see_all_messages" />
+            app:layout_constraintTop_toBottomOf="@id/tv_button_see_all_messages"
+            tools:background="@color/ttlDefaultBackgroundColor"
+            tools:layout_height="48dp" />
 
         <LinearLayout
             android:id="@+id/ll_button_new_message"
@@ -225,7 +227,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_message"
+            app:layout_constraintTop_toBottomOf="@id/rv_case_list"
             app:layout_goneMarginTop="0dp">
 
             <TextView
