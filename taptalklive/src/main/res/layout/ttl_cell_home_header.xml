@@ -53,12 +53,16 @@
         app:layout_constraintTop_toBottomOf="@id/tv_label_title" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_channel_and_direct_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/ttl_bg_white_rounded_8dp"
         android:elevation="2dp"
-        android:padding="16dp"
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="@id/tv_label_description"
         app:layout_constraintStart_toStartOf="@id/tv_label_description"
         app:layout_constraintTop_toBottomOf="@id/tv_label_description">
@@ -150,6 +154,88 @@
                 android:layout_marginLeft="4dp"
                 android:gravity="center"
                 android:text="@string/ttl_message_us_directly"
+                android:textColor="@color/ttlColorPrimary" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ttl_bg_white_rounded_8dp"
+        android:elevation="2dp"
+        android:paddingStart="12dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintEnd_toEndOf="@id/cl_channel_and_direct_message"
+        app:layout_constraintStart_toStartOf="@id/cl_channel_and_direct_message"
+        app:layout_constraintTop_toBottomOf="@id/cl_channel_and_direct_message">
+
+        <TextView
+            android:id="@+id/tv_label_your_messages"
+            style="@style/ttlHomeInfoLabelStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/ttl_your_messages"
+            app:layout_constraintBottom_toTopOf="@id/rv_channel_links"
+            app:layout_constraintEnd_toStartOf="@id/tv_button_see_all_messages"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_button_see_all_messages"
+            style="@style/ttlHomeButtonLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ttl_see_all_messages"
+            app:layout_constraintBottom_toTopOf="@id/rv_channel_links"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@id/fl_or"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_button_see_all_messages" />
+
+        <LinearLayout
+            android:id="@+id/ll_button_new_message"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/tap_bg_button_border_ripple"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_message"
+            app:layout_goneMarginTop="0dp">
+
+            <TextView
+                android:id="@+id/tv_button_new_message"
+                style="@style/ttlButtonLabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:gravity="center"
+                android:text="@string/ttl_new_message"
                 android:textColor="@color/ttlColorPrimary" />
 
         </LinearLayout>

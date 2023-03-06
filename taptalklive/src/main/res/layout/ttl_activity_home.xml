@@ -5,7 +5,7 @@
     android:id="@+id/cl_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tapWhiteFa"
+    android:background="@color/ttlHomeBackgroundColor"
     tools:context=".Activity.TTLHomeActivity">
 
     <androidx.recyclerview.widget.RecyclerView

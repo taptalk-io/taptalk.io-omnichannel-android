@@ -22,6 +22,8 @@
     <string name="ttl_send_message">Kirim Pesan</string>
     <string name="ttl_message_us_directly">Kirim Pesan Langsung</string>
     <string name="ttl_new_conversation">Percakapan Baru</string>
+    <string name="ttl_your_messages">Pesan Anda</string>
+    <string name="ttl_see_all_messages">Lihat Semua Pesan</string>
     <string name="ttl_new_message">Pesan Baru</string>
     <string name="ttl_or_uppercase">ATAU</string>
     <string name="ttl_ok">OK</string>

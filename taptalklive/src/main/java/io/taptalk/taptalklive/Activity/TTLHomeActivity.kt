@@ -7,10 +7,12 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
+import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
+import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.adapter.TTLHomeAdapter
 import kotlinx.android.synthetic.main.ttl_activity_home.*
@@ -48,7 +50,7 @@ class TTLHomeActivity : TAPBaseActivity() {
     private fun initView() {
         val homeItemList = ArrayList<TTLScfPathModel>()
         homeItemList.add(TTLScfPathModel())
-        adapter = TTLHomeAdapter(homeItemList)
+        adapter = TTLHomeAdapter(homeItemList, adapterListener)
         rv_home.adapter = adapter
         rv_home.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
             override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
@@ -62,10 +64,37 @@ class TTLHomeActivity : TAPBaseActivity() {
         }
     }
 
+    private val adapterListener = object: TTLHomeAdapterInterface {
+        override fun onCloseButtonTapped() {
+            onBackPressed()
+        }
+
+        override fun onChannelLinkSelected(position: Int) {
+            super.onChannelLinkSelected(position)
+        }
+
+        override fun onNewMessageButtonTapped() {
+            openCreateCaseForm()
+        }
+
+        override fun onSeeAllMessagesButtonTapped() {
+            super.onSeeAllMessagesButtonTapped()
+        }
+
+        override fun onChatRoomTapped(lastMessage: TAPMessageModel) {
+            super.onChatRoomTapped(lastMessage)
+        }
+    }
+
     private fun openCreateCaseForm() {
-        val intent = Intent(this@TTLHomeActivity, TTLCreateCaseFormActivity::class.java)
-        intent.putExtra(SHOW_CLOSE_BUTTON, true)
-        startActivity(intent)
-        overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay)
+        TTLCreateCaseFormActivity.start(this, true)
+//        val intent = Intent(this@TTLHomeActivity, TTLCreateCaseFormActivity::class.java)
+//        intent.putExtra(SHOW_CLOSE_BUTTON, true)
+//        startActivity(intent)
+//        overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay)
+    }
+
+    private fun openCaseList() {
+        TTLCaseListActivity.start(this)
     }
 }

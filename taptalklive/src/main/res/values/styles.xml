@@ -76,6 +76,12 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="ttlHomeButtonLabelStyle" parent="ttlFontFamilyBold">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlHomeButtonLabelColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="ttlCreateFormDescriptionLabelStyle" parent="ttlFontFamilyRegular">
         <item name="android:letterSpacing">-0.01</item>
         <item name="android:lineSpacingExtra">4sp</item>
