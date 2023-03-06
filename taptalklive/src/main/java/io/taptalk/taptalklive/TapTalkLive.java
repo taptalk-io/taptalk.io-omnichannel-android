@@ -64,6 +64,7 @@ import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
+import io.taptalk.taptalklive.Activity.TTLHomeActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
@@ -655,16 +656,17 @@ public class TapTalkLive {
         if (tapTalkLive == null || !tapTalkLive.isTapTalkInitialized) {
             return false;
         }
-        if (TTLDataManager.getInstance().checkActiveUserExists() ||
-                TTLDataManager.getInstance().checkAccessTokenAvailable()
-        ) {
-            // Open case list
-            TTLCaseListActivity.Companion.start(activityContext);
-        }
-        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
-            // Open create case form
-            TTLCreateCaseFormActivity.Companion.start(activityContext, true);
-        }
+        TTLHomeActivity.Companion.start(activityContext);
+//        if (TTLDataManager.getInstance().checkActiveUserExists() ||
+//                TTLDataManager.getInstance().checkAccessTokenAvailable()
+//        ) {
+//            // Open case list
+//            TTLCaseListActivity.Companion.start(activityContext);
+//        }
+//        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
+//            // Open create case form
+//            TTLCreateCaseFormActivity.Companion.start(activityContext, true);
+//        }
         return true;
     }
 

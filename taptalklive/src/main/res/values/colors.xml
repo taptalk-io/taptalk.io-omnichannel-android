@@ -58,6 +58,10 @@
     <color name="ttlButtonActiveBackgroundGradientDarkColor">@color/ttlColorPrimary</color>
     <color name="ttlButtonActiveBorderColor">@color/ttlColorPrimary</color>
 
+    <color name="ttlHomeTitleLabelColor">@color/ttlColorTextLight</color>
+    <color name="ttlHomeTitleDescriptionColor">@color/ttlColorTextLight</color>
+    <color name="ttlHomeInfoLabelColor">@color/ttlTextDark60</color>
+
     <color name="ttlFormLabelColor">@color/ttlColorTextDark</color>
     <color name="ttlFormTextFieldColor">@color/ttlColorTextDark</color>
     <color name="ttlFormTextFieldPlaceholderColor">@color/ttlColorTextMedium</color>
