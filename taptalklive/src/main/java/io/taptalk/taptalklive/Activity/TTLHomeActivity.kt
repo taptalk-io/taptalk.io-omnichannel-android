@@ -4,11 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
+import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
+import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
@@ -50,7 +53,7 @@ class TTLHomeActivity : TAPBaseActivity() {
     private fun initView() {
         val homeItemList = ArrayList<TTLScfPathModel>()
         homeItemList.add(TTLScfPathModel())
-        adapter = TTLHomeAdapter(homeItemList, adapterListener)
+        adapter = TTLHomeAdapter(this, homeItemList, adapterListener)
         rv_home.adapter = adapter
         rv_home.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
             override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
@@ -69,8 +72,8 @@ class TTLHomeActivity : TAPBaseActivity() {
             onBackPressed()
         }
 
-        override fun onChannelLinkSelected(position: Int) {
-            super.onChannelLinkSelected(position)
+        override fun onChannelLinkSelected(channelLink: TTLChannelLinkModel?, position: Int) {
+            Log.e(">>>>>>>>>", "onChannelLinkSelected: ${TAPUtils.toJsonString(channelLink)}")
         }
 
         override fun onNewMessageButtonTapped() {

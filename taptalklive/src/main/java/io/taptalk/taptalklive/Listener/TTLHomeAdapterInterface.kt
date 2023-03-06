@@ -1,13 +1,14 @@
 package io.taptalk.taptalklive.Listener
 
 import io.taptalk.TapTalk.Model.TAPMessageModel
+import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 
 interface TTLHomeAdapterInterface {
     fun onCloseButtonTapped() {
 
     }
 
-    fun onChannelLinkSelected(position: Int) {
+    fun onChannelLinkSelected(channelLink: TTLChannelLinkModel?, position: Int) {
 
     }
 

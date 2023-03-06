@@ -27,6 +27,17 @@ class TTLConstant {
         const val TYPE_WABA_TEMPLATE_FILE_MESSAGE = 3024
     }
 
+    object CaseMedium {
+        const val LAUNCHER = "launcher"
+        const val WHATSAPP_SME = "whatsapp"
+        const val WHATSAPP_BA = "whatsappba"
+        const val TELEGRAM = "telegram"
+        const val LINE = "line"
+        const val TWITTER = "twitter"
+        const val FACEBOOK = "facebook"
+        const val INSTAGRAM = "instagram"
+    }
+
     object RequestCode {
         const val REVIEW = 1001
     }
