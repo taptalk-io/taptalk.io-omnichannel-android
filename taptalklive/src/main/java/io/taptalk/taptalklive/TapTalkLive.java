@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,7 +43,6 @@ import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface;
 import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Listener.TapUICustomKeyboardListener;
-import io.taptalk.TapTalk.Listener.TapUIRoomListListener;
 import io.taptalk.TapTalk.Manager.TapLocaleManager;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
@@ -56,14 +54,12 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLCaseModel;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
-import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
-import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLHomeActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
@@ -187,9 +183,9 @@ public class TapTalkLive {
         return apiBaseUrl + "/" + API_VERSION + "/";
     }
 
-    private final TTLDefaultDataView<TTLGetProjectConfigsRespone> projectConfigsDataView = new TTLDefaultDataView<>() {
+    private final TTLDefaultDataView<TTLGetProjectConfigsResponse> projectConfigsDataView = new TTLDefaultDataView<>() {
         @Override
-        public void onSuccess(TTLGetProjectConfigsRespone response) {
+        public void onSuccess(TTLGetProjectConfigsResponse response) {
             TTLTapTalkProjectConfigsModel tapTalk = response.getTapTalkProjectConfigs();
             if (null != tapTalk) {
                 initializeTapTalkSDK(
@@ -199,6 +195,9 @@ public class TapTalkLive {
                 TTLDataManager.getInstance().saveTapTalkAppKeyID(tapTalk.getAppKeyID());
                 TTLDataManager.getInstance().saveTapTalkAppKeySecret(tapTalk.getAppKeySecret());
                 TTLDataManager.getInstance().saveTapTalkApiUrl(tapTalk.getApiURL());
+            }
+            if (null != response.getChannelLinks()) {
+                TTLDataManager.getInstance().saveChannelLinks(response.getChannelLinks());
             }
         }
 

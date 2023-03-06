@@ -17,5 +17,4 @@ import kotlinx.android.parcel.Parcelize
     @field:JsonProperty("deletedTime") var deletedTime: Long = 0L,
     @field:JsonProperty("topics") var topics: List<TTLTopicModel> = ArrayList(),
     @field:JsonProperty("childItems") var childItems: List<TTLScfPathModel> = ArrayList(),
-
 ) : Parcelable

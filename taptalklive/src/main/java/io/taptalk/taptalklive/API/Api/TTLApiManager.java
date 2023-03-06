@@ -14,7 +14,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
@@ -164,7 +164,7 @@ public class TTLApiManager {
         execute(ttlApiService.requestAccessToken("Bearer " + TTLDataManager.getInstance().getAuthTicket()), subscriber);
     }
 
-    public void getProjectConfigs(Subscriber<TTLBaseResponse<TTLGetProjectConfigsRespone>> subscriber) {
+    public void getProjectConfigs(Subscriber<TTLBaseResponse<TTLGetProjectConfigsResponse>> subscriber) {
         execute(ttlApiService.getProjectConfigs(), subscriber);
     }
 

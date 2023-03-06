@@ -48,6 +48,7 @@ class TTLConstant {
         const val TAPTALK_APP_KEY_ID = "kTapTalkLiveTapTalkAppKeyId"
         const val TAPTALK_APP_KEY_SECRET = "kTapTalkLiveTapTalkAppKeySecret"
         const val TAPTALK_AUTH_TICKET = "kTapTalkLiveTapTalkAuthenticationTicket"
+        const val CHANNEL_LINKS = "kTapTalkLiveChannelLinks"
         const val CASE_EXISTS = "kTapTalkLiveCaseExists"
     }
 }

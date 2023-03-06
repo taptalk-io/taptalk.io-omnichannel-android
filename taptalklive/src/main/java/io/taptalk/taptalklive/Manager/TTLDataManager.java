@@ -7,15 +7,15 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
+import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
-import io.taptalk.taptalklive.TapTalkLive;
 
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN_EXPIRY;
@@ -23,12 +23,15 @@ import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACTIVE_USER
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.APP_KEY_SECRET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.AUTH_TICKET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.CASE_EXISTS;
+import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.CHANNEL_LINKS;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN_EXPIRY;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_API_URL;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_AUTH_TICKET;
+
+import java.util.List;
 
 public class TTLDataManager {
     private static final String TAG = TTLDataManager.class.getSimpleName();
@@ -102,6 +105,7 @@ public class TTLDataManager {
         removeTapTalkAppKeyID();
         removeTapTalkAppKeySecret();
         removeTapTalkAuthTicket();
+        removeChannelLinks();
         removeActiveUserHasExistingCase();
     }
 
@@ -284,6 +288,22 @@ public class TTLDataManager {
     }
 
     /**
+     * CHANNEL LINKS
+     */
+
+    public List<TTLChannelLinkModel> getChannelLinks() {
+        return Hawk.get(CHANNEL_LINKS, null);
+    }
+
+    public void saveChannelLinks(List<TTLChannelLinkModel> channelLinks) {
+        Hawk.put(CHANNEL_LINKS, channelLinks);
+    }
+
+    public void removeChannelLinks() {
+        removePreference(CHANNEL_LINKS);
+    }
+
+    /**
      * USER HAS EXISTING CASE
      */
     public boolean activeUserHasExistingCase() {
@@ -309,7 +329,7 @@ public class TTLDataManager {
         TTLApiManager.getInstance().requestAccessToken(new TTLDefaultSubscriber<>(view));
     }
 
-    public void getProjectConfigs(TTLDefaultDataView<TTLGetProjectConfigsRespone> view) {
+    public void getProjectConfigs(TTLDefaultDataView<TTLGetProjectConfigsResponse> view) {
         TTLApiManager.getInstance().getProjectConfigs(new TTLDefaultSubscriber<>(view));
     }
 
