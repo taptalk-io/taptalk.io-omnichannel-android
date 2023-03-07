@@ -1,22 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/v_header_background"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:background="@color/ttlDefaultNavBarBackgroundColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_button_close"
+        android:layout_width="?android:attr/actionBarSize"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="16dp"
+        android:src="@drawable/tap_ic_chevron_left_white"
+        android:tint="@color/ttlIconNavBarCloseButton"
+        app:layout_constraintBottom_toTopOf="@id/tv_label_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:ignore="UseAppTint"
+        tools:targetApi="lollipop" />
 
     <LinearLayout
         android:id="@+id/ll_faq_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/ttl_bg_white_rounded_top_8dp"
         android:orientation="vertical"
         android:paddingStart="12dp"
         android:paddingTop="16dp"
         android:paddingEnd="12dp"
-        android:layout_gravity="center">
+        app:layout_constraintBottom_toTopOf="@id/v_bottom_decoration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_button_close"
+        app:layout_goneMarginTop="0dp">
 
         <TextView
             android:id="@+id/tv_label_faq"
@@ -38,11 +73,55 @@
             style="@style/ttlFaqContentLabelStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
             android:layout_marginTop="12dp"
+            android:layout_marginRight="4dp"
             tools:text="A single dashboard to manage WhatsApp, Twitter, FB Messenger, Telegram, LINE and email to elevate your sales, marketing, and support experience." />
+
+        <LinearLayout
+            android:id="@+id/ll_button_talk_to_agent"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/tap_bg_button_border_ripple"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_button_talk_to_agent"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ttl_ic_chat_bubble"
+                android:tint="@color/ttlButtonActiveBorderColor" />
+
+            <TextView
+                android:id="@+id/tv_button_talk_to_agent"
+                style="@style/ttlButtonLabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:gravity="center"
+                android:text="@string/ttl_talk_to_agent"
+                android:textColor="@color/ttlColorPrimary" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+    <View
+        android:id="@+id/v_bottom_decoration"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/ttl_bg_white_rounded_bottom_8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_faq_container" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

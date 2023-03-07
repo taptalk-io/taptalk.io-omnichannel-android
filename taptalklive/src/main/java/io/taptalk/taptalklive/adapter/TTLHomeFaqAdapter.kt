@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView
+import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
 import io.taptalk.TapTalk.Manager.TAPDataManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
@@ -30,7 +31,7 @@ import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.model.TTLCaseListModel
 
-class TTLHomeAdapter(
+class TTLHomeFaqAdapter(
     context: Context,
     itemList: List<TTLScfPathModel>,
     val listener: TTLHomeAdapterInterface?,
@@ -230,26 +231,12 @@ class TTLHomeAdapter(
 
     internal inner class FaqParentViewHolder(parent: ViewGroup?, itemLayoutId: Int) : TAPBaseViewHolder<TTLScfPathModel>(parent, itemLayoutId) {
 
+        private var llButtonTalkToAgent: LinearLayout = itemView.findViewById(R.id.ll_button_talk_to_agent)
+        private var ivButtonClose: ImageView = itemView.findViewById(R.id.iv_button_close)
+        private var tvLabelFaq: TextView = itemView.findViewById(R.id.tv_label_faq)
         private var tvFaqTitle: TextView = itemView.findViewById(R.id.tv_faq_title)
         private var tvFaqContent: TextView = itemView.findViewById(R.id.tv_faq_content)
-
-        override fun onBind(item: TTLScfPathModel?, position: Int) {
-            if (item == null) {
-                return
-            }
-
-            tvFaqTitle.text = item.title
-            tvFaqContent.text = item.content
-        }
-    }
-
-    // TODO: TALK_TO_AGENT TYPE
-    internal inner class FaqChildViewHolder(parent: ViewGroup?, itemLayoutId: Int) : TAPBaseViewHolder<TTLScfPathModel>(parent, itemLayoutId) {
-
-        private var clFaqChildContainer: ConstraintLayout = itemView.findViewById(R.id.cl_faq_child_container)
-        private var llButtonTalkToAgent: LinearLayout = itemView.findViewById(R.id.ll_button_talk_to_agent)
-        private var tvFaqChildTitle: TextView = itemView.findViewById(R.id.tv_faq_child_title)
-        private var tvFaqChildContent: TextView = itemView.findViewById(R.id.tv_faq_child_content)
+        private var vHeaderBackground: View = itemView.findViewById(R.id.v_header_background)
         private var vBottomDecoration: View = itemView.findViewById(R.id.v_bottom_decoration)
 
         override fun onBind(item: TTLScfPathModel?, position: Int) {
@@ -257,13 +244,70 @@ class TTLHomeAdapter(
                 return
             }
 
-            if (item.type == TALK_TO_AGENT) {
-                clFaqChildContainer.visibility = View.GONE
-                llButtonTalkToAgent.visibility = View.VISIBLE
+            if (containsHeader) {
+                // Home page FAQ parent
+                vHeaderBackground.visibility = View.GONE
+                ivButtonClose.visibility = View.GONE
+                tvLabelFaq.visibility = View.VISIBLE
+                ivButtonClose.setOnClickListener(null)
+                if (tvFaqContent.layoutParams is ViewGroup.MarginLayoutParams) {
+                    val layoutParams = tvFaqContent.layoutParams as ViewGroup.MarginLayoutParams
+                    layoutParams.topMargin = TAPUtils.dpToPx(itemView.context.resources, 12f)
+                    layoutParams.leftMargin = TAPUtils.dpToPx(itemView.context.resources, 4f)
+                    layoutParams.rightMargin = TAPUtils.dpToPx(itemView.context.resources, 4f)
+                    tvFaqContent.requestLayout()
+                }
             }
             else {
-                clFaqChildContainer.visibility = View.VISIBLE
+                // FAQ child details page
+                vHeaderBackground.visibility = View.VISIBLE
+                ivButtonClose.visibility = View.VISIBLE
+                tvLabelFaq.visibility = View.GONE
+                ivButtonClose.setOnClickListener {
+                    listener?.onCloseButtonTapped()
+                }
+                if (tvFaqContent.layoutParams is ViewGroup.MarginLayoutParams) {
+                    val layoutParams = tvFaqContent.layoutParams as ViewGroup.MarginLayoutParams
+                    layoutParams.topMargin = TAPUtils.dpToPx(itemView.context.resources, 4f)
+                    layoutParams.leftMargin = 0
+                    layoutParams.rightMargin = 0
+                    tvFaqContent.requestLayout()
+                }
+            }
+
+            tvFaqTitle.text = item.title
+            tvFaqContent.text = item.content
+
+            if (item.type == TALK_TO_AGENT) {
+                llButtonTalkToAgent.visibility = View.VISIBLE
+                llButtonTalkToAgent.setOnClickListener {
+                    listener?.onTalkToAgentButtonTapped(item)
+                }
+            }
+            else {
                 llButtonTalkToAgent.visibility = View.GONE
+                llButtonTalkToAgent.setOnClickListener(null)
+            }
+
+            if (bindingAdapterPosition >= itemCount - 1) {
+                vBottomDecoration.visibility = View.VISIBLE
+            }
+            else {
+                vBottomDecoration.visibility = View.GONE
+            }
+        }
+    }
+
+    internal inner class FaqChildViewHolder(parent: ViewGroup?, itemLayoutId: Int) : TAPBaseViewHolder<TTLScfPathModel>(parent, itemLayoutId) {
+
+        private var clFaqChildContainer: ConstraintLayout = itemView.findViewById(R.id.cl_faq_child_container)
+        private var tvFaqChildTitle: TextView = itemView.findViewById(R.id.tv_faq_child_title)
+        private var tvFaqChildContent: TextView = itemView.findViewById(R.id.tv_faq_child_content)
+        private var vBottomDecoration: View = itemView.findViewById(R.id.v_bottom_decoration)
+
+        override fun onBind(item: TTLScfPathModel?, position: Int) {
+            if (item == null) {
+                return
             }
 
             tvFaqChildTitle.text = item.title
@@ -277,9 +321,6 @@ class TTLHomeAdapter(
             }
 
             clFaqChildContainer.setOnClickListener {
-                listener?.onFaqChildTapped(item)
-            }
-            llButtonTalkToAgent.setOnClickListener {
                 listener?.onFaqChildTapped(item)
             }
         }

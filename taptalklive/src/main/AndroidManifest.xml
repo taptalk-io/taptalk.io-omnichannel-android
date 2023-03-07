@@ -12,6 +12,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".Activity.TTLFaqDetailsActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".Activity.TTLCaseListActivity"
             android:exported="true"
             android:screenOrientation="portrait" />

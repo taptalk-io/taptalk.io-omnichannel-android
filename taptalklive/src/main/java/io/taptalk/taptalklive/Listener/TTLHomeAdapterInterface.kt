@@ -28,4 +28,8 @@ interface TTLHomeAdapterInterface {
     fun onFaqChildTapped(scfPath: TTLScfPathModel) {
 
     }
+
+    fun onTalkToAgentButtonTapped(scfPath: TTLScfPathModel) {
+
+    }
 }

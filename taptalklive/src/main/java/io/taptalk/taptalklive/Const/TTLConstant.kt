@@ -54,6 +54,7 @@ class TTLConstant {
     object Extras {
         const val MESSAGE = "kTapTalkLiveExtrasMessage"
         const val SHOW_CLOSE_BUTTON = "kTapTalkLiveExtrasShowCloseButton"
+        const val SCF_PATH = "kTapTalkLiveExtrasScfPath"
     }
 
     object PreferenceKey {

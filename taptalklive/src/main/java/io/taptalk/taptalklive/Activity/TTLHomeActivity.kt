@@ -6,14 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
-import io.taptalk.TapTalk.Const.TAPDefaultConstant
 import io.taptalk.TapTalk.Helper.TAPBroadcastManager
-import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.TapTalk.View.Activity.TapUIChatActivity
@@ -24,7 +21,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTA
 import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
-import io.taptalk.taptalklive.adapter.TTLHomeAdapter
+import io.taptalk.taptalklive.adapter.TTLHomeFaqAdapter
 import io.taptalk.taptalklive.model.TTLCaseListModel
 import kotlinx.android.synthetic.main.ttl_activity_home.*
 
@@ -43,7 +40,7 @@ class TTLHomeActivity : TAPBaseActivity() {
         }
     }
 
-    private lateinit var adapter: TTLHomeAdapter
+    private lateinit var adapter: TTLHomeFaqAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +62,7 @@ class TTLHomeActivity : TAPBaseActivity() {
     }
 
     private fun initView() {
-        adapter = TTLHomeAdapter(this, generateAdapterItems(), adapterListener, true)
+        adapter = TTLHomeFaqAdapter(this, generateAdapterItems(), adapterListener, true)
         rv_home.adapter = adapter
         rv_home.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
             override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
@@ -119,6 +116,10 @@ class TTLHomeActivity : TAPBaseActivity() {
 
         override fun onCaseListTapped(caseList: TTLCaseListModel) {
             openChatRoom(caseList)
+        }
+
+        override fun onFaqChildTapped(scfPath: TTLScfPathModel) {
+            TTLFaqDetailsActivity.start(this@TTLHomeActivity, scfPath)
         }
     }
 
