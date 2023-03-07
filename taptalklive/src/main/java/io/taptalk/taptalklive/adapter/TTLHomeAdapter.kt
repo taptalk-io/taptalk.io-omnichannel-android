@@ -147,6 +147,8 @@ class TTLHomeAdapter(
     internal inner class HeaderViewHolder(parent: ViewGroup?, itemLayoutId: Int) : TAPBaseViewHolder<TTLScfPathModel>(parent, itemLayoutId) {
 
         private var flOr: FrameLayout = itemView.findViewById(R.id.fl_or)
+        private var clChannelAndDirectMessage: ConstraintLayout = itemView.findViewById(R.id.cl_channel_and_direct_message)
+        private var clCaseList: ConstraintLayout = itemView.findViewById(R.id.cl_case_list)
         private var llButtonMessageDirectly: LinearLayout = itemView.findViewById(R.id.ll_button_message_directly)
         private var llButtonNewMessage: LinearLayout = itemView.findViewById(R.id.ll_button_new_message)
         private var ivButtonClose: ImageView = itemView.findViewById(R.id.iv_button_close)
@@ -156,23 +158,21 @@ class TTLHomeAdapter(
         private var rvCaseList: TAPChatRecyclerView = itemView.findViewById(R.id.rv_case_list)
 
         override fun onBind(item: TTLScfPathModel?, position: Int) {
-            if (item == null) {
+            if (item == null || !containsHeader) {
                 return
             }
 
             if (filteredChannelLinks?.isEmpty() == true) {
                 // Hide channel links
-//                tvLabelChannel.visibility = View.GONE
-//                rvChannelLinks.visibility = View.GONE
-//                flOr.visibility = View.GONE
+                tvLabelChannel.visibility = View.GONE
+                rvChannelLinks.visibility = View.GONE
                 rvChannelLinks.adapter = null
                 rvChannelLinks.layoutManager = null
             }
             else {
                 // Show channel links
-//                tvLabelChannel.visibility = View.VISIBLE
-//                rvChannelLinks.visibility = View.VISIBLE
-//                flOr.visibility = View.VISIBLE
+                tvLabelChannel.visibility = View.VISIBLE
+                rvChannelLinks.visibility = View.VISIBLE
                 rvChannelLinks.adapter = channelLinksAdapter
                 rvChannelLinks.layoutManager = channelLinksLayoutManager
             }
@@ -182,14 +182,34 @@ class TTLHomeAdapter(
                 messageAnimator.supportsChangeAnimations = false
             }
             if (caseListArray?.isEmpty() == true) {
-                // Hide latest case list
+                // Hide latest message
+                clCaseList.visibility = View.GONE
+                llButtonMessageDirectly.visibility = View.VISIBLE
                 rvCaseList.adapter = null
                 rvCaseList.layoutManager = null
             }
             else {
-                // Show latest case list
+                // Show latest message
+                clCaseList.visibility = View.VISIBLE
+                llButtonMessageDirectly.visibility = View.GONE
                 rvCaseList.adapter = caseListAdapter
                 rvCaseList.layoutManager = caseListLayoutManager
+            }
+
+            if (rvChannelLinks.visibility == View.VISIBLE && llButtonMessageDirectly.visibility == View.VISIBLE) {
+                // Show channel links and message us directly button
+                clChannelAndDirectMessage.visibility = View.VISIBLE
+                flOr.visibility = View.VISIBLE
+            }
+            else if (rvChannelLinks.visibility == View.GONE && llButtonMessageDirectly.visibility == View.GONE) {
+                // Hide channel links and message us directly button
+                clChannelAndDirectMessage.visibility = View.GONE
+                flOr.visibility = View.GONE
+            }
+            else {
+                // Show either channel links or message us directly button
+                clChannelAndDirectMessage.visibility = View.VISIBLE
+                flOr.visibility = View.GONE
             }
 
             ivButtonClose.setOnClickListener {

@@ -162,7 +162,6 @@ class TTLHomeActivity : TAPBaseActivity() {
                 }
             }
         }
-
     }
 
     private fun registerBroadcastReceiver() {
