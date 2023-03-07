@@ -8,7 +8,7 @@ interface TTLHomeAdapterInterface {
 
     }
 
-    fun onChannelLinkSelected(channelLink: TTLChannelLinkModel?, position: Int) {
+    fun onChannelLinkSelected(channelLink: TTLChannelLinkModel, position: Int) {
 
     }
 

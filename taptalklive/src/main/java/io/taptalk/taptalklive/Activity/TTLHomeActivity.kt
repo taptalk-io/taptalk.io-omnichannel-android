@@ -3,12 +3,12 @@ package io.taptalk.taptalklive.Activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.util.Patterns
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
-import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.TapTalk.View.Activity.TapUIChatActivity
@@ -73,8 +73,8 @@ class TTLHomeActivity : TAPBaseActivity() {
             onBackPressed()
         }
 
-        override fun onChannelLinkSelected(channelLink: TTLChannelLinkModel?, position: Int) {
-            Log.e(">>>>>>>>>", "onChannelLinkSelected: ${TAPUtils.toJsonString(channelLink)}")
+        override fun onChannelLinkSelected(channelLink: TTLChannelLinkModel, position: Int) {
+            openChannelUrl(channelLink)
         }
 
         override fun onNewMessageButtonTapped() {
@@ -92,10 +92,6 @@ class TTLHomeActivity : TAPBaseActivity() {
 
     private fun openCreateCaseForm() {
         TTLCreateCaseFormActivity.start(this, true)
-//        val intent = Intent(this@TTLHomeActivity, TTLCreateCaseFormActivity::class.java)
-//        intent.putExtra(SHOW_CLOSE_BUTTON, true)
-//        startActivity(intent)
-//        overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay)
     }
 
     private fun openCaseList() {
@@ -113,5 +109,14 @@ class TTLHomeActivity : TAPBaseActivity() {
             room.type,
             room.color
         )
+    }
+
+    private fun openChannelUrl(channelLink: TTLChannelLinkModel) {
+        if (channelLink.url.isEmpty() || !Patterns.WEB_URL.matcher(channelLink.url).matches()) {
+            return
+        }
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(channelLink.url)
+        startActivity(intent)
     }
 }
