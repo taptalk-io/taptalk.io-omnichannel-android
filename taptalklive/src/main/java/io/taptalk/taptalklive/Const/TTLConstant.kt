@@ -42,6 +42,10 @@ class TTLConstant {
         const val REVIEW = 1001
     }
 
+    object Broadcast {
+        const val SCF_PATH_UPDATED = "kTapTalkLiveScfPathUpdated"
+    }
+
     object Extras {
         const val MESSAGE = "kTapTalkLiveExtrasMessage"
         const val SHOW_CLOSE_BUTTON = "kTapTalkLiveExtrasShowCloseButton"
@@ -60,6 +64,7 @@ class TTLConstant {
         const val TAPTALK_APP_KEY_SECRET = "kTapTalkLiveTapTalkAppKeySecret"
         const val TAPTALK_AUTH_TICKET = "kTapTalkLiveTapTalkAuthenticationTicket"
         const val CHANNEL_LINKS = "kTapTalkLiveChannelLinks"
+        const val SCF_PATH = "kTapTalkLiveScfPath"
         const val CASE_EXISTS = "kTapTalkLiveCaseExists"
     }
 }

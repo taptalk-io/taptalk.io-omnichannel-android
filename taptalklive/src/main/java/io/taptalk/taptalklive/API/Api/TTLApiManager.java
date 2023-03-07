@@ -15,6 +15,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetScfPathResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
@@ -170,6 +171,10 @@ public class TTLApiManager {
 
     public void requestTapTalkAuthTicket(Subscriber<TTLBaseResponse<TTLRequestTicketResponse>> subscriber) {
         execute(ttlApiService.requestTapTalkAuthTicket(), subscriber);
+    }
+
+    public void getScfPath(Subscriber<TTLBaseResponse<TTLGetScfPathResponse>> subscriber) {
+        execute(ttlApiService.getScfPath(), subscriber);
     }
 
     public void getTopicList(Subscriber<TTLBaseResponse<TTLGetTopicListResponse>> subscriber) {

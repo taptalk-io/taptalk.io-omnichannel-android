@@ -64,6 +64,11 @@
     <color name="ttlHomeInfoLabelColor">@color/ttlTextDark60</color>
     <color name="ttlHomeButtonLabelColor">@color/ttlColorPrimary</color>
 
+    <color name="ttlFaqTitleLabelColor">@color/tapColorTextDark</color>
+    <color name="ttlFaqContentLabelColor">@color/ttlTextDark60</color>
+    <color name="ttlFaqChildTitleLabelColor">@color/tapColorTextDark</color>
+    <color name="ttlFaqChildContentLabelColor">@color/ttlTextDark60</color>
+
     <color name="ttlFormLabelColor">@color/ttlColorTextDark</color>
     <color name="ttlFormTextFieldColor">@color/ttlColorTextDark</color>
     <color name="ttlFormTextFieldPlaceholderColor">@color/ttlTextDark40</color>

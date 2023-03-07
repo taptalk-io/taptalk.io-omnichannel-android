@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <View
         android:layout_width="match_parent"
@@ -22,8 +22,11 @@
         android:padding="16dp"
         android:src="@drawable/ttl_ic_close_grey"
         android:tint="@color/ttlIconNavBarCloseButton"
+        app:layout_constraintBottom_toTopOf="@id/tv_label_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:ignore="UseAppTint"
         tools:targetApi="lollipop" />
 
@@ -38,6 +41,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/ttl_home_title"
+        app:layout_constraintBottom_toTopOf="@id/tv_label_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_button_close" />
@@ -47,7 +51,9 @@
         style="@style/ttlHomeDescriptionLabelStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/ttl_home_description"
+        app:layout_constraintBottom_toTopOf="@id/cl_channel_and_direct_message"
         app:layout_constraintEnd_toEndOf="@id/tv_label_title"
         app:layout_constraintStart_toStartOf="@id/tv_label_title"
         app:layout_constraintTop_toBottomOf="@id/tv_label_title" />
@@ -56,13 +62,14 @@
         android:id="@+id/cl_channel_and_direct_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/ttl_bg_white_rounded_8dp"
         android:elevation="2dp"
         android:paddingStart="20dp"
         android:paddingTop="16dp"
         android:paddingEnd="20dp"
         android:paddingBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/cl_message"
         app:layout_constraintEnd_toEndOf="@id/tv_label_description"
         app:layout_constraintStart_toStartOf="@id/tv_label_description"
         app:layout_constraintTop_toBottomOf="@id/tv_label_description">
@@ -166,13 +173,14 @@
         android:id="@+id/cl_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/ttl_bg_white_rounded_8dp"
         android:elevation="2dp"
         android:paddingStart="12dp"
         android:paddingTop="16dp"
         android:paddingEnd="12dp"
         android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/cl_channel_and_direct_message"
         app:layout_constraintStart_toStartOf="@id/cl_channel_and_direct_message"
         app:layout_constraintTop_toBottomOf="@id/cl_channel_and_direct_message">

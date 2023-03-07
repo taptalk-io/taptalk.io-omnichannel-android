@@ -1,21 +1,28 @@
 package io.taptalk.taptalklive.Activity
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
+import io.taptalk.TapTalk.Const.TAPDefaultConstant
+import io.taptalk.TapTalk.Helper.TAPBroadcastManager
+import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.TapTalk.View.Activity.TapUIChatActivity
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
+import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.SCF_PATH_UPDATED
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
+import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.adapter.TTLHomeAdapter
 import io.taptalk.taptalklive.model.TTLCaseListModel
@@ -44,6 +51,12 @@ class TTLHomeActivity : TAPBaseActivity() {
 
         instanceKey = TAPTALK_INSTANCE_KEY
         initView()
+        registerBroadcastReceiver()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterBroadcastReceiver()
     }
 
     override fun onBackPressed() {
@@ -52,9 +65,7 @@ class TTLHomeActivity : TAPBaseActivity() {
     }
 
     private fun initView() {
-        val homeItemList = ArrayList<TTLScfPathModel>()
-        homeItemList.add(TTLScfPathModel())
-        adapter = TTLHomeAdapter(this, homeItemList, adapterListener)
+        adapter = TTLHomeAdapter(this, generateAdapterItems(), adapterListener, true)
         rv_home.adapter = adapter
         rv_home.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
             override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
@@ -66,6 +77,27 @@ class TTLHomeActivity : TAPBaseActivity() {
                 }
             }
         }
+    }
+
+    private fun generateAdapterItems(): ArrayList<TTLScfPathModel> {
+        val homeItemList = ArrayList<TTLScfPathModel>()
+
+        homeItemList.add(TTLScfPathModel()) // Empty item for header
+
+        val scfPath = TTLDataManager.getInstance().scfPath
+        if (scfPath != null) {
+            if (scfPath.childItems.isEmpty()) {
+                homeItemList.add(scfPath)
+            }
+            else {
+                val parentScf = scfPath.copy()
+                parentScf.childItems = ArrayList()
+                homeItemList.add(parentScf)
+                homeItemList.addAll(scfPath.childItems)
+            }
+        }
+
+        return homeItemList
     }
 
     private val adapterListener = object: TTLHomeAdapterInterface {
@@ -118,5 +150,26 @@ class TTLHomeActivity : TAPBaseActivity() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(channelLink.url)
         startActivity(intent)
+    }
+
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                SCF_PATH_UPDATED -> {
+                    if (this@TTLHomeActivity::adapter.isInitialized) {
+                        adapter.items = generateAdapterItems()
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun registerBroadcastReceiver() {
+        TAPBroadcastManager.register(this, broadcastReceiver, SCF_PATH_UPDATED)
+    }
+
+    private fun unregisterBroadcastReceiver() {
+        TAPBroadcastManager.unregister(this, broadcastReceiver)
     }
 }

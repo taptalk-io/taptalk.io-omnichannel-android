@@ -8,11 +8,13 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetScfPathResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel;
+import io.taptalk.taptalklive.API.Model.TTLScfPathModel;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
@@ -26,6 +28,7 @@ import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.CASE_EXISTS
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.CHANNEL_LINKS;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN_EXPIRY;
+import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.SCF_PATH;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_API_URL;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET;
@@ -106,6 +109,7 @@ public class TTLDataManager {
         removeTapTalkAppKeySecret();
         removeTapTalkAuthTicket();
         removeChannelLinks();
+        removeScfPath();
         removeActiveUserHasExistingCase();
     }
 
@@ -304,6 +308,22 @@ public class TTLDataManager {
     }
 
     /**
+     * SCF PATH
+     */
+
+    public TTLScfPathModel getScfPath() {
+        return Hawk.get(SCF_PATH, null);
+    }
+
+    public void saveScfPath(TTLScfPathModel scfPath) {
+        Hawk.put(SCF_PATH, scfPath);
+    }
+
+    public void removeScfPath() {
+        removePreference(SCF_PATH);
+    }
+
+    /**
      * USER HAS EXISTING CASE
      */
     public boolean activeUserHasExistingCase() {
@@ -335,6 +355,10 @@ public class TTLDataManager {
 
     public void requestTapTalkAuthTicket(TTLDefaultDataView<TTLRequestTicketResponse> view) {
         TTLApiManager.getInstance().requestTapTalkAuthTicket(new TTLDefaultSubscriber<>(view));
+    }
+
+    public void getScfPath(TTLDefaultDataView<TTLGetScfPathResponse> view) {
+        TTLApiManager.getInstance().getScfPath(new TTLDefaultSubscriber<>(view));
     }
 
     public void getTopicList(TTLDefaultDataView<TTLGetTopicListResponse> view) {

@@ -32,6 +32,8 @@
     <string name="ttl_submit_review">Kirim ulasan</string>
     <string name="ttl_review_submitted">Ulasan terkirim</string>
     <string name="ttl_successfully_logged_in">Berhasil log in.</string>
+    <string name="ttl_mark_as_solved">Akhiri percakapan</string>
+    <string name="ttl_faq">FAQ</string>
 
     <string name="ttl_error">Error</string>
     <string name="ttl_error_message_general">Terjadi kesalahan, silakan coba lagi.</string>
@@ -54,5 +56,4 @@
     <string name="ttl_close_case">Tutup percakapan</string>
     <string name="ttl_close_case_dialog_message">Percakapan ini akan ditutup dan Anda tidak akan dapat mengirim pesan atau menerima bantuan terkait kasus ini. Apa Anda yakin ingin melanjutkan?</string>
 
-    <string name="ttl_mark_as_solved">Akhiri percakapan</string>
 </resources>

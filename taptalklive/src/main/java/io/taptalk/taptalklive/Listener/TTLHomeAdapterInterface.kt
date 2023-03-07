@@ -1,6 +1,7 @@
 package io.taptalk.taptalklive.Listener
 
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
+import io.taptalk.taptalklive.API.Model.TTLScfPathModel
 import io.taptalk.taptalklive.model.TTLCaseListModel
 
 interface TTLHomeAdapterInterface {
@@ -21,6 +22,10 @@ interface TTLHomeAdapterInterface {
     }
 
     fun onCaseListTapped(caseList: TTLCaseListModel) {
+
+    }
+
+    fun onFaqChildTapped(scfPath: TTLScfPathModel) {
 
     }
 }
