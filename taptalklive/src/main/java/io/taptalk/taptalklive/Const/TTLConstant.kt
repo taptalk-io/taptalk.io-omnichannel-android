@@ -38,6 +38,11 @@ class TTLConstant {
         const val INSTAGRAM = "instagram"
     }
 
+    object ScfPathType {
+        const val QNA = "qna"
+        const val TALK_TO_AGENT = "talk_to_agent"
+    }
+
     object RequestCode {
         const val REVIEW = 1001
     }

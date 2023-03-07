@@ -22,6 +22,7 @@ import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
+import io.taptalk.taptalklive.Const.TTLConstant.ScfPathType.TALK_TO_AGENT
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.Listener.TTLItemListInterface
@@ -246,6 +247,7 @@ class TTLHomeAdapter(
     internal inner class FaqChildViewHolder(parent: ViewGroup?, itemLayoutId: Int) : TAPBaseViewHolder<TTLScfPathModel>(parent, itemLayoutId) {
 
         private var clFaqChildContainer: ConstraintLayout = itemView.findViewById(R.id.cl_faq_child_container)
+        private var llButtonTalkToAgent: LinearLayout = itemView.findViewById(R.id.ll_button_talk_to_agent)
         private var tvFaqChildTitle: TextView = itemView.findViewById(R.id.tv_faq_child_title)
         private var tvFaqChildContent: TextView = itemView.findViewById(R.id.tv_faq_child_content)
         private var vBottomDecoration: View = itemView.findViewById(R.id.v_bottom_decoration)
@@ -253,6 +255,15 @@ class TTLHomeAdapter(
         override fun onBind(item: TTLScfPathModel?, position: Int) {
             if (item == null) {
                 return
+            }
+
+            if (item.type == TALK_TO_AGENT) {
+                clFaqChildContainer.visibility = View.GONE
+                llButtonTalkToAgent.visibility = View.VISIBLE
+            }
+            else {
+                clFaqChildContainer.visibility = View.VISIBLE
+                llButtonTalkToAgent.visibility = View.GONE
             }
 
             tvFaqChildTitle.text = item.title
@@ -266,6 +277,9 @@ class TTLHomeAdapter(
             }
 
             clFaqChildContainer.setOnClickListener {
+                listener?.onFaqChildTapped(item)
+            }
+            llButtonTalkToAgent.setOnClickListener {
                 listener?.onFaqChildTapped(item)
             }
         }

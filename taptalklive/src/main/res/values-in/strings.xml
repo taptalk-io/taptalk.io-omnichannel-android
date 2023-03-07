@@ -21,6 +21,7 @@
     <string name="ttl_enter_your_message">Masukkan pesan</string>
     <string name="ttl_send_message">Kirim Pesan</string>
     <string name="ttl_message_us_directly">Kirim Pesan Langsung</string>
+    <string name="ttl_talk_to_agent">Kirim Pesan ke Agent</string>
     <string name="ttl_new_conversation">Percakapan Baru</string>
     <string name="ttl_your_messages">Pesan Anda</string>
     <string name="ttl_see_all_messages">Lihat Semua Pesan</string>

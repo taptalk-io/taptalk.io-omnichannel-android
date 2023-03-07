@@ -21,6 +21,7 @@
     <string name="ttl_enter_your_message">Enter your message</string>
     <string name="ttl_send_message">Send Message</string>
     <string name="ttl_message_us_directly">Message Us Directly</string>
+    <string name="ttl_talk_to_agent">Talk to Agent</string>
     <string name="ttl_new_conversation">New Conversation</string>
     <string name="ttl_your_messages">Your messages</string>
     <string name="ttl_see_all_messages">See All Messages</string>
