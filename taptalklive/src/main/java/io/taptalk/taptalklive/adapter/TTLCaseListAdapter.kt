@@ -22,9 +22,9 @@ import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Manager.TAPChatManager
 import io.taptalk.TapTalk.Manager.TapUI
-import io.taptalk.TapTalk.R
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
+import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.model.TTLCaseListModel
 
 class TTLCaseListAdapter(
@@ -50,7 +50,7 @@ class TTLCaseListAdapter(
         parent: ViewGroup,
         viewType: Int
     ): TAPBaseViewHolder<TTLCaseListModel> {
-        return CaseListViewHolder(parent, R.layout.tap_cell_user_room)
+        return CaseListViewHolder(parent, R.layout.ttl_cell_case_list)
     }
 
     internal inner class CaseListViewHolder(parent: ViewGroup?, itemLayoutId: Int) : TAPBaseViewHolder<TTLCaseListModel>(parent, itemLayoutId) {

@@ -21,7 +21,7 @@ class TTLCaseListActivity : TAPBaseActivity() {
             }
             context.startActivity(intent)
             if (context is Activity) {
-                context.overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay)
+                context.overridePendingTransition(R.anim.tap_slide_left, R.anim.tap_stay)
             }
         }
     }
@@ -37,12 +37,12 @@ class TTLCaseListActivity : TAPBaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_down)
+        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_right)
     }
 
     private fun initView() {
         iv_button_close.setOnClickListener { onBackPressed() }
-        ll_button_new_message.setOnClickListener { openCreateCaseForm() }
+        iv_button_new_message.setOnClickListener { openCreateCaseForm() }
     }
 
     private fun initFragment() {
