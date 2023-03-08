@@ -1,14 +1,19 @@
 package io.taptalk.taptalklive.Activity
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
+import io.taptalk.TapTalk.Helper.TAPBroadcastManager
+import io.taptalk.TapTalk.Manager.TapCoreMessageManager
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
+import io.taptalk.taptalklive.Const.TTLConstant
+import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.NEW_CASE_CREATED
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SCF_PATH
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
@@ -37,6 +42,12 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
 
         instanceKey = TAPTALK_INSTANCE_KEY
         initView()
+        registerBroadcastReceiver()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterBroadcastReceiver()
     }
 
     override fun onBackPressed() {
@@ -54,6 +65,25 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
                 }
                 catch (e: IndexOutOfBoundsException) {
                     e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun registerBroadcastReceiver() {
+        TAPBroadcastManager.register(this, broadcastReceiver, NEW_CASE_CREATED)
+    }
+
+    private fun unregisterBroadcastReceiver() {
+        TAPBroadcastManager.unregister(this, broadcastReceiver)
+    }
+
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                NEW_CASE_CREATED -> {
+                    finish()
+                    overridePendingTransition(R.anim.tap_stay, R.anim.tap_stay)
                 }
             }
         }
@@ -87,5 +117,13 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
         override fun onFaqChildTapped(scfPath: TTLScfPathModel) {
             start(this@TTLFaqDetailsActivity, scfPath)
         }
+
+        override fun onTalkToAgentButtonTapped(scfPath: TTLScfPathModel) {
+            openCreateCaseForm()
+        }
+    }
+
+    private fun openCreateCaseForm() {
+        TTLCreateCaseFormActivity.start(this, true)
     }
 }

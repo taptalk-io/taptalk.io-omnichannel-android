@@ -132,6 +132,10 @@ class TTLHomeActivity : TAPBaseActivity() {
         override fun onFaqChildTapped(scfPath: TTLScfPathModel) {
             TTLFaqDetailsActivity.start(this@TTLHomeActivity, scfPath)
         }
+
+        override fun onTalkToAgentButtonTapped(scfPath: TTLScfPathModel) {
+            openCreateCaseForm()
+        }
     }
 
     private fun openCreateCaseForm() {
@@ -178,9 +182,7 @@ class TTLHomeActivity : TAPBaseActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 SCF_PATH_UPDATED -> {
-                    if (this@TTLHomeActivity::adapter.isInitialized) {
-                        adapter.items = generateAdapterItems()
-                    }
+                    adapter.items = generateAdapterItems()
                 }
             }
         }

@@ -10,6 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
@@ -24,8 +25,11 @@ import io.taptalk.TapTalk.Manager.TapCoreChatRoomManager
 import io.taptalk.TapTalk.Manager.TapUI
 import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.taptalklive.API.Model.ResponseModel.*
+import io.taptalk.taptalklive.API.Model.TTLCaseModel
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
+import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.NEW_CASE_CREATED
+import io.taptalk.taptalklive.Const.TTLConstant.Extras.CASE_DETAILS
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLCommonListener
@@ -422,9 +426,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private val createCaseDataView = object : TTLDefaultDataView<TTLCreateCaseResponse>() {
         override fun onSuccess(response: TTLCreateCaseResponse?) {
             if (!response?.caseResponse?.tapTalkXCRoomID.isNullOrEmpty()) {
-                openCaseChatRoom(response?.caseResponse?.tapTalkXCRoomID!!)
+                openCaseChatRoom(response?.caseResponse)
             } else {
                 onError(getString(R.string.ttl_error_xc_room_id_empty))
+                sendCaseCreatedBroadcast(response?.caseResponse)
             }
         }
 
@@ -437,15 +442,16 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun openCaseChatRoom(tapTalkXCRoomID: String) {
+    private fun openCaseChatRoom(caseModel: TTLCaseModel?) {
         TTLDataManager.getInstance().saveActiveUserHasExistingCase(true)
-        TapCoreChatRoomManager.getInstance(TAPTALK_INSTANCE_KEY).getChatRoomByXcRoomID(tapTalkXCRoomID, object : TapCoreGetRoomListener() {
+        TapCoreChatRoomManager.getInstance(TAPTALK_INSTANCE_KEY).getChatRoomByXcRoomID(caseModel?.tapTalkXCRoomID, object : TapCoreGetRoomListener() {
             override fun onSuccess(roomModel: TAPRoomModel?) {
                 if (vm.openRoomListOnComplete) {
 //                    TapUI.getInstance(TAPTALK_INSTANCE_KEY).openRoomList(this@TTLCreateCaseFormActivity)
                     TTLCaseListActivity.start(this@TTLCreateCaseFormActivity);
                 }
                 TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                sendCaseCreatedBroadcast(caseModel)
                 finish()
             }
 
@@ -453,6 +459,12 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 showDefaultErrorDialog(errorMessage)
             }
         })
+    }
+
+    private fun sendCaseCreatedBroadcast(caseModel: TTLCaseModel?) {
+        val intent = Intent(NEW_CASE_CREATED)
+        intent.putExtra(CASE_DETAILS, caseModel)
+        LocalBroadcastManager.getInstance(this@TTLCreateCaseFormActivity).sendBroadcast(intent)
     }
 
     private fun showDefaultErrorDialog(errorMessage: String?) {

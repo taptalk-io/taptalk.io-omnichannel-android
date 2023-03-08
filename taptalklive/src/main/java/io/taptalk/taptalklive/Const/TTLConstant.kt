@@ -49,12 +49,14 @@ class TTLConstant {
 
     object Broadcast {
         const val SCF_PATH_UPDATED = "kTapTalkLiveScfPathUpdated"
+        const val NEW_CASE_CREATED = "kTapTalkLiveNewCaseCreated"
     }
 
     object Extras {
         const val MESSAGE = "kTapTalkLiveExtrasMessage"
         const val SHOW_CLOSE_BUTTON = "kTapTalkLiveExtrasShowCloseButton"
         const val SCF_PATH = "kTapTalkLiveExtrasScfPath"
+        const val CASE_DETAILS = "kTapTalkLiveCaseDetails"
     }
 
     object PreferenceKey {
