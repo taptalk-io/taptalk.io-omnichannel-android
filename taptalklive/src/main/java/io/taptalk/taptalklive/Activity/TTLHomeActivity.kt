@@ -6,14 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
+import androidx.recyclerview.widget.SimpleItemAnimator
 import io.taptalk.TapTalk.Helper.TAPBroadcastManager
 import io.taptalk.TapTalk.Listener.TapCommonListener
+import io.taptalk.TapTalk.Listener.TapCoreMessageListener
+import io.taptalk.TapTalk.Manager.TapCoreMessageManager
 import io.taptalk.TapTalk.Manager.TapCoreRoomListManager
+import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.TapTalk.View.Activity.TapUIChatActivity
@@ -51,13 +54,13 @@ class TTLHomeActivity : TAPBaseActivity() {
 
         instanceKey = TAPTALK_INSTANCE_KEY
         initView()
-        registerBroadcastReceiver()
+        initListeners()
         fetchNewMessages()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterBroadcastReceiver()
+        removeListeners()
     }
 
     override fun onBackPressed() {
@@ -77,6 +80,10 @@ class TTLHomeActivity : TAPBaseActivity() {
                     e.printStackTrace()
                 }
             }
+        }
+        val messageAnimator = rv_home.itemAnimator as SimpleItemAnimator?
+        if (null != messageAnimator) {
+            messageAnimator.supportsChangeAnimations = false
         }
     }
 
@@ -157,6 +164,16 @@ class TTLHomeActivity : TAPBaseActivity() {
         startActivity(intent)
     }
 
+    private fun initListeners() {
+        TAPBroadcastManager.register(this, broadcastReceiver, SCF_PATH_UPDATED)
+        TapCoreMessageManager.getInstance(instanceKey).addMessageListener(messageListener)
+    }
+
+    private fun removeListeners() {
+        TAPBroadcastManager.unregister(this, broadcastReceiver)
+        TapCoreMessageManager.getInstance(instanceKey).removeMessageListener(messageListener)
+    }
+
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
@@ -169,24 +186,34 @@ class TTLHomeActivity : TAPBaseActivity() {
         }
     }
 
-    private fun registerBroadcastReceiver() {
-        TAPBroadcastManager.register(this, broadcastReceiver, SCF_PATH_UPDATED)
-    }
-
-    private fun unregisterBroadcastReceiver() {
-        TAPBroadcastManager.unregister(this, broadcastReceiver)
-    }
-
     private fun fetchNewMessages() {
         if (!TTLDataManager.getInstance().checkActiveUserExists()) {
-            Log.e(">>>>>>>>>>>>>>", "fetchNewMessages no active user")
             return
         }
         TapCoreRoomListManager.getInstance(instanceKey).fetchNewMessageToDatabase(object : TapCommonListener() {
             override fun onSuccess(successMessage: String?) {
-                Log.e(">>>>>>>>>>>>>>", "fetchNewMessages onSuccess: $successMessage")
                 adapter.refreshLatestCaseList()
             }
         })
+    }
+
+    private val messageListener = object : TapCoreMessageListener() {
+        override fun onReceiveNewMessage(message: TAPMessageModel?) {
+            processNewMessageFromSocket(message)
+        }
+
+        override fun onReceiveUpdatedMessage(message: TAPMessageModel?) {
+            processNewMessageFromSocket(message)
+        }
+
+        override fun onMessageDeleted(message: TAPMessageModel?) {
+            processNewMessageFromSocket(message)
+        }
+    }
+
+    private fun processNewMessageFromSocket(message: TAPMessageModel?) {
+        if (message != null && message.isHidden == false) {
+            adapter.setLastMessage(message)
+        }
     }
 }

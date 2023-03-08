@@ -2,7 +2,6 @@ package io.taptalk.taptalklive.adapter
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -20,6 +19,7 @@ import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView
 import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
+import io.taptalk.TapTalk.Manager.TAPChatManager
 import io.taptalk.TapTalk.Manager.TAPDataManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
@@ -334,10 +334,6 @@ class TTLHomeFaqAdapter(
                     }
                     caseListArray?.clear()
                     caseListArray?.add(caseList)
-                    Log.e(">>>>>>>>>>>>>>>", "onSelectedRoomList: ${entity.roomName} - ${entity.body}")
-                }
-                else {
-                    Log.e(">>>>>>>>>>>>>>>", "onSelectedRoomList: empty")
                 }
 
                 context.runOnUiThread {
@@ -345,5 +341,65 @@ class TTLHomeFaqAdapter(
                 }
             }
         })
+    }
+
+    fun setLastMessage(message: TAPMessageModel) {
+        if (context !is Activity) {
+            return
+        }
+        if (caseListArray?.isNotEmpty() == true && caseListArray!![0].lastMessage.room.roomID == message.room.roomID) {
+            // Received message in the same room as previous case list
+            val previousCaseList = caseListArray!![0]
+            val previousMessage = caseListArray!![0].lastMessage
+            if (previousMessage.localID == message.localID) {
+                // Update case list's last message data
+                previousMessage.updateValue(message)
+            }
+            else if (previousMessage.created < message.created) {
+                // Update case list's last message with the new message from socket
+                previousCaseList.lastMessage = message
+
+                val activeUser = TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).activeUser
+                if (message.user.userID != activeUser.userID) {
+                    // Add unread count by 1 if sender is not self
+                    previousCaseList.unreadCount++
+
+                    if (TAPUtils.isActiveUserMentioned(message, activeUser)) {
+                        // Show mention badge if user is mentioned
+                        previousCaseList.unreadMentions++
+                    }
+                }
+
+            }
+            context.runOnUiThread {
+                notifyItemChanged(HEADER)
+            }
+        }
+        else {
+            // Received new message in a different case list
+            val caseList = TTLCaseListModel(message)
+            TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).getUnreadCountPerRoom(
+                message.room.roomID,
+                object: TAPDatabaseListener<TAPMessageEntity>() {
+                    override fun onCountedUnreadCount(
+                        roomID: String?,
+                        unreadCount: Int,
+                        mentionCount: Int
+                    ) {
+                        if (roomID == message.room.roomID) {
+                            caseList.unreadCount = unreadCount
+                            caseList.unreadMentions = mentionCount
+                        }
+
+                        caseListArray?.clear()
+                        caseListArray?.add(caseList)
+
+                        context.runOnUiThread {
+                            notifyItemChanged(HEADER)
+                        }
+                    }
+                }
+            )
+        }
     }
 }
