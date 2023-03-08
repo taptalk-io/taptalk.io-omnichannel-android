@@ -1,6 +1,8 @@
 package io.taptalk.taptalklive.adapter
 
+import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -32,7 +34,7 @@ import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.model.TTLCaseListModel
 
 class TTLHomeFaqAdapter(
-    context: Context,
+    val context: Context,
     itemList: List<TTLScfPathModel>,
     val listener: TTLHomeAdapterInterface?,
     val containsHeader: Boolean
@@ -47,12 +49,12 @@ class TTLHomeFaqAdapter(
     private var filteredChannelLinks: ArrayList<TTLChannelLinkModel>? = null
     private var channelLinksAdapter: TTLChannelLinksAdapter? = null
     private var channelLinksListener: TTLItemListInterface? = null
-    private var channelLinksLayoutManager: GridLayoutManager? = null
+//    private var channelLinksLayoutManager: GridLayoutManager? = null
 
     private var caseListArray: ArrayList<TTLCaseListModel>? = null
     private var caseListAdapter: TTLCaseListAdapter? = null
     private var caseListListener: TTLCaseListAdapter.TTLCaseListInterface? = null
-    private var caseListLayoutManager: LinearLayoutManager? = null
+//    private var caseListLayoutManager: LinearLayoutManager? = null
 
     init {
         items = itemList
@@ -74,15 +76,6 @@ class TTLHomeFaqAdapter(
                 }
             }
             channelLinksAdapter = TTLChannelLinksAdapter(filteredChannelLinks!!, channelLinksListener)
-            channelLinksLayoutManager = object : GridLayoutManager(context, 5) {
-                override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
-                    try {
-                        super.onLayoutChildren(recycler, state)
-                    } catch (e: IndexOutOfBoundsException) {
-                        e.printStackTrace()
-                    }
-                }
-            }
 
             // Setup case list
             caseListArray = ArrayList()
@@ -94,36 +87,7 @@ class TTLHomeFaqAdapter(
                 }
             }
             caseListAdapter = TTLCaseListAdapter(caseListArray!!, Glide.with(context), caseListListener!!)
-            caseListLayoutManager = object : LinearLayoutManager(context, VERTICAL, false) {
-                override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
-                    try {
-                        super.onLayoutChildren(recycler, state)
-                    } catch (e: IndexOutOfBoundsException) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-            TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).getRoomList(true, object: TAPDatabaseListener<TAPMessageEntity>() {
-                override fun onSelectedRoomList(
-                    entities: MutableList<TAPMessageEntity>?,
-                    unreadMap: MutableMap<String, Int>?,
-                    mentionMap: MutableMap<String, Int>?
-                ) {
-                    if (!entities.isNullOrEmpty()) {
-                        val entity = entities[0]
-                        val message = TAPMessageModel.fromMessageEntity(entity)
-                        val caseList = TTLCaseListModel(message)
-                        if (null != unreadMap && null != unreadMap[entity.roomID]) {
-                            caseList.unreadCount = unreadMap[entity.roomID]!!
-                        }
-                        if (null != mentionMap && null != mentionMap[entity.roomID]) {
-                            caseList.unreadMentions = mentionMap[entity.roomID]!!
-                        }
-                        caseListArray!!.add(caseList)
-                    }
-                    notifyItemChanged(HEADER)
-                }
-            })
+            refreshLatestCaseList()
         }
     }
 
@@ -176,7 +140,18 @@ class TTLHomeFaqAdapter(
                 tvLabelChannel.visibility = View.VISIBLE
                 rvChannelLinks.visibility = View.VISIBLE
                 rvChannelLinks.adapter = channelLinksAdapter
-                rvChannelLinks.layoutManager = channelLinksLayoutManager
+                if (rvChannelLinks.layoutManager == null) {
+                    rvChannelLinks.layoutManager = object : GridLayoutManager(context, 5) {
+                        override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
+                            try {
+                                super.onLayoutChildren(recycler, state)
+                            }
+                            catch (e: IndexOutOfBoundsException) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                }
             }
 
             val messageAnimator = rvCaseList.itemAnimator as SimpleItemAnimator?
@@ -195,7 +170,18 @@ class TTLHomeFaqAdapter(
                 clCaseList.visibility = View.VISIBLE
                 llButtonMessageDirectly.visibility = View.GONE
                 rvCaseList.adapter = caseListAdapter
-                rvCaseList.layoutManager = caseListLayoutManager
+                if (rvCaseList.layoutManager == null) {
+                    rvCaseList.layoutManager = object : LinearLayoutManager(context, VERTICAL, false) {
+                        override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
+                            try {
+                                super.onLayoutChildren(recycler, state)
+                            }
+                            catch (e: IndexOutOfBoundsException) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                }
             }
 
             if (rvChannelLinks.visibility == View.VISIBLE && llButtonMessageDirectly.visibility == View.VISIBLE) {
@@ -324,5 +310,40 @@ class TTLHomeFaqAdapter(
                 listener?.onFaqChildTapped(item)
             }
         }
+    }
+
+    fun refreshLatestCaseList() {
+        if (context !is Activity) {
+            return
+        }
+        TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).getRoomList(true, object: TAPDatabaseListener<TAPMessageEntity>() {
+            override fun onSelectedRoomList(
+                entities: MutableList<TAPMessageEntity>?,
+                unreadMap: MutableMap<String, Int>?,
+                mentionMap: MutableMap<String, Int>?
+            ) {
+                if (!entities.isNullOrEmpty()) {
+                    val entity = entities[0]
+                    val message = TAPMessageModel.fromMessageEntity(entity)
+                    val caseList = TTLCaseListModel(message)
+                    if (null != unreadMap && null != unreadMap[entity.roomID]) {
+                        caseList.unreadCount = unreadMap[entity.roomID]!!
+                    }
+                    if (null != mentionMap && null != mentionMap[entity.roomID]) {
+                        caseList.unreadMentions = mentionMap[entity.roomID]!!
+                    }
+                    caseListArray?.clear()
+                    caseListArray?.add(caseList)
+                    Log.e(">>>>>>>>>>>>>>>", "onSelectedRoomList: ${entity.roomName} - ${entity.body}")
+                }
+                else {
+                    Log.e(">>>>>>>>>>>>>>>", "onSelectedRoomList: empty")
+                }
+
+                context.runOnUiThread {
+                    notifyItemChanged(HEADER)
+                }
+            }
+        })
     }
 }
