@@ -140,50 +140,6 @@ public class TapTalkLive {
         // Get project configs for TapTalk SDK
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
 
-        if (TTLDataManager.getInstance().checkActiveUserExists() && !isGetCaseListCompleted) {
-            // Check if user has active case
-            TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
-                @Override
-                public void onSuccess(TTLGetCaseListResponse response) {
-                    TTLUtil.processGetCaseListResponse(response, new TapCommonListener() {
-                        @Override
-                        public void onSuccess(String successMessage) {
-                            onFinish();
-                        }
-
-                        @Override
-                        public void onError(String errorCode, String errorMessage) {
-                            onFinish();
-                        }
-                    });
-                }
-
-                @Override
-                public void onError(TTLErrorModel error) {
-                    onFinish();
-                }
-
-                @Override
-                public void onError(String errorMessage) {
-                    onFinish();
-                }
-
-                private void onFinish() {
-                    isGetCaseListCompleted = true;
-                    if (isTapTalkInitialized) {
-                        isTapTalkLiveInitialized = true;
-                        tapTalkLiveListener.onInitializationCompleted();
-                    }
-                }
-            });
-        } else {
-            isGetCaseListCompleted = true;
-            if (isTapTalkInitialized) {
-                isTapTalkLiveInitialized = true;
-                tapTalkLiveListener.onInitializationCompleted();
-            }
-        }
-
         fetchScfPath();
         // TODO: TEST DUMMY DATA
         TTLScfPathModel dummyScf = TAPUtils.fromJSON(new TypeReference<>() {
@@ -305,6 +261,8 @@ public class TapTalkLive {
                     isTapTalkInitialized = true;
                     if (isGetCaseListCompleted) {
                         tapTalkLiveListener.onInitializationCompleted();
+                    } else {
+                        getCaseList();
                     }
                 }
 
@@ -313,12 +271,62 @@ public class TapTalkLive {
                     isTapTalkInitialized = true;
                     if (isGetCaseListCompleted) {
                         tapTalkLiveListener.onInitializationCompleted();
+                    } else {
+                        getCaseList();
                     }
                 }
             });
         } else {
             isTapTalkInitialized = true;
             if (isGetCaseListCompleted) {
+                tapTalkLiveListener.onInitializationCompleted();
+            } else {
+                getCaseList();
+            }
+        }
+    }
+
+    private void getCaseList() {
+        if (TTLDataManager.getInstance().checkActiveUserExists() && !isGetCaseListCompleted) {
+            // Check if user has active case
+            TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
+                @Override
+                public void onSuccess(TTLGetCaseListResponse response) {
+                    TTLUtil.processGetCaseListResponse(response, new TapCommonListener() {
+                        @Override
+                        public void onSuccess(String successMessage) {
+                            onFinish();
+                        }
+
+                        @Override
+                        public void onError(String errorCode, String errorMessage) {
+                            onFinish();
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(TTLErrorModel error) {
+                    onFinish();
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    onFinish();
+                }
+
+                private void onFinish() {
+                    isGetCaseListCompleted = true;
+                    if (isTapTalkInitialized) {
+                        isTapTalkLiveInitialized = true;
+                        tapTalkLiveListener.onInitializationCompleted();
+                    }
+                }
+            });
+        } else {
+            isGetCaseListCompleted = true;
+            if (isTapTalkInitialized) {
+                isTapTalkLiveInitialized = true;
                 tapTalkLiveListener.onInitializationCompleted();
             }
         }
