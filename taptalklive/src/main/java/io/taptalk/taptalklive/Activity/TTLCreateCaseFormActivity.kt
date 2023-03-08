@@ -21,6 +21,7 @@ import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
 import io.taptalk.TapTalk.Listener.TapCoreGetRoomListener
+import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
 import io.taptalk.TapTalk.Manager.TapCoreChatRoomManager
 import io.taptalk.TapTalk.Manager.TapUI
 import io.taptalk.TapTalk.Model.TAPRoomModel
@@ -35,7 +36,6 @@ import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTA
 import io.taptalk.taptalklive.Listener.TTLCommonListener
 import io.taptalk.taptalklive.Listener.TTLItemListInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
-import io.taptalk.taptalklive.Manager.TTLNetworkStateManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
@@ -47,7 +47,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private lateinit var vm: TTLCreateCaseViewModel
     private lateinit var glide: RequestManager
     private lateinit var topicAdapter: TTLItemDropdownAdapter
-//    private lateinit var topicSpinnerAdapter: ArrayAdapter<String>
 
     private var selectedTopicIndex = -1
 
@@ -72,6 +71,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         glide = Glide.with(this)
         initViewModel()
         initView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -113,7 +116,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
         et_message.onFocusChangeListener = formFocusListener
 
-        initTopicSpinnerAdapter()
+        initTopics()
 
         ll_button_send_message.setOnClickListener { validateSendMessage() }
     }
@@ -137,13 +140,8 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun initTopicSpinnerAdapter() {
-//        val spinnerPlaceholder = getString(R.string.ttl_select_topic)
-//        vm.topics.add(spinnerPlaceholder)
-
-//        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_select_topic_loading)
-
-        getTopicList()
+    private fun initTopics() {
+        fetchTopicList(true)
 
         topicAdapter = TTLItemDropdownAdapter(
             vm.topics,
@@ -171,83 +169,69 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         rv_topic_dropdown.adapter = topicAdapter
         rv_topic_dropdown.layoutManager = layoutManager
         rv_topic_dropdown.setMaxHeight(TAPUtils.dpToPx(resources, 144f))
-
-//        topicSpinnerAdapter = object : ArrayAdapter<String>(
-//                this, R.layout.ttl_cell_default_spinner_item, vm.topics) {
-//            override fun isEnabled(position: Int): Boolean {
-//                return vm.topics[position] != spinnerPlaceholder
-//            }
-//        }
-
-//        val spinnerAdapterListener = object : OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-//                val tv = view as TextView
-//                if (vm.topics[position] == spinnerPlaceholder) {
-//                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.ttlFormTextFieldPlaceholderColor))
-//                } else {
-//                    tv.setTextColor(ContextCompat.getColor(this@TTLCreateCaseFormActivity, R.color.ttlFormTextFieldColor))
-//                    if (vm.topics.contains(spinnerPlaceholder)) {
-//                        vm.topics.remove(spinnerPlaceholder)
-//                        sp_select_topic.setSelection(position - 1)
-//                        topicSpinnerAdapter.notifyDataSetChanged()
-//                    }
-//                }
-//            }
-//
-//            override fun onNothingSelected(p0: AdapterView<*>?) {
-//
-//            }
-//        }
-
-//        topicSpinnerAdapter.setDropDownViewResource(R.layout.ttl_cell_default_spinner_dropdown_item)
-//        sp_select_topic.adapter = topicSpinnerAdapter
-//        sp_select_topic.onItemSelectedListener = spinnerAdapterListener
         cl_topic.setOnClickListener {
             showTopicDropdown()
         }
     }
 
-    private fun getTopicList() {
+    private fun fetchTopicList(getFromPreference: Boolean) {
+        if (getFromPreference) {
+            val topics = TTLDataManager.getInstance().topics
+            if (!topics.isNullOrEmpty()) {
+                for (topic in topics) {
+                    vm.topicsMap[topic.name] = topic
+                }
+                vm.topics.clear()
+                vm.topics.addAll(vm.topicsMap.keys)
+
+                showTopicLoadingFinished()
+            }
+        }
         TTLDataManager.getInstance().getTopicList(topicListDataView)
     }
 
     private val topicListDataView = object : TTLDefaultDataView<TTLGetTopicListResponse>() {
         override fun onSuccess(response: TTLGetTopicListResponse?) {
             if (null != response) {
+                TTLDataManager.getInstance().saveTopics(response.topics)
                 for (topic in response.topics) {
                     vm.topicsMap[topic.name] = topic
                 }
+                vm.topics.clear()
                 vm.topics.addAll(vm.topicsMap.keys)
                 topicAdapter.items = vm.topics
 
-//                topicSpinnerAdapter.notifyDataSetChanged()
-
-//                iv_select_topic_loading.clearAnimation()
-                cl_topic.background = ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_bg_text_field_inactive)
-                pb_select_topic_loading.visibility = View.GONE
-                iv_select_topic_drop_down.visibility = View.VISIBLE
+                showTopicLoadingFinished()
             }
         }
 
         override fun onError(error: TTLErrorModel?) {
             setGetTopicListAsPending()
         }
-
         override fun onError(errorMessage: String?) {
             setGetTopicListAsPending()
         }
     }
 
     private fun setGetTopicListAsPending() {
-        TTLNetworkStateManager.getInstance().addNetworkListener(object : TapTalkNetworkInterface {
+        TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).addNetworkListener(object : TapTalkNetworkInterface {
             override fun onNetworkAvailable() {
-                getTopicList()
-                TTLNetworkStateManager.getInstance().removeNetworkListener(this)
+                fetchTopicList(false)
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).removeNetworkListener(this)
             }
         })
     }
 
+    private fun showTopicLoadingFinished() {
+        cl_topic.background = ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_bg_text_field_inactive)
+        pb_select_topic_loading.visibility = View.GONE
+        iv_select_topic_drop_down.visibility = View.VISIBLE
+    }
+
     private fun showTopicDropdown() {
+        if (vm.topics.isEmpty() || rv_topic_dropdown.visibility == View.VISIBLE) {
+            return
+        }
         TAPUtils.dismissKeyboard(this)
         val location = IntArray(2)
         cl_topic.getLocationInWindow(location)
@@ -271,6 +255,9 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun hideTopicDropdown() {
+        if (rv_topic_dropdown.visibility != View.VISIBLE) {
+            return
+        }
         rv_topic_dropdown.visibility = View.INVISIBLE
         v_dismiss_dropdown.visibility = View.GONE
         v_dismiss_dropdown.setOnClickListener(null)
@@ -447,7 +434,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         TapCoreChatRoomManager.getInstance(TAPTALK_INSTANCE_KEY).getChatRoomByXcRoomID(caseModel?.tapTalkXCRoomID, object : TapCoreGetRoomListener() {
             override fun onSuccess(roomModel: TAPRoomModel?) {
                 if (vm.openRoomListOnComplete) {
-//                    TapUI.getInstance(TAPTALK_INSTANCE_KEY).openRoomList(this@TTLCreateCaseFormActivity)
                     TTLCaseListActivity.start(this@TTLCreateCaseFormActivity);
                 }
                 TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
@@ -468,7 +454,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun showDefaultErrorDialog(errorMessage: String?) {
-        val message = if (!TTLNetworkStateManager.getInstance().hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
+        val message = if (!TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
             getString(R.string.ttl_error_message_offline)
         } else if (!errorMessage.isNullOrEmpty()) {
             errorMessage

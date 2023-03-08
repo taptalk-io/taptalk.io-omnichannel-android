@@ -47,6 +47,7 @@ import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface;
 import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Listener.TapUICustomKeyboardListener;
+import io.taptalk.TapTalk.Manager.TAPNetworkStateManager;
 import io.taptalk.TapTalk.Manager.TapLocaleManager;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
@@ -74,7 +75,6 @@ import io.taptalk.taptalklive.Fragment.TTLCaseListFragment;
 import io.taptalk.taptalklive.Listener.TTLCommonListener;
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
-import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 import io.taptalk.taptalklive.helper.TTLUtil;
 
 public class TapTalkLive {
@@ -187,8 +187,8 @@ public class TapTalkLive {
                         TTLDataManager.getInstance().getTapTalkApiUrl());
             } else {
                 isNeedToGetProjectConfigs = true;
-                TTLNetworkStateManager.getInstance().registerCallback(context);
-                TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).registerCallback(context);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).addNetworkListener(networkListener);
             }
         }
     };
@@ -377,7 +377,7 @@ public class TapTalkLive {
         public void onNetworkAvailable() {
             if (isNeedToGetProjectConfigs) {
                 TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
-                TTLNetworkStateManager.getInstance().unregisterCallback(context);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).unregisterCallback(context);
                 isNeedToGetProjectConfigs = false;
             }
         }
@@ -606,8 +606,8 @@ public class TapTalkLive {
                 );
             } else {
                 tapTalkLive.isNeedToGetProjectConfigs = true;
-                TTLNetworkStateManager.getInstance().registerCallback(context);
-                TTLNetworkStateManager.getInstance().addNetworkListener(tapTalkLive.networkListener);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).registerCallback(context);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).addNetworkListener(tapTalkLive.networkListener);
             }
         }
 

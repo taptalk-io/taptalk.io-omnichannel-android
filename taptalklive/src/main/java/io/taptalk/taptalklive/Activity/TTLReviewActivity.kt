@@ -6,14 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import io.taptalk.TapTalk.Helper.TapTalkDialog
+import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE
+import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Fragment.TTLReviewBottomSheetFragment
 import io.taptalk.taptalklive.Manager.TTLDataManager
-import io.taptalk.taptalklive.Manager.TTLNetworkStateManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.ViewModel.TTLReviewViewModel
 
@@ -98,7 +99,7 @@ class TTLReviewActivity : AppCompatActivity() {
     }
 
     private fun showDefaultErrorDialog(errorMessage: String?) {
-        val message = if (!TTLNetworkStateManager.getInstance().hasNetworkConnection(this@TTLReviewActivity)) {
+        val message = if (!TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).hasNetworkConnection(this@TTLReviewActivity)) {
             getString(R.string.ttl_error_message_offline)
         } else if (!errorMessage.isNullOrEmpty()) {
             errorMessage

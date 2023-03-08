@@ -73,6 +73,7 @@ class TTLConstant {
         const val TAPTALK_AUTH_TICKET = "kTapTalkLiveTapTalkAuthenticationTicket"
         const val CHANNEL_LINKS = "kTapTalkLiveChannelLinks"
         const val SCF_PATH = "kTapTalkLiveScfPath"
+        const val TOPICS = "kTapTalkLiveTopics"
         const val CASE_EXISTS = "kTapTalkLiveCaseExists"
     }
 }

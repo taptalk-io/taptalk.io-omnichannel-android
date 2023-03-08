@@ -15,6 +15,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenRespo
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel;
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel;
+import io.taptalk.taptalklive.API.Model.TTLTopicModel;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
@@ -33,6 +34,7 @@ import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_API
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP_KEY_ID;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_AUTH_TICKET;
+import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TOPICS;
 
 import java.util.List;
 
@@ -110,6 +112,7 @@ public class TTLDataManager {
         removeTapTalkAuthTicket();
         removeChannelLinks();
         removeScfPath();
+        removeTopics();
         removeActiveUserHasExistingCase();
     }
 
@@ -321,6 +324,22 @@ public class TTLDataManager {
 
     public void removeScfPath() {
         removePreference(SCF_PATH);
+    }
+
+    /**
+     * CHANNEL LINKS
+     */
+
+    public List<TTLTopicModel> getTopics() {
+        return Hawk.get(TOPICS, null);
+    }
+
+    public void saveTopics(List<TTLTopicModel> topics) {
+        Hawk.put(TOPICS, topics);
+    }
+
+    public void removeTopics() {
+        removePreference(TOPICS);
     }
 
     /**
