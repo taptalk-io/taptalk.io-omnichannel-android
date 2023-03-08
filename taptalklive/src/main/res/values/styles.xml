@@ -113,6 +113,36 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="ttlCaseListAvatarFontStyle" parent="ttlFontFamilyBold">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlCaseListAvatarFontColor</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ttlCaseListTitleFontStyle" parent="ttlFontFamilyRegular">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlCaseListTitleFontColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ttlCaseListSenderFontStyle" parent="ttlFontFamilyRegular">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlCaseListSenderFontColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ttlCaseListMessageFontStyle" parent="ttlFontFamilyRegular">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlCaseListMessageFontColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ttlCaseListTimestampFontStyle" parent="ttlFontFamilyRegular">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlCaseListTimestampFontColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="ttlDefaultRoomAvatarSmallFontStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">0.01</item>
         <item name="android:textColor">@color/ttlDefaultRoomAvatarSmallFontColor</item>

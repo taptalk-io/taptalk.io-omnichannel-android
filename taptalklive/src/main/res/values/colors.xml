@@ -42,6 +42,13 @@
 
     <color name="tapDefaultRightBubbleBackgroundColor">@color/ttlColorPrimary</color>
 
+    <color name="tapIconRoomListMessageDeleted">@color/ttlTextDark40</color>
+    <color name="tapIconRoomListMessageDelivered">@color/ttlTextDark40</color>
+    <color name="tapIconRoomListMessageFailed">@color/ttlTextDark40</color>
+    <color name="tapIconRoomListMessageSending">@color/ttlTextDark40</color>
+    <color name="tapIconRoomListMessageSent">@color/ttlTextDark40</color>
+    <color name="tapIconRoomListMuted">@color/ttlTextDark40</color>
+
     <!--TapLive Component Colors-->
     <color name="ttlDefaultBackgroundColor">@color/ttlWhiteF3</color>
     <color name="ttlDefaultNavBarBackgroundColor">@color/ttlColorPrimary</color>
@@ -84,6 +91,11 @@
     <color name="ttlIconLoadingProgressPrimary">@color/ttlColorPrimaryIcon</color>
     <color name="ttlIconLoadingProgressWhite">@color/ttlColorWhiteIcon</color>
 
+    <color name="ttlCaseListAvatarFontColor">@color/ttlColorTextLight</color>
+    <color name="ttlCaseListTitleFontColor">@color/ttlColorTextDark</color>
+    <color name="ttlCaseListSenderFontColor">@color/ttlTextDark40</color>
+    <color name="ttlCaseListMessageFontColor">@color/ttlTextDark40</color>
+    <color name="ttlCaseListTimestampFontColor">@color/ttlTextDark40</color>
     <color name="ttlDefaultRoomAvatarSmallFontColor">@color/ttlColorTextLight</color>
 
     <color name="ttlLeftBubbleSenderNameColor">@color/ttlColorPrimary</color>

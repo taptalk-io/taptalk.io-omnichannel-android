@@ -56,6 +56,7 @@ class TTLCaseListAdapter(
     internal inner class CaseListViewHolder(parent: ViewGroup?, itemLayoutId: Int) : TAPBaseViewHolder<TTLCaseListModel>(parent, itemLayoutId) {
 
         private val clContainer: ConstraintLayout = itemView.findViewById(R.id.cl_container)
+        private val clContent: ConstraintLayout = itemView.findViewById(R.id.cl_content)
         private val civAvatar: CircleImageView = itemView.findViewById(R.id.civ_avatar)
         private val ivAvatarIcon: ImageView = itemView.findViewById(R.id.iv_avatar_icon)
         private val ivMute: ImageView = itemView.findViewById(R.id.iv_mute)
@@ -64,11 +65,11 @@ class TTLCaseListAdapter(
         private val ivBadgeMention: ImageView = itemView.findViewById(R.id.iv_badge_mention)
         private val tvAvatarLabel: TextView = itemView.findViewById(R.id.tv_avatar_label)
         private val tvFullName: TextView = itemView.findViewById(R.id.tv_full_name)
+        private val tvSender: TextView = itemView.findViewById(R.id.tv_group_sender_name)
         private val tvLastMessage: TextView = itemView.findViewById(R.id.tv_last_message)
         private val tvLastMessageTime: TextView = itemView.findViewById(R.id.tv_last_message_time)
         private val tvBadgeUnread: TextView = itemView.findViewById(R.id.tv_badge_unread)
         private val vSeparator: View = itemView.findViewById(R.id.v_separator)
-        private val vSeparatorFull: View = itemView.findViewById(R.id.v_separator_full)
         private val llMarkRead: LinearLayout = itemView.findViewById(R.id.ll_mark_read)
         private val tvMarkRead: TextView = itemView.findViewById(R.id.tv_mark_read)
         private val ivMarkRead: ImageView = itemView.findViewById(R.id.iv_mark_read)
@@ -113,23 +114,41 @@ class TTLCaseListAdapter(
 
             ivAvatarIcon.visibility = View.GONE
 
+            if (clContent.layoutParams is ViewGroup.MarginLayoutParams) {
+                val layoutParams = clContent.layoutParams as ViewGroup.MarginLayoutParams
+                if (bindingAdapterPosition == 0) {
+                    layoutParams.topMargin = TAPUtils.dpToPx(itemView.context.resources, 16f)
+                }
+                else {
+                    layoutParams.topMargin = TAPUtils.dpToPx(itemView.context.resources, 12f)
+                }
+                clContent.requestLayout()
+            }
+
             // Show/hide separator
-//            if (position == itemCount - 1) {
-//                vSeparator.visibility = View.GONE
-//                vSeparatorFull.visibility = View.VISIBLE
-//            }
-//            else {
+            if (bindingAdapterPosition >= itemCount - 1) {
+                vSeparator.visibility = View.GONE
+            }
+            else {
                 vSeparator.visibility = View.VISIBLE
-                vSeparatorFull.visibility = View.GONE
-//            }
+            }
 
             // Set room name
             tvFullName.text = room?.name ?: ""
 
+            // Set sender name
+            if (message.user.userID == activeUser.userID) {
+                tvSender.text = itemView.context.getString(R.string.tap_you)
+            }
+            else {
+                tvSender.text = message.user.fullname
+            }
+
             // Set last message timestamp
             tvLastMessageTime.text = item.lastMessageTimestamp
+
             val draft = TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).getMessageFromDraft(message.room.roomID)
-            if (null != draft && !draft.isEmpty()) {
+            if (!draft.isNullOrEmpty()) {
                 // Show draft
                 tvLastMessage.text = String.format(itemView.context.getString(R.string.tap_format_s_draft), draft)
                 ivPersonalRoomTypingIndicator.visibility = View.GONE
@@ -209,7 +228,8 @@ class TTLCaseListAdapter(
                 tvBadgeUnread.visibility = View.VISIBLE
                 //glide.load(R.drawable.tap_ic_mark_read_white).fitCenter().into(ivMarkRead)
                 //tvMarkRead.setText(R.string.tap_read)
-            } else {
+            }
+            else {
                 ivMessageStatus.visibility = View.VISIBLE
                 tvBadgeUnread.visibility = View.GONE
                 //glide.load(R.drawable.tap_ic_mark_unread_white).fitCenter().into(ivMarkRead)
@@ -219,10 +239,14 @@ class TTLCaseListAdapter(
             // Show mention badge
             if (!TapUI.getInstance(TAPTALK_INSTANCE_KEY).isMentionUsernameDisabled && item.unreadMentions > 0) {
                 ivBadgeMention.visibility = View.VISIBLE
-            } else {
+            }
+            else {
                 ivBadgeMention.visibility = View.GONE
             }
-            itemView.setOnClickListener { v: View? -> caseListInterface.onCaseSelected(item, bindingAdapterPosition) }
+
+            clContent.setOnClickListener {
+                caseListInterface.onCaseSelected(item, bindingAdapterPosition)
+            }
         }
     }
 }

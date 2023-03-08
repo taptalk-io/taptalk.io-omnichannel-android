@@ -18,6 +18,7 @@ import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView
 import io.taptalk.TapTalk.Helper.TAPUtils
+import io.taptalk.TapTalk.Helper.TAPVerticalDecoration
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
 import io.taptalk.TapTalk.Manager.TAPChatManager
 import io.taptalk.TapTalk.Manager.TAPDataManager
@@ -49,12 +50,10 @@ class TTLHomeFaqAdapter(
     private var filteredChannelLinks: ArrayList<TTLChannelLinkModel>? = null
     private var channelLinksAdapter: TTLChannelLinksAdapter? = null
     private var channelLinksListener: TTLItemListInterface? = null
-//    private var channelLinksLayoutManager: GridLayoutManager? = null
 
     private var caseListArray: ArrayList<TTLCaseListModel>? = null
     private var caseListAdapter: TTLCaseListAdapter? = null
     private var caseListListener: TTLCaseListAdapter.TTLCaseListInterface? = null
-//    private var caseListLayoutManager: LinearLayoutManager? = null
 
     init {
         items = itemList
