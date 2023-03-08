@@ -528,9 +528,9 @@ public class TapTalkLive {
         public List<TAPCustomKeyboardItemModel> setCustomKeyboardItems(TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
             List<TAPCustomKeyboardItemModel> keyboardItemModelList = new ArrayList<>();
             TAPCustomKeyboardItemModel markAsSolvedCustomKeyboard = new TAPCustomKeyboardItemModel(
-                    context.getString(R.string.ttl_mark_as_solved),
+                    context.getString(R.string.ttl_mark_as_resolved),
                     ContextCompat.getDrawable(context, R.drawable.ttl_ic_checklist_black_19),
-                    context.getString(R.string.ttl_mark_as_solved)
+                    context.getString(R.string.ttl_mark_as_resolved)
             );
             keyboardItemModelList.add(markAsSolvedCustomKeyboard);
             return keyboardItemModelList;

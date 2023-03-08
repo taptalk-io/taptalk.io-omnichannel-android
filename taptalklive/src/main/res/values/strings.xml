@@ -33,7 +33,7 @@
     <string name="ttl_submit_review">Submit review</string>
     <string name="ttl_review_submitted">Review submitted</string>
     <string name="ttl_successfully_logged_in">Successfully logged in.</string>
-    <string name="ttl_mark_as_solved">Mark as solved</string>
+    <string name="ttl_mark_as_resolved">Mark as Resolved</string>
     <string name="ttl_faq">FAQ</string>
 
     <string name="ttl_error">Error</string>
