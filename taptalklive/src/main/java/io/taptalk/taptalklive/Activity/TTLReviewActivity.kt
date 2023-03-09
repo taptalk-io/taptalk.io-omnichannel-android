@@ -1,17 +1,21 @@
 package io.taptalk.taptalklive.Activity
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
+import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE
+import io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Fragment.TTLReviewBottomSheetFragment
 import io.taptalk.taptalklive.Manager.TTLDataManager
@@ -23,6 +27,20 @@ class TTLReviewActivity : AppCompatActivity() {
     private lateinit var vm: TTLReviewViewModel
 
     private lateinit var reviewBottomSheetFragment: TTLReviewBottomSheetFragment
+
+    companion object {
+        fun start(context: Context, message: TAPMessageModel) {
+            val intent = Intent(context, TTLReviewActivity::class.java)
+            intent.putExtra(MESSAGE, message)
+            if (context is Activity) {
+                context.startActivityForResult(intent, REVIEW)
+                context.overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay)
+            }
+            else {
+                context.startActivity(intent)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +87,7 @@ class TTLReviewActivity : AppCompatActivity() {
                 return
             }
             TTLDataManager.getInstance().rateConversation(vm.caseID, rating, comment, reviewDataView)
-            reviewBottomSheetFragment.dismiss()
+//            reviewBottomSheetFragment.dismiss()
         }
     }
 

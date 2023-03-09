@@ -18,8 +18,13 @@
 
     <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/TransparentBottomSheetStyle</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="TransparentBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/ttl_bg_review_layout</item>
     </style>
 
     <style name="ttlFontFamilyLight">
@@ -42,6 +47,18 @@
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">@color/ttlFormLabelColor</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ttlFormLabelOptionalStyle" parent="ttlFontFamilyRegular">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:textColor">@color/ttlFormLabelOptionalColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ttlFormLabelInfoStyle" parent="ttlFontFamilyRegular">
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:textColor">@color/ttlFormLabelInfoColor</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="ttlFormTextFieldStyle" parent="ttlFontFamilyRegular">
@@ -191,7 +208,7 @@
     <style name="ttlReviewRatingLabelStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">-0.01</item>
         <item name="android:textColor">@color/ttlReviewRatingLabelColor</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="ttlErrorInfoLabelStyle" parent="ttlFontFamilyBold">

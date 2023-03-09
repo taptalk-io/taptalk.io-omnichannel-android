@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <stroke
-        android:width="1dp"
-        android:color="@color/ttlButtonInactiveBorderColor" />
     <corners
         android:radius="8dp" />
-
-    <gradient
-        android:startColor="@color/ttlButtonInactiveBackgroundGradientLightColor"
-        android:endColor="@color/ttlButtonInactiveBackgroundGradientDarkColor"
-        android:angle="270"/>
+    <solid
+        android:color="@color/tapTransparentBlack1910" />
 </shape>

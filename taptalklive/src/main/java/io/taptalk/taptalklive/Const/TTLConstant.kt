@@ -47,6 +47,10 @@ class TTLConstant {
         const val REVIEW = 1001
     }
 
+    object Form {
+        const val REVIEW_CHARACTER_LIMIT = 1000
+    }
+
     object Broadcast {
         const val SCF_PATH_UPDATED = "kTapTalkLiveScfPathUpdated"
         const val NEW_CASE_CREATED = "kTapTalkLiveNewCaseCreated"

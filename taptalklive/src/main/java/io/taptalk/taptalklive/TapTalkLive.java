@@ -507,16 +507,9 @@ public class TapTalkLive {
 
     private final TTLReviewChatBubbleClass reviewCustomBubble = new TTLReviewChatBubbleClass(
             R.layout.ttl_cell_chat_bubble_review,
-            TYPE_REVIEW, (context, message) -> {
-        Intent intent = new Intent(context, TTLReviewActivity.class);
-        intent.putExtra(MESSAGE, message);
-        if (context instanceof Activity) {
-            ((Activity) context).startActivityForResult(intent, REVIEW);
-            ((Activity) context).overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay);
-        } else {
-            context.startActivity(intent);
-        }
-    });
+            TYPE_REVIEW,
+            TTLReviewActivity.Companion::start
+    );
 
     private final TTLReviewChatBubbleClass reviewSubmittedCustomBubble = new TTLReviewChatBubbleClass(
             R.layout.ttl_cell_chat_bubble_review,

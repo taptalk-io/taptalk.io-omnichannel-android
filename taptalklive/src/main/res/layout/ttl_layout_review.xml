@@ -5,35 +5,34 @@
     android:id="@+id/cl_review_layout_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ttl_bg_review_layout"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <ImageView
         android:id="@+id/iv_button_dismiss_review"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
         android:src="@drawable/ttl_ic_close_grey"
         android:tint="@color/ttlColorPrimaryIcon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseAppTint" />
 
     <TextView
         android:id="@+id/tv_review_title"
         style="@style/ttlPopupDialogTitleStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginEnd="56dp"
         android:layout_marginRight="56dp"
         android:gravity="center"
-        android:text="@string/ttl_leave_a_review"
+        android:text="@string/ttl_rate_your_conversation"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@id/iv_button_dismiss_review"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,48 +44,48 @@
         android:id="@+id/ll_review_stars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_review_title">
+        app:layout_constraintTop_toBottomOf="@id/iv_button_dismiss_review">
 
         <ImageView
             android:id="@+id/iv_review_star_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive" />
 
         <ImageView
             android:id="@+id/iv_review_star_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive" />
 
         <ImageView
             android:id="@+id/iv_review_star_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive" />
 
         <ImageView
             android:id="@+id/iv_review_star_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive" />
 
         <ImageView
             android:id="@+id/iv_review_star_5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ttl_ic_star_inactive" />
 
     </LinearLayout>
@@ -98,57 +97,148 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/ll_review_stars"
-        tools:text="Excellent" />
+        android:text="@string/ttl_rating_0"
+        app:layout_constraintTop_toBottomOf="@id/ll_review_stars" />
+
+    <TextView
+        android:id="@+id/tv_label_comment"
+        style="@style/ttlFormLabelStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/ttl_comment"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/tv_label_comment_optional"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_label_review_rating" />
+
+    <TextView
+        android:id="@+id/tv_label_comment_optional"
+        style="@style/ttlFormLabelOptionalStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2sp"
+        android:layout_marginLeft="2sp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/ttl_optional"
+        app:layout_constraintBottom_toBottomOf="@id/tv_label_comment"
+        app:layout_constraintEnd_toStartOf="@id/tv_label_character_count"
+        app:layout_constraintStart_toEndOf="@id/tv_label_comment"
+        app:layout_constraintTop_toTopOf="@id/tv_label_comment" />
+
+    <TextView
+        android:id="@+id/tv_label_character_count"
+        style="@style/ttlFormLabelInfoStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2sp"
+        android:layout_marginLeft="2sp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_label_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintTop_toTopOf="@id/tv_label_comment"
+        tools:text="(0/1000)" />
 
     <EditText
         android:id="@+id/et_review_comment"
         style="@style/ttlFormTextFieldStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100sp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/ttl_bg_text_field_inactive"
         android:gravity="top"
-        android:hint="@string/ttl_type_message_here"
+        android:hint="@string/ttl_leave_a_review_ellipsis"
         android:inputType="textMultiLine"
         android:minLines="2"
-        android:maxLines="8"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp"
+        android:scrollbars="vertical"
         android:textCursorDrawable="@drawable/ttl_cursor_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_label_review_rating"
+        app:layout_constraintTop_toBottomOf="@id/tv_label_comment"
         app:layout_goneMarginTop="48dp" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_comment_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/et_review_comment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <FrameLayout
-        android:id="@+id/fl_button_submit_review"
+        <ImageView
+            android:id="@+id/iv_comment_error_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ttl_ic_info"
+            android:tint="@color/ttlColorDestructiveIcon"
+            app:layout_constraintEnd_toStartOf="@id/tv_comment_error_message"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
+
+        <TextView
+            android:id="@+id/tv_comment_error_message"
+            style="@style/ttlErrorInfoLabelStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ttl_error_field_required"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_comment_error_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_button_submit_review"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/ttl_bg_button_inactive_ripple"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_review_comment">
+        app:layout_constraintTop_toBottomOf="@id/cl_comment_error">
 
-        <ImageView
-            android:id="@+id/iv_button_submit_review_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ttl_ic_loading_progress_circle_white"
-            android:tint="@color/ttlIconLoadingProgressWhite"
-            android:visibility="gone"/>
+        <ProgressBar
+            android:id="@+id/pb_button_submit_review_loading"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:indeterminateTint="@color/ttlWhite"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/tv_button_submit_review"
@@ -157,8 +247,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/ttl_submit_review" />
+            android:text="@string/ttl_submit_review"
+            android:textColor="@color/ttlButtonLabelDisabledColor" />
 
-    </FrameLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

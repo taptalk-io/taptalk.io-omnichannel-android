@@ -29,7 +29,12 @@
     <string name="ttl_or_uppercase">ATAU</string>
     <string name="ttl_ok">OK</string>
     <string name="ttl_cancel">Batal</string>
-    <string name="ttl_leave_a_review">Berikan Ulasan</string>
+    <string name="ttl_leave_a_review">Berikan ulasan</string>
+    <string name="ttl_leave_a_review_ellipsis">Berikan ulasan…</string>
+    <string name="ttl_rate_your_conversation">Berikan penilaian</string>
+    <string name="ttl_comment">Komentar</string>
+    <string name="ttl_optional">(Opsional)</string>
+    <string name="ttl_submit">Kirim</string>
     <string name="ttl_submit_review">Kirim ulasan</string>
     <string name="ttl_review_submitted">Ulasan terkirim</string>
     <string name="ttl_successfully_logged_in">Berhasil log in.</string>
@@ -49,6 +54,7 @@
     <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
     <string name="ttl_error_field_required">Bagian ini diperlukan</string>
 
+    <string name="ttl_rating_0">Tidak ada rating</string>
     <string name="ttl_rating_1">Mengecewakan</string>
     <string name="ttl_rating_2">Kurang baik</string>
     <string name="ttl_rating_3">Cukup baik</string>

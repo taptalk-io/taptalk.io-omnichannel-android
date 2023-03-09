@@ -77,16 +77,19 @@
     <color name="ttlFaqChildContentLabelColor">@color/ttlTextDark60</color>
 
     <color name="ttlFormLabelColor">@color/ttlColorTextDark</color>
+    <color name="ttlFormLabelOptionalColor">@color/ttlTextDark60</color>
+    <color name="ttlFormLabelInfoColor">@color/ttlTextDark40</color>
     <color name="ttlFormTextFieldColor">@color/ttlColorTextDark</color>
     <color name="ttlFormTextFieldPlaceholderColor">@color/ttlTextDark40</color>
 
     <color name="ttlCreateFormTitleLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlCreateFormDescriptionLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlReviewTitleLabelColor">@color/ttlColorTextDark</color>
-    <color name="ttlReviewRatingLabelColor">@color/ttlColorPrimary</color>
+    <color name="ttlReviewRatingLabelColor">@color/ttlColorTextDark</color>
     <color name="ttlErrorInfoLabelColor">@color/ttlColorError</color>
 
     <color name="ttlButtonLabelColor">@color/ttlColorTextLight</color>
+    <color name="ttlButtonLabelDisabledColor">@color/ttlTextDark40</color>
     <color name="ttlButtonIconColor">@color/ttlColorTextLight</color>
     <color name="ttlIconLoadingProgressPrimary">@color/ttlColorPrimaryIcon</color>
     <color name="ttlIconLoadingProgressWhite">@color/ttlColorWhiteIcon</color>
@@ -133,6 +136,7 @@
     <color name="ttlWatermelonRed">#ff3f57</color>
     <color name="ttlHighlightBlue">#5ac8fa</color>
     <color name="ttlVibrantGreen">#19c700</color>
+    <color name="ttlSaffron">#f4c12a</color>
 
     <color name="ttlTextDark10">#1a191919</color>
     <color name="ttlTextDark20">#33191919</color>
