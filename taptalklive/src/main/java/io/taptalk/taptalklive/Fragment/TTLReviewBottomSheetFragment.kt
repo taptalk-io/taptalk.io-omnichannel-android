@@ -7,10 +7,7 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -73,6 +70,16 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
         etReviewComment.filters = arrayOf<InputFilter>(LengthFilter(REVIEW_CHARACTER_LIMIT))
         etReviewComment.onFocusChangeListener = formFocusListener
         etReviewComment.addTextChangedListener(textWatcher)
+
+        // Enable EditText scrolling
+        etReviewComment.setOnTouchListener { v, event ->
+            v.parent.requestDisallowInterceptTouchEvent(true)
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_UP ->
+                    v.parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
         updateCharacterCount()
 
         ivButtonDismissReview.setOnClickListener { dismiss() }
