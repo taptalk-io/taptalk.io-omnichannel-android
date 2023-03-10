@@ -533,6 +533,7 @@ public class TapTalkLive {
         public void onCustomKeyboardItemTapped(Activity activity, TAPCustomKeyboardItemModel customKeyboardItem, TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
             new TapTalkDialog.Builder(activity)
                     .setDialogType(TapTalkDialog.DialogType.DEFAULT)
+                    .setCancelable(true)
                     .setTitle(activity.getString(R.string.ttl_close_case))
                     .setMessage(activity.getString(R.string.ttl_close_case_dialog_message))
                     .setPrimaryButtonTitle(activity.getString(R.string.ttl_ok))

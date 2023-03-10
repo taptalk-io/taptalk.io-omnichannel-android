@@ -463,6 +463,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
         TapTalkDialog.Builder(this@TTLCreateCaseFormActivity)
             .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
+            .setCancelable(true)
             .setTitle(getString(R.string.ttl_error))
             .setMessage(message)
             .setPrimaryButtonTitle(getString(R.string.ttl_ok))
@@ -474,6 +475,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private fun showValidationErrorDialog(errorMessage: String?) {
         TapTalkDialog.Builder(this@TTLCreateCaseFormActivity)
             .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
+            .setCancelable(true)
             .setMessage(errorMessage)
             .setPrimaryButtonTitle(getString(R.string.ttl_ok))
             .show()

@@ -37,6 +37,8 @@
     <string name="ttl_submit">Kirim</string>
     <string name="ttl_submit_review">Kirim ulasan</string>
     <string name="ttl_review_submitted">Ulasan terkirim</string>
+    <string name="ttl_thank_you_exclamation">Terima Kasih!</string>
+    <string name="ttl_review_submitted_message">Umpan balik Anda sangat dihargai dan akan membantu kami untuk melayani Anda dan pengguna lain!</string>
     <string name="ttl_successfully_logged_in">Berhasil log in.</string>
     <string name="ttl_mark_as_resolved">Akhiri percakapan</string>
     <string name="ttl_faq">FAQ</string>
@@ -53,6 +55,8 @@
     <string name="ttl_error_xc_room_id_empty">Unable to fetch TapTalk chat room</string>
     <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
     <string name="ttl_error_field_required">Bagian ini diperlukan</string>
+    <string name="ttl_error_failed_to_submit">Gagal Mengirim</string>
+    <string name="ttl_error_message_submit_review">Terjadi kesalahan saat mengirimkan ulasan, harap coba kirim ulang ulasan Anda untuk percakapan ini.</string>
 
     <string name="ttl_rating_0">Tidak ada rating</string>
     <string name="ttl_rating_1">Mengecewakan</string>

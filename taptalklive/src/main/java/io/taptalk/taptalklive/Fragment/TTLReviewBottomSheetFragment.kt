@@ -19,7 +19,11 @@ import io.taptalk.taptalklive.Const.TTLConstant.Form.REVIEW_CHARACTER_LIMIT
 import io.taptalk.taptalklive.R
 
 
-class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: ReviewBottomSheetListener) : BottomSheetDialogFragment() {
+class TTLReviewBottomSheetFragment(
+    private val reviewBottomSheetListener: ReviewBottomSheetListener,
+    private var rating: Int = 0,
+    private val comment: String = ""
+) : BottomSheetDialogFragment() {
 
     private lateinit var clReviewLayoutContainer: ConstraintLayout
     private lateinit var clCommentError: ConstraintLayout
@@ -36,7 +40,7 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
     private lateinit var tvButtonSubmitReview: TextView
     private lateinit var etReviewComment: EditText
 
-    private var rating = 0
+//    private var rating = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +73,7 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
 
         etReviewComment.filters = arrayOf<InputFilter>(LengthFilter(REVIEW_CHARACTER_LIMIT))
         etReviewComment.onFocusChangeListener = formFocusListener
+        etReviewComment.setText(comment)
         etReviewComment.addTextChangedListener(textWatcher)
 
         // Enable EditText scrolling
@@ -80,7 +85,7 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
             }
             false
         }
-        updateCharacterCount()
+
 
         ivButtonDismissReview.setOnClickListener { dismiss() }
         ivReviewStar1.setOnClickListener { updateRating(1) }
@@ -89,7 +94,9 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
         ivReviewStar4.setOnClickListener { updateRating(4) }
         ivReviewStar5.setOnClickListener { updateRating(5) }
         clReviewLayoutContainer.setOnClickListener { dismissKeyboard() }
-        llButtonSubmitReview.setOnClickListener(null)
+
+        updateRating(rating)
+        updateCharacterCount()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -103,6 +110,14 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
         }
         this.rating = rating
         when (rating) {
+            0 -> {
+                ivReviewStar1.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
+                ivReviewStar2.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
+                ivReviewStar3.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
+                ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
+                ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
+                tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_0)
+            }
             1 -> {
                 ivReviewStar1.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_active))
                 ivReviewStar2.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
@@ -153,12 +168,14 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
             }
         }
         dismissKeyboard()
-        activity?.let {
-            tvButtonSubmitReview.setTextColor(ContextCompat.getColor(it, R.color.ttlButtonLabelColor))
-        }
-        llButtonSubmitReview.background = ContextCompat.getDrawable(requireContext(), R.drawable.ttl_bg_button_active_ripple)
-        llButtonSubmitReview.setOnClickListener {
-            submitReview()
+        if (rating > 0) {
+            activity?.let {
+                tvButtonSubmitReview.setTextColor(ContextCompat.getColor(it, R.color.ttlButtonLabelColor))
+            }
+            llButtonSubmitReview.background = ContextCompat.getDrawable(requireContext(), R.drawable.ttl_bg_button_active_ripple)
+            llButtonSubmitReview.setOnClickListener {
+                submitReview()
+            }
         }
     }
 
@@ -209,6 +226,7 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
             }
             return
         }
+        isCancelable = false
         ivReviewStar1.setOnClickListener(null)
         ivReviewStar2.setOnClickListener(null)
         ivReviewStar3.setOnClickListener(null)
@@ -222,11 +240,11 @@ class TTLReviewBottomSheetFragment(private val reviewBottomSheetListener: Review
             etReviewComment.background = ContextCompat.getDrawable(it, R.drawable.ttl_bg_text_field_disabled)
         }
         pbButtonSubmitReviewLoading.visibility = View.VISIBLE
-        // TODO: TEST
-//        reviewBottomSheetListener.onSubmitReviewButtonTapped(rating, etReviewComment.text.toString())
+        reviewBottomSheetListener.onSubmitReviewButtonTapped(rating, etReviewComment.text.toString())
     }
 
     fun onSubmitReviewFailed() {
+        isCancelable = true
         ivReviewStar1.setOnClickListener { updateRating(1) }
         ivReviewStar2.setOnClickListener { updateRating(2) }
         ivReviewStar3.setOnClickListener { updateRating(3) }
