@@ -258,19 +258,6 @@
                         android:paddingEnd="16dp"
                         android:paddingBottom="12dp">
 
-                        <!--                    <Spinner-->
-                        <!--                        android:id="@+id/sp_select_topic"-->
-                        <!--                        android:layout_width="match_parent"-->
-                        <!--                        android:layout_height="match_parent"-->
-                        <!--                        android:background="@drawable/ttl_bg_text_field_inactive"-->
-                        <!--                        android:overlapAnchor="false"-->
-                        <!--                        android:paddingStart="16dp"-->
-                        <!--                        android:paddingLeft="16dp"-->
-                        <!--                        android:paddingTop="12dp"-->
-                        <!--                        android:paddingEnd="56dp"-->
-                        <!--                        android:paddingRight="56dp"-->
-                        <!--                        android:paddingBottom="12dp" />-->
-
                         <TextView
                             android:id="@+id/tv_topic"
                             style="@style/ttlFormTextFieldStyle"
@@ -289,7 +276,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ttl_ic_chevron_down_orange"
-                            android:tint="@color/ttlFormTextFieldColor"
+                            android:tint="@color/ttlColorDarkIcon"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -304,16 +291,6 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <!--                    <ImageView-->
-                        <!--                        android:id="@+id/iv_select_topic_loading"-->
-                        <!--                        android:layout_width="24dp"-->
-                        <!--                        android:layout_height="24dp"-->
-                        <!--                        android:src="@drawable/ttl_ic_loading_progress_circle_white"-->
-                        <!--                        android:tint="@color/ttlIconLoadingProgressPrimary"-->
-                        <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-                        <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                        <!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -446,7 +423,7 @@
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
                         android:indeterminateTint="@color/ttlWhite"
-                        android:tint="@color/ttlButtonIconColor"
+                        android:tint="@color/ttlIconLoadingProgressWhite"
                         android:visibility="gone"
                         tools:visibility="visible" />
 

@@ -60,9 +60,11 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ttl_ic_arrow_right"
+                android:tint="@color/ttlColorPrimaryIcon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseAppTint" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

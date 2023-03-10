@@ -37,8 +37,8 @@
         android:id="@+id/fl_bubble"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:elevation="1dp"
@@ -145,7 +145,8 @@
                     android:layout_marginRight="4dp"
                     android:src="@drawable/ttl_ic_checklist_black_19"
                     android:tint="@color/ttlWhite"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:ignore="UseAppTint" />
 
                 <TextView
                     android:id="@+id/tv_button_review"

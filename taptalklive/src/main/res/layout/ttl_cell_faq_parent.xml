@@ -9,7 +9,7 @@
     <View
         android:id="@+id/v_header_background"
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="108dp"
         android:background="@color/ttlDefaultNavBarBackgroundColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +93,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ttl_ic_chat_bubble"
-                android:tint="@color/ttlButtonActiveBorderColor" />
+                android:tint="@color/ttlColorPrimaryIcon" />
 
             <TextView
                 android:id="@+id/tv_button_talk_to_agent"
@@ -105,7 +105,7 @@
                 android:layout_marginLeft="4dp"
                 android:gravity="center"
                 android:text="@string/ttl_talk_to_agent"
-                android:textColor="@color/ttlColorPrimary" />
+                android:textColor="@color/ttlColorTextPrimary" />
 
         </LinearLayout>
 

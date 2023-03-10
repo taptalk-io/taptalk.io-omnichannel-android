@@ -8,7 +8,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="176dp"
         android:background="@color/ttlDefaultNavBarBackgroundColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -151,7 +151,7 @@
                 android:layout_height="16dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ttl_ic_send_white"
-                android:tint="@color/ttlButtonActiveBorderColor" />
+                android:tint="@color/ttlColorPrimaryIcon" />
 
             <TextView
                 android:id="@+id/tv_button_message_directly"
@@ -163,7 +163,7 @@
                 android:layout_marginLeft="4dp"
                 android:gravity="center"
                 android:text="@string/ttl_message_us_directly"
-                android:textColor="@color/ttlColorPrimary" />
+                android:textColor="@color/ttlColorTextPrimary" />
 
         </LinearLayout>
 
@@ -251,7 +251,7 @@
                 android:layout_marginLeft="4dp"
                 android:gravity="center"
                 android:text="@string/ttl_new_message"
-                android:textColor="@color/ttlColorPrimary" />
+                android:textColor="@color/ttlColorTextPrimary" />
 
         </LinearLayout>
 

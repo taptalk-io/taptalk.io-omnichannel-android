@@ -2,6 +2,7 @@ package io.taptalk.taptalklive.Fragment
 
 import android.R.attr.maxLength
 import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
@@ -11,6 +12,7 @@ import android.view.*
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -117,6 +119,13 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_0)
+                activity?.let {
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                }
             }
             1 -> {
                 ivReviewStar1.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_active))
@@ -125,6 +134,13 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_1)
+                activity?.let {
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                }
             }
             2 -> {
                 ivReviewStar1.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_active))
@@ -133,6 +149,13 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_2)
+                activity?.let {
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                }
             }
             3 -> {
                 ivReviewStar1.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_active))
@@ -141,6 +164,13 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_3)
+                activity?.let {
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                }
             }
             4 -> {
                 ivReviewStar1.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_active))
@@ -152,6 +182,11 @@ class TTLReviewBottomSheetFragment(
                 clCommentError.visibility = View.GONE
                 activity?.let {
                     etReviewComment.background = ContextCompat.getDrawable(it, R.drawable.ttl_bg_text_field_inactive)
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
                 }
             }
             5 -> {
@@ -164,6 +199,11 @@ class TTLReviewBottomSheetFragment(
                 clCommentError.visibility = View.GONE
                 activity?.let {
                     etReviewComment.background = ContextCompat.getDrawable(it, R.drawable.ttl_bg_text_field_inactive)
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
                 }
             }
         }

@@ -78,7 +78,7 @@ class TTLReviewActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        window?.setBackgroundDrawable(ContextCompat.getDrawable(this@TTLReviewActivity, R.color.ttlTextDark80))
+        window?.setBackgroundDrawable(ContextCompat.getDrawable(this@TTLReviewActivity, R.color.ttlTransparentBlack1980))
 
         reviewBottomSheetFragment = TTLReviewBottomSheetFragment(reviewBottomSheetListener)
         reviewBottomSheetFragment.show(supportFragmentManager, "")

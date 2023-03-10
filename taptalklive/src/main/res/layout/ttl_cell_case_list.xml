@@ -140,7 +140,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:background="@color/tapWhite"
+        android:background="@color/ttlWhite"
         android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -395,7 +395,7 @@
             android:id="@+id/v_separator"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/tapTransparentBlack1910"
+            android:background="@color/ttlTransparentBlack1910"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_last_message_time"
             app:layout_constraintStart_toStartOf="@id/tv_full_name" />
@@ -404,7 +404,7 @@
             android:id="@+id/v_separator_full"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/tapGreyDc"
+            android:background="@color/ttlTransparentBlack1910"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

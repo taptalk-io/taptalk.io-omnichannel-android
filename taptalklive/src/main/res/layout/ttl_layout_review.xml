@@ -56,7 +56,8 @@
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ttl_ic_star_inactive" />
+            android:src="@drawable/ttl_ic_star_inactive"
+            android:tint="@color/ttlIconStarInactive" />
 
         <ImageView
             android:id="@+id/iv_review_star_2"
@@ -64,7 +65,9 @@
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ttl_ic_star_inactive" />
+            android:src="@drawable/ttl_ic_star_inactive"
+            android:tint="@color/ttlIconStarInactive" />
+
 
         <ImageView
             android:id="@+id/iv_review_star_3"
@@ -72,7 +75,9 @@
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ttl_ic_star_inactive" />
+            android:src="@drawable/ttl_ic_star_inactive"
+            android:tint="@color/ttlIconStarInactive" />
+
 
         <ImageView
             android:id="@+id/iv_review_star_4"
@@ -80,13 +85,17 @@
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ttl_ic_star_inactive" />
+            android:src="@drawable/ttl_ic_star_inactive"
+            android:tint="@color/ttlIconStarInactive" />
+
 
         <ImageView
             android:id="@+id/iv_review_star_5"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ttl_ic_star_inactive" />
+            android:src="@drawable/ttl_ic_star_inactive"
+            android:tint="@color/ttlIconStarInactive" />
+
 
     </LinearLayout>
 
@@ -235,7 +244,7 @@
             android:layout_height="20dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:indeterminateTint="@color/ttlWhite"
+            android:indeterminateTint="@color/ttlIconLoadingProgressWhite"
             android:visibility="gone"
             tools:visibility="visible" />
 
