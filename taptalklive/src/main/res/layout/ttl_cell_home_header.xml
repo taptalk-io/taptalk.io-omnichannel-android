@@ -18,7 +18,7 @@
         android:id="@+id/iv_button_close"
         android:layout_width="?android:attr/actionBarSize"
         android:layout_height="?android:attr/actionBarSize"
-        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:background="?attr/actionBarItemBackground"
         android:padding="16dp"
         android:src="@drawable/ttl_ic_close_grey"
         android:tint="@color/ttlIconNavBarCloseButton"

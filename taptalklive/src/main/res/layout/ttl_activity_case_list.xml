@@ -23,7 +23,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
-        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:background="?attr/actionBarItemBackground"
         android:padding="16dp"
         android:src="@drawable/tap_ic_chevron_left_white"
         android:tint="@color/ttlIconNavBarCloseButton"
@@ -54,7 +54,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:background="?attr/actionBarItemBackground"
         android:padding="16dp"
         android:src="@drawable/tap_ic_edit_orange"
         android:tint="@color/ttlIconNavBarCloseButton"
@@ -75,13 +75,13 @@
         android:layout_marginBottom="24dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp"
-        tools:layout_height="320dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/cl_footer_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_button_close"
-        app:layout_constraintVertical_bias="0">
+        app:layout_constraintVertical_bias="0"
+        tools:layout_height="320dp">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcv_case_list"
@@ -92,15 +92,6 @@
         </androidx.fragment.app.FragmentContainerView>
 
     </androidx.cardview.widget.CardView>
-
-<!--    <View-->
-<!--        android:id="@+id/v_bottom"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="1dp"-->
-<!--        app:barrierDirection="bottom"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/cl_footer_container" />-->
 
     <include layout="@layout/ttl_layout_footer" />
 
