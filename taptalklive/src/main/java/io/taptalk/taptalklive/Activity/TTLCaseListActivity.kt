@@ -52,9 +52,6 @@ class TTLCaseListActivity : TAPBaseActivity() {
     }
 
     private fun openCreateCaseForm() {
-        val intent = Intent(this@TTLCaseListActivity, TTLCreateCaseFormActivity::class.java)
-        intent.putExtra(SHOW_CLOSE_BUTTON, true)
-        startActivity(intent)
-        overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay)
+        TTLCreateCaseFormActivity.start(this, true)
     }
 }
