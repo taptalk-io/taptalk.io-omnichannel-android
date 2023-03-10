@@ -229,14 +229,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun showTopicDropdown() {
-        if (vm.topics.isEmpty() || rv_topic_dropdown.visibility == View.VISIBLE) {
+        if (vm.topics.isEmpty() || cv_topic_dropdown.visibility == View.VISIBLE) {
             return
         }
         TAPUtils.dismissKeyboard(this)
         val location = IntArray(2)
         cl_topic.getLocationInWindow(location)
-        rv_topic_dropdown.translationY = location[1].toFloat() + (cl_topic.height.toFloat() / 2)
-        rv_topic_dropdown.visibility = View.VISIBLE
+        cv_topic_dropdown.translationY = location[1].toFloat() + (cl_topic.height.toFloat() / 2)
+        cv_topic_dropdown.visibility = View.VISIBLE
         cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_active)
         cl_topic.setOnClickListener {
             hideTopicDropdown()
@@ -255,10 +255,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun hideTopicDropdown() {
-        if (rv_topic_dropdown.visibility != View.VISIBLE) {
+        if (cv_topic_dropdown.visibility != View.VISIBLE) {
             return
         }
-        rv_topic_dropdown.visibility = View.INVISIBLE
+        cv_topic_dropdown.visibility = View.INVISIBLE
         v_dismiss_dropdown.visibility = View.GONE
         v_dismiss_dropdown.setOnClickListener(null)
         cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)

@@ -38,6 +38,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
                 android:src="@drawable/tap_ic_chevron_left_white"
@@ -87,8 +90,8 @@
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/ttl_bg_white_rounded_8dp"
                 android:elevation="2dp"
-                android:padding="16dp"
                 android:orientation="vertical"
+                android:padding="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -481,22 +484,29 @@
 
     <include layout="@layout/ttl_layout_footer" />
 
-    <io.taptalk.TapTalk.Helper.MaxHeightRecyclerView
-        android:id="@+id/rv_topic_dropdown"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_topic_dropdown"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="36dp"
         android:layout_marginBottom="12dp"
-        android:background="@drawable/ttl_bg_white_rounded_8dp"
-        android:elevation="8dp"
-        android:maxHeight="144dp"
-        android:overScrollMode="never"
-        android:scrollbars="vertical"
         android:visibility="invisible"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintVertical_bias="0">
+
+        <io.taptalk.TapTalk.Helper.MaxHeightRecyclerView
+            android:id="@+id/rv_topic_dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/ttl_bg_white_rounded_8dp"
+            android:overScrollMode="never"
+            android:scrollbars="vertical" />
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

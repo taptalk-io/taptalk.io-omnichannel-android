@@ -42,19 +42,6 @@ class TTLItemDropdownAdapter(
 
             tvItemName.text = item
 
-//            if (bindingAdapterPosition == 0 && itemCount <= 1) {
-//                clContainer.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_dropdown_single_ripple)
-//            }
-//            else if (bindingAdapterPosition == 0) {
-//                clContainer.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_dropdown_top_ripple)
-//            }
-//            else if (bindingAdapterPosition >= itemCount - 1) {
-//                clContainer.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_dropdown_bottom_ripple)
-//            }
-//            else {
-//                clContainer.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_dropdown_ripple)
-//            }
-
 //            if (selectedItem == item) {
 //                ivChecklist.visibility = View.VISIBLE
 //                tvItemName.setTextColor(ContextCompat.getColor(itemView.context, R.color.tapColorPrimary))
