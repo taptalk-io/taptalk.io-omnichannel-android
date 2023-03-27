@@ -5,19 +5,19 @@
     <color name="colorAccent">#90ff1e</color>
 
     <!--Override TapTalkLive Colors for Testing-->
-    <color name="ttlColorPrimaryExtraLight">#6bb6ff</color>
-    <color name="ttlColorPrimaryLight">#51a9ff</color>
-    <color name="ttlColorPrimary">@color/colorPrimary</color>
-    <color name="ttlColorPrimaryDark">@color/colorPrimaryDark</color>
-    <color name="ttlColorAccent">@color/colorAccent</color>
+<!--    <color name="ttlColorPrimaryExtraLight">#6bb6ff</color>-->
+<!--    <color name="ttlColorPrimaryLight">#51a9ff</color>-->
+<!--    <color name="ttlColorPrimary">@color/colorPrimary</color>-->
+<!--    <color name="ttlColorPrimaryDark">@color/colorPrimaryDark</color>-->
+<!--    <color name="ttlColorAccent">@color/colorAccent</color>-->
 
-    <color name="ttlLeftBubbleSenderNameColor">@color/ttlColorTextError</color>
-    <color name="ttlLeftBubbleMessageBodyColor">@color/ttlTransparentBlack1980</color>
-    <color name="ttlRightBubbleMessageBodyColor">@color/ttlWhiteF3</color>
+<!--    <color name="ttlLeftBubbleSenderNameColor">@color/ttlColorTextError</color>-->
+<!--    <color name="ttlLeftBubbleMessageBodyColor">@color/ttlTransparentBlack1980</color>-->
+<!--    <color name="ttlRightBubbleMessageBodyColor">@color/ttlWhiteF3</color>-->
 
-    <color name="ttlLeftBubbleBackgroundColor">#d2e9ff</color>
-    <color name="ttlRightBubbleBackgroundColor">@color/colorPrimaryDark</color>
+<!--    <color name="ttlLeftBubbleBackgroundColor">#d2e9ff</color>-->
+<!--    <color name="ttlRightBubbleBackgroundColor">@color/colorPrimaryDark</color>-->
 
-    <color name="ttlIconStarInactive">@color/ttlColorPrimaryLight</color>
-    <color name="ttlIconStarActive">@color/colorPrimary</color>
+<!--    <color name="ttlIconStarInactive">@color/ttlColorPrimaryLight</color>-->
+<!--    <color name="ttlIconStarActive">@color/colorPrimary</color>-->
 </resources>
