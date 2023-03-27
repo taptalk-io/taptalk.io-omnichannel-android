@@ -248,6 +248,7 @@ class TTLReviewBottomSheetFragment(
         tvLabelCharacterCount.text = String.format("(%d/%d)", etReviewComment.text.length, REVIEW_CHARACTER_LIMIT)
         if (!etReviewComment.text.isNullOrEmpty()) {
             clCommentError.visibility = View.GONE
+            formFocusListener.onFocusChange(etReviewComment, etReviewComment.isFocused)
         }
     }
 

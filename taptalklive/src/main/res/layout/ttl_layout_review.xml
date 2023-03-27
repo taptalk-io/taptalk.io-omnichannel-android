@@ -161,66 +161,79 @@
         app:layout_constraintTop_toTopOf="@id/tv_label_comment"
         tools:text="(0/1000)" />
 
-    <EditText
-        android:id="@+id/et_review_comment"
-        style="@style/ttlFormTextFieldStyle"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_review_comment"
         android:layout_width="match_parent"
         android:layout_height="100sp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/ttl_bg_text_field_inactive"
-        android:gravity="top"
-        android:hint="@string/ttl_leave_a_review_ellipsis"
-        android:inputType="textMultiLine"
-        android:minLines="2"
-        android:paddingStart="16dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="12dp"
-        android:scrollbars="vertical"
-        android:textCursorDrawable="@drawable/ttl_cursor_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_label_comment"
-        app:layout_goneMarginTop="48dp" />
+        app:layout_constraintTop_toBottomOf="@id/tv_label_comment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_comment_error"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/et_review_comment"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:id="@+id/iv_comment_error_icon"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/ttl_ic_info"
-            android:tint="@color/ttlColorDestructiveIcon"
-            app:layout_constraintEnd_toStartOf="@id/tv_comment_error_message"
-            app:layout_constraintHorizontal_chainStyle="packed"
+        <EditText
+            android:id="@+id/et_review_comment"
+            style="@style/ttlFormTextFieldStyle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ttl_bg_text_field_inactive"
+            android:gravity="top"
+            android:hint="@string/ttl_leave_a_review_ellipsis"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:paddingStart="16dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="12dp"
+            android:scrollbars="vertical"
+            android:textCursorDrawable="@drawable/ttl_cursor_color"
+            app:layout_constraintBottom_toTopOf="@id/cl_comment_error"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="UseAppTint" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_goneMarginTop="48dp" />
 
-        <TextView
-            android:id="@+id/tv_comment_error_message"
-            style="@style/ttlErrorInfoLabelStyle"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_comment_error"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ttl_error_field_required"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_comment_error_icon"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_review_comment"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/iv_comment_error_icon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:src="@drawable/ttl_ic_info"
+                android:tint="@color/ttlColorDestructiveIcon"
+                app:layout_constraintEnd_toStartOf="@id/tv_comment_error_message"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseAppTint" />
+
+            <TextView
+                android:id="@+id/tv_comment_error_message"
+                style="@style/ttlErrorInfoLabelStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/ttl_error_field_required"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_comment_error_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -236,7 +249,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_comment_error">
+        app:layout_constraintTop_toBottomOf="@id/cl_review_comment">
 
         <ProgressBar
             android:id="@+id/pb_button_submit_review_loading"
