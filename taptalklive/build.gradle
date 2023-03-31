@@ -116,10 +116,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:19.0.0'
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
+    // Multidex
     implementation 'com.android.support:multidex:1.0.3'
 
     // TapTalk
-    implementation 'com.github.taptalk-io:taptalk.io-android:2.9.5'
+    implementation 'com.github.taptalk-io:taptalk.io-android:2.9.7'
 }
 
 task androidSourcesJar(type: Jar) {
@@ -133,9 +134,10 @@ project.afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 artifact androidSourcesJar // optional sources
-//                groupId = 'com.github.taptalk-io'
-//                artifactId = 'taptalk.io-omnichannel-android'
-//                version = "\"${defaultConfig.versionName}\""
+                groupId = 'com.github.taptalk-io'
+                artifactId = 'taptalk.io-omnichannel-android'
+                version = "2.0.0"
+//                version = "\"${android.defaultConfig.versionName}\""
             }
         }
     }
