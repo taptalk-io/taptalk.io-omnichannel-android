@@ -36,6 +36,8 @@ class TTLConstant {
         const val TWITTER = "twitter"
         const val FACEBOOK = "facebook"
         const val INSTAGRAM = "instagram"
+        const val GOOGLE_BUSINESS = "google_business"
+        const val LINKEDIN = "linkedin"
     }
 
     object ScfPathType {

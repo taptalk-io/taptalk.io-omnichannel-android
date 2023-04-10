@@ -9,8 +9,11 @@ import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.FACEBOOK
+import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.GOOGLE_BUSINESS
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.INSTAGRAM
+import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.LAUNCHER
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.LINE
+import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.LINKEDIN
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.TELEGRAM
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.TWITTER
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.WHATSAPP_BA
@@ -42,6 +45,9 @@ class TTLChannelLinksAdapter(
 
             // Set channel icon
             when (item.channel) {
+                LAUNCHER -> {
+                    ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_taptalk))
+                }
                 WHATSAPP_SME -> {
                     ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_whatsapp_sme))
                 }
@@ -63,8 +69,14 @@ class TTLChannelLinksAdapter(
                 FACEBOOK -> {
                     ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_messenger))
                 }
+                GOOGLE_BUSINESS -> {
+                    ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_google))
+                }
+                LINKEDIN -> {
+                    ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_linkedin))
+                }
                 else -> {
-                    ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_taptalk))
+                    ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_default))
                 }
             }
 
