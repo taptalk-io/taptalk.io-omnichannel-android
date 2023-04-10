@@ -1,6 +1,5 @@
 package io.taptalk.taptalklive.Fragment
 
-import android.R.attr.maxLength
 import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -20,7 +19,6 @@ import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.taptalklive.Const.TTLConstant.Form.REVIEW_CHARACTER_LIMIT
 import io.taptalk.taptalklive.R
 
-
 class TTLReviewBottomSheetFragment(
     private val reviewBottomSheetListener: ReviewBottomSheetListener,
     private var rating: Int = 0,
@@ -38,6 +36,7 @@ class TTLReviewBottomSheetFragment(
     private lateinit var ivReviewStar5: ImageView
     private lateinit var pbButtonSubmitReviewLoading: ProgressBar
     private lateinit var tvLabelReviewRating: TextView
+    private lateinit var tvLabelCommentOptional: TextView
     private lateinit var tvLabelCharacterCount: TextView
     private lateinit var tvButtonSubmitReview: TextView
     private lateinit var etReviewComment: EditText
@@ -69,6 +68,7 @@ class TTLReviewBottomSheetFragment(
         ivReviewStar5 = view.findViewById(R.id.iv_review_star_5)
         pbButtonSubmitReviewLoading = view.findViewById(R.id.pb_button_submit_review_loading)
         tvLabelReviewRating = view.findViewById(R.id.tv_label_review_rating)
+        tvLabelCommentOptional = view.findViewById(R.id.tv_label_comment_optional)
         tvLabelCharacterCount = view.findViewById(R.id.tv_label_character_count)
         tvButtonSubmitReview = view.findViewById(R.id.tv_button_submit_review)
         etReviewComment = view.findViewById(R.id.et_review_comment)
@@ -119,6 +119,7 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_0)
+                tvLabelCommentOptional.visibility = View.VISIBLE
                 activity?.let {
                     ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
                     ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
@@ -134,6 +135,7 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_1)
+                tvLabelCommentOptional.visibility = View.GONE
                 activity?.let {
                     ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
                     ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
@@ -149,6 +151,7 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_2)
+                tvLabelCommentOptional.visibility = View.GONE
                 activity?.let {
                     ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
                     ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
@@ -164,6 +167,7 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_3)
+                tvLabelCommentOptional.visibility = View.GONE
                 activity?.let {
                     ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
                     ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
@@ -179,6 +183,7 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_active))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_4)
+                tvLabelCommentOptional.visibility = View.VISIBLE
                 clCommentError.visibility = View.GONE
                 activity?.let {
                     etReviewComment.background = ContextCompat.getDrawable(it, R.drawable.ttl_bg_text_field_inactive)
@@ -196,6 +201,7 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar4.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_active))
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_active))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_5)
+                tvLabelCommentOptional.visibility = View.VISIBLE
                 clCommentError.visibility = View.GONE
                 activity?.let {
                     etReviewComment.background = ContextCompat.getDrawable(it, R.drawable.ttl_bg_text_field_inactive)

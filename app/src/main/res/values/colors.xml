@@ -11,6 +11,11 @@
 <!--    <color name="ttlColorPrimaryDark">@color/colorPrimaryDark</color>-->
 <!--    <color name="ttlColorAccent">@color/colorAccent</color>-->
 
+<!--    <color name="ttlColorTextLight">#ffff00</color>-->
+<!--    <color name="ttlColorTextSoft">@color/ttlColorPrimaryLight</color>-->
+<!--    <color name="ttlColorTextMedium">@color/colorPrimary</color>-->
+<!--    <color name="ttlColorTextDark">@color/colorPrimaryDark</color>-->
+
 <!--    <color name="ttlLeftBubbleSenderNameColor">@color/ttlColorTextError</color>-->
 <!--    <color name="ttlLeftBubbleMessageBodyColor">@color/ttlTransparentBlack1980</color>-->
 <!--    <color name="ttlRightBubbleMessageBodyColor">@color/ttlWhiteF3</color>-->
