@@ -57,7 +57,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconStarInactive" />
+            android:tint="@color/ttlIconReviewStarInactive" />
 
         <ImageView
             android:id="@+id/iv_review_star_2"
@@ -66,7 +66,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconStarInactive" />
+            android:tint="@color/ttlIconReviewStarInactive" />
 
 
         <ImageView
@@ -76,7 +76,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconStarInactive" />
+            android:tint="@color/ttlIconReviewStarInactive" />
 
 
         <ImageView
@@ -86,7 +86,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconStarInactive" />
+            android:tint="@color/ttlIconReviewStarInactive" />
 
 
         <ImageView
@@ -94,7 +94,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconStarInactive" />
+            android:tint="@color/ttlIconReviewStarInactive" />
 
 
     </LinearLayout>

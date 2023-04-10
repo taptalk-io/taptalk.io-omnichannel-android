@@ -77,7 +77,7 @@
     <style name="ttlHomeDescriptionLabelStyle" parent="ttlFontFamilyRegular">
         <item name="android:letterSpacing" tools:targetApi="lollipop">-0.01</item>
         <item name="android:lineSpacingExtra">4sp</item>
-        <item name="android:textColor">@color/ttlHomeTitleDescriptionColor</item>
+        <item name="android:textColor">@color/ttlHomeDescriptionLabelColor</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -127,6 +127,12 @@
     <style name="ttlButtonLabelStyle" parent="ttlFontFamilyBold">
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/ttlButtonLabelColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ttlBorderedButtonLabelStyle" parent="ttlFontFamilyBold">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/ttlBorderedButtonLabelColor</item>
         <item name="android:textSize">16sp</item>
     </style>
 

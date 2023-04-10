@@ -18,6 +18,6 @@
 <!--    <color name="ttlLeftBubbleBackgroundColor">#d2e9ff</color>-->
 <!--    <color name="ttlRightBubbleBackgroundColor">@color/colorPrimaryDark</color>-->
 
-<!--    <color name="ttlIconStarInactive">@color/ttlColorPrimaryLight</color>-->
-<!--    <color name="ttlIconStarActive">@color/colorPrimary</color>-->
+<!--    <color name="ttlIconReviewStarInactive">@color/ttlColorPrimaryLight</color>-->
+<!--    <color name="ttlIconReviewStarActive">@color/colorPrimary</color>-->
 </resources>

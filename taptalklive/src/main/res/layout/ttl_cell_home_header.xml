@@ -21,7 +21,7 @@
         android:background="?attr/actionBarItemBackground"
         android:padding="16dp"
         android:src="@drawable/ttl_ic_close_grey"
-        android:tint="@color/ttlIconNavBarCloseButton"
+        android:tint="@color/ttlIconNavBarCloseButtonColor"
         app:layout_constraintBottom_toTopOf="@id/tv_label_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -155,15 +155,14 @@
 
             <TextView
                 android:id="@+id/tv_button_message_directly"
-                style="@style/ttlButtonLabelStyle"
+                style="@style/ttlBorderedButtonLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
                 android:gravity="center"
-                android:text="@string/ttl_message_us_directly"
-                android:textColor="@color/ttlColorTextPrimary" />
+                android:text="@string/ttl_message_us_directly" />
 
         </LinearLayout>
 
@@ -243,15 +242,14 @@
 
             <TextView
                 android:id="@+id/tv_button_new_message"
-                style="@style/ttlButtonLabelStyle"
+                style="@style/ttlBorderedButtonLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
                 android:gravity="center"
-                android:text="@string/ttl_new_message"
-                android:textColor="@color/ttlColorTextPrimary" />
+                android:text="@string/ttl_new_message" />
 
         </LinearLayout>
 

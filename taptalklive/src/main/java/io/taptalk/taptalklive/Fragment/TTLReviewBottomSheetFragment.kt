@@ -120,11 +120,11 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_0)
                 activity?.let {
-                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
                 }
             }
             1 -> {
@@ -135,11 +135,11 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_1)
                 activity?.let {
-                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
                 }
             }
             2 -> {
@@ -150,11 +150,11 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_2)
                 activity?.let {
-                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
                 }
             }
             3 -> {
@@ -165,11 +165,11 @@ class TTLReviewBottomSheetFragment(
                 ivReviewStar5.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ttl_ic_star_inactive))
                 tvLabelReviewRating.text = requireContext().getString(R.string.ttl_rating_3)
                 activity?.let {
-                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
                 }
             }
             4 -> {
@@ -182,11 +182,11 @@ class TTLReviewBottomSheetFragment(
                 clCommentError.visibility = View.GONE
                 activity?.let {
                     etReviewComment.background = ContextCompat.getDrawable(it, R.drawable.ttl_bg_text_field_inactive)
-                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarInactive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarInactive)))
                 }
             }
             5 -> {
@@ -199,11 +199,11 @@ class TTLReviewBottomSheetFragment(
                 clCommentError.visibility = View.GONE
                 activity?.let {
                     etReviewComment.background = ContextCompat.getDrawable(it, R.drawable.ttl_bg_text_field_inactive)
-                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
-                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar1, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar2, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar3, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar4, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
+                    ImageViewCompat.setImageTintList(ivReviewStar5, ColorStateList.valueOf(ContextCompat.getColor(it, R.color.ttlIconReviewStarActive)))
                 }
             }
         }

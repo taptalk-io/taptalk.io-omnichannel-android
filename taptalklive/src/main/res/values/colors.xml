@@ -44,16 +44,15 @@
     <color name="tapColorSuccessIcon">@color/ttlColorSuccessIcon</color>
     <color name="tapColorDestructiveIcon">@color/ttlColorDestructiveIcon</color>
 
-    <color name="tapDefaultRightBubbleBackgroundColor">@color/ttlColorPrimary</color>
-
     <color name="tapIconRoomListMessageDeleted">@color/ttlIconMessageDeleted</color>
     <color name="tapIconRoomListMessageDelivered">@color/ttlIconMessageDelivered</color>
     <color name="tapIconRoomListMessageRead">@color/ttlIconMessageRead</color>
     <color name="tapIconRoomListMessageFailed">@color/ttlIconMessageFailed</color>
     <color name="tapIconRoomListMessageSending">@color/ttlIconMessageSending</color>
     <color name="tapIconRoomListMessageSent">@color/ttlIconMessageSent</color>
-    <color name="tapIconRoomListMuted">@color/ttlTransparentBlack1940</color>
+    <color name="tapIconRoomListMuted">@color/ttlColorGrayIcon</color>
 
+    <color name="tapDefaultRightBubbleBackgroundColor">@color/ttlColorPrimary</color>
     <color name="tapLeftBubbleSenderNameColor">@color/ttlLeftBubbleSenderNameColor</color>
     <color name="tapLeftBubbleMessageBodyColor">@color/ttlLeftBubbleMessageBodyColor</color>
     <color name="tapLeftBubbleMessageBodyURLColor">@color/ttlLeftBubbleMessageBodyURLColor</color>
@@ -68,7 +67,7 @@
     <!--TapLive Component Colors-->
     <color name="ttlDefaultBackgroundColor">@color/ttlWhiteF3</color>
     <color name="ttlDefaultNavBarBackgroundColor">@color/ttlColorPrimary</color>
-    <color name="ttlIconNavBarCloseButton">@color/ttlColorWhiteIcon</color>
+    <color name="ttlIconNavBarCloseButtonColor">@color/ttlColorWhiteIcon</color>
 
     <color name="ttlTextFieldCursorColor">@color/ttlColorPrimary</color>
     <color name="ttlTextFieldBorderActiveColor">@color/ttlColorPrimary</color>
@@ -84,7 +83,7 @@
 
     <color name="ttlHomeBackgroundColor">@color/tapWhiteFa</color>
     <color name="ttlHomeTitleLabelColor">@color/ttlColorTextLight</color>
-    <color name="ttlHomeTitleDescriptionColor">@color/ttlColorTextLight</color>
+    <color name="ttlHomeDescriptionLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlHomeInfoLabelColor">@color/ttlColorTextMedium</color>
     <color name="ttlHomeButtonLabelColor">@color/ttlColorTextPrimary</color>
 
@@ -106,6 +105,7 @@
     <color name="ttlErrorInfoLabelColor">@color/ttlColorTextError</color>
 
     <color name="ttlButtonLabelColor">@color/ttlColorTextLight</color>
+    <color name="ttlBorderedButtonLabelColor">@color/ttlColorTextPrimary</color>
     <color name="ttlButtonLabelDisabledColor">@color/ttlColorTextSoft</color>
     <color name="ttlButtonIconColor">@color/ttlColorTextLight</color>
     <color name="ttlIconLoadingProgressPrimary">@color/ttlColorPrimaryIcon</color>
@@ -141,8 +141,8 @@
 
     <color name="ttlPopupDialogTitleColor">@color/ttlColorTextDark</color>
 
-    <color name="ttlIconStarActive">@color/ttlSaffron</color>
-    <color name="ttlIconStarInactive">@color/ttlSaffron</color>
+    <color name="ttlIconReviewStarActive">@color/ttlSaffron</color>
+    <color name="ttlIconReviewStarInactive">@color/ttlSaffron</color>
 
     <!--Color Palette-->
     <color name="ttlWhite">#ffffff</color>
