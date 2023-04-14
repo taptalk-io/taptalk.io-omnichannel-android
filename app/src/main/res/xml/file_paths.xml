@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-path
-        name="TapTalkFiles"
-        path="." />
+    <files-path name="Files" path="." />
+    <external-path name="TapTalkFiles" path="." />
+    <cache-path name="TapTalkCache" path="."/>
 </paths>
