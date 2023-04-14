@@ -27,13 +27,42 @@ class TTLConstant {
         const val TYPE_WABA_TEMPLATE_FILE_MESSAGE = 3024
     }
 
+    object CaseMedium {
+        const val LAUNCHER = "launcher"
+        const val WHATSAPP_SME = "whatsapp"
+        const val WHATSAPP_BA = "whatsappba"
+        const val TELEGRAM = "telegram"
+        const val LINE = "line"
+        const val TWITTER = "twitter"
+        const val FACEBOOK = "facebook"
+        const val INSTAGRAM = "instagram"
+        const val GOOGLE_BUSINESS = "google_business"
+        const val LINKEDIN = "linkedin"
+    }
+
+    object ScfPathType {
+        const val QNA = "qna"
+        const val TALK_TO_AGENT = "talk_to_agent"
+    }
+
     object RequestCode {
         const val REVIEW = 1001
+    }
+
+    object Form {
+        const val REVIEW_CHARACTER_LIMIT = 1000
+    }
+
+    object Broadcast {
+        const val SCF_PATH_UPDATED = "kTapTalkLiveScfPathUpdated"
+        const val NEW_CASE_CREATED = "kTapTalkLiveNewCaseCreated"
     }
 
     object Extras {
         const val MESSAGE = "kTapTalkLiveExtrasMessage"
         const val SHOW_CLOSE_BUTTON = "kTapTalkLiveExtrasShowCloseButton"
+        const val SCF_PATH = "kTapTalkLiveExtrasScfPath"
+        const val CASE_DETAILS = "kTapTalkLiveCaseDetails"
     }
 
     object PreferenceKey {
@@ -48,6 +77,9 @@ class TTLConstant {
         const val TAPTALK_APP_KEY_ID = "kTapTalkLiveTapTalkAppKeyId"
         const val TAPTALK_APP_KEY_SECRET = "kTapTalkLiveTapTalkAppKeySecret"
         const val TAPTALK_AUTH_TICKET = "kTapTalkLiveTapTalkAuthenticationTicket"
+        const val CHANNEL_LINKS = "kTapTalkLiveChannelLinks"
+        const val SCF_PATH = "kTapTalkLiveScfPath"
+        const val TOPICS = "kTapTalkLiveTopics"
         const val CASE_EXISTS = "kTapTalkLiveCaseExists"
     }
 }

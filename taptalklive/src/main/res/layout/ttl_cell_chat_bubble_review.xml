@@ -37,8 +37,8 @@
         android:id="@+id/fl_bubble"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:elevation="1dp"
@@ -119,33 +119,35 @@
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_user_name"
-                tools:text="Hey there, love your work!" />
+                tools:text="Do you mind leaving a review so that we can keep on improving our services?" />
 
             <LinearLayout
                 android:id="@+id/ll_button_review"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/ttl_bg_button_active_ripple"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="12dp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_message_timestamp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_message_body">
 
                 <ImageView
                     android:id="@+id/iv_button_review"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
-                    android:src="@drawable/ttl_ic_checklist_black_19"
-                    android:tint="@color/ttlWhite"
-                    android:visibility="gone" />
+                    android:alpha="0.4"
+                    android:src="@drawable/ttl_ic_check"
+                    android:tint="@color/ttlColorDarkIcon"
+                    android:visibility="gone"
+                    tools:ignore="UseAppTint"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tv_button_review"
@@ -154,9 +156,22 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
-                    android:text="@string/ttl_leave_a_review" />
+                    android:text="@string/ttl_rate_your_conversation" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_message_timestamp"
+                style="@style/tapLeftBubbleMessageTimestampStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_button_review"
+                app:layout_goneMarginEnd="0dp"
+                app:layout_goneMarginTop="2dp"
+                tools:text="17:05" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -200,7 +215,6 @@
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
         android:layout_marginBottom="2dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/fl_bubble"
         app:layout_constraintEnd_toStartOf="@id/fl_bubble"

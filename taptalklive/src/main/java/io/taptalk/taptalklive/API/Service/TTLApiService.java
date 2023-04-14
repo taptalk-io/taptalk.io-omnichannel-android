@@ -10,7 +10,8 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetScfPathResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
@@ -25,10 +26,13 @@ public interface TTLApiService {
     Observable<TTLBaseResponse<TTLRequestAccessTokenResponse>> requestAccessToken(@Header("Authorization") String authTicket);
 
     @POST("client/project/get_configs")
-    Observable<TTLBaseResponse<TTLGetProjectConfigsRespone>> getProjectConfigs();
+    Observable<TTLBaseResponse<TTLGetProjectConfigsResponse>> getProjectConfigs();
 
     @POST("client/taptalk/request_auth_ticket")
     Observable<TTLBaseResponse<TTLRequestTicketResponse>> requestTapTalkAuthTicket();
+
+    @POST("client/scf/get_path")
+    Observable<TTLBaseResponse<TTLGetScfPathResponse>> getScfPath();
 
     @POST("client/topic/get_list")
     Observable<TTLBaseResponse<TTLGetTopicListResponse>> getTopicList();

@@ -103,7 +103,7 @@ public class TTLCaseListModel {
         }
         TAPRoomModel room = lastMessage.getRoom();
         if (null != room && (null == room.getImageURL() || room.getImageURL().getThumbnail().isEmpty())) {
-            defaultAvatarBackgroundColor = TAPUtils.getRandomColor(TapTalkLive.context, room.getName());
+            defaultAvatarBackgroundColor = TAPUtils.getRandomColor(TapTalkLive.context, room.getRoomID());
         }
     }
 

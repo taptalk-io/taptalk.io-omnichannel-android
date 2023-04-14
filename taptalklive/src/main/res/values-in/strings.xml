@@ -3,7 +3,10 @@
     <string name="ttl_get_started">Memulai dengan TapTalk.io</string>
     <string name="ttl_launch_live_chat">Tampilkan live chat</string>
 
-    <string name="ttl_create_form_title">Butuh Bantuan?</string>
+    <string name="ttl_home_title">Butuh Bantuan?</string>
+    <string name="ttl_home_description">Pilih salah satu channel di bawah atau kirim pesan langsung.</string>
+    <string name="ttl_home_channel_description">Pilih salah satu channel untuk memulai</string>
+    <string name="ttl_create_form_title">Pesan Baru</string>
     <string name="ttl_create_form_description">Harap isi formulir di bawah sebelum meninggalkan pesan</string>
     <string name="ttl_full_name">Nama Lengkap</string>
     <string name="ttl_enter_full_name">Masukkan nama lengkap</string>
@@ -15,15 +18,30 @@
     <string name="ttl_conversations">Percakapan</string>
     <string name="ttl_messages">Pesan</string>
     <string name="ttl_type_message_here">Masukkan pesan</string>
+    <string name="ttl_enter_your_message">Masukkan pesan</string>
     <string name="ttl_send_message">Kirim Pesan</string>
+    <string name="ttl_message_us_directly">Kirim Pesan Langsung</string>
+    <string name="ttl_talk_to_agent">Kirim Pesan ke Agent</string>
     <string name="ttl_new_conversation">Percakapan Baru</string>
+    <string name="ttl_your_messages">Pesan Anda</string>
+    <string name="ttl_see_all_messages">Lihat Semua Pesan</string>
     <string name="ttl_new_message">Pesan Baru</string>
+    <string name="ttl_or_uppercase">ATAU</string>
     <string name="ttl_ok">OK</string>
     <string name="ttl_cancel">Batal</string>
-    <string name="ttl_leave_a_review">Berikan Ulasan</string>
+    <string name="ttl_leave_a_review">Berikan ulasan</string>
+    <string name="ttl_leave_a_review_ellipsis">Berikan ulasan…</string>
+    <string name="ttl_rate_your_conversation">Berikan penilaian</string>
+    <string name="ttl_comment">Komentar</string>
+    <string name="ttl_optional">(Opsional)</string>
+    <string name="ttl_submit">Kirim</string>
     <string name="ttl_submit_review">Kirim ulasan</string>
     <string name="ttl_review_submitted">Ulasan terkirim</string>
+    <string name="ttl_thank_you_exclamation">Terima Kasih!</string>
+    <string name="ttl_review_submitted_message">Umpan balik Anda sangat dihargai dan akan membantu kami untuk melayani Anda dan pengguna lain!</string>
     <string name="ttl_successfully_logged_in">Berhasil log in.</string>
+    <string name="ttl_mark_as_resolved">Akhiri percakapan</string>
+    <string name="ttl_faq">FAQ</string>
 
     <string name="ttl_error">Error</string>
     <string name="ttl_error_message_general">Terjadi kesalahan, silakan coba lagi.</string>
@@ -36,7 +54,11 @@
     <string name="ttl_error_not_initialized">TapTalkLive is not initialized. Please call TapTalkLive.init()</string>
     <string name="ttl_error_xc_room_id_empty">Unable to fetch TapTalk chat room</string>
     <string name="ttl_error_taptalk_auth_ticket_empty">Unable to request TapTalk authentication ticket.</string>
+    <string name="ttl_error_field_required">Bagian ini diperlukan</string>
+    <string name="ttl_error_failed_to_submit">Gagal Mengirim</string>
+    <string name="ttl_error_message_submit_review">Terjadi kesalahan saat mengirimkan ulasan, harap coba kirim ulang ulasan Anda untuk percakapan ini.</string>
 
+    <string name="ttl_rating_0">Tidak ada rating</string>
     <string name="ttl_rating_1">Mengecewakan</string>
     <string name="ttl_rating_2">Kurang baik</string>
     <string name="ttl_rating_3">Cukup baik</string>
@@ -45,5 +67,4 @@
     <string name="ttl_close_case">Tutup percakapan</string>
     <string name="ttl_close_case_dialog_message">Percakapan ini akan ditutup dan Anda tidak akan dapat mengirim pesan atau menerima bantuan terkait kasus ini. Apa Anda yakin ingin melanjutkan?</string>
 
-    <string name="ttl_mark_as_solved">Akhiri percakapan</string>
 </resources>

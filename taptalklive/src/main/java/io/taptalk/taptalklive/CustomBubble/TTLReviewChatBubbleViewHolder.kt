@@ -3,6 +3,7 @@ package io.taptalk.taptalklive.CustomBubble
 import android.app.Activity
 import android.content.res.ColorStateList
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -30,8 +31,8 @@ import io.taptalk.taptalklive.R
 class TTLReviewChatBubbleViewHolder internal constructor(
         parent: ViewGroup,
         itemLayoutId: Int,
-        private val listener: TTLReviewChatBubbleListener) :
-    TAPBaseChatViewHolder(parent, itemLayoutId) {
+        private val listener: TTLReviewChatBubbleListener
+) : TAPBaseChatViewHolder(parent, itemLayoutId) {
 
     private val clBubble: ConstraintLayout = itemView.findViewById(R.id.cl_bubble)
     private val flBubble: FrameLayout = itemView.findViewById(R.id.fl_bubble)
@@ -43,8 +44,9 @@ class TTLReviewChatBubbleViewHolder internal constructor(
     private val tvAvatarLabel: TextView = itemView.findViewById(R.id.tv_avatar_label)
     private val tvUserName: TextView = itemView.findViewById(R.id.tv_user_name)
     private val tvMessageBody: TextView = itemView.findViewById(R.id.tv_message_body)
-    private val tvMessageStatus: TextView = itemView.findViewById(R.id.tv_message_status)
     private val tvButtonReview: TextView = itemView.findViewById(R.id.tv_button_review)
+    private val tvMessageTimestamp: TextView = itemView.findViewById(R.id.tv_message_timestamp)
+    private val tvMessageStatus: TextView = itemView.findViewById(R.id.tv_message_status)
     private val vMarginLeft: View = itemView.findViewById(R.id.v_margin_left)
     private val vMarginRight: View = itemView.findViewById(R.id.v_margin_right)
 
@@ -52,8 +54,6 @@ class TTLReviewChatBubbleViewHolder internal constructor(
 
     private var isNeedAnimateSend = false
     private var isAnimating = false
-
-//    private lateinit var caseModel: TTLCaseModel
 
     private fun isMessageFromMySelf(messageModel: TAPMessageModel): Boolean {
         return user.userID == messageModel.user.xcUserID
@@ -75,15 +75,19 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             vMarginRight.visibility = View.GONE
             vMarginLeft.visibility = View.VISIBLE
 
-            if (null != item.isRead && item.isRead!!) {
+            if (item.isRead == true) {
                 showMessageAsRead(item)
-            } else if (null != item.delivered && item.delivered!!) {
+            }
+            else if (item.isDelivered == true) {
                 showMessageAsDelivered(item)
-            } else if (null != item.failedSend && item.failedSend!!) {
+            }
+            else if (item.isFailedSend == true) {
                 showMessageFailedToSend()
-            } else if (null != item.sending && !item.sending!!) {
+            }
+            else if (item.isSending == true) {
                 showMessageAsSent(item)
-            } else {
+            }
+            else {
                 showMessageAsSending()
             }
         } else {
@@ -95,59 +99,67 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             vMarginRight.visibility = View.VISIBLE
             vMarginLeft.visibility = View.GONE
 
-            if (item.room.roomType == TYPE_PERSONAL) {
+            if (item.room.type == TYPE_PERSONAL) {
                 // Hide avatar and name for personal room
                 civAvatar.visibility = View.GONE
                 tvAvatarLabel.visibility = View.GONE
                 tvUserName.visibility = View.GONE
             } else {
                 // Load avatar and name for other room types
-                if (null != user && null != user.avatarURL && user.avatarURL.thumbnail.isNotEmpty()) {
-                    Glide.with(itemView.context).load(user.avatarURL.thumbnail).into(civAvatar)
+                if (null != user && null != user.imageURL && user.imageURL.thumbnail.isNotEmpty()) {
+                    Glide.with(itemView.context).load(user.imageURL.thumbnail).into(civAvatar)
                     ImageViewCompat.setImageTintList(civAvatar, null)
                     civAvatar.visibility = View.VISIBLE
                     tvAvatarLabel.visibility = View.GONE
-                } else if (null != item.user.avatarURL && item.user.avatarURL.thumbnail.isNotEmpty()) {
-                    Glide.with(itemView.context).load(item.user.avatarURL.thumbnail).into(civAvatar)
+                }
+                else if (null != item.user.imageURL && item.user.imageURL.thumbnail.isNotEmpty()) {
+                    Glide.with(itemView.context).load(item.user.imageURL.thumbnail).into(civAvatar)
                     ImageViewCompat.setImageTintList(civAvatar, null)
                     civAvatar.visibility = View.VISIBLE
                     tvAvatarLabel.visibility = View.GONE
-                } else {
-                    ImageViewCompat.setImageTintList(civAvatar, ColorStateList.valueOf(TAPUtils.getRandomColor(itemView.context, item.user.name)))
+                }
+                else {
+                    ImageViewCompat.setImageTintList(civAvatar, ColorStateList.valueOf(TAPUtils.getRandomColor(itemView.context, item.user.fullname)))
                     civAvatar.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_circle_9b9b9b))
-                    tvAvatarLabel.text = TAPUtils.getInitials(item.user.name, 2)
+                    tvAvatarLabel.text = TAPUtils.getInitials(item.user.fullname, 2)
                     civAvatar.visibility = View.VISIBLE
                     tvAvatarLabel.visibility = View.VISIBLE
                 }
-                tvUserName.text = item.user.name
+                tvUserName.text = item.user.fullname
                 tvUserName.visibility = View.VISIBLE
             }
-
-//            try {
-//                caseModel = TTLCaseModel(item.data)
-//            } catch (e: Exception) {
-//                caseModel = TTLCaseModel()
-//                e.printStackTrace()
-//            }
 
             if (item.type == TYPE_REVIEW_SUBMITTED) {
                 // Show review submitted
                 llButtonReview.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_button_inactive_ripple)
                 tvButtonReview.text = itemView.context.getString(R.string.ttl_review_submitted)
+                tvButtonReview.setTextColor(ContextCompat.getColor(itemView.context, R.color.ttlColorTextSoft))
                 ivButtonReview.visibility = View.VISIBLE
-                llButtonReview.setOnClickListener { }
-            } else if (item.type == TYPE_REVIEW) {
+                llButtonReview.visibility = View.VISIBLE
+                llButtonReview.setOnClickListener(null)
+            }
+            else if (item.type == TYPE_REVIEW) {
                 // Show review button available
                 llButtonReview.background = ContextCompat.getDrawable(itemView.context, R.drawable.ttl_bg_button_active_ripple)
-                tvButtonReview.text = itemView.context.getString(R.string.ttl_leave_a_review)
+                tvButtonReview.text = itemView.context.getString(R.string.ttl_rate_your_conversation)
+                tvButtonReview.setTextColor(ContextCompat.getColor(itemView.context, R.color.ttlColorTextLight))
                 ivButtonReview.visibility = View.GONE
-                llButtonReview.setOnClickListener { onReviewButtonTapped() }
+                llButtonReview.visibility = View.VISIBLE
+                llButtonReview.setOnClickListener {
+                    onReviewButtonTapped()
+                }
+            }
+            else {
+                // Hide review button
+                llButtonReview.visibility = View.GONE
+                llButtonReview.setOnClickListener(null)
             }
         }
 
         tvMessageBody.text = item.body
 
         tvMessageStatus.text = item.messageStatusText
+        tvMessageTimestamp.text = item.messageStatusText
 
         markMessageAsRead(item, TapTalk.getTapTalkActiveUser(TAPTALK_INSTANCE_KEY))
 
@@ -225,7 +237,7 @@ class TTLReviewChatBubbleViewHolder internal constructor(
             flBubble.translationX = TAPUtils.dpToPx(-22).toFloat()
             ivSending.translationX = 0f
             ivSending.translationY = 0f
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 flBubble.animate()
                         .translationX(0f)
                         .setDuration(160L)
@@ -239,9 +251,9 @@ class TTLReviewChatBubbleViewHolder internal constructor(
                             ivSending.alpha = 0f
                             isAnimating = false
                             if (null != item.isRead && item.isRead!! ||
-                                    null != item.delivered && item.delivered!!) {
+                                    null != item.isDelivered && item.isDelivered!!) {
                                 //notifyItemChanged(getItems().indexOf(item))
-                                onBind(item, position)
+                                onBind(item, bindingAdapterPosition)
                             }
                         }
                         .start()

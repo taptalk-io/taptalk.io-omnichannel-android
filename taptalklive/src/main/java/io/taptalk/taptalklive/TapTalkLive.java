@@ -4,6 +4,7 @@ import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ApiErrorCode.OTHER_ERR
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
+import static io.taptalk.taptalklive.Const.TTLConstant.Broadcast.SCF_PATH_UPDATED;
 import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_FILE_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_IMAGE_MESSAGE;
@@ -24,13 +25,14 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.facebook.stetho.Stetho;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
@@ -38,13 +40,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Helper.TapTalkDialog;
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface;
 import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Listener.TapUICustomKeyboardListener;
-import io.taptalk.TapTalk.Listener.TapUIRoomListListener;
+import io.taptalk.TapTalk.Manager.TAPNetworkStateManager;
 import io.taptalk.TapTalk.Manager.TapLocaleManager;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
@@ -56,14 +59,15 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateUserResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespone;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetScfPathResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLCaseModel;
+import io.taptalk.taptalklive.API.Model.TTLScfPathModel;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
-import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
-import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
+import io.taptalk.taptalklive.Activity.TTLHomeActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
@@ -71,7 +75,6 @@ import io.taptalk.taptalklive.Fragment.TTLCaseListFragment;
 import io.taptalk.taptalklive.Listener.TTLCommonListener;
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
-import io.taptalk.taptalklive.Manager.TTLNetworkStateManager;
 import io.taptalk.taptalklive.helper.TTLUtil;
 
 public class TapTalkLive {
@@ -137,58 +140,25 @@ public class TapTalkLive {
         // Get project configs for TapTalk SDK
         TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
 
-        if (TTLDataManager.getInstance().checkActiveUserExists() && !isGetCaseListCompleted) {
-            // Check if user has active case
-            TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
-                @Override
-                public void onSuccess(TTLGetCaseListResponse response) {
-                    TTLUtil.processGetCaseListResponse(response, new TapCommonListener() {
-                        @Override
-                        public void onSuccess(String successMessage) {
-                            onFinish();
-                        }
+        fetchScfPath();
 
-                        @Override
-                        public void onError(String errorCode, String errorMessage) {
-                            onFinish();
-                        }
-                    });
-                }
-
-                @Override
-                public void onError(TTLErrorModel error) {
-                    onFinish();
-                }
-
-                @Override
-                public void onError(String errorMessage) {
-                    onFinish();
-                }
-
-                private void onFinish() {
-                    isGetCaseListCompleted = true;
-                    if (isTapTalkInitialized) {
-                        isTapTalkLiveInitialized = true;
-                        tapTalkLiveListener.onInitializationCompleted();
-                    }
-                }
-            });
-        } else {
-            isGetCaseListCompleted = true;
-            if (isTapTalkInitialized) {
-                isTapTalkLiveInitialized = true;
-                tapTalkLiveListener.onInitializationCompleted();
-            }
-        }
+        // TODO: TEST DUMMY DATA
+//        if (BuildConfig.DEBUG) {
+//            TTLScfPathModel dummyScf = TAPUtils.fromJSON(new TypeReference<>() {
+//            }, "{\"itemID\":35,\"pathID\":10,\"parentID\":0,\"sequence\":0,\"title\":\"Selamat datang di TapTalk.io! Apa itu OmniChannel? Selamat datang di TapTalk.io! Apa itu OmniChannel? Selamat datang di TapTalk.io! Apa itu OmniChannel? Selamat datang di TapTalk.io! Apa itu OmniChann\",\"content\":\"Omnichannel adalah platform integrasi berbagai saluran yang digabungkan menjadi satu sistem manajemen untuk meningkatkan kepuasan pelanggan dan pengalaman pelanggan.\\n\\nDalam hal customer support, omnichannel menyatukan berbagai saluran perpesanan dalam platform yang sama. Omnichannel fokus pada perjalanan pelanggan dalam berkomunikasi dengan perusahaan, sehingga kualitas pengalaman yang didapatkan menjadi lebih mulus.\\nOmnichannel adalah platform integrasi berbagai saluran yang digabungkan menjadi satu sistem manajemen untuk meningkatkan kepuasan pelanggan dan pengalaman pelanggan.\\n\\nDalam hal customer support, omnichannel menyatukan berbagai saluran perpesanan dalam platform yang sama. Omnichannel fokus pada perjalanan pelanggan dalam berkomunikasi dengan perusahaan, sehingga kualitas pengalaman yang didapatkan menjadi lebih mulus.\\nOmnichannel adalah platform integrasi berbagai saluran yang digabungkan menjadi satu sistem manajemen untuk meningkatkan kepuasan pelanggan dan pengalaman pel\",\"type\":\"qna\",\"createdTime\":1641534357255,\"updatedTime\":1669876981058,\"deletedTime\":0,\"childItems\":[{\"itemID\":50,\"pathID\":10,\"parentID\":35,\"sequence\":2,\"title\":\"How to know what's the best subscription plan for your business?\",\"content\":\"How to know what's the best subscription plan for your business?\\n\\ndi atas ini kosong\\nHow to know what's the best subscription plan for your business\\n\",\"type\":\"talk_to_agent\",\"createdTime\":1641792012566,\"updatedTime\":1642671098853,\"deletedTime\":0,\"topics\":[{\"id\":1,\"name\":\"Billing kepotong gak??\"},{\"id\":96,\"name\":\"General yang panjanggggg yaaa coba dehhhhhhh\"},{\"id\":362,\"name\":\"new topic 2\"},{\"id\":361,\"name\":\"tes topic namanya panjang tes topic namanya\"}]},{\"itemID\":57,\"pathID\":10,\"parentID\":35,\"sequence\":3,\"title\":\"Why our company is the best choice for you?\",\"content\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae interdum sem, et congue turpis. Donec efficitur porttitor mauris, tempor dapibus ligula commodo tempus. Suspendisse congue nibh sit amet leo ultrices dictum. Proin pretium ornare sagittis. Donec vitae neque a lectus euismod rutrum. Proin a porta risus. Nullam semper velit sapien, sed venenatis metus pulvinar et. Etiam mollis tristique erat, nec vestibulum eros molestie nec. Fusce pulvinar est non quam iaculis gravida. Nulla tincidunt vulputate diam, varius vulputate lacus lobortis vel. Sed volutpat enim in iaculis imperdiet. Nulla semper sagittis porttitor. Nam rutrum lacus ligula, eu accumsan urna aliquam et.\\n.\\n.\\n.\\nullamcorper mollis metus, volutpat porta augue sodales fermentum. Cras vel elit ac urna ultrices tempor at nec nibh. Curabitur convallis augue non accumsan mollis. In quis elit ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed tristique enim nec mauris\",\"type\":\"qna\",\"createdTime\":1641803736932,\"updatedTime\":0,\"deletedTime\":0,\"childItems\":[{\"itemID\":58,\"pathID\":10,\"parentID\":57,\"sequence\":1,\"title\":\"More About Our Company\",\"content\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae interdum sem, et congue turpis. Donec efficitur porttitor mauris, tempor dapibus ligula commodo tempus. Suspendisse congue nibh sit amet leo ultrices dictum. Proin pretium ornare sagittis. Donec vitae neque a lectus euismod rutrum. Proin a porta risus. Nullam semper velit sapien, sed venenatis metus pulvinar et. Etiam mollis tristique erat, nec vestibulum eros molestie nec. Fusce pulvinar est non quam iaculis gravida. Nulla tincidunt vulputate diam, varius vulputate lacus lobortis vel. Sed volutpat enim in iaculis imperdiet. Nulla semper sagittis porttitor. Nam rutrum lacus ligula, eu accumsan urna aliquam\",\"type\":\"qna\",\"createdTime\":1641803770519,\"updatedTime\":0,\"deletedTime\":0},{\"itemID\":91,\"pathID\":10,\"parentID\":57,\"sequence\":2,\"title\":\"q\",\"content\":\"b\",\"type\":\"qna\",\"createdTime\":1642138351639,\"updatedTime\":0,\"deletedTime\":0},{\"itemID\":92,\"pathID\":10,\"parentID\":57,\"sequence\":3,\"title\":\"b\",\"content\":\"b\",\"type\":\"qna\",\"createdTime\":1642138359112,\"updatedTime\":0,\"deletedTime\":0},{\"itemID\":93,\"pathID\":10,\"parentID\":57,\"sequence\":4,\"title\":\"What is OmniChannel? \",\"content\":\"What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? What is OmniChannel? \",\"type\":\"qna\",\"createdTime\":1642138365487,\"updatedTime\":1655196511440,\"deletedTime\":0},{\"itemID\":94,\"pathID\":10,\"parentID\":57,\"sequence\":5,\"title\":\"asd\",\"content\":\"123\",\"type\":\"qna\",\"createdTime\":1642138378117,\"updatedTime\":0,\"deletedTime\":0}]},{\"itemID\":59,\"pathID\":10,\"parentID\":35,\"sequence\":4,\"title\":\"Services we provide:\",\"content\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae interdum sem, et congue turpis. Donec efficitur porttitor mauris, tempor dapibus ligula commodo tempus. Suspendisse congue nibh sit amet leo ultrices dictum. Proin pretium ornare sagittis. Donec vitae neque a lectus euismod rutrum. Proin a porta risus. Nullam semper velit sapien, sed venenatis metus pulvinar et. Etiam mollis tristique erat, nec vestibulum eros molestie nec. Fusce pulvinar est non quam iaculis gravida. Nulla tincidunt vulputate diam, varius vulputate lacus lobortis vel. Sed volutpat enim in iaculis imperdiet. Nulla semper sagittis porttitor. Nam rutrum lacus ligula, eu accumsan urna aliquam et.\\n.\\n.\\n.\\nullamcorper mollis metus, volutpat porta augue sodales fermentum. Cras vel elit ac urna ultrices tempor at nec nibh. Curabitur convallis augue non accumsan mollis. In quis elit ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed tristique enim nec mauris\",\"type\":\"talk_to_agent\",\"createdTime\":1641803843242,\"updatedTime\":0,\"deletedTime\":0,\"topics\":[{\"id\":1,\"name\":\"Billing kepotong gak??\"},{\"id\":96,\"name\":\"General yang panjanggggg yaaa coba dehhhhhhh\"}]},{\"itemID\":86,\"pathID\":10,\"parentID\":35,\"sequence\":5,\"title\":\"Apa itu Chatbot? Fitur apa saja yang tersedia? \uD83C\uDD94 Apa itu Chatbot? Fitur apa saja yang tersedia? Apa itu Chatbot? Fitur apa saja yang tersedia? Apa itu Chatbot? Fitur apa saja yang tersedia? \uD83D\uDC4D\",\"content\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\n\\n!\\\"#$%\\u0026'()*+,-./:;\\u003c=\\u003e?@[\\\\]^_`{|}~ ❌\uD83C\uDFC1\uD83C\uDD94\uD83C\uDF80\uD83D\uDC4D❤️ !\\\"#$%\\u0026'()*+,-./:;\\u003c=\\u003e?@[\\\\]^_`{|}~ ä § ‡ © Æ ¥\\n\\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"type\":\"talk_to_agent\",\"createdTime\":1641963693002,\"updatedTime\":1669877155294,\"deletedTime\":0,\"topics\":[{\"id\":361,\"name\":\"tes topic namanya panjang tes topic namanya\"},{\"id\":362,\"name\":\"new topic 2\"}]},{\"itemID\":89,\"pathID\":10,\"parentID\":35,\"sequence\":6,\"title\":\"title\",\"content\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"type\":\"qna\",\"createdTime\":1642138135467,\"updatedTime\":1669877212847,\"deletedTime\":0},{\"itemID\":101,\"pathID\":10,\"parentID\":35,\"sequence\":7,\"title\":\"child 1 talk to agent\",\"content\":\"child 1 talk to agent\",\"type\":\"qna\",\"createdTime\":1642579154210,\"updatedTime\":0,\"deletedTime\":0,\"childItems\":[{\"itemID\":102,\"pathID\":10,\"parentID\":101,\"sequence\":1,\"title\":\"child 1a talk to agent\",\"content\":\"child 1a talk to agent\",\"type\":\"qna\",\"createdTime\":1642579161459,\"updatedTime\":0,\"deletedTime\":0,\"childItems\":[{\"itemID\":103,\"pathID\":10,\"parentID\":102,\"sequence\":1,\"title\":\"child 1a-1 talk to agent\",\"content\":\"child 1a-1 talk to agent\",\"type\":\"talk_to_agent\",\"createdTime\":1642579192033,\"updatedTime\":0,\"deletedTime\":0,\"topics\":[{\"id\":96,\"name\":\"General yang panjanggggg yaaa coba dehhhhhhh\"}]}]},{\"itemID\":111,\"pathID\":10,\"parentID\":101,\"sequence\":2,\"title\":\"child 1b \",\"content\":\"child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b child 1b \",\"type\":\"qna\",\"createdTime\":1655196597467,\"updatedTime\":0,\"deletedTime\":0},{\"itemID\":112,\"pathID\":10,\"parentID\":101,\"sequence\":3,\"title\":\"child 1c  \",\"content\":\"child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  child 1c  \",\"type\":\"talk_to_agent\",\"createdTime\":1655196621531,\"updatedTime\":0,\"deletedTime\":0,\"topics\":[{\"id\":1,\"name\":\"Billing kepotong gak??\"},{\"id\":3,\"name\":\"Career\"},{\"id\":96,\"name\":\"General yang panjanggggg yaaa coba dehhhhhhh\"},{\"id\":378,\"name\":\"Instagram\"},{\"id\":104,\"name\":\"Logistic\"},{\"id\":362,\"name\":\"new topic 2\"},{\"id\":361,\"name\":\"tes topic namanya panjang tes topic namanya\"}]},{\"itemID\":113,\"pathID\":10,\"parentID\":101,\"sequence\":4,\"title\":\"child 1d \",\"content\":\"child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d child 1d \",\"type\":\"qna\",\"createdTime\":1655196642144,\"updatedTime\":0,\"deletedTime\":0}]}]}\n");
+//            TTLDataManager.getInstance().saveScfPath(dummyScf);
+//            Intent intent = new Intent(SCF_PATH_UPDATED);
+//            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+//        }
     }
 
     private static String generateApiBaseUrl(String apiBaseUrl) {
         return apiBaseUrl + "/" + API_VERSION + "/";
     }
 
-    private final TTLDefaultDataView<TTLGetProjectConfigsRespone> projectConfigsDataView = new TTLDefaultDataView<>() {
+    private final TTLDefaultDataView<TTLGetProjectConfigsResponse> projectConfigsDataView = new TTLDefaultDataView<>() {
         @Override
-        public void onSuccess(TTLGetProjectConfigsRespone response) {
+        public void onSuccess(TTLGetProjectConfigsResponse response) {
             TTLTapTalkProjectConfigsModel tapTalk = response.getTapTalkProjectConfigs();
             if (null != tapTalk) {
                 initializeTapTalkSDK(
@@ -198,6 +168,9 @@ public class TapTalkLive {
                 TTLDataManager.getInstance().saveTapTalkAppKeyID(tapTalk.getAppKeyID());
                 TTLDataManager.getInstance().saveTapTalkAppKeySecret(tapTalk.getAppKeySecret());
                 TTLDataManager.getInstance().saveTapTalkApiUrl(tapTalk.getApiURL());
+            }
+            if (null != response.getChannelLinks()) {
+                TTLDataManager.getInstance().saveChannelLinks(response.getChannelLinks());
             }
         }
 
@@ -217,8 +190,8 @@ public class TapTalkLive {
                         TTLDataManager.getInstance().getTapTalkApiUrl());
             } else {
                 isNeedToGetProjectConfigs = true;
-                TTLNetworkStateManager.getInstance().registerCallback(context);
-                TTLNetworkStateManager.getInstance().addNetworkListener(networkListener);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).registerCallback(context);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).addNetworkListener(networkListener);
             }
         }
     };
@@ -271,6 +244,10 @@ public class TapTalkLive {
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setStarMessageMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setPinMessageMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setSavedMessagesMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setScheduledMessageFeatureEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReportMessageMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setBlockUserMenuEnabled(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMessageInfoMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_TEXT_MESSAGE, TapUI.LongPressMenuType.TYPE_TEXT_MESSAGE);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_IMAGE_MESSAGE, TapUI.LongPressMenuType.TYPE_IMAGE_MESSAGE);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_BROADCAST_VIDEO_MESSAGE, TapUI.LongPressMenuType.TYPE_VIDEO_MESSAGE);
@@ -287,6 +264,8 @@ public class TapTalkLive {
                     isTapTalkInitialized = true;
                     if (isGetCaseListCompleted) {
                         tapTalkLiveListener.onInitializationCompleted();
+                    } else {
+                        getCaseList();
                     }
                 }
 
@@ -295,6 +274,8 @@ public class TapTalkLive {
                     isTapTalkInitialized = true;
                     if (isGetCaseListCompleted) {
                         tapTalkLiveListener.onInitializationCompleted();
+                    } else {
+                        getCaseList();
                     }
                 }
             });
@@ -302,8 +283,69 @@ public class TapTalkLive {
             isTapTalkInitialized = true;
             if (isGetCaseListCompleted) {
                 tapTalkLiveListener.onInitializationCompleted();
+            } else {
+                getCaseList();
             }
         }
+    }
+
+    private void getCaseList() {
+        if (TTLDataManager.getInstance().checkActiveUserExists() && !isGetCaseListCompleted) {
+            // Check if user has active case
+            TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
+                @Override
+                public void onSuccess(TTLGetCaseListResponse response) {
+                    TTLUtil.processGetCaseListResponse(response, new TapCommonListener() {
+                        @Override
+                        public void onSuccess(String successMessage) {
+                            onFinish();
+                        }
+
+                        @Override
+                        public void onError(String errorCode, String errorMessage) {
+                            onFinish();
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(TTLErrorModel error) {
+                    onFinish();
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    onFinish();
+                }
+
+                private void onFinish() {
+                    isGetCaseListCompleted = true;
+                    if (isTapTalkInitialized) {
+                        isTapTalkLiveInitialized = true;
+                        tapTalkLiveListener.onInitializationCompleted();
+                    }
+                }
+            });
+        } else {
+            isGetCaseListCompleted = true;
+            if (isTapTalkInitialized) {
+                isTapTalkLiveInitialized = true;
+                tapTalkLiveListener.onInitializationCompleted();
+            }
+        }
+    }
+
+    private void fetchScfPath() {
+        TTLDataManager.getInstance().getScfPath(new TTLDefaultDataView<>() {
+            @Override
+            public void onSuccess(TTLGetScfPathResponse response) {
+                if (response != null && response.getItem() != null) {
+                    TTLDataManager.getInstance().saveScfPath(response.getItem());
+                    Intent intent = new Intent(SCF_PATH_UPDATED);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                }
+            }
+        });
     }
 
     private final TapListener tapListener = new TapListener() {
@@ -338,7 +380,7 @@ public class TapTalkLive {
         public void onNetworkAvailable() {
             if (isNeedToGetProjectConfigs) {
                 TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
-                TTLNetworkStateManager.getInstance().unregisterCallback(context);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).unregisterCallback(context);
                 isNeedToGetProjectConfigs = false;
             }
         }
@@ -468,16 +510,9 @@ public class TapTalkLive {
 
     private final TTLReviewChatBubbleClass reviewCustomBubble = new TTLReviewChatBubbleClass(
             R.layout.ttl_cell_chat_bubble_review,
-            TYPE_REVIEW, (context, message) -> {
-        Intent intent = new Intent(context, TTLReviewActivity.class);
-        intent.putExtra(MESSAGE, message);
-        if (context instanceof Activity) {
-            ((Activity) context).startActivityForResult(intent, REVIEW);
-            ((Activity) context).overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay);
-        } else {
-            context.startActivity(intent);
-        }
-    });
+            TYPE_REVIEW,
+            TTLReviewActivity.Companion::start
+    );
 
     private final TTLReviewChatBubbleClass reviewSubmittedCustomBubble = new TTLReviewChatBubbleClass(
             R.layout.ttl_cell_chat_bubble_review,
@@ -489,9 +524,9 @@ public class TapTalkLive {
         public List<TAPCustomKeyboardItemModel> setCustomKeyboardItems(TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
             List<TAPCustomKeyboardItemModel> keyboardItemModelList = new ArrayList<>();
             TAPCustomKeyboardItemModel markAsSolvedCustomKeyboard = new TAPCustomKeyboardItemModel(
-                    context.getString(R.string.ttl_mark_as_solved),
+                    context.getString(R.string.ttl_mark_as_resolved),
                     ContextCompat.getDrawable(context, R.drawable.ttl_ic_checklist_black_19),
-                    context.getString(R.string.ttl_mark_as_solved)
+                    context.getString(R.string.ttl_mark_as_resolved)
             );
             keyboardItemModelList.add(markAsSolvedCustomKeyboard);
             return keyboardItemModelList;
@@ -501,6 +536,7 @@ public class TapTalkLive {
         public void onCustomKeyboardItemTapped(Activity activity, TAPCustomKeyboardItemModel customKeyboardItem, TAPRoomModel room, TAPUserModel activeUser, @Nullable TAPUserModel recipientUser) {
             new TapTalkDialog.Builder(activity)
                     .setDialogType(TapTalkDialog.DialogType.DEFAULT)
+                    .setCancelable(true)
                     .setTitle(activity.getString(R.string.ttl_close_case))
                     .setMessage(activity.getString(R.string.ttl_close_case_dialog_message))
                     .setPrimaryButtonTitle(activity.getString(R.string.ttl_ok))
@@ -567,8 +603,8 @@ public class TapTalkLive {
                 );
             } else {
                 tapTalkLive.isNeedToGetProjectConfigs = true;
-                TTLNetworkStateManager.getInstance().registerCallback(context);
-                TTLNetworkStateManager.getInstance().addNetworkListener(tapTalkLive.networkListener);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).registerCallback(context);
+                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).addNetworkListener(tapTalkLive.networkListener);
             }
         }
 
@@ -651,16 +687,17 @@ public class TapTalkLive {
         if (tapTalkLive == null || !tapTalkLive.isTapTalkInitialized) {
             return false;
         }
-        if (TTLDataManager.getInstance().checkActiveUserExists() ||
-                TTLDataManager.getInstance().checkAccessTokenAvailable()
-        ) {
-            // Open case list
-            TTLCaseListActivity.Companion.start(activityContext);
-        }
-        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
-            // Open create case form
-            TTLCreateCaseFormActivity.Companion.start(activityContext, true);
-        }
+        TTLHomeActivity.Companion.start(activityContext);
+//        if (TTLDataManager.getInstance().checkActiveUserExists() ||
+//                TTLDataManager.getInstance().checkAccessTokenAvailable()
+//        ) {
+//            // Open case list
+//            TTLCaseListActivity.Companion.start(activityContext);
+//        }
+//        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
+//            // Open create case form
+//            TTLCreateCaseFormActivity.Companion.start(activityContext, true);
+//        }
         return true;
     }
 

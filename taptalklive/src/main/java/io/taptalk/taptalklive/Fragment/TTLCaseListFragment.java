@@ -47,6 +47,7 @@ import io.taptalk.TapTalk.Helper.OverScrolled.OverScrollDecoratorHelper;
 import io.taptalk.TapTalk.Helper.TAPBroadcastManager;
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView;
 import io.taptalk.TapTalk.Helper.TAPUtils;
+import io.taptalk.TapTalk.Helper.TAPVerticalDecoration;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Helper.TapTalkDialog;
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface;
@@ -266,7 +267,8 @@ public class TTLCaseListFragment extends Fragment {
             public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
                 try {
                     super.onLayoutChildren(recycler, state);
-                } catch (IndexOutOfBoundsException e) {
+                }
+                catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
             }
@@ -367,6 +369,10 @@ public class TTLCaseListFragment extends Fragment {
             activity.runOnUiThread(() -> {
                 if (adapter != null) {
                     adapter.setItems(caseLists, false);
+                    while (rvCaseList.getItemDecorationCount() > 0) {
+                        rvCaseList.removeItemDecorationAt(0);
+                    }
+                    rvCaseList.addItemDecoration(new TAPVerticalDecoration(0, TAPUtils.dpToPx(getResources(), 16f), adapter.getItemCount() - 1));
                 }
                 if (!TAPRoomListViewModel.isShouldNotLoadFromAPI(TAPTALK_INSTANCE_KEY)) {
                     fetchDataFromAPI();

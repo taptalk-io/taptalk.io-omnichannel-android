@@ -1,0 +1,31 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+  <path
+      android:pathData="M32,0L32,0A32,32 0,0 1,64 32L64,32A32,32 0,0 1,32 64L32,64A32,32 0,0 1,0 32L0,32A32,32 0,0 1,32 0z">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startX="-32"
+          android:startY="32"
+          android:endX="32"
+          android:endY="96"
+          android:type="linear">
+        <item android:offset="0" android:color="#FFFFAB3A"/>
+        <item android:offset="1" android:color="#FFFF7E00"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path
+      android:pathData="M32,16C23.167,16 16,23.176 16,32.013C16,40.851 23.167,48 32,48H46.228C47.232,48 48.026,47.182 47.999,46.18V32.013V31.987C47.999,23.149 40.833,16 32,16ZM22.188,32.013C22.188,26.605 26.578,22.226 32,22.226C37.421,22.226 41.811,26.605 41.811,32.013V32.04V40.719C41.811,41.326 41.309,41.8 40.727,41.8H32C26.578,41.8 22.188,37.421 22.188,32.013ZM35.147,32.013C35.147,32.831 35.808,33.517 36.654,33.517C37.5,33.517 38.161,32.831 38.161,32.013C38.161,31.195 37.5,30.51 36.654,30.51C35.834,30.51 35.147,31.169 35.147,32.013ZM30.519,32.013C30.519,32.831 31.18,33.517 32.026,33.517C32.846,33.517 33.533,32.831 33.533,32.013C33.533,31.195 32.846,30.51 32.026,30.51C31.206,30.51 30.519,31.169 30.519,32.013ZM25.891,32.013C25.891,32.831 26.552,33.517 27.398,33.517C28.218,33.517 28.906,32.831 28.906,32.013C28.906,31.195 28.244,30.51 27.398,30.51C26.578,30.51 25.891,31.169 25.891,32.013Z"
+      android:fillColor="#ffffff"
+      android:fillType="evenOdd"/>
+  <path
+      android:strokeWidth="1"
+      android:pathData="M32,0.5L32,0.5A31.5,31.5 0,0 1,63.5 32L63.5,32A31.5,31.5 0,0 1,32 63.5L32,63.5A31.5,31.5 0,0 1,0.5 32L0.5,32A31.5,31.5 0,0 1,32 0.5z"
+      android:strokeAlpha="0.1"
+      android:fillColor="#00000000"
+      android:strokeColor="#191919"/>
+</vector>

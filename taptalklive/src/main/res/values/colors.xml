@@ -8,15 +8,19 @@
     <color name="ttlColorAccent">@color/ttlColorPrimary</color>
 
     <color name="ttlColorTextLight">@color/ttlWhite</color>
-    <color name="ttlColorTextMedium">@color/ttlTextDark60</color>
+    <color name="ttlColorTextSoft">@color/ttlTransparentBlack1940</color>
+    <color name="ttlColorTextMedium">@color/ttlTransparentBlack1960</color>
     <color name="ttlColorTextDark">@color/ttlBlack19</color>
+    <color name="ttlColorTextPrimary">@color/ttlColorPrimary</color>
+    <color name="ttlColorTextError">@color/ttlColorError</color>
 
     <color name="ttlColorSuccess">@color/ttlAppleGreen</color>
     <color name="ttlColorError">@color/ttlWatermelonRed</color>
 
-    <color name="ttlColorPrimaryIcon">@color/ttlDarkOrange</color>
+    <color name="ttlColorPrimaryIcon">@color/ttlColorPrimary</color>
     <color name="ttlColorWhiteIcon">@color/ttlWhite</color>
-    <color name="ttlColorGrayIcon">@color/ttlGrey9b</color>
+    <color name="ttlColorGrayIcon">@color/ttlTransparentBlack1940</color>
+    <color name="ttlColorDarkIcon">@color/ttlBlack19</color>
     <color name="ttlColorSuccessIcon">@color/ttlAppleGreen</color>
     <color name="ttlColorDestructiveIcon">@color/ttlWatermelonRed</color>
 
@@ -40,16 +44,35 @@
     <color name="tapColorSuccessIcon">@color/ttlColorSuccessIcon</color>
     <color name="tapColorDestructiveIcon">@color/ttlColorDestructiveIcon</color>
 
+    <color name="tapIconRoomListMessageDeleted">@color/ttlIconMessageDeleted</color>
+    <color name="tapIconRoomListMessageDelivered">@color/ttlIconMessageDelivered</color>
+    <color name="tapIconRoomListMessageRead">@color/ttlIconMessageRead</color>
+    <color name="tapIconRoomListMessageFailed">@color/ttlIconMessageFailed</color>
+    <color name="tapIconRoomListMessageSending">@color/ttlIconMessageSending</color>
+    <color name="tapIconRoomListMessageSent">@color/ttlIconMessageSent</color>
+    <color name="tapIconRoomListMuted">@color/ttlColorGrayIcon</color>
+
     <color name="tapDefaultRightBubbleBackgroundColor">@color/ttlColorPrimary</color>
+    <color name="tapLeftBubbleSenderNameColor">@color/ttlLeftBubbleSenderNameColor</color>
+    <color name="tapLeftBubbleMessageBodyColor">@color/ttlLeftBubbleMessageBodyColor</color>
+    <color name="tapLeftBubbleMessageBodyURLColor">@color/ttlLeftBubbleMessageBodyURLColor</color>
+    <color name="tapLeftBubbleMessageBodyURLHighlightedColor">@color/ttlLeftBubbleMessageBodyURLHighlightedColor</color>
+    <color name="tapRightBubbleMessageBodyColor">@color/ttlRightBubbleMessageBodyColor</color>
+    <color name="tapRightBubbleMessageBodyURLColor">@color/ttlRightBubbleMessageBodyURLColor</color>
+    <color name="tapRightBubbleMessageBodyURLHighlightedColor">@color/ttlRightBubbleMessageBodyURLHighlightedColor</color>
+
+    <color name="tapLeftBubbleBackgroundColor">@color/ttlLeftBubbleBackgroundColor</color>
+    <color name="tapRightBubbleBackgroundColor">@color/ttlRightBubbleBackgroundColor</color>
 
     <!--TapLive Component Colors-->
     <color name="ttlDefaultBackgroundColor">@color/ttlWhiteF3</color>
     <color name="ttlDefaultNavBarBackgroundColor">@color/ttlColorPrimary</color>
+    <color name="ttlIconNavBarCloseButtonColor">@color/ttlColorWhiteIcon</color>
 
     <color name="ttlTextFieldCursorColor">@color/ttlColorPrimary</color>
     <color name="ttlTextFieldBorderActiveColor">@color/ttlColorPrimary</color>
     <color name="ttlTextFieldBorderErrorColor">@color/ttlColorError</color>
-    <color name="ttlTextFieldBorderInactiveColor">@color/ttlTextDark10</color>
+    <color name="ttlTextFieldBorderInactiveColor">@color/ttlTransparentBlack1910</color>
 
     <color name="ttlButtonInactiveBackgroundGradientDarkColor">@color/ttlGrey9b</color>
     <color name="ttlButtonInactiveBackgroundGradientLightColor">@color/ttlGreyCe</color>
@@ -58,26 +81,50 @@
     <color name="ttlButtonActiveBackgroundGradientDarkColor">@color/ttlColorPrimary</color>
     <color name="ttlButtonActiveBorderColor">@color/ttlColorPrimary</color>
 
+    <color name="ttlHomeBackgroundColor">@color/tapWhiteFa</color>
+    <color name="ttlHomeTitleLabelColor">@color/ttlColorTextLight</color>
+    <color name="ttlHomeDescriptionLabelColor">@color/ttlColorTextLight</color>
+    <color name="ttlHomeInfoLabelColor">@color/ttlColorTextMedium</color>
+    <color name="ttlHomeButtonLabelColor">@color/ttlColorTextPrimary</color>
+
+    <color name="ttlFaqTitleLabelColor">@color/tapColorTextDark</color>
+    <color name="ttlFaqContentLabelColor">@color/ttlColorTextMedium</color>
+    <color name="ttlFaqChildTitleLabelColor">@color/tapColorTextDark</color>
+    <color name="ttlFaqChildContentLabelColor">@color/ttlColorTextMedium</color>
+
     <color name="ttlFormLabelColor">@color/ttlColorTextDark</color>
+    <color name="ttlFormLabelOptionalColor">@color/ttlColorTextMedium</color>
+    <color name="ttlFormLabelInfoColor">@color/ttlColorTextSoft</color>
     <color name="ttlFormTextFieldColor">@color/ttlColorTextDark</color>
-    <color name="ttlFormTextFieldPlaceholderColor">@color/ttlColorTextMedium</color>
+    <color name="ttlFormTextFieldPlaceholderColor">@color/ttlColorTextSoft</color>
 
     <color name="ttlCreateFormTitleLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlCreateFormDescriptionLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlReviewTitleLabelColor">@color/ttlColorTextDark</color>
-    <color name="ttlReviewRatingLabelColor">@color/ttlColorPrimary</color>
+    <color name="ttlReviewRatingLabelColor">@color/ttlColorTextDark</color>
+    <color name="ttlErrorInfoLabelColor">@color/ttlColorTextError</color>
 
     <color name="ttlButtonLabelColor">@color/ttlColorTextLight</color>
+    <color name="ttlBorderedButtonLabelColor">@color/ttlColorTextPrimary</color>
+    <color name="ttlButtonLabelDisabledColor">@color/ttlColorTextSoft</color>
     <color name="ttlButtonIconColor">@color/ttlColorTextLight</color>
     <color name="ttlIconLoadingProgressPrimary">@color/ttlColorPrimaryIcon</color>
     <color name="ttlIconLoadingProgressWhite">@color/ttlColorWhiteIcon</color>
 
+    <color name="ttlCaseListAvatarFontColor">@color/ttlColorTextLight</color>
+    <color name="ttlCaseListTitleFontColor">@color/ttlColorTextDark</color>
+    <color name="ttlCaseListSenderFontColor">@color/ttlColorTextSoft</color>
+    <color name="ttlCaseListMessageFontColor">@color/ttlColorTextSoft</color>
+    <color name="ttlCaseListTimestampFontColor">@color/ttlColorTextSoft</color>
     <color name="ttlDefaultRoomAvatarSmallFontColor">@color/ttlColorTextLight</color>
 
-    <color name="ttlLeftBubbleSenderNameColor">@color/ttlColorPrimary</color>
+    <color name="ttlLeftBubbleSenderNameColor">@color/ttlColorTextPrimary</color>
     <color name="ttlLeftBubbleMessageBodyColor">@color/ttlColorTextDark</color>
-    <color name="ttlLeftBubbleMessageBodyURLColor">@color/ttlColorPrimary</color>
+    <color name="ttlLeftBubbleMessageBodyURLColor">@color/ttlColorTextPrimary</color>
     <color name="ttlLeftBubbleMessageBodyURLHighlightedColor">@color/ttlHighlightBlue</color>
+    <color name="ttlRightBubbleMessageBodyColor">@color/ttlColorTextLight</color>
+    <color name="ttlRightBubbleMessageBodyURLColor">@color/ttlColorTextLight</color>
+    <color name="ttlRightBubbleMessageBodyURLHighlightedColor">@color/ttlHighlightBlue</color>
     <color name="ttlSystemMessageBodyColor">@color/ttlColorTextMedium</color>
 
     <color name="ttlBubbleMessageStatusColor">@color/ttlColorTextMedium</color>
@@ -85,13 +132,17 @@
     <color name="ttlLeftBubbleBackgroundColor">@color/ttlWhite</color>
     <color name="ttlRightBubbleBackgroundColor">@color/ttlColorPrimary</color>
 
-    <color name="ttlIconNavBarCloseButton">@color/ttlWhite</color>
     <color name="ttlIconMessageSending">@color/ttlColorGrayIcon</color>
+    <color name="ttlIconMessageSent">@color/ttlColorGrayIcon</color>
     <color name="ttlIconMessageDelivered">@color/ttlColorGrayIcon</color>
     <color name="ttlIconMessageRead">@color/ttlVibrantGreen</color>
-    <color name="ttlIconMessageSent">@color/ttlColorGrayIcon</color>
+    <color name="ttlIconMessageDeleted">@color/ttlColorGrayIcon</color>
+    <color name="ttlIconMessageFailed">@color/ttlColorGrayIcon</color>
 
     <color name="ttlPopupDialogTitleColor">@color/ttlColorTextDark</color>
+
+    <color name="ttlIconReviewStarActive">@color/ttlSaffron</color>
+    <color name="ttlIconReviewStarInactive">@color/ttlSaffron</color>
 
     <!--Color Palette-->
     <color name="ttlWhite">#ffffff</color>
@@ -109,10 +160,12 @@
     <color name="ttlWatermelonRed">#ff3f57</color>
     <color name="ttlHighlightBlue">#5ac8fa</color>
     <color name="ttlVibrantGreen">#19c700</color>
+    <color name="ttlSaffron">#f4c12a</color>
 
-    <color name="ttlTextDark10">#1a191919</color>
-    <color name="ttlTextDark20">#33191919</color>
-    <color name="ttlTextDark60">#99191919</color>
-    <color name="ttlTextDark80">#cc191919</color>
+    <color name="ttlTransparentBlack1910">#1a191919</color>
+    <color name="ttlTransparentBlack1920">#33191919</color>
+    <color name="ttlTransparentBlack1940">#66191919</color>
+    <color name="ttlTransparentBlack1960">#99191919</color>
+    <color name="ttlTransparentBlack1980">#cc191919</color>
 
 </resources>
