@@ -60,6 +60,8 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLCaseModel;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
+import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
+import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLHomeActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
@@ -684,20 +686,27 @@ public class TapTalkLive {
     }
 
     public static boolean openTapTalkLiveView(Context activityContext) {
-        if (tapTalkLive == null || !tapTalkLive.isTapTalkInitialized) {
+        if (tapTalkLive == null || !tapTalkLive.isTapTalkInitialized || activityContext == null) {
             return false;
         }
         TTLHomeActivity.Companion.start(activityContext);
-//        if (TTLDataManager.getInstance().checkActiveUserExists() ||
-//                TTLDataManager.getInstance().checkAccessTokenAvailable()
-//        ) {
-//            // Open case list
-//            TTLCaseListActivity.Companion.start(activityContext);
-//        }
-//        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
-//            // Open create case form
-//            TTLCreateCaseFormActivity.Companion.start(activityContext, true);
-//        }
+        return true;
+    }
+
+    public static boolean openCaseListView(Context activityContext) {
+        if (tapTalkLive == null || !tapTalkLive.isTapTalkInitialized || activityContext == null) {
+            return false;
+        }
+        if (TTLDataManager.getInstance().checkActiveUserExists() ||
+                TTLDataManager.getInstance().checkAccessTokenAvailable()
+        ) {
+            // Open case list
+            TTLCaseListActivity.Companion.start(activityContext);
+        }
+        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
+            // Open create case form
+            TTLCreateCaseFormActivity.Companion.start(activityContext, true);
+        }
         return true;
     }
 
