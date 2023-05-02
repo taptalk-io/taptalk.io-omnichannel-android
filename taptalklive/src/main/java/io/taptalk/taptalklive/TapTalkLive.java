@@ -366,7 +366,7 @@ public class TapTalkLive {
 
         @Override
         public void onTaskRootChatRoomClosed(Activity activity) {
-
+            tapTalkLiveListener.onTaskRootChatRoomClosed(activity);
         }
     };
 

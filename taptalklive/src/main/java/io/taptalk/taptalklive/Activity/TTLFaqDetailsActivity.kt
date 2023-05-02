@@ -18,6 +18,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.Extras.SCF_PATH
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.R
+import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.adapter.TTLHomeFaqAdapter
 import kotlinx.android.synthetic.main.ttl_activity_home.*
 
@@ -53,6 +54,7 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_right)
+        TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInFaqDetailsTapped(this, intent.getParcelableExtra(SCF_PATH))
     }
 
     private fun initView() {
@@ -115,15 +117,11 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
         }
 
         override fun onFaqChildTapped(scfPath: TTLScfPathModel) {
-            start(this@TTLFaqDetailsActivity, scfPath)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqChildTapped(this@TTLFaqDetailsActivity, scfPath)
         }
 
         override fun onTalkToAgentButtonTapped(scfPath: TTLScfPathModel) {
-            openCreateCaseForm()
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onTalkToAgentButtonTapped(this@TTLFaqDetailsActivity, scfPath)
         }
-    }
-
-    private fun openCreateCaseForm() {
-        TTLCreateCaseFormActivity.start(this, true)
     }
 }

@@ -27,6 +27,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTA
 import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
+import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.adapter.TTLHomeFaqAdapter
 import io.taptalk.taptalklive.model.TTLCaseListModel
 import kotlinx.android.synthetic.main.ttl_activity_home.*
@@ -66,6 +67,7 @@ class TTLHomeActivity : TAPBaseActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_down)
+        TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInHomePageTapped(this)
     }
 
     private fun initView() {
@@ -118,45 +120,24 @@ class TTLHomeActivity : TAPBaseActivity() {
         }
 
         override fun onNewMessageButtonTapped() {
-            openCreateCaseForm()
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onCreateNewMessageButtonTapped(this@TTLHomeActivity)
         }
 
         override fun onSeeAllMessagesButtonTapped() {
-            openCaseList()
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onSeeAllMessagesButtonTapped(this@TTLHomeActivity)
         }
 
         override fun onCaseListTapped(caseList: TTLCaseListModel) {
-            openChatRoom(caseList)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onCaseListItemTapped(this@TTLHomeActivity, caseList)
         }
 
         override fun onFaqChildTapped(scfPath: TTLScfPathModel) {
-            TTLFaqDetailsActivity.start(this@TTLHomeActivity, scfPath)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqChildTapped(this@TTLHomeActivity, scfPath)
         }
 
         override fun onTalkToAgentButtonTapped(scfPath: TTLScfPathModel) {
-            openCreateCaseForm()
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onTalkToAgentButtonTapped(this@TTLHomeActivity, scfPath)
         }
-    }
-
-    private fun openCreateCaseForm() {
-        TTLCreateCaseFormActivity.start(this, true)
-    }
-
-    private fun openCaseList() {
-        TTLCaseListActivity.start(this)
-    }
-
-    private fun openChatRoom(caseList: TTLCaseListModel) {
-        val room: TAPRoomModel = caseList.lastMessage.room
-        TapUIChatActivity.start(
-            this@TTLHomeActivity,
-            TAPTALK_INSTANCE_KEY,
-            room.roomID,
-            room.name,
-            room.imageURL,
-            room.type,
-            room.color
-        )
     }
 
     private fun openChannelUrl(channelLink: TTLChannelLinkModel) {
