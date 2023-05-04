@@ -255,7 +255,7 @@ public class TTLCaseListFragment extends Fragment {
                 TapTalkLive.getInstance() != null &&
                 TapTalkLive.getInstance().tapTalkLiveListener != null
             ) {
-                TapTalkLive.getInstance().tapTalkLiveListener.onCaseListItemTapped(activity, caseListModel);
+                TapTalkLive.getInstance().tapTalkLiveListener.onCaseListItemTapped(activity, caseListModel.getLastMessage());
             }
         });
         llm = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) {

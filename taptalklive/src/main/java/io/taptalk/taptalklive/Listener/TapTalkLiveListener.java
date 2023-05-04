@@ -63,11 +63,11 @@ public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
     }
 
     @Override
-    public void onCaseListItemTapped(Activity activity, TTLCaseListModel caseListModel) {
-        if (caseListModel == null || caseListModel.getLastMessage() == null || caseListModel.getLastMessage().getRoom() == null) {
+    public void onCaseListItemTapped(Activity activity, TAPMessageModel lastMessage) {
+        if (lastMessage == null || lastMessage.getRoom() == null) {
             return;
         }
-        TAPRoomModel room = caseListModel.getLastMessage().getRoom();
+        TAPRoomModel room = lastMessage.getRoom();
         TapUIChatActivity.start(
             activity,
             TAPTALK_INSTANCE_KEY,

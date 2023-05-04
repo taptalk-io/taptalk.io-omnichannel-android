@@ -27,7 +27,7 @@ public interface TapTalkLiveInterface {
 
     void onCreateNewMessageButtonTapped(Activity activity);
 
-    void onCaseListItemTapped(Activity activity, TTLCaseListModel caseListModel);
+    void onCaseListItemTapped(Activity activity, TAPMessageModel lastMessage);
 
     void onFaqChildTapped(Activity activity, TTLScfPathModel scfPath);
 
