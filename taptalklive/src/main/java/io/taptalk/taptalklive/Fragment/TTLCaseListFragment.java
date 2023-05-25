@@ -250,16 +250,12 @@ public class TTLCaseListFragment extends Fragment {
         glide = Glide.with(this);
 
         adapter = new TTLCaseListAdapter(caseLists, glide, (caseListModel, position) -> {
-            if (caseListModel != null) {
-                TAPRoomModel room = caseListModel.getLastMessage().getRoom();
-                TapUIChatActivity.start(
-                        activity,
-                        TAPTALK_INSTANCE_KEY,
-                        room.getRoomID(),
-                        room.getName(),
-                        room.getImageURL(),
-                        room.getType(),
-                        room.getColor());
+            if (activity != null &&
+                caseListModel != null &&
+                TapTalkLive.getInstance() != null &&
+                TapTalkLive.getInstance().tapTalkLiveListener != null
+            ) {
+                TapTalkLive.getInstance().tapTalkLiveListener.onCaseListItemTapped(activity, caseListModel.getLastMessage());
             }
         });
         llm = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) {

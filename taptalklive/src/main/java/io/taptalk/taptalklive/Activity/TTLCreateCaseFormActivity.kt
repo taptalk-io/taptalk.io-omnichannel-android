@@ -73,16 +73,13 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         initView()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun onBackPressed() {
         if (!vm.showCloseButton) {
             return
         }
         super.onBackPressed()
         overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_right)
+        TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped(this)
     }
 
     private fun initViewModel() {
@@ -97,7 +94,6 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         if (vm.showCloseButton) {
             iv_button_close.visibility = View.VISIBLE
             iv_button_close.setOnClickListener {
-                TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped()
                 onBackPressed()
             }
         }

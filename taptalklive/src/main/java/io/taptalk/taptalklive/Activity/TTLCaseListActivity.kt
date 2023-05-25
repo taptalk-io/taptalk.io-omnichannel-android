@@ -38,6 +38,7 @@ class TTLCaseListActivity : TAPBaseActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_right)
+        TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCaseListTapped(this)
     }
 
     private fun initView() {
@@ -52,6 +53,6 @@ class TTLCaseListActivity : TAPBaseActivity() {
     }
 
     private fun openCreateCaseForm() {
-        TTLCreateCaseFormActivity.start(this, true)
+        TapTalkLive.getInstance()?.tapTalkLiveListener?.onCreateNewMessageButtonTapped(this)
     }
 }

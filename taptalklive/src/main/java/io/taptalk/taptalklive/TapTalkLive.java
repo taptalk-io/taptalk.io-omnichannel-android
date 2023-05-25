@@ -5,7 +5,6 @@ import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
 import static io.taptalk.taptalklive.Const.TTLConstant.Broadcast.SCF_PATH_UPDATED;
-import static io.taptalk.taptalklive.Const.TTLConstant.Extras.MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_FILE_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_IMAGE_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_TEXT_MESSAGE;
@@ -18,7 +17,6 @@ import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEM
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_IMAGE_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_TEXT_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_VIDEO_MESSAGE;
-import static io.taptalk.taptalklive.Const.TTLConstant.RequestCode.REVIEW;
 import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
 
 import android.app.Activity;
@@ -32,7 +30,6 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.facebook.stetho.Stetho;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
@@ -40,14 +37,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Helper.TapTalkDialog;
-import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface;
 import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Listener.TapUICustomKeyboardListener;
-import io.taptalk.TapTalk.Manager.TAPNetworkStateManager;
 import io.taptalk.TapTalk.Manager.TapLocaleManager;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
@@ -64,9 +58,10 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetScfPathResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.TTLCaseModel;
-import io.taptalk.taptalklive.API.Model.TTLScfPathModel;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
+import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
+import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLHomeActivity;
 import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
@@ -81,15 +76,13 @@ public class TapTalkLive {
     public static Context context;
     public static boolean isTapTalkLiveInitialized;
     private static TapTalkLive tapTalkLive;
+    private static String buildType;
     private static final String releaseBaseApiUrl = "https://taplive-cstd.taptalk.io/api/visitor";
     private static final String stagingBaseApiUrl = "https://taplive-cstd-stg.taptalk.io/api/visitor";
     private static final String devBaseApiUrl = "https://taplive-api-dev.taptalk.io/api/visitor";
 
-    private static final String TAG = TapTalkLive.class.getSimpleName();
     private String clientAppName;
-    //private String appKeySecret = "";
     private int clientAppIcon;
-    private boolean isNeedToGetProjectConfigs;
     private boolean isTapTalkInitialized;
     private boolean isGetCaseListCompleted;
     private TTLCaseListFragment caseListFragment;
@@ -102,11 +95,12 @@ public class TapTalkLive {
      * =============================================================================================
      */
 
-    private TapTalkLive(@NonNull final Context appContext,
-                        @NonNull String appKeySecret,
-                        int clientAppIcon,
-                        String clientAppName,
-                        @NonNull TapTalkLiveListener tapTalkLiveListener
+    private TapTalkLive(
+        @NonNull final Context appContext,
+        @NonNull String appKeySecret,
+        int clientAppIcon,
+        String clientAppName,
+        @NonNull TapTalkLiveListener tapTalkLiveListener
     ) {
         tapTalkLive = this;
         TapTalkLive.context = appContext;
@@ -124,12 +118,21 @@ public class TapTalkLive {
         TTLDataManager.getInstance().saveAppKeySecret(appKeySecret);
 //        TTLApiManager.setApiBaseUrl(generateApiBaseUrl(TAPLIVE_SDK_BASE_URL));
         // FIXME: TAPLIVE_SDK_BASE_URL NOT FOUND IN BUILD CONFIG WHEN BUILDING JITPACK LIBRARY
-        if (BuildConfig.BUILD_TYPE.equals("release")) {
-            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(releaseBaseApiUrl));
-        } else if (BuildConfig.BUILD_TYPE.equals("staging")) {
-            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(stagingBaseApiUrl));
-        } else {
+//        if (BuildConfig.BUILD_TYPE.equals("release")) {
+//            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(releaseBaseApiUrl));
+//        } else if (BuildConfig.BUILD_TYPE.equals("staging")) {
+//            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(stagingBaseApiUrl));
+//        } else {
+//            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(devBaseApiUrl));
+//        }
+        if (buildType.equals("dev")) {
             TTLApiManager.setApiBaseUrl(generateApiBaseUrl(devBaseApiUrl));
+        }
+        else if (buildType.equals("staging")) {
+            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(stagingBaseApiUrl));
+        }
+        else {
+            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(releaseBaseApiUrl));
         }
 
         //this.appKeySecret = appKeySecret;
@@ -138,7 +141,7 @@ public class TapTalkLive {
         this.tapTalkLiveListener = tapTalkLiveListener;
 
         // Get project configs for TapTalk SDK
-        TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
+        getProjectConfigs();
 
         fetchScfPath();
 
@@ -156,45 +159,49 @@ public class TapTalkLive {
         return apiBaseUrl + "/" + API_VERSION + "/";
     }
 
-    private final TTLDefaultDataView<TTLGetProjectConfigsResponse> projectConfigsDataView = new TTLDefaultDataView<>() {
-        @Override
-        public void onSuccess(TTLGetProjectConfigsResponse response) {
-            TTLTapTalkProjectConfigsModel tapTalk = response.getTapTalkProjectConfigs();
-            if (null != tapTalk) {
-                initializeTapTalkSDK(
+    private void getProjectConfigs() {
+        TTLDataManager.getInstance().getProjectConfigs(new TTLDefaultDataView<>() {
+            @Override
+            public void onSuccess(TTLGetProjectConfigsResponse response) {
+                TTLTapTalkProjectConfigsModel tapTalk = response.getTapTalkProjectConfigs();
+                if (null != tapTalk) {
+                    initializeTapTalkSDK(
                         tapTalk.getAppKeyID(),
                         tapTalk.getAppKeySecret(),
-                        tapTalk.getApiURL());
-                TTLDataManager.getInstance().saveTapTalkAppKeyID(tapTalk.getAppKeyID());
-                TTLDataManager.getInstance().saveTapTalkAppKeySecret(tapTalk.getAppKeySecret());
-                TTLDataManager.getInstance().saveTapTalkApiUrl(tapTalk.getApiURL());
+                        tapTalk.getApiURL()
+                    );
+                    TTLDataManager.getInstance().saveTapTalkAppKeyID(tapTalk.getAppKeyID());
+                    TTLDataManager.getInstance().saveTapTalkAppKeySecret(tapTalk.getAppKeySecret());
+                    TTLDataManager.getInstance().saveTapTalkApiUrl(tapTalk.getApiURL());
+                }
+                if (null != response.getChannelLinks()) {
+                    TTLDataManager.getInstance().saveChannelLinks(response.getChannelLinks());
+                }
             }
-            if (null != response.getChannelLinks()) {
-                TTLDataManager.getInstance().saveChannelLinks(response.getChannelLinks());
-            }
-        }
 
-        @Override
-        public void onError(TTLErrorModel error) {
-            onError(error.getMessage());
-        }
-
-        @Override
-        public void onError(String errorMessage) {
-            if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
+            @Override
+            public void onError(TTLErrorModel error) {
+                if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
                     TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
-                    TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()) {
-                initializeTapTalkSDK(
+                    TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()
+                ) {
+                    initializeTapTalkSDK(
                         TTLDataManager.getInstance().getTapTalkAppKeyID(),
                         TTLDataManager.getInstance().getTapTalkAppKeySecret(),
-                        TTLDataManager.getInstance().getTapTalkApiUrl());
-            } else {
-                isNeedToGetProjectConfigs = true;
-                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).registerCallback(context);
-                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).addNetworkListener(networkListener);
+                        TTLDataManager.getInstance().getTapTalkApiUrl()
+                    );
+                }
+                else {
+                    tapTalkLiveListener.onInitializationFailed(error);
+                }
             }
-        }
-    };
+
+            @Override
+            public void onError(String errorMessage) {
+                onError(new TTLErrorModel(ERROR_CODE_OTHERS, errorMessage, ""));
+            }
+        });
+    }
 
     private final TTLDefaultDataView<TTLGetCaseListResponse> accessTokenCaseListDataView = new TTLDefaultDataView<>() {
         @Override
@@ -210,15 +217,16 @@ public class TapTalkLive {
         }
         TapTalk.setLoggingEnabled(BuildConfig.DEBUG);
         TapTalk.initNewInstance(
-                TAPTALK_INSTANCE_KEY,
-                context,
-                tapTalkAppKeyID,
-                tapTalkAppKeySecret,
-                clientAppIcon,
-                clientAppName,
-                tapTalkApiUrl,
-                TapTalkImplementationTypeCombine,
-                tapListener);
+            TAPTALK_INSTANCE_KEY,
+            context,
+            tapTalkAppKeyID,
+            tapTalkAppKeySecret,
+            clientAppIcon,
+            clientAppName,
+            tapTalkApiUrl,
+            TapTalkImplementationTypeCombine,
+            tapListener
+        );
 
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReadStatusVisible(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setProfileButtonInChatRoomVisible(false);
@@ -261,31 +269,27 @@ public class TapTalkLive {
             TapTalk.connect(TAPTALK_INSTANCE_KEY, new TapCommonListener() {
                 @Override
                 public void onSuccess(String s) {
-                    isTapTalkInitialized = true;
-                    if (isGetCaseListCompleted) {
-                        tapTalkLiveListener.onInitializationCompleted();
-                    } else {
-                        getCaseList();
-                    }
+                    onTapTalkInitializationCompleted();
                 }
 
                 @Override
                 public void onError(String s, String s1) {
-                    isTapTalkInitialized = true;
-                    if (isGetCaseListCompleted) {
-                        tapTalkLiveListener.onInitializationCompleted();
-                    } else {
-                        getCaseList();
-                    }
+                    onTapTalkInitializationCompleted();
                 }
             });
-        } else {
-            isTapTalkInitialized = true;
-            if (isGetCaseListCompleted) {
-                tapTalkLiveListener.onInitializationCompleted();
-            } else {
-                getCaseList();
-            }
+        }
+        else {
+            onTapTalkInitializationCompleted();
+        }
+    }
+
+    private void onTapTalkInitializationCompleted() {
+        isTapTalkInitialized = true;
+        if (isGetCaseListCompleted) {
+            tapTalkLiveListener.onInitializationCompleted();
+        }
+        else {
+            getCaseList();
         }
     }
 
@@ -319,19 +323,20 @@ public class TapTalkLive {
                 }
 
                 private void onFinish() {
-                    isGetCaseListCompleted = true;
-                    if (isTapTalkInitialized) {
-                        isTapTalkLiveInitialized = true;
-                        tapTalkLiveListener.onInitializationCompleted();
-                    }
+                    onGetCaseListCompleted();
                 }
             });
-        } else {
-            isGetCaseListCompleted = true;
-            if (isTapTalkInitialized) {
-                isTapTalkLiveInitialized = true;
-                tapTalkLiveListener.onInitializationCompleted();
-            }
+        }
+        else {
+            onGetCaseListCompleted();
+        }
+    }
+
+    private void onGetCaseListCompleted() {
+        isGetCaseListCompleted = true;
+        if (isTapTalkInitialized) {
+            isTapTalkLiveInitialized = true;
+            tapTalkLiveListener.onInitializationCompleted();
         }
     }
 
@@ -355,34 +360,13 @@ public class TapTalkLive {
         }
 
         @Override
-        public void onTapTalkUnreadChatRoomBadgeCountUpdated(int unreadCount) {
-
-        }
-
-        @Override
         public void onNotificationReceived(TAPMessageModel message) {
-            TapTalk.showTapTalkNotification(TAPTALK_INSTANCE_KEY, message);
-        }
-
-        @Override
-        public void onUserLogout() {
-
+            tapTalkLiveListener.onNotificationReceived(message);
         }
 
         @Override
         public void onTaskRootChatRoomClosed(Activity activity) {
-
-        }
-    };
-
-    private final TapTalkNetworkInterface networkListener = new TapTalkNetworkInterface() {
-        @Override
-        public void onNetworkAvailable() {
-            if (isNeedToGetProjectConfigs) {
-                TTLDataManager.getInstance().getProjectConfigs(projectConfigsDataView);
-                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).unregisterCallback(context);
-                isNeedToGetProjectConfigs = false;
-            }
+            tapTalkLiveListener.onTaskRootChatRoomClosed(activity);
         }
     };
 
@@ -574,46 +558,64 @@ public class TapTalkLive {
      * =============================================================================================
      */
 
-    public static void init(Context context,
-                            String appKeySecret,
-                            int clientAppIcon,
-                            String clientAppName,
-                            TapTalkLiveListener tapTalkLiveListener
+    public static void init(
+        Context context,
+        String appKeySecret,
+        int clientAppIcon,
+        String clientAppName,
+        TapTalkLiveListener tapTalkLiveListener
+    ) {
+        init(context, appKeySecret, clientAppIcon, clientAppName, tapTalkLiveListener, "");
+    }
+
+    public static void init(
+        Context context,
+        String appKeySecret,
+        int clientAppIcon,
+        String clientAppName,
+        TapTalkLiveListener tapTalkLiveListener,
+        String buildTypeParameter
     ) {
         if (tapTalkLive != null) {
             tapTalkLive.isTapTalkInitialized = false;
         }
+        if (buildTypeParameter == null || buildTypeParameter.isEmpty()) {
+            buildType = BuildConfig.BUILD_TYPE;
+        }
+        else {
+            buildType = buildTypeParameter;
+        }
         if (!isTapTalkLiveInitialized) {
             tapTalkLive = new TapTalkLive(
-                    context,
-                    appKeySecret,
-                    clientAppIcon,
-                    clientAppName,
-                    tapTalkLiveListener
+                context,
+                appKeySecret,
+                clientAppIcon,
+                clientAppName,
+                tapTalkLiveListener
             );
-        } else if (tapTalkLive != null) {
+        }
+        else if (tapTalkLive != null) {
             if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
-                    TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
-                    TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()
+                TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
+                TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()
             ) {
                 tapTalkLive.initializeTapTalkSDK(
-                        TTLDataManager.getInstance().getTapTalkAppKeyID(),
-                        TTLDataManager.getInstance().getTapTalkAppKeySecret(),
-                        TTLDataManager.getInstance().getTapTalkApiUrl()
+                    TTLDataManager.getInstance().getTapTalkAppKeyID(),
+                    TTLDataManager.getInstance().getTapTalkAppKeySecret(),
+                    TTLDataManager.getInstance().getTapTalkApiUrl()
                 );
-            } else {
-                tapTalkLive.isNeedToGetProjectConfigs = true;
-                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).registerCallback(context);
-                TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).addNetworkListener(tapTalkLive.networkListener);
+            }
+            else {
+                tapTalkLive.getProjectConfigs();
             }
         }
 
         if (BuildConfig.DEBUG) {
             Stetho.initialize(
-                    Stetho.newInitializerBuilder(context)
-                            .enableDumpapp(Stetho.defaultDumperPluginsProvider(context))
-                            .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(context))
-                            .build()
+                Stetho.newInitializerBuilder(context)
+                    .enableDumpapp(Stetho.defaultDumperPluginsProvider(context))
+                    .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(context))
+                    .build()
             );
         }
     }
@@ -684,20 +686,27 @@ public class TapTalkLive {
     }
 
     public static boolean openTapTalkLiveView(Context activityContext) {
-        if (tapTalkLive == null || !tapTalkLive.isTapTalkInitialized) {
+        if (tapTalkLive == null || !tapTalkLive.isTapTalkInitialized || activityContext == null) {
             return false;
         }
         TTLHomeActivity.Companion.start(activityContext);
-//        if (TTLDataManager.getInstance().checkActiveUserExists() ||
-//                TTLDataManager.getInstance().checkAccessTokenAvailable()
-//        ) {
-//            // Open case list
-//            TTLCaseListActivity.Companion.start(activityContext);
-//        }
-//        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
-//            // Open create case form
-//            TTLCreateCaseFormActivity.Companion.start(activityContext, true);
-//        }
+        return true;
+    }
+
+    public static boolean openCaseListView(Context activityContext) {
+        if (tapTalkLive == null || !tapTalkLive.isTapTalkInitialized || activityContext == null) {
+            return false;
+        }
+        if (TTLDataManager.getInstance().checkActiveUserExists() ||
+                TTLDataManager.getInstance().checkAccessTokenAvailable()
+        ) {
+            // Open case list
+            TTLCaseListActivity.Companion.start(activityContext);
+        }
+        if (!TTLDataManager.getInstance().activeUserHasExistingCase()) {
+            // Open create case form
+            TTLCreateCaseFormActivity.Companion.start(activityContext, true);
+        }
         return true;
     }
 
