@@ -84,9 +84,9 @@ class MainActivity : AppCompatActivity() {
 //            Log.e(">>>>", "onTalkToAgentButtonTapped: ${scfPath?.title}")
 //        }
 //
-//        override fun onCaseListItemTapped(activity: Activity?, caseListModel: TTLCaseListModel?) {
-//            super.onCaseListItemTapped(activity, caseListModel)
-//            Log.e(">>>>", "onCaseListItemTapped: ${caseListModel?.lastMessage?.room?.name}")
+//        override fun onCaseListItemTapped(activity: Activity?, lastMessage: TAPMessageModel?) {
+//            super.onCaseListItemTapped(activity, lastMessage)
+//            Log.e(">>>>", "onCaseListItemTapped: ${lastMessage?.room?.name}")
 //        }
     }
 

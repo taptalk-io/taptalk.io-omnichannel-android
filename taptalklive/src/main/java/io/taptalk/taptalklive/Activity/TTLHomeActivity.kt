@@ -128,7 +128,7 @@ class TTLHomeActivity : TAPBaseActivity() {
         }
 
         override fun onCaseListTapped(caseList: TTLCaseListModel) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onCaseListItemTapped(this@TTLHomeActivity, caseList)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onCaseListItemTapped(this@TTLHomeActivity, caseList.lastMessage)
         }
 
         override fun onFaqChildTapped(scfPath: TTLScfPathModel) {
