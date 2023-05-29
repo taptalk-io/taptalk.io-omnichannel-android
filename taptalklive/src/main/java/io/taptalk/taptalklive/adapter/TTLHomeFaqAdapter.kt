@@ -62,9 +62,11 @@ class TTLHomeFaqAdapter(
             // Setup channel links
             val channelLinks = TTLDataManager.getInstance().channelLinks
             filteredChannelLinks = ArrayList()
-            for (channel in channelLinks) {
-                if (channel.isEnabled) {
-                    filteredChannelLinks!!.add(channel)
+            if (!channelLinks.isNullOrEmpty()) {
+                for (channel in channelLinks) {
+                    if (channel.isEnabled) {
+                        filteredChannelLinks!!.add(channel)
+                    }
                 }
             }
             channelLinksListener = object: TTLItemListInterface {
