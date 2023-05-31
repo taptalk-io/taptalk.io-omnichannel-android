@@ -791,6 +791,8 @@ public class TapTalkLive {
 
     public static void clearAllTapLiveData() {
         //checkTapTalkInitialized();
+        tapTalkLive = null;
+        isTapTalkLiveInitialized = false;
         TTLDataManager.getInstance().deleteAllPreference();
         TTLApiManager.getInstance().setLoggedOut(true);
         TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
