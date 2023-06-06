@@ -58,6 +58,6 @@ public interface TTLApiService {
     @POST("client/case/rate")
     Observable<TTLBaseResponse<TTLCommonResponse>> rateConversation(@Body TTLRateConversationRequest request);
 
-    @POST("logout")
+    @POST("client/logout")
     Observable<TTLBaseResponse<TTLCommonResponse>> logout();
 }

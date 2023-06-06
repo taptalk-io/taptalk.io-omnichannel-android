@@ -203,14 +203,6 @@ public class TapTalkLive {
         });
     }
 
-    private final TTLDefaultDataView<TTLGetCaseListResponse> accessTokenCaseListDataView = new TTLDefaultDataView<>() {
-        @Override
-        public void onSuccess(TTLGetCaseListResponse response) {
-            isGetCaseListCompleted = true;
-            TTLUtil.processGetCaseListResponse(response, null);
-        }
-    };
-
     private void initializeTapTalkSDK(String tapTalkAppKeyID, String tapTalkAppKeySecret, String tapTalkApiUrl) {
         if (isTapTalkInitialized) {
             return;
@@ -288,48 +280,48 @@ public class TapTalkLive {
         if (isGetCaseListCompleted) {
             tapTalkLiveListener.onInitializationCompleted();
         }
-        else {
-            getCaseList();
-        }
-    }
-
-    private void getCaseList() {
-        if (TTLDataManager.getInstance().checkActiveUserExists() && !isGetCaseListCompleted) {
+        else if (TTLDataManager.getInstance().checkActiveUserExists() && !isGetCaseListCompleted) {
             // Check if user has active case
-            TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
-                @Override
-                public void onSuccess(TTLGetCaseListResponse response) {
-                    TTLUtil.processGetCaseListResponse(response, new TapCommonListener() {
-                        @Override
-                        public void onSuccess(String successMessage) {
-                            onFinish();
-                        }
-
-                        @Override
-                        public void onError(String errorCode, String errorMessage) {
-                            onFinish();
-                        }
-                    });
-                }
-
-                @Override
-                public void onError(TTLErrorModel error) {
-                    onFinish();
-                }
-
-                @Override
-                public void onError(String errorMessage) {
-                    onFinish();
-                }
-
-                private void onFinish() {
-                    onGetCaseListCompleted();
-                }
-            });
+            getCaseList(true);
         }
         else {
             onGetCaseListCompleted();
         }
+    }
+
+    private void getCaseList(boolean triggerCompletion) {
+        TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
+            @Override
+            public void onSuccess(TTLGetCaseListResponse response) {
+                TTLUtil.processGetCaseListResponse(response, new TapCommonListener() {
+                    @Override
+                    public void onSuccess(String successMessage) {
+                        onFinish();
+                    }
+
+                    @Override
+                    public void onError(String errorCode, String errorMessage) {
+                        onFinish();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(TTLErrorModel error) {
+                onFinish();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                onFinish();
+            }
+
+            private void onFinish() {
+                if (triggerCompletion) {
+                    onGetCaseListCompleted();
+                }
+            }
+        });
     }
 
     private void onGetCaseListCompleted() {
@@ -452,12 +444,24 @@ public class TapTalkLive {
                     TTLDataManager.getInstance().saveAccessTokenExpiry(response.getAccessTokenExpiry());
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
                     if (tapTalkLive != null) {
-                        TTLDataManager.getInstance().getCaseList(tapTalkLive.accessTokenCaseListDataView);
-                    }
-                    if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
-                        requestTapTalkAuthTicket(listener);
-                    } else {
-                        listener.onSuccess(context.getString(R.string.ttl_successfully_logged_in));
+                        TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
+                            @Override
+                            public void onSuccess(TTLGetCaseListResponse response) {
+                                TTLUtil.processGetCaseListResponse(response, null);
+                                tapTalkLive.isGetCaseListCompleted = true;
+                                onFinish();
+                            }
+
+                            @Override
+                            public void onError(TTLErrorModel error) {
+                                onFinish();
+                            }
+
+                            @Override
+                            public void onError(String errorMessage) {
+                                onFinish();
+                            }
+                        });
                     }
                 } else {
                     onError("No response when requesting access token.");
@@ -472,6 +476,14 @@ public class TapTalkLive {
             @Override
             public void onError(String errorMessage) {
                 listener.onError(OTHER_ERRORS, errorMessage);
+            }
+
+            private void onFinish() {
+                if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
+                    requestTapTalkAuthTicket(listener);
+                } else {
+                    listener.onSuccess(context.getString(R.string.ttl_successfully_logged_in));
+                }
             }
         });
     }
@@ -779,6 +791,8 @@ public class TapTalkLive {
 
     public static void clearAllTapLiveData() {
         //checkTapTalkInitialized();
+        tapTalkLive = null;
+        isTapTalkLiveInitialized = false;
         TTLDataManager.getInstance().deleteAllPreference();
         TTLApiManager.getInstance().setLoggedOut(true);
         TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
