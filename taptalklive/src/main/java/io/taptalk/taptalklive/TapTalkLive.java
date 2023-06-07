@@ -220,12 +220,6 @@ public class TapTalkLive {
             tapListener
         );
 
-        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReadStatusVisible(false);
-        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setProfileButtonInChatRoomVisible(false);
-//        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setCloseButtonInRoomListVisible(true);
-//        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMyAccountButtonInRoomListVisible(false);
-//        TapUI.getInstance(TAPTALK_INSTANCE_KEY).removeRoomListListener(tapUIRoomListListener);
-//        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addRoomListListener(tapUIRoomListListener);
 
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(closeCaseCustomBubble);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reopenCaseCustomBubble);
@@ -235,6 +229,9 @@ public class TapTalkLive {
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomKeyboardListener(customKeyboardListener);
 
         // Remove disabled features from chat room
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReadStatusVisible(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setProfileButtonInChatRoomVisible(false);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).setReplyMessageMenuEnabled(true);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setForwardMessageMenuEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setMentionUsernameEnabled(false);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setDeleteMessageMenuEnabled(false);
@@ -760,6 +757,41 @@ public class TapTalkLive {
         // TODO: 27 Feb 2020 RESTART OPEN ACTIVITIES TO APPLY CHANGED RESOURCES
     }
 
+    public static void logout(TTLCommonListener listener) {
+        TTLDataManager.getInstance().logout(new TTLDefaultDataView<>() {
+            @Override
+            public void onSuccess(TTLCommonResponse response) {
+                onFinish();
+                if (null != listener) {
+                    listener.onSuccess(response.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(TTLErrorModel error) {
+                onError(error.getMessage());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                onFinish();
+                if (null != listener) {
+                    listener.onError(ERROR_CODE_OTHERS, errorMessage);
+                }
+            }
+
+            private void onFinish() {
+                TTLDataManager.getInstance().deleteUserPreferences();
+                TTLApiManager.getInstance().setLoggedOut(true);
+                TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
+                if (tapTalkLive != null) {
+                    tapTalkLive.isTapTalkInitialized = false;
+                    tapTalkLive.isGetCaseListCompleted = false;
+                }
+            }
+        });
+    }
+
     public static void logoutAndClearAllTapLiveData(TTLCommonListener listener) {
         //checkTapTalkInitialized();
         TTLDataManager.getInstance().logout(new TTLDefaultDataView<>() {
@@ -773,10 +805,7 @@ public class TapTalkLive {
 
             @Override
             public void onError(TTLErrorModel error) {
-                clearAllTapLiveData();
-                if (null != listener) {
-                    listener.onError(error.getCode(), error.getMessage());
-                }
+                onError(error.getMessage());
             }
 
             @Override

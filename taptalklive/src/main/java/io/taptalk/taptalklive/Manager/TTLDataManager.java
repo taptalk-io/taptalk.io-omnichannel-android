@@ -100,20 +100,26 @@ public class TTLDataManager {
      * =========================================================================================== *
      */
 
-    public void deleteAllPreference() {
-        removeAppKeySecret();
+    public void deleteUserPreferences() {
         removeAuthTicket();
         removeAccessToken();
+        removeAccessTokenExpiry();
         removeRefreshToken();
+        removeRefreshTokenExpiry();
         removeActiveUser();
+        removeTapTalkAuthTicket();
+        removeActiveUserHasExistingCase();
+    }
+
+    public void deleteAllPreference() {
+        deleteUserPreferences();
+        removeAppKeySecret();
         removeTapTalkApiUrl();
         removeTapTalkAppKeyID();
         removeTapTalkAppKeySecret();
-        removeTapTalkAuthTicket();
         removeChannelLinks();
         removeScfPath();
         removeTopics();
-        removeActiveUserHasExistingCase();
     }
 
     /**
@@ -168,16 +174,20 @@ public class TTLDataManager {
         saveStringPreference(ACCESS_TOKEN, accessToken);
     }
 
-    public void saveAccessTokenExpiry(Long accessTokenExpiry) {
-        saveLongTimestampPreference(ACCESS_TOKEN_EXPIRY, accessTokenExpiry);
+    public void removeAccessToken() {
+        removePreference(ACCESS_TOKEN);
     }
 
     public long getAccessTokenExpiry() {
         return getLongTimestampPreference(ACCESS_TOKEN_EXPIRY);
     }
 
-    public void removeAccessToken() {
-        removePreference(ACCESS_TOKEN);
+    public void saveAccessTokenExpiry(Long accessTokenExpiry) {
+        saveLongTimestampPreference(ACCESS_TOKEN_EXPIRY, accessTokenExpiry);
+    }
+
+    public void removeAccessTokenExpiry() {
+        removePreference(ACCESS_TOKEN_EXPIRY);
     }
 
     /**
@@ -195,12 +205,20 @@ public class TTLDataManager {
         saveStringPreference(REFRESH_TOKEN, refreshToken);
     }
 
+    public void removeRefreshToken() {
+        removePreference(REFRESH_TOKEN);
+    }
+
+    public String getRefreshTokenExpiry() {
+        return getStringPreference(REFRESH_TOKEN_EXPIRY);
+    }
+
     public void saveRefreshTokenExpiry(Long refreshTokenExpiry) {
         saveLongTimestampPreference(REFRESH_TOKEN_EXPIRY, refreshTokenExpiry);
     }
 
-    public void removeRefreshToken() {
-        removePreference(REFRESH_TOKEN);
+    public void removeRefreshTokenExpiry() {
+        removePreference(REFRESH_TOKEN_EXPIRY);
     }
 
     /**
