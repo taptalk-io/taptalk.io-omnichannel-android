@@ -59,6 +59,11 @@ class TTLHomeActivity : TAPBaseActivity() {
         fetchNewMessages()
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter.refreshLatestCaseList()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         removeListeners()
