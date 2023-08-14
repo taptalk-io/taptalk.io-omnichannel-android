@@ -10,15 +10,15 @@ if (file("${rootProject.rootDir}/environment.properties").exists()) {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     publishNonDefault true
 
     defaultConfig {
         minSdk 16
         targetSdk 33
-        versionCode 23
-        versionName "2.2.0"
+        versionCode 24
+        versionName "2.2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
         multiDexEnabled true
@@ -120,7 +120,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // TapTalk
-    api 'com.github.taptalk-io:taptalk.io-android:2.10.2'
+    api 'com.github.taptalk-io:taptalk.io-android:2.12.4'
 }
 
 task androidSourcesJar(type: Jar) {
@@ -136,7 +136,7 @@ project.afterEvaluate {
                 artifact androidSourcesJar // optional sources
                 groupId = 'com.github.taptalk-io'
                 artifactId = 'taptalk.io-omnichannel-android'
-                version = "2.2.0"
+                version = "2.2.2"
 //                version = "\"${android.defaultConfig.versionName}\""
             }
         }

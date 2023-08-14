@@ -18,3 +18,5 @@
 .idea/jarRepositories.xml
 .idea/gradle.xml
 .idea/misc.xml
+environment.properties
+.idea/
