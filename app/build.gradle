@@ -11,14 +11,14 @@ if (file("${rootProject.rootDir}/environment.properties").exists()) {
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
 
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "io.taptalk.taptalklivesample"
         minSdk 16
         targetSdk 33
-        versionCode 24
-        versionName "2.2.1"
+        versionCode 25
+        versionName "2.2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         setProperty("archivesBaseName", applicationId + "-" + versionName)
