@@ -2,6 +2,8 @@
 
 buildscript {
     ext.kotlin_version = '1.6.0'
+    ext.taptalklive_version_name = '2.2.3'
+    ext.taptalklive_version_code = 25
     repositories {
         google()
         jcenter()
