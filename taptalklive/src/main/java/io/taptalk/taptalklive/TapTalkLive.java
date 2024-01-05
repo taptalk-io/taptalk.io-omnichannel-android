@@ -2,6 +2,12 @@ package io.taptalk.taptalklive;
 
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ApiErrorCode.OTHER_ERRORS;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.CAPTION;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_NAME;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_URL;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageType.TYPE_FILE;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageType.TYPE_IMAGE;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageType.TYPE_VIDEO;
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
 import static io.taptalk.taptalklive.Const.TTLConstant.Broadcast.SCF_PATH_UPDATED;
@@ -17,13 +23,17 @@ import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEM
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_IMAGE_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_TEXT_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_WABA_TEMPLATE_VIDEO_MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.FILE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.IMAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.TEXT;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.VIDEO;
 import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +48,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Helper.TapTalkDialog;
 import io.taptalk.TapTalk.Listener.TAPChatListener;
@@ -45,6 +56,7 @@ import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Listener.TapUICustomKeyboardListener;
 import io.taptalk.TapTalk.Manager.TAPChatManager;
+import io.taptalk.TapTalk.Manager.TAPNetworkStateManager;
 import io.taptalk.TapTalk.Manager.TapLocaleManager;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
@@ -60,7 +72,10 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsRespon
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetScfPathResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageRequest;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageResponse;
 import io.taptalk.taptalklive.API.Model.TTLCaseModel;
+import io.taptalk.taptalklive.API.Model.TTLMessageMediaModel;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
@@ -282,8 +297,74 @@ public class TapTalkLive {
     private TAPChatListener chatListener = new TAPChatListener() {
         @Override
         public void onSendMessagePending(TAPMessageModel message) {
-            Log.e(">>>>>>", "onSendMessagePending: " + message.getBody());
-            TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).sendMessage(message); // test
+            if (message == null || message.getRoom() == null) {
+                return;
+            }
+            TTLCaseModel caseModel = TapTalkLive.getCaseMap().get(message.getRoom().getXcRoomID());
+            if (caseModel == null) {
+                return;
+            }
+            if (TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).hasNetworkConnection(context)) {
+                String replyToLocalID = null != message.getReplyTo() ? message.getReplyTo().getLocalID() : null;
+                String messageType;
+                if (message.getType() == TYPE_IMAGE) {
+                    messageType = IMAGE;
+                }
+                else if (message.getType() == TYPE_VIDEO) {
+                    messageType = VIDEO;
+                }
+                else if (message.getType() == TYPE_FILE) {
+                    messageType = FILE;
+                }
+                else {
+                    messageType = TEXT;
+                }
+                TTLMessageMediaModel media = null;
+                if (!messageType.equals(TEXT) && message.getData() != null) {
+                    String fileUrl = (String) message.getData().get(FILE_URL);
+                    if (fileUrl == null || fileUrl.isEmpty()) {
+                        fileUrl = (String) message.getData().get("fileURL");
+                    }
+                    String caption = (String) message.getData().get(CAPTION);
+                    String fileName = (String) message.getData().get(FILE_NAME);
+                    media = new TTLMessageMediaModel(
+                        fileUrl,
+                        caption,
+                        fileName
+                    );
+                }
+                TTLSendMessageRequest request = new TTLSendMessageRequest(
+                    caseModel.getId(),
+                    caseModel.getCreatedTime(),
+                    message.getLocalID(),
+                    replyToLocalID,
+                    messageType,
+                    message.getBody(),
+                    messageType.equals(IMAGE) ? media : null,
+                    messageType.equals(VIDEO) ? media : null,
+                    messageType.equals(FILE) ? media : null
+                );
+                TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).putWaitingForResponseMessage(message);
+                TTLDataManager.getInstance().sendMessage(request, new TTLDefaultDataView<>() {
+                    @Override
+                    public void onError(TTLErrorModel error) {
+                        onError(error.getMessage());
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        handleSendMessageError(message, errorMessage);
+                    }
+                });
+            }
+            else {
+                handleSendMessageError(message, context.getString(R.string.ttl_error_message_offline));
+            }
+        }
+
+        private void handleSendMessageError(TAPMessageModel message, String errorMessage) {
+            TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).putPendingMessage(message);
+            Toast.makeText(context, "Unable to send message: " + errorMessage, Toast.LENGTH_SHORT).show();
         }
     };
 

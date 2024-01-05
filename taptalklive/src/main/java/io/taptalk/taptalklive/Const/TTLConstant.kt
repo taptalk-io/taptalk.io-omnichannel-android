@@ -27,6 +27,14 @@ class TTLConstant {
         const val TYPE_WABA_TEMPLATE_FILE_MESSAGE = 3024
     }
 
+    object MessageTypeString {
+        const val TEXT = "text"
+        const val IMAGE = "image"
+        const val VIDEO = "video"
+        const val FILE = "file"
+        const val LOCATION = "location"
+    }
+
     object CaseMedium {
         const val LAUNCHER = "launcher"
         const val WHATSAPP_SME = "whatsapp"
