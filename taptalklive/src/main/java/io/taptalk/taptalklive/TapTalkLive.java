@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,9 +40,11 @@ import java.util.List;
 
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Helper.TapTalkDialog;
+import io.taptalk.TapTalk.Listener.TAPChatListener;
 import io.taptalk.TapTalk.Listener.TapCommonListener;
 import io.taptalk.TapTalk.Listener.TapListener;
 import io.taptalk.TapTalk.Listener.TapUICustomKeyboardListener;
+import io.taptalk.TapTalk.Manager.TAPChatManager;
 import io.taptalk.TapTalk.Manager.TapLocaleManager;
 import io.taptalk.TapTalk.Manager.TapUI;
 import io.taptalk.TapTalk.Model.TAPCustomKeyboardItemModel;
@@ -220,7 +223,6 @@ public class TapTalkLive {
             tapListener
         );
 
-
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(closeCaseCustomBubble);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reopenCaseCustomBubble);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reviewCustomBubble);
@@ -254,6 +256,11 @@ public class TapTalkLive {
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_WABA_TEMPLATE_VIDEO_MESSAGE, TapUI.LongPressMenuType.TYPE_VIDEO_MESSAGE);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).setLongPressMenuForMessageType(TYPE_WABA_TEMPLATE_FILE_MESSAGE, TapUI.LongPressMenuType.TYPE_FILE_MESSAGE);
 
+        // Disable send message by default
+        TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).setSendMessageDisabled(true);
+        TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).removeChatListener(chatListener);
+        TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).addChatListener(chatListener);
+
         if (!TapTalk.isConnected(TAPTALK_INSTANCE_KEY)) {
             TapTalk.connect(TAPTALK_INSTANCE_KEY, new TapCommonListener() {
                 @Override
@@ -271,6 +278,14 @@ public class TapTalkLive {
             onTapTalkInitializationCompleted();
         }
     }
+
+    private TAPChatListener chatListener = new TAPChatListener() {
+        @Override
+        public void onSendMessagePending(TAPMessageModel message) {
+            Log.e(">>>>>>", "onSendMessagePending: " + message.getBody());
+            TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).sendMessage(message); // test
+        }
+    };
 
     private void onTapTalkInitializationCompleted() {
         isTapTalkInitialized = true;
