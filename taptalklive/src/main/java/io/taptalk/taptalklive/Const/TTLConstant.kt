@@ -50,6 +50,7 @@ class TTLConstant {
 
     object ScfPathType {
         const val QNA = "qna"
+        const val QNA_VIA_API = "qna_via_api"
         const val TALK_TO_AGENT = "talk_to_agent"
     }
 
@@ -64,6 +65,7 @@ class TTLConstant {
     object Broadcast {
         const val SCF_PATH_UPDATED = "kTapTalkLiveScfPathUpdated"
         const val NEW_CASE_CREATED = "kTapTalkLiveNewCaseCreated"
+        const val JSON_TASK_COMPLETED = "kTapTalkLiveJsonTaskCompleted"
     }
 
     object Extras {
@@ -71,6 +73,8 @@ class TTLConstant {
         const val SHOW_CLOSE_BUTTON = "kTapTalkLiveExtrasShowCloseButton"
         const val SCF_PATH = "kTapTalkLiveExtrasScfPath"
         const val CASE_DETAILS = "kTapTalkLiveCaseDetails"
+        const val JSON_URL = "kTapTalkLiveJsonUrl"
+        const val JSON_STRING = "kTapTalkLiveJsonString"
     }
 
     object PreferenceKey {
