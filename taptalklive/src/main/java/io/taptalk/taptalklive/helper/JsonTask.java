@@ -28,6 +28,12 @@ public class JsonTask extends AsyncTask<Void, Void, String> {
     String jsonUrl;
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        TapTalkLive.getLoadingContentResponseList().add(jsonUrl);
+    }
+
+    @Override
     protected String doInBackground(Void... voids) {
         HttpURLConnection urlConnection = null;
         BufferedReader bufferedReader = null;
@@ -75,6 +81,7 @@ public class JsonTask extends AsyncTask<Void, Void, String> {
         super.onPostExecute(jsonString);
 
         Log.e(">>>>>>>>>>>>>", "onPostExecute: " + jsonString);
+        TapTalkLive.getLoadingContentResponseList().remove(jsonUrl);
         if (jsonString != null) {
             TapTalkLive.getContentResponseMap().put(jsonUrl, jsonString);
             Intent intent = new Intent(JSON_TASK_COMPLETED);

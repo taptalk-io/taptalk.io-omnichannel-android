@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
+import androidx.recyclerview.widget.SimpleItemAnimator
 import io.taptalk.TapTalk.Helper.TAPBroadcastManager
 import io.taptalk.TapTalk.Manager.TapCoreMessageManager
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
@@ -66,8 +67,8 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
 
     private fun initView() {
         adapter = TTLHomeFaqAdapter(this, generateAdapterItems(), adapterListener, false)
-        rv_home.adapter = adapter
-        rv_home.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
+        rv_home?.adapter = adapter
+        rv_home?.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
             override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
                 try {
                     super.onLayoutChildren(recycler, state)
@@ -77,6 +78,8 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
                 }
             }
         }
+        val messageAnimator = rv_home?.itemAnimator as SimpleItemAnimator?
+        messageAnimator?.supportsChangeAnimations = false
     }
 
     private fun registerBroadcastReceiver() {

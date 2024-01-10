@@ -106,6 +106,7 @@ public class TapTalkLive {
     private TTLCaseListFragment caseListFragment;
     private HashMap<String /*xcRoomID*/, TTLCaseModel> caseMap;
     private HashMap<String /*apiUrl*/, String /*contentResponse*/> contentResponseMap;
+    private ArrayList<String> loadingContentResponseList;
     public TapTalkLiveListener tapTalkLiveListener;
 
     /**
@@ -845,6 +846,16 @@ public class TapTalkLive {
             tapTalkLive.contentResponseMap = new HashMap<>();
         }
         return tapTalkLive.contentResponseMap;
+    }
+
+    public static ArrayList<String> getLoadingContentResponseList() {
+        if (tapTalkLive == null) {
+            return new ArrayList<>();
+        }
+        if (tapTalkLive.loadingContentResponseList == null) {
+            tapTalkLive.loadingContentResponseList = new ArrayList<>();
+        }
+        return tapTalkLive.loadingContentResponseList;
     }
 
     public enum Language {ENGLISH, INDONESIAN}

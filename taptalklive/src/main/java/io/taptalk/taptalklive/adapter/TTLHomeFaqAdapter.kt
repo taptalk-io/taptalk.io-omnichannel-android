@@ -42,6 +42,7 @@ import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.Listener.TTLItemListInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
+import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.model.TTLCaseListModel
 
 class TTLHomeFaqAdapter(
@@ -230,14 +231,19 @@ class TTLHomeFaqAdapter(
 
         private var llButtonTalkToAgent: LinearLayout = itemView.findViewById(R.id.ll_button_talk_to_agent)
         private var flImagePreview: FrameLayout = itemView.findViewById(R.id.fl_image_preview)
+        private var clFilePreview: ConstraintLayout = itemView.findViewById(R.id.cl_file_preview)
         private var ivButtonClose: ImageView = itemView.findViewById(R.id.iv_button_close)
         private var tvLabelFaq: TextView = itemView.findViewById(R.id.tv_label_faq)
         private var tvFaqTitle: TextView = itemView.findViewById(R.id.tv_faq_title)
         private var tvFaqContent: TextView = itemView.findViewById(R.id.tv_faq_content)
+        private var tvFileName: TextView = itemView.findViewById(R.id.tv_file_name)
+        private var tvFileInfo: TextView = itemView.findViewById(R.id.tv_file_info)
         private var ivImagePreview: ImageView = itemView.findViewById(R.id.iv_image_preview)
         private var ivButtonPlay: ImageView = itemView.findViewById(R.id.iv_button_play)
+        private var ivFileStatusIcon: ImageView = itemView.findViewById(R.id.iv_file_status_icon)
         private var vHeaderBackground: View = itemView.findViewById(R.id.v_header_background)
         private var vBottomDecoration: View = itemView.findViewById(R.id.v_bottom_decoration)
+        private var pbContentResponseLoading: View = itemView.findViewById(R.id.pb_content_response_loading)
 
         override fun onBind(item: TTLScfPathModel?, position: Int) {
             if (item == null) {
@@ -287,6 +293,7 @@ class TTLHomeFaqAdapter(
                         val mediaMap = contentResponseMap[type] as HashMap<*, *>?
                         val url = mediaMap?.get("url") as String?
                         if (!url.isNullOrEmpty()) {
+                            // Show image/video thumbnail
                             flImagePreview.visibility = View.VISIBLE
                             Glide.with(itemView.context).load(url).listener(object : RequestListener<Drawable?> {
                                 override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable?>, isFirstResource: Boolean): Boolean {
@@ -312,19 +319,54 @@ class TTLHomeFaqAdapter(
                         else {
                             flImagePreview.visibility = View.GONE
                         }
-                        // TODO: HIDE FILE
+                        clFilePreview.visibility = View.GONE
                     }
-                    // TODO: FILE/DOC
+                    else if (type == FILE || type == DOCUMENT) {
+                        val mediaMap = contentResponseMap[type] as HashMap<*, *>?
+                        val url = mediaMap?.get("url") as String?
+                        if (!url.isNullOrEmpty()) {
+                            // Show file preview
+                            val filename = mediaMap?.get("filename") as String?
+                            if (!filename.isNullOrEmpty()) {
+                                tvFileName.text = filename
+                            }
+                            else {
+                                tvFileName.text = DOCUMENT
+                            }
+
+                            val size = mediaMap?.get("size") as Number?
+                            if (size != null && size.toLong() > 0L) {
+                                tvFileInfo.text = TAPUtils.getStringSizeLengthFile(size.toLong())
+                                tvFileInfo.visibility = View.VISIBLE
+                            }
+                            else {
+                                tvFileInfo.visibility = View.GONE
+                            }
+
+                            clFilePreview.visibility = View.VISIBLE
+                        }
+                        else {
+                            clFilePreview.visibility = View.GONE
+                        }
+                        flImagePreview.visibility = View.GONE
+                    }
                     else {
                         flImagePreview.visibility = View.GONE
+                        clFilePreview.visibility = View.GONE
                     }
                 }
                 else {
                     flImagePreview.visibility = View.GONE
+                    clFilePreview.visibility = View.GONE
                 }
+                pbContentResponseLoading.visibility = View.GONE
             }
             else {
                 flImagePreview.visibility = View.GONE
+                clFilePreview.visibility = View.GONE
+                if (TapTalkLive.getLoadingContentResponseList().contains(item.apiURL)) {
+                    pbContentResponseLoading.visibility = View.VISIBLE
+                }
             }
 
             // Content
@@ -358,6 +400,9 @@ class TTLHomeFaqAdapter(
                     else {
                         tvFaqContent.text = ""
                     }
+                }
+                else if (TapTalkLive.getLoadingContentResponseList().contains(item.apiURL)) {
+                    tvFaqContent.text = ""
                 }
                 else {
                     tvFaqContent.text = item.contentOnAPIError
@@ -406,7 +451,14 @@ class TTLHomeFaqAdapter(
             }
 
             tvFaqChildTitle.text = item.title
-            tvFaqChildContent.text = item.content
+
+            if (!item.content.isNullOrEmpty()) {
+                tvFaqChildContent.text = item.content
+                tvFaqChildContent.visibility = View.VISIBLE
+            }
+            else {
+                tvFaqChildContent.visibility = View.GONE
+            }
 
             if (bindingAdapterPosition >= itemCount - 1) {
                 vBottomDecoration.visibility = View.VISIBLE

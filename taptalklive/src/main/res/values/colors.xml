@@ -103,6 +103,8 @@
     <color name="ttlReviewTitleLabelColor">@color/ttlColorTextDark</color>
     <color name="ttlReviewRatingLabelColor">@color/ttlColorTextDark</color>
     <color name="ttlErrorInfoLabelColor">@color/ttlColorTextError</color>
+    <color name="ttlFileNameLabelColor">@color/ttlColorTextDark</color>
+    <color name="ttlFileInfoLabelColor">@color/ttlTransparentBlack1980</color>
 
     <color name="ttlButtonLabelColor">@color/ttlColorTextLight</color>
     <color name="ttlBorderedButtonLabelColor">@color/ttlColorTextPrimary</color>
@@ -162,6 +164,7 @@
     <color name="ttlVibrantGreen">#19c700</color>
     <color name="ttlSaffron">#f4c12a</color>
 
+    <color name="ttlTransparentBlack1905">#0c191919</color>
     <color name="ttlTransparentBlack1910">#1a191919</color>
     <color name="ttlTransparentBlack1920">#33191919</color>
     <color name="ttlTransparentBlack1940">#66191919</color>

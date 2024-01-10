@@ -97,9 +97,7 @@ class TTLHomeActivity : TAPBaseActivity() {
             }
         }
         val messageAnimator = rv_home.itemAnimator as SimpleItemAnimator?
-        if (null != messageAnimator) {
-            messageAnimator.supportsChangeAnimations = false
-        }
+        messageAnimator?.supportsChangeAnimations = false
     }
 
     private fun generateAdapterItems(): ArrayList<TTLScfPathModel> {
