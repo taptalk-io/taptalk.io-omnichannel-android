@@ -2,6 +2,7 @@ package io.taptalk.taptalklive.adapter
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -14,11 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView
+import io.taptalk.TapTalk.Helper.TAPRoundedCornerImageView
 import io.taptalk.TapTalk.Helper.TAPUtils
-import io.taptalk.TapTalk.Helper.TAPVerticalDecoration
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
 import io.taptalk.TapTalk.Manager.TAPChatManager
 import io.taptalk.TapTalk.Manager.TAPDataManager
@@ -26,6 +31,11 @@ import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
+import io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.DOCUMENT
+import io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.FILE
+import io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.IMAGE
+import io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.TEXT
+import io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.VIDEO
 import io.taptalk.taptalklive.Const.TTLConstant.ScfPathType.TALK_TO_AGENT
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
@@ -219,10 +229,13 @@ class TTLHomeFaqAdapter(
     internal inner class FaqParentViewHolder(parent: ViewGroup?, itemLayoutId: Int) : TAPBaseViewHolder<TTLScfPathModel>(parent, itemLayoutId) {
 
         private var llButtonTalkToAgent: LinearLayout = itemView.findViewById(R.id.ll_button_talk_to_agent)
+        private var flImagePreview: FrameLayout = itemView.findViewById(R.id.fl_image_preview)
         private var ivButtonClose: ImageView = itemView.findViewById(R.id.iv_button_close)
         private var tvLabelFaq: TextView = itemView.findViewById(R.id.tv_label_faq)
         private var tvFaqTitle: TextView = itemView.findViewById(R.id.tv_faq_title)
         private var tvFaqContent: TextView = itemView.findViewById(R.id.tv_faq_content)
+        private var ivImagePreview: ImageView = itemView.findViewById(R.id.iv_image_preview)
+        private var ivButtonPlay: ImageView = itemView.findViewById(R.id.iv_button_play)
         private var vHeaderBackground: View = itemView.findViewById(R.id.v_header_background)
         private var vBottomDecoration: View = itemView.findViewById(R.id.v_bottom_decoration)
 
@@ -262,8 +275,103 @@ class TTLHomeFaqAdapter(
                 }
             }
 
+            // Title
             tvFaqTitle.text = item.title
-            tvFaqContent.text = item.content
+
+            // Media Preview
+            if (!item.apiURL.isNullOrEmpty() && !item.contentResponse.isNullOrEmpty()) {
+                val contentResponseMap = TAPUtils.toHashMap(item.contentResponse)
+                if (contentResponseMap != null) {
+                    val type = contentResponseMap["type"] as String?
+                    if (type == IMAGE || type == VIDEO) {
+                        val mediaMap = contentResponseMap[type] as HashMap<*, *>?
+                        val url = mediaMap?.get("url") as String?
+                        if (!url.isNullOrEmpty()) {
+                            flImagePreview.visibility = View.VISIBLE
+                            Glide.with(itemView.context).load(url).listener(object : RequestListener<Drawable?> {
+                                override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable?>, isFirstResource: Boolean): Boolean {
+                                    (itemView.context as Activity?)?.runOnUiThread {
+                                        flImagePreview.visibility = View.GONE
+                                    }
+                                    return false
+                                }
+
+                                override fun onResourceReady(resource: Drawable?, model: Any, target: Target<Drawable?>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
+                                    (itemView.context as Activity?)?.runOnUiThread {
+                                        if (type == VIDEO) {
+                                            ivButtonPlay.visibility = View.VISIBLE
+                                        }
+                                        else {
+                                            ivButtonPlay.visibility = View.GONE
+                                        }
+                                    }
+                                    return false
+                                }
+                            }).into(ivImagePreview)
+                        }
+                        else {
+                            flImagePreview.visibility = View.GONE
+                        }
+                        // TODO: HIDE FILE
+                    }
+                    // TODO: FILE/DOC
+                    else {
+                        flImagePreview.visibility = View.GONE
+                    }
+                }
+                else {
+                    flImagePreview.visibility = View.GONE
+                }
+            }
+            else {
+                flImagePreview.visibility = View.GONE
+            }
+
+            // Content
+            if (!item.content.isNullOrEmpty()) {
+                tvFaqContent.text = item.content
+            }
+            else if (!item.apiURL.isNullOrEmpty()) {
+                if (!item.contentResponse.isNullOrEmpty()) {
+                    val contentResponseMap = TAPUtils.toHashMap(item.contentResponse)
+                    if (contentResponseMap != null) {
+                        val type = contentResponseMap["type"] as String?
+                        if (type == TEXT) {
+                            val textMap = contentResponseMap["text"] as HashMap<*, *>?
+                            val body = textMap?.get("body") as String?
+                            tvFaqContent.text = body ?: ""
+                        }
+                        else if (
+                            type == IMAGE ||
+                            type == VIDEO ||
+                            type == FILE ||
+                            type == DOCUMENT
+                        ) {
+                            val mediaMap = contentResponseMap[type] as HashMap<*, *>?
+                            val caption = mediaMap?.get("caption") as String?
+                            tvFaqContent.text = caption ?: ""
+                        }
+                        else {
+                            tvFaqContent.text = ""
+                        }
+                    }
+                    else {
+                        tvFaqContent.text = ""
+                    }
+                }
+                else {
+                    tvFaqContent.text = item.contentOnAPIError
+                }
+            }
+            else {
+                tvFaqContent.text = ""
+            }
+            if (tvFaqContent.text.isNullOrEmpty()) {
+                tvFaqContent.visibility = View.GONE
+            }
+            else {
+                tvFaqContent.visibility = View.VISIBLE
+            }
 
             if (item.type == TALK_TO_AGENT) {
                 llButtonTalkToAgent.visibility = View.VISIBLE

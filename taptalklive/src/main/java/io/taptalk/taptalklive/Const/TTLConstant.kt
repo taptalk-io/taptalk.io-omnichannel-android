@@ -32,6 +32,7 @@ class TTLConstant {
         const val IMAGE = "image"
         const val VIDEO = "video"
         const val FILE = "file"
+        const val DOCUMENT = "document"
         const val LOCATION = "location"
     }
 
