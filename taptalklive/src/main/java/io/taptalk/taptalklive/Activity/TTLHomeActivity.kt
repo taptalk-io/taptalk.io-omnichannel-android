@@ -56,9 +56,6 @@ class TTLHomeActivity : TAPBaseActivity() {
     }
 
     private lateinit var adapter: TTLHomeFaqAdapter
-    private lateinit var adapterItems: ArrayList<TTLScfPathModel>
-    private lateinit var scfMap: HashMap<String /*apiURL*/, TTLScfPathModel>
-    private var contentResponseMap: HashMap<String /*apiURL*/, String /*contentResponse*/> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,13 +109,13 @@ class TTLHomeActivity : TAPBaseActivity() {
 
         val scfPath = TTLDataManager.getInstance().scfPath
         if (scfPath != null) {
-            Log.e(">>>>>>>>>>", "generateAdapterItems parent: ${scfPath.apiURL} - ${scfPath.contentResponse}")
             if (scfPath.contentResponse.isNullOrEmpty() &&
                 !scfPath.apiURL.isNullOrEmpty() &&
-                !contentResponseMap[scfPath.apiURL].isNullOrEmpty()
+                !TapTalkLive.getContentResponseMap()[scfPath.apiURL].isNullOrEmpty()
             ) {
-                scfPath.contentResponse = contentResponseMap[scfPath.apiURL]!!
+                scfPath.contentResponse = TapTalkLive.getContentResponseMap()[scfPath.apiURL]!!
             }
+            Log.e(">>>>>>>>>>", "generateAdapterItems parent: ${scfPath.apiURL} - ${scfPath.contentResponse}")
             if (scfPath.childItems.isEmpty()) {
                 homeItemList.add(scfPath)
             }
@@ -126,21 +123,10 @@ class TTLHomeActivity : TAPBaseActivity() {
                 val parentScf = scfPath.copy()
                 parentScf.childItems = ArrayList()
                 homeItemList.add(parentScf)
-                for (child in scfPath.childItems) {
-                    Log.e(">>>>>>>>>>", "generateAdapterItems child: ${child.apiURL} - ${child.contentResponse}")
-                    if (child.contentResponse.isNullOrEmpty() &&
-                        !child.apiURL.isNullOrEmpty() &&
-                        !contentResponseMap[child.apiURL].isNullOrEmpty()
-                    ) {
-                        child.contentResponse = contentResponseMap[child.apiURL]!!
-                    }
-                }
                 homeItemList.addAll(scfPath.childItems)
             }
-            scfMap = TTLUtil.fetchScfPathContentResponse(scfPath, true)
+            TTLUtil.fetchScfPathContentResponse(scfPath, true)
         }
-
-        adapterItems = homeItemList
         return homeItemList
     }
 
@@ -208,21 +194,10 @@ class TTLHomeActivity : TAPBaseActivity() {
                     val jsonUrl = intent.getStringExtra(JSON_URL)
                     val jsonString = intent.getStringExtra(JSON_STRING)
                     if (!jsonString.isNullOrEmpty()) {
-                        if (adapterItems.isNotEmpty() && adapterItems.size > 1 && adapterItems[1].apiURL == jsonUrl) {
-                            adapterItems[1].contentResponse = jsonString
-                            adapter.items = adapterItems
+                        if (adapter.items.isNotEmpty() && adapter.items.size > 1 && adapter.items[1].apiURL == jsonUrl) {
+                            adapter.items[1].contentResponse = jsonString
+                            adapter.notifyItemChanged(1)
                         }
-                        else {
-                            val child = scfMap[jsonUrl]
-                            if (child != null) {
-                                child.contentResponse = jsonString
-                            }
-                        }
-                        if (!jsonUrl.isNullOrEmpty()) {
-                            contentResponseMap[jsonUrl] = jsonString
-                        }
-//                        contentResponse = jsonString
-//                        adapter.items = generateAdapterItems()
                         Log.e(">>>>>>>>>>>>>", "JSON_TASK_COMPLETED $jsonUrl: $jsonString");
                     }
                 }

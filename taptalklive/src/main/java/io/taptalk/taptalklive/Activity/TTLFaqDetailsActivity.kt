@@ -43,10 +43,6 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
     }
 
     private lateinit var adapter: TTLHomeFaqAdapter
-    private lateinit var adapterItems: ArrayList<TTLScfPathModel>
-    private lateinit var scfMap: HashMap<String /*apiURL*/, TTLScfPathModel>
-    private var contentResponseMap: HashMap<String /*apiURL*/, String /*contentResponse*/> = HashMap()
-    private var contentResponse: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,22 +103,11 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
                     val jsonUrl = intent.getStringExtra(JSON_URL)
                     val jsonString = intent.getStringExtra(JSON_STRING)
                     if (!jsonString.isNullOrEmpty()) {
-                        if (adapterItems.isNotEmpty() && adapterItems[0].apiURL == jsonUrl) {
-                            adapterItems[0].contentResponse = jsonString
-                            adapter.items = adapterItems
+                        if (adapter.items.isNotEmpty() && adapter.items[0].apiURL == jsonUrl) {
+                            adapter.items[0].contentResponse = jsonString
+                            adapter.notifyItemChanged(0)
                         }
-                        else {
-                            val child = scfMap[jsonUrl]
-                            if (child != null) {
-                                child.contentResponse = jsonString
-                            }
-                        }
-                        if (!jsonUrl.isNullOrEmpty()) {
-                            contentResponseMap[jsonUrl] = jsonString
-                        }
-//                        contentResponse = jsonString
-//                        adapter.items = generateAdapterItems()
-                        Log.e(">>>>>>>>>>>>>", "JSON_TASK_COMPLETED $jsonUrl: $jsonString");
+//                        Log.e(">>>>>>>>>>>>>", "JSON_TASK_COMPLETED $jsonUrl: $jsonString");
                     }
                 }
             }
@@ -133,13 +118,13 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
         val itemList = ArrayList<TTLScfPathModel>()
         val scfPath = intent.getParcelableExtra<TTLScfPathModel>(SCF_PATH)
         if (scfPath != null) {
-            Log.e(">>>>>>>>>>", "generateAdapterItems parent: ${scfPath.apiURL} - ${scfPath.contentResponse}")
             if (scfPath.contentResponse.isNullOrEmpty() &&
                 !scfPath.apiURL.isNullOrEmpty() &&
-                !contentResponseMap[scfPath.apiURL].isNullOrEmpty()
+                !TapTalkLive.getContentResponseMap()[scfPath.apiURL].isNullOrEmpty()
             ) {
-                scfPath.contentResponse = contentResponseMap[scfPath.apiURL]!!
+                scfPath.contentResponse = TapTalkLive.getContentResponseMap()[scfPath.apiURL]!!
             }
+            Log.e(">>>>>>>>>>", "generateAdapterItems parent: ${scfPath.apiURL} - ${scfPath.contentResponse}")
             if (scfPath.childItems.isEmpty()) {
                 itemList.add(scfPath)
             }
@@ -147,23 +132,13 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
                 val parentScf = scfPath.copy()
                 parentScf.childItems = ArrayList()
                 itemList.add(parentScf)
-                for (child in scfPath.childItems) {
-                    Log.e(">>>>>>>>>>", "generateAdapterItems child: ${child.apiURL} - ${child.contentResponse}")
-                    if (child.contentResponse.isNullOrEmpty() &&
-                        !child.apiURL.isNullOrEmpty() &&
-                        !contentResponseMap[child.apiURL].isNullOrEmpty()
-                    ) {
-                        child.contentResponse = contentResponseMap[child.apiURL]!!
-                    }
-                }
                 itemList.addAll(scfPath.childItems)
             }
-            scfMap = TTLUtil.fetchScfPathContentResponse(scfPath, true)
+            TTLUtil.fetchScfPathContentResponse(scfPath, true)
         }
         if (itemList.isEmpty()) {
             onBackPressed()
         }
-        adapterItems = itemList
         return itemList
     }
 

@@ -75,9 +75,12 @@ public class JsonTask extends AsyncTask<Void, Void, String> {
         super.onPostExecute(jsonString);
 
         Log.e(">>>>>>>>>>>>>", "onPostExecute: " + jsonString);
-        Intent intent = new Intent(JSON_TASK_COMPLETED);
-        intent.putExtra(JSON_URL, jsonUrl);
-        intent.putExtra(JSON_STRING, jsonString);
-        LocalBroadcastManager.getInstance(TapTalkLive.context).sendBroadcast(intent);
+        if (jsonString != null) {
+            TapTalkLive.getContentResponseMap().put(jsonUrl, jsonString);
+            Intent intent = new Intent(JSON_TASK_COMPLETED);
+            intent.putExtra(JSON_URL, jsonUrl);
+            intent.putExtra(JSON_STRING, jsonString);
+            LocalBroadcastManager.getInstance(TapTalkLive.context).sendBroadcast(intent);
+        }
     }
 }

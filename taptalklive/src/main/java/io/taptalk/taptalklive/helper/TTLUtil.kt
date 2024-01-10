@@ -51,8 +51,8 @@ object TTLUtil {
         Log.e(">>>>>>>>>>>>>", "fetchScfPathContentResponse: ${scfPath.type} - url: ${scfPath.apiURL} - contentResponse: ${scfPath.contentResponse}");
         val scfMap = HashMap<String, TTLScfPathModel>()
         if (scfPath.type == QNA_VIA_API &&
-            scfPath.contentResponse.isNullOrEmpty() &&
-            !scfPath.apiURL.isNullOrEmpty()
+            !scfPath.apiURL.isNullOrEmpty() &&
+            (scfPath.contentResponse.isNullOrEmpty() && TapTalkLive.getContentResponseMap()[scfPath.apiURL].isNullOrEmpty())
         ) {
             Log.e(">>>>>>>>>>>>>", "execute JSON Task: ${scfPath.apiURL}");
             JsonTask(scfPath.apiURL).execute()
