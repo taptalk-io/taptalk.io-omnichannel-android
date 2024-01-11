@@ -19,6 +19,11 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.MediaType.IMAGE_JPEG
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.CAPTION
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_ID
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_URL
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.MEDIA_TYPE
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView
@@ -28,6 +33,8 @@ import io.taptalk.TapTalk.Listener.TAPDatabaseListener
 import io.taptalk.TapTalk.Manager.TAPChatManager
 import io.taptalk.TapTalk.Manager.TAPDataManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
+import io.taptalk.TapTalk.Model.TAPUserModel
+import io.taptalk.TapTalk.View.Activity.TAPImageDetailPreviewActivity
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
@@ -307,9 +314,13 @@ class TTLHomeFaqAdapter(
                                     (itemView.context as Activity?)?.runOnUiThread {
                                         if (type == VIDEO) {
                                             ivButtonPlay.visibility = View.VISIBLE
+                                            // TODO: PREVIEW VIDEO LISTENER
                                         }
                                         else {
                                             ivButtonPlay.visibility = View.GONE
+                                            ivImagePreview.setOnClickListener {
+                                                openImageDetailPreview(mediaMap)
+                                            }
                                         }
                                     }
                                     return false
@@ -435,6 +446,27 @@ class TTLHomeFaqAdapter(
             else {
                 vBottomDecoration.visibility = View.GONE
             }
+        }
+
+        private fun openImageDetailPreview(mediaMap: HashMap<*, *>?) {
+            val message = TAPMessageModel()
+            val url = mediaMap?.get("url") as String?
+            val caption = mediaMap?.get("caption") as String?
+            val data = HashMap<String, Any>()
+            data[FILE_URL] = url ?: ""
+            data[FILE_ID] = ""
+            data[CAPTION] = caption ?: ""
+            data[MEDIA_TYPE] = IMAGE_JPEG
+            message.data = data
+            val user = TAPUserModel("", "")
+            message.user = user
+            message.created = item.createdTime
+            TAPImageDetailPreviewActivity.start(
+                itemView.context,
+                TAPTALK_INSTANCE_KEY,
+                message,
+                ivImagePreview
+            )
         }
     }
 

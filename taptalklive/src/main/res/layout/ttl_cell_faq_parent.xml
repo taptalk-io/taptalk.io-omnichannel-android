@@ -89,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
+                    android:transitionName="@string/tap_transition_view_image"
                     tools:src="@drawable/tap_img_empty_shared_media" />
 
             </androidx.cardview.widget.CardView>
