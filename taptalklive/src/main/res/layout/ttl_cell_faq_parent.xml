@@ -133,6 +133,23 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="UseAppTint" />
 
+            <ProgressBar
+                android:id="@+id/pb_file_download_progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:max="100"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintTop_toTopOf="@id/iv_file_status_icon"
+                app:layout_constraintBottom_toBottomOf="@id/iv_file_status_icon"
+                app:layout_constraintStart_toStartOf="@id/iv_file_status_icon"
+                app:layout_constraintEnd_toEndOf="@id/iv_file_status_icon"
+                android:progressDrawable="@drawable/tap_file_circular_progress_white"
+                tools:progress="65" />
+
             <TextView
                 android:id="@+id/tv_file_name"
                 style="@style/ttlFileNameLabelStyle"

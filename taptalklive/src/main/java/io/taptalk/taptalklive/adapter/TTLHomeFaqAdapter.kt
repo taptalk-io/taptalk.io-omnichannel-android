@@ -3,13 +3,19 @@ package io.taptalk.taptalklive.adapter
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,22 +25,30 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.FILEPROVIDER_AUTHORITY
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MediaType.IMAGE_JPEG
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.CAPTION
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_ID
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_NAME
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_URL
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.MEDIA_TYPE
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.SIZE
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView
 import io.taptalk.TapTalk.Helper.TAPRoundedCornerImageView
 import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
+import io.taptalk.TapTalk.Listener.TapCoreFileDownloadListener
 import io.taptalk.TapTalk.Manager.TAPChatManager
 import io.taptalk.TapTalk.Manager.TAPDataManager
+import io.taptalk.TapTalk.Manager.TAPFileDownloadManager
+import io.taptalk.TapTalk.Manager.TapCoreMessageManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
+import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.TapTalk.Model.TAPUserModel
 import io.taptalk.TapTalk.View.Activity.TAPImageDetailPreviewActivity
+import io.taptalk.TapTalk.View.Activity.TAPVideoPlayerActivity
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
@@ -51,6 +65,8 @@ import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.model.TTLCaseListModel
+import java.io.File
+import java.net.URLConnection
 
 class TTLHomeFaqAdapter(
     val context: Context,
@@ -72,6 +88,8 @@ class TTLHomeFaqAdapter(
     private var caseListArray: ArrayList<TTLCaseListModel>? = null
     private var caseListAdapter: TTLCaseListAdapter? = null
     private var caseListListener: TTLCaseListAdapter.TTLCaseListInterface? = null
+
+    var fileDownloadProgress: Int = 0
 
     init {
         items = itemList
@@ -250,7 +268,10 @@ class TTLHomeFaqAdapter(
         private var ivFileStatusIcon: ImageView = itemView.findViewById(R.id.iv_file_status_icon)
         private var vHeaderBackground: View = itemView.findViewById(R.id.v_header_background)
         private var vBottomDecoration: View = itemView.findViewById(R.id.v_bottom_decoration)
-        private var pbContentResponseLoading: View = itemView.findViewById(R.id.pb_content_response_loading)
+        private var pbContentResponseLoading: ProgressBar = itemView.findViewById(R.id.pb_content_response_loading)
+        private var pbFileDownloadProgress: ProgressBar = itemView.findViewById(R.id.pb_file_download_progress)
+
+        private var fileUri: Uri? = null
 
         override fun onBind(item: TTLScfPathModel?, position: Int) {
             if (item == null) {
@@ -314,7 +335,9 @@ class TTLHomeFaqAdapter(
                                     (itemView.context as Activity?)?.runOnUiThread {
                                         if (type == VIDEO) {
                                             ivButtonPlay.visibility = View.VISIBLE
-                                            // TODO: PREVIEW VIDEO LISTENER
+                                            ivImagePreview.setOnClickListener {
+                                                playVideo(url)
+                                            }
                                         }
                                         else {
                                             ivButtonPlay.visibility = View.GONE
@@ -352,6 +375,58 @@ class TTLHomeFaqAdapter(
                             }
                             else {
                                 tvFileInfo.visibility = View.GONE
+                            }
+
+                            // Generate message to manage file
+                            val message = TAPMessageModel()
+                            var fileNameData = filename
+                            var mimeType = ""
+                            if (filename?.contains('.') == true) {
+                                val dotIndex = filename.lastIndexOf('.')
+                                fileNameData = filename.substring(0, dotIndex)
+                                try {
+                                    mimeType = URLConnection.guessContentTypeFromName(filename)
+                                }
+                                catch (e: StringIndexOutOfBoundsException) {
+                                    e.printStackTrace()
+                                }
+                            }
+                            message.localID = item.itemID.toString()
+                            val room = TAPRoomModel()
+                            room.roomID = ""
+                            message.room = room
+                            val data = HashMap<String, Any>()
+                            data[FILE_URL] = url
+                            data[FILE_ID] = ""
+                            data[FILE_NAME] = fileNameData ?: ""
+                            data[MEDIA_TYPE] = mimeType
+                            data[SIZE] = 0L
+                            message.data = data
+                            message.created = item.createdTime
+
+                            val fileUri = TAPFileDownloadManager.getInstance(TAPTALK_INSTANCE_KEY).getFileMessageUri(url)
+                            Log.e(">>>>>>>>>", "onBind fileUri: $fileUri")
+                            if (fileUri != null) {
+                                ivImagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_documents_white))
+                                ivFileStatusIcon.visibility = View.VISIBLE
+                                pbFileDownloadProgress.visibility = View.GONE
+                                ivFileStatusIcon.setOnClickListener {
+                                    listener?.onOpenFileButtonTapped(fileUri)
+                                }
+                            }
+                            else if (fileDownloadProgress in 1..100) {
+                                ivFileStatusIcon.visibility = View.GONE
+                                pbFileDownloadProgress.visibility = View.VISIBLE
+                                pbFileDownloadProgress.progress = fileDownloadProgress
+                                ivFileStatusIcon.setOnClickListener(null)
+                            }
+                            else {
+                                ivImagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_download_orange))
+                                ivFileStatusIcon.visibility = View.VISIBLE
+                                pbFileDownloadProgress.visibility = View.GONE
+                                ivFileStatusIcon.setOnClickListener {
+                                    listener?.onDownloadFileButtonTapped(message)
+                                }
                             }
 
                             clFilePreview.visibility = View.VISIBLE
@@ -462,11 +537,55 @@ class TTLHomeFaqAdapter(
             message.user = user
             message.created = item.createdTime
             TAPImageDetailPreviewActivity.start(
-                itemView.context,
+                context,
                 TAPTALK_INSTANCE_KEY,
                 message,
                 ivImagePreview
             )
+        }
+
+        private fun playVideo(url: String) {
+            TAPVideoPlayerActivity.start(
+                context,
+                TAPTALK_INSTANCE_KEY,
+                null,
+                url,
+                null
+            )
+        }
+
+        private fun downloadFile(message: TAPMessageModel) {
+            TapCoreMessageManager.getInstance(TAPTALK_INSTANCE_KEY).downloadMessageFile(message, object  : TapCoreFileDownloadListener() {
+                override fun onProgress(message: TAPMessageModel?, percentage: Int, bytes: Long) {
+                    if (message?.localID == item.itemID.toString()) {
+                        ivFileStatusIcon.visibility = View.GONE
+                        pbFileDownloadProgress.visibility = View.VISIBLE
+                        pbFileDownloadProgress.progress = percentage
+                    }
+                }
+
+                override fun onSuccess(message: TAPMessageModel?, file: File?) {
+                    Log.e(">>>>>>>>>", "downloadFile onSuccess: ${message?.localID} - ${file?.absolutePath}")
+                    if (message?.localID == item.itemID.toString()) {
+                        ivFileStatusIcon.visibility = View.VISIBLE
+                        pbFileDownloadProgress.visibility = View.GONE
+                        pbFileDownloadProgress.progress = 100
+
+                        ivImagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_documents_white))
+                        ivFileStatusIcon.setOnClickListener {
+                            file?.let { listener?.onOpenFileButtonTapped(FileProvider.getUriForFile(context, FILEPROVIDER_AUTHORITY, it)) }
+                        }
+                    }
+                }
+
+                override fun onError(message: TAPMessageModel?, errorCode: String?, errorMessage: String?) {
+                    if (message?.localID == item.itemID.toString()) {
+                        ivFileStatusIcon.visibility = View.VISIBLE
+                        pbFileDownloadProgress.visibility = View.GONE
+                        pbFileDownloadProgress.progress = 0
+                    }
+                }
+            })
         }
     }
 
