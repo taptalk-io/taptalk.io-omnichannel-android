@@ -6,16 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import androidx.recyclerview.widget.SimpleItemAnimator
-import io.taptalk.TapTalk.Const.TAPDefaultConstant
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.PermissionRequest.PERMISSION_WRITE_EXTERNAL_STORAGE_SAVE_FILE
 import io.taptalk.TapTalk.Helper.TAPBroadcastManager
 import io.taptalk.TapTalk.Helper.TAPFileUtils
@@ -37,7 +33,7 @@ import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.adapter.TTLHomeFaqAdapter
 import io.taptalk.taptalklive.helper.TTLUtil
-import kotlinx.android.synthetic.main.ttl_activity_home.*
+import kotlinx.android.synthetic.main.ttl_activity_home.rv_home
 import java.io.File
 
 class TTLFaqDetailsActivity : TAPBaseActivity() {
@@ -81,7 +77,6 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
         if (TAPUtils.allPermissionsGranted(grantResults)) {
             when (requestCode) {
                 PERMISSION_WRITE_EXTERNAL_STORAGE_SAVE_FILE -> {
-                    Log.e(">>>>>>>>>", "PERMISSION_WRITE_EXTERNAL_STORAGE_SAVE_FILE: downloadFile")
                     pendingDownloadMessage?.let { downloadFile(it) }
                 }
             }
@@ -133,7 +128,6 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
                             adapter.items[0].contentResponse = jsonString
                             adapter.notifyItemChanged(0)
                         }
-//                        Log.e(">>>>>>>>>>>>>", "JSON_TASK_COMPLETED $jsonUrl: $jsonString");
                     }
                 }
             }
@@ -150,7 +144,6 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
             ) {
                 scfPath.contentResponse = TapTalkLive.getContentResponseMap()[scfPath.apiURL]!!
             }
-            Log.e(">>>>>>>>>>", "generateAdapterItems parent: ${scfPath.apiURL} - ${scfPath.contentResponse}")
             if (scfPath.childItems.isEmpty()) {
                 itemList.add(scfPath)
             }
@@ -186,9 +179,7 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
         }
 
         override fun onOpenFileButtonTapped(fileUri: Uri) {
-            Log.e(">>>>>>>>>>>>>>>", "onOpenFileButtonTapped: $fileUri")
             val mimeType = TAPFileUtils.getMimeTypeFromUri(this@TTLFaqDetailsActivity, fileUri)
-            Log.e(">>>>>>>>>>>>>>>", "onOpenFileButtonTapped mimeType: $mimeType")
             if (!mimeType.isNullOrEmpty()) {
                 if (!TAPUtils.openFile(TAPTALK_INSTANCE_KEY, this@TTLFaqDetailsActivity, fileUri, mimeType)) {
                     showDownloadFileDialog()
@@ -212,7 +203,6 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
 
     private fun downloadFile(fileMessage: TAPMessageModel) {
         if (!TAPUtils.hasPermissions(this, *TAPUtils.getStoragePermissions(true))) {
-            Log.e(">>>>>>>>>", "downloadFile : request permission")
             // Request storage permission
             pendingDownloadMessage = fileMessage
             ActivityCompat.requestPermissions(
@@ -222,32 +212,27 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
             )
             return
         }
-//        Log.e(">>>>>>>>>", "downloadFile: ${TAPUtils.toJsonString(fileMessage.data)}")
-        Log.e(">>>>>>>>>", "downloadFile: ${fileMessage.localID}")
         pendingDownloadMessage = null
         TapCoreMessageManager.getInstance(TAPTALK_INSTANCE_KEY).downloadMessageFile(fileMessage, object : TapCoreFileDownloadListener() {
             override fun onProgress(message: TAPMessageModel?, percentage: Int, bytes: Long) {
-                Log.e(">>>>>>>>>", "downloadFile onProgress: ${message?.localID} - $percentage")
-//                if (message?.localID == fileMessage.localID) {
+                if (message?.localID == fileMessage.localID) {
                     adapter.fileDownloadProgress = percentage
                     adapter.notifyItemChanged(0)
-//                }
+                }
             }
 
             override fun onSuccess(message: TAPMessageModel?, file: File?) {
-                Log.e(">>>>>>>>>", "downloadFile onSuccess: ${message?.localID} - ${file?.absolutePath}")
-//                if (message?.localID == fileMessage.localID) {
+                if (message?.localID == fileMessage.localID) {
                     adapter.fileDownloadProgress = 100
                     adapter.notifyItemChanged(0)
-//                }
+                }
             }
 
             override fun onError(message: TAPMessageModel?, errorCode: String?, errorMessage: String?) {
-                Log.e(">>>>>>>>>", "downloadFile onError: ${message?.localID} - $errorMessage")
-//                if (message?.localID == fileMessage.localID) {
+                if (message?.localID == fileMessage.localID) {
                     adapter.fileDownloadProgress = 0
                     adapter.notifyItemChanged(0)
-//                }
+                }
             }
         })
     }

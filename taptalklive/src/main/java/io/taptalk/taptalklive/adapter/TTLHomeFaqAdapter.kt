@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -12,10 +11,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +22,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import io.taptalk.TapTalk.Const.TAPDefaultConstant.FILEPROVIDER_AUTHORITY
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MediaType.IMAGE_JPEG
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.CAPTION
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_ID
@@ -37,14 +33,11 @@ import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageType.TYPE_FILE
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView
-import io.taptalk.TapTalk.Helper.TAPRoundedCornerImageView
 import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
-import io.taptalk.TapTalk.Listener.TapCoreFileDownloadListener
 import io.taptalk.TapTalk.Manager.TAPChatManager
 import io.taptalk.TapTalk.Manager.TAPDataManager
 import io.taptalk.TapTalk.Manager.TAPFileDownloadManager
-import io.taptalk.TapTalk.Manager.TapCoreMessageManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.TapTalk.Model.TAPUserModel
@@ -66,7 +59,6 @@ import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.model.TTLCaseListModel
-import java.io.File
 import java.net.URLConnection
 
 class TTLHomeFaqAdapter(
@@ -407,9 +399,7 @@ class TTLHomeFaqAdapter(
                             message.created = item.createdTime
 
                             val fileUri = TAPFileDownloadManager.getInstance(TAPTALK_INSTANCE_KEY).getFileMessageUri(url)
-                            Log.e(">>>>>>>>>", "onBind fileUri: $fileUri")
                             if (fileUri != null) {
-                                Log.e(">>>>>>", "onBind download completed")
                                 ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_documents_white))
                                 pbFileDownloadProgress.visibility = View.GONE
                                 ivFileStatusIcon.setOnClickListener {
@@ -417,14 +407,12 @@ class TTLHomeFaqAdapter(
                                 }
                             }
                             else if (fileDownloadProgress in 1..100) {
-                                Log.e(">>>>>>", "onBind fileDownloadProgress: $fileDownloadProgress")
                                 ivFileStatusIcon.setImageDrawable(null)
                                 pbFileDownloadProgress.visibility = View.VISIBLE
                                 pbFileDownloadProgress.progress = fileDownloadProgress
                                 ivFileStatusIcon.setOnClickListener(null)
                             }
                             else {
-                                Log.e(">>>>>>", "onBind file not downloaded")
                                 ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_download_orange))
                                 pbFileDownloadProgress.visibility = View.GONE
                                 ivFileStatusIcon.setOnClickListener {
@@ -555,40 +543,6 @@ class TTLHomeFaqAdapter(
                 url,
                 null
             )
-        }
-
-        private fun downloadFile(message: TAPMessageModel) {
-            TapCoreMessageManager.getInstance(TAPTALK_INSTANCE_KEY).downloadMessageFile(message, object  : TapCoreFileDownloadListener() {
-                override fun onProgress(message: TAPMessageModel?, percentage: Int, bytes: Long) {
-                    if (message?.localID == item.itemID.toString()) {
-                        ivFileStatusIcon.visibility = View.GONE
-                        pbFileDownloadProgress.visibility = View.VISIBLE
-                        pbFileDownloadProgress.progress = percentage
-                    }
-                }
-
-                override fun onSuccess(message: TAPMessageModel?, file: File?) {
-                    Log.e(">>>>>>>>>", "downloadFile onSuccess: ${message?.localID} - ${file?.absolutePath}")
-                    if (message?.localID == item.itemID.toString()) {
-                        ivFileStatusIcon.visibility = View.VISIBLE
-                        pbFileDownloadProgress.visibility = View.GONE
-                        pbFileDownloadProgress.progress = 100
-
-                        ivImagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_documents_white))
-                        ivFileStatusIcon.setOnClickListener {
-                            file?.let { listener?.onOpenFileButtonTapped(FileProvider.getUriForFile(context, FILEPROVIDER_AUTHORITY, it)) }
-                        }
-                    }
-                }
-
-                override fun onError(message: TAPMessageModel?, errorCode: String?, errorMessage: String?) {
-                    if (message?.localID == item.itemID.toString()) {
-                        ivFileStatusIcon.visibility = View.VISIBLE
-                        pbFileDownloadProgress.visibility = View.GONE
-                        pbFileDownloadProgress.progress = 0
-                    }
-                }
-            })
         }
     }
 

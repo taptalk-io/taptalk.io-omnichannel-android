@@ -6,7 +6,6 @@ import static io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_URL;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -80,7 +79,6 @@ public class JsonTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String jsonString) {
         super.onPostExecute(jsonString);
 
-        Log.e(">>>>>>>>>>>>>", "onPostExecute: " + jsonString);
         TapTalkLive.getLoadingContentResponseList().remove(jsonUrl);
         if (jsonString != null) {
             TapTalkLive.getContentResponseMap().put(jsonUrl, jsonString);

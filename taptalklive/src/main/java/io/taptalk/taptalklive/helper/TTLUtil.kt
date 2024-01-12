@@ -1,6 +1,5 @@
 package io.taptalk.taptalklive.helper
 
-import android.util.Log
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
@@ -48,13 +47,11 @@ object TTLUtil {
 
     @JvmStatic
     fun fetchScfPathContentResponse(scfPath: TTLScfPathModel, fetchChildContents: Boolean): HashMap<String, TTLScfPathModel> {
-        Log.e(">>>>>>>>>>>>>", "fetchScfPathContentResponse: ${scfPath.type} - url: ${scfPath.apiURL} - contentResponse: ${scfPath.contentResponse}");
         val scfMap = HashMap<String, TTLScfPathModel>()
         if (scfPath.type == QNA_VIA_API &&
             !scfPath.apiURL.isNullOrEmpty() &&
             (scfPath.contentResponse.isNullOrEmpty() && TapTalkLive.getContentResponseMap()[scfPath.apiURL].isNullOrEmpty())
         ) {
-            Log.e(">>>>>>>>>>>>>", "execute JSON Task: ${scfPath.apiURL}");
             JsonTask(scfPath.apiURL).execute()
             scfMap[scfPath.apiURL] = scfPath
         }
