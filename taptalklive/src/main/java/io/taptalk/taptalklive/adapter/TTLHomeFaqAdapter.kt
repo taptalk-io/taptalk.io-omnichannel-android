@@ -33,6 +33,7 @@ import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_NAME
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_URL
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.MEDIA_TYPE
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.SIZE
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageType.TYPE_FILE
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.Helper.TAPChatRecyclerView
@@ -392,6 +393,7 @@ class TTLHomeFaqAdapter(
                                 }
                             }
                             message.localID = item.itemID.toString()
+                            message.type = TYPE_FILE
                             val room = TAPRoomModel()
                             room.roomID = ""
                             message.room = room
@@ -407,22 +409,23 @@ class TTLHomeFaqAdapter(
                             val fileUri = TAPFileDownloadManager.getInstance(TAPTALK_INSTANCE_KEY).getFileMessageUri(url)
                             Log.e(">>>>>>>>>", "onBind fileUri: $fileUri")
                             if (fileUri != null) {
-                                ivImagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_documents_white))
-                                ivFileStatusIcon.visibility = View.VISIBLE
+                                Log.e(">>>>>>", "onBind download completed")
+                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_documents_white))
                                 pbFileDownloadProgress.visibility = View.GONE
                                 ivFileStatusIcon.setOnClickListener {
                                     listener?.onOpenFileButtonTapped(fileUri)
                                 }
                             }
                             else if (fileDownloadProgress in 1..100) {
-                                ivFileStatusIcon.visibility = View.GONE
+                                Log.e(">>>>>>", "onBind fileDownloadProgress: $fileDownloadProgress")
+                                ivFileStatusIcon.setImageDrawable(null)
                                 pbFileDownloadProgress.visibility = View.VISIBLE
                                 pbFileDownloadProgress.progress = fileDownloadProgress
                                 ivFileStatusIcon.setOnClickListener(null)
                             }
                             else {
-                                ivImagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_download_orange))
-                                ivFileStatusIcon.visibility = View.VISIBLE
+                                Log.e(">>>>>>", "onBind file not downloaded")
+                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_download_orange))
                                 pbFileDownloadProgress.visibility = View.GONE
                                 ivFileStatusIcon.setOnClickListener {
                                     listener?.onDownloadFileButtonTapped(message)

@@ -222,30 +222,32 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
             )
             return
         }
-        Log.e(">>>>>>>>>", "downloadFile: ${TAPUtils.toJsonString(fileMessage.data)}")
+//        Log.e(">>>>>>>>>", "downloadFile: ${TAPUtils.toJsonString(fileMessage.data)}")
+        Log.e(">>>>>>>>>", "downloadFile: ${fileMessage.localID}")
         pendingDownloadMessage = null
         TapCoreMessageManager.getInstance(TAPTALK_INSTANCE_KEY).downloadMessageFile(fileMessage, object : TapCoreFileDownloadListener() {
             override fun onProgress(message: TAPMessageModel?, percentage: Int, bytes: Long) {
-                if (message?.localID == fileMessage.localID) {
+                Log.e(">>>>>>>>>", "downloadFile onProgress: ${message?.localID} - $percentage")
+//                if (message?.localID == fileMessage.localID) {
                     adapter.fileDownloadProgress = percentage
                     adapter.notifyItemChanged(0)
-                }
+//                }
             }
 
             override fun onSuccess(message: TAPMessageModel?, file: File?) {
                 Log.e(">>>>>>>>>", "downloadFile onSuccess: ${message?.localID} - ${file?.absolutePath}")
-                if (message?.localID == fileMessage.localID) {
+//                if (message?.localID == fileMessage.localID) {
                     adapter.fileDownloadProgress = 100
                     adapter.notifyItemChanged(0)
-                }
+//                }
             }
 
             override fun onError(message: TAPMessageModel?, errorCode: String?, errorMessage: String?) {
                 Log.e(">>>>>>>>>", "downloadFile onError: ${message?.localID} - $errorMessage")
-                if (message?.localID == fileMessage.localID) {
+//                if (message?.localID == fileMessage.localID) {
                     adapter.fileDownloadProgress = 0
                     adapter.notifyItemChanged(0)
-                }
+//                }
             }
         })
     }
