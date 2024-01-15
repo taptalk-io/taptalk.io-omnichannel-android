@@ -230,7 +230,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="ttlFileInfoLabelStyle" parent="ttlFontFamilyBold">
+    <style name="ttlFileInfoLabelStyle" parent="ttlFontFamilyRegular">
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineSpacingExtra">6sp</item>
         <item name="android:textColor">@color/ttlFileInfoLabelColor</item>

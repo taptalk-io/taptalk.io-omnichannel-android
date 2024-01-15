@@ -444,6 +444,9 @@ class TTLHomeFaqAdapter(
                 if (TapTalkLive.getLoadingContentResponseList().contains(item.apiURL)) {
                     pbContentResponseLoading.visibility = View.VISIBLE
                 }
+                else {
+                    pbContentResponseLoading.visibility = View.GONE
+                }
             }
 
             // Content
