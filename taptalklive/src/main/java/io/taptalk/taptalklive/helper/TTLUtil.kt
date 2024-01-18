@@ -1,5 +1,7 @@
 package io.taptalk.taptalklive.helper
 
+import android.content.Intent
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
@@ -8,6 +10,9 @@ import io.taptalk.TapTalk.Manager.TAPDataManager
 import io.taptalk.TapTalk.Manager.TAPEncryptorManager
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
+import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.JSON_TASK_COMPLETED
+import io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_STRING
+import io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_URL
 import io.taptalk.taptalklive.Const.TTLConstant.ScfPathType.QNA_VIA_API
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Manager.TTLDataManager
@@ -50,10 +55,20 @@ object TTLUtil {
         val scfMap = HashMap<String, TTLScfPathModel>()
         if (scfPath.type == QNA_VIA_API &&
             !scfPath.apiURL.isNullOrEmpty() &&
-            (scfPath.contentResponse.isNullOrEmpty() && TapTalkLive.getContentResponseMap()[scfPath.apiURL].isNullOrEmpty())
+            (scfPath.contentResponse.isNullOrEmpty())
         ) {
-            JsonTask(scfPath.apiURL).execute()
             scfMap[scfPath.apiURL] = scfPath
+            val savedContentResponse = TapTalkLive.getContentResponseMap()[scfPath.apiURL]
+            if (!savedContentResponse.isNullOrEmpty()) {
+                scfPath.contentResponse = savedContentResponse
+                val intent = Intent(JSON_TASK_COMPLETED)
+                intent.putExtra(JSON_URL, scfPath.apiURL)
+                intent.putExtra(JSON_STRING, savedContentResponse)
+                LocalBroadcastManager.getInstance(TapTalkLive.context).sendBroadcast(intent)
+            }
+            else {
+                JsonTask(scfPath.apiURL).execute()
+            }
         }
         if (fetchChildContents && scfPath.childItems.isNotEmpty()) {
             for (child in scfPath.childItems) {
