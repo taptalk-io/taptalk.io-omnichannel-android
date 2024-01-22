@@ -27,6 +27,15 @@ class TTLConstant {
         const val TYPE_WABA_TEMPLATE_FILE_MESSAGE = 3024
     }
 
+    object MessageTypeString {
+        const val TEXT = "text"
+        const val IMAGE = "image"
+        const val VIDEO = "video"
+        const val FILE = "file"
+        const val DOCUMENT = "document"
+        const val LOCATION = "location"
+    }
+
     object CaseMedium {
         const val LAUNCHER = "launcher"
         const val WHATSAPP_SME = "whatsapp"
@@ -42,6 +51,7 @@ class TTLConstant {
 
     object ScfPathType {
         const val QNA = "qna"
+        const val QNA_VIA_API = "qna_via_api"
         const val TALK_TO_AGENT = "talk_to_agent"
     }
 
@@ -56,6 +66,7 @@ class TTLConstant {
     object Broadcast {
         const val SCF_PATH_UPDATED = "kTapTalkLiveScfPathUpdated"
         const val NEW_CASE_CREATED = "kTapTalkLiveNewCaseCreated"
+        const val JSON_TASK_COMPLETED = "kTapTalkLiveJsonTaskCompleted"
     }
 
     object Extras {
@@ -63,6 +74,8 @@ class TTLConstant {
         const val SHOW_CLOSE_BUTTON = "kTapTalkLiveExtrasShowCloseButton"
         const val SCF_PATH = "kTapTalkLiveExtrasScfPath"
         const val CASE_DETAILS = "kTapTalkLiveCaseDetails"
+        const val JSON_URL = "kTapTalkLiveJsonUrl"
+        const val JSON_STRING = "kTapTalkLiveJsonString"
     }
 
     object PreferenceKey {

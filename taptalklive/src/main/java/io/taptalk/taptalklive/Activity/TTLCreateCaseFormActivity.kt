@@ -20,12 +20,15 @@ import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
+import io.taptalk.TapTalk.Listener.TapCommonListener
 import io.taptalk.TapTalk.Listener.TapCoreGetRoomListener
 import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
 import io.taptalk.TapTalk.Manager.TapCoreChatRoomManager
 import io.taptalk.TapTalk.Manager.TapUI
 import io.taptalk.TapTalk.Model.TAPRoomModel
-import io.taptalk.taptalklive.API.Model.ResponseModel.*
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse
 import io.taptalk.taptalklive.API.Model.TTLCaseModel
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.BuildConfig
@@ -40,7 +43,27 @@ import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
 import io.taptalk.taptalklive.adapter.TTLItemDropdownAdapter
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.*
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_email_address_error
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_full_name_error
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_message_error
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_topic
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_topic_error
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cv_topic_dropdown
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.et_email_address
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.et_full_name
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.et_message
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.iv_button_close
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.iv_select_topic_drop_down
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.ll_button_send_message
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.ll_email_address
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.ll_full_name
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.pb_button_send_message_loading
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.pb_select_topic_loading
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.rv_topic_dropdown
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_button_send_message
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_email_address_error_message
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_topic
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.v_dismiss_dropdown
 
 class TTLCreateCaseFormActivity : AppCompatActivity() {
 
@@ -410,9 +433,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         override fun onSuccess(response: TTLCreateCaseResponse?) {
             if (!response?.caseResponse?.tapTalkXCRoomID.isNullOrEmpty()) {
                 openCaseChatRoom(response?.caseResponse)
-            } else {
+            }
+            else {
                 onError(getString(R.string.ttl_error_xc_room_id_empty))
                 sendCaseCreatedBroadcast(response?.caseResponse)
+            }
+            response?.caseResponse?.let {
+                // Save case to map
+                TapTalkLive.getCaseMap()[it.tapTalkXCRoomID] = it
             }
         }
 
@@ -430,9 +458,22 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         TapCoreChatRoomManager.getInstance(TAPTALK_INSTANCE_KEY).getChatRoomByXcRoomID(caseModel?.tapTalkXCRoomID, object : TapCoreGetRoomListener() {
             override fun onSuccess(roomModel: TAPRoomModel?) {
                 if (vm.openRoomListOnComplete) {
-                    TTLCaseListActivity.start(this@TTLCreateCaseFormActivity);
+                    TTLCaseListActivity.start(this@TTLCreateCaseFormActivity)
                 }
-                TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                if (TapTalk.isConnected(TAPTALK_INSTANCE_KEY)) {
+                    TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                }
+                else {
+                    TapTalk.connect(TAPTALK_INSTANCE_KEY, object : TapCommonListener() {
+                        override fun onSuccess(successMessage: String?) {
+                            TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                        }
+
+                        override fun onError(errorCode: String?, errorMessage: String?) {
+                            TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
+                        }
+                    })
+                }
                 sendCaseCreatedBroadcast(caseModel)
                 finish()
             }

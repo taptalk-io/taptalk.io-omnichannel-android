@@ -16,6 +16,8 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageRequest;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageResponse;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -57,6 +59,9 @@ public interface TTLApiService {
 
     @POST("client/case/rate")
     Observable<TTLBaseResponse<TTLCommonResponse>> rateConversation(@Body TTLRateConversationRequest request);
+
+    @POST("client/case/send_message")
+    Observable<TTLBaseResponse<TTLSendMessageResponse>> sendMessage(@Body TTLSendMessageRequest request);
 
     @POST("client/logout")
     Observable<TTLBaseResponse<TTLCommonResponse>> logout();

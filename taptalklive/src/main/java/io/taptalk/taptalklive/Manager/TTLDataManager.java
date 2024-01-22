@@ -13,6 +13,8 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageRequest;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageResponse;
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel;
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel;
 import io.taptalk.taptalklive.API.Model.TTLTopicModel;
@@ -428,6 +430,10 @@ public class TTLDataManager {
 
     public void rateConversation(Integer caseID, Integer rating, String note, TTLDefaultDataView<TTLCommonResponse> view) {
         TTLApiManager.getInstance().rateConversation(caseID, rating, note, new TTLDefaultSubscriber<>(view));
+    }
+
+    public void sendMessage(TTLSendMessageRequest request, TTLDefaultDataView<TTLSendMessageResponse> view) {
+        TTLApiManager.getInstance().sendMessage(request, new TTLDefaultSubscriber<>(view));
     }
 
     public void logout(TTLDefaultDataView<TTLCommonResponse> view) {

@@ -15,7 +15,7 @@ android {
     publishNonDefault true
 
     defaultConfig {
-        minSdk 16
+        minSdk 21
         targetSdk 33
         versionCode taptalklive_version_code
         versionName taptalklive_version_name
@@ -113,14 +113,14 @@ dependencies {
     implementation "com.orhanobut:hawk:2.0.1"
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:19.0.0'
-    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-messaging:23.4.0'
 
     // Multidex
     implementation 'com.android.support:multidex:1.0.3'
 
     // TapTalk
-    api 'com.github.taptalk-io:taptalk.io-android:2.15.0'
+    api 'com.github.taptalk-io:taptalk.io-android:2.15.3'
 }
 
 task androidSourcesJar(type: Jar) {

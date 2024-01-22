@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateCaseRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLGetCaseListRequest;
@@ -20,6 +21,9 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetUserProfileResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageRequest;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageResponse;
+import io.taptalk.taptalklive.API.Model.TTLMessageMediaModel;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
 import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
 import io.taptalk.taptalklive.BuildConfig;
@@ -213,6 +217,10 @@ public class TTLApiManager {
     public void rateConversation(Integer caseID, Integer rating, String note, Subscriber<TTLBaseResponse<TTLCommonResponse>> subscriber) {
         TTLRateConversationRequest request = new TTLRateConversationRequest(caseID, rating, note);
         execute(ttlApiService.rateConversation(request), subscriber);
+    }
+
+    public void sendMessage(TTLSendMessageRequest request, Subscriber<TTLBaseResponse<TTLSendMessageResponse>> subscriber) {
+        execute(ttlApiService.sendMessage(request), subscriber);
     }
 
     public void logout(Subscriber<TTLBaseResponse<TTLCommonResponse>> subscriber) {
