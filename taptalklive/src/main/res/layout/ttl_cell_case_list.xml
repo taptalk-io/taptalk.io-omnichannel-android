@@ -357,12 +357,12 @@
 
             <TextView
                 android:id="@+id/tv_badge_unread"
-                style="@style/tapRoomListUnreadBadgeLabelStyle"
+                style="@style/ttlCaseListUnreadCountFontStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="24dp"
                 android:background="@drawable/tap_bg_room_list_unread_badge"
                 android:gravity="center"
-                android:minWidth="16dp"
+                android:minWidth="24dp"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 android:visibility="gone"
@@ -375,7 +375,7 @@
 
         <ImageView
             android:id="@+id/iv_badge_mention"
-            style="@style/tapRoomListUnreadBadgeLabelStyle"
+            style="@style/ttlCaseListUnreadCountFontStyle"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_gravity="end"

@@ -431,7 +431,7 @@ public class TapTalkLive {
         TTLDataManager.getInstance().getScfPath(new TTLDefaultDataView<>() {
             @Override
             public void onSuccess(TTLGetScfPathResponse response) {
-                if (response != null && response.getItem() != null) {
+                if (response != null/* && response.getItem() != null*/) {
                     TTLDataManager.getInstance().saveScfPath(response.getItem());
                     Intent intent = new Intent(SCF_PATH_UPDATED);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
