@@ -1,9 +1,7 @@
 package io.taptalk.taptalklive.adapter
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -58,11 +56,12 @@ import io.taptalk.taptalklive.Listener.TTLItemListInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
+import io.taptalk.taptalklive.helper.TTLUtil
 import io.taptalk.taptalklive.model.TTLCaseListModel
 import java.net.URLConnection
 
 class TTLHomeFaqAdapter(
-    val context: Context,
+    val activity: Activity,
     itemList: List<TTLScfPathModel>,
     val listener: TTLHomeAdapterInterface?,
     val containsHeader: Boolean
@@ -116,7 +115,7 @@ class TTLHomeFaqAdapter(
                     }
                 }
             }
-            caseListAdapter = TTLCaseListAdapter(caseListArray!!, Glide.with(context), caseListListener!!)
+            caseListAdapter = TTLCaseListAdapter(caseListArray!!, Glide.with(activity), caseListListener!!)
             refreshLatestCaseList()
         }
     }
@@ -171,7 +170,7 @@ class TTLHomeFaqAdapter(
                 rvChannelLinks.visibility = View.VISIBLE
                 rvChannelLinks.adapter = channelLinksAdapter
                 if (rvChannelLinks.layoutManager == null) {
-                    rvChannelLinks.layoutManager = object : GridLayoutManager(context, 5) {
+                    rvChannelLinks.layoutManager = object : GridLayoutManager(activity, 5) {
                         override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
                             try {
                                 super.onLayoutChildren(recycler, state)
@@ -201,7 +200,7 @@ class TTLHomeFaqAdapter(
                 llButtonMessageDirectly.visibility = View.GONE
                 rvCaseList.adapter = caseListAdapter
                 if (rvCaseList.layoutManager == null) {
-                    rvCaseList.layoutManager = object : LinearLayoutManager(context, VERTICAL, false) {
+                    rvCaseList.layoutManager = object : LinearLayoutManager(activity, VERTICAL, false) {
                         override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
                             try {
                                 super.onLayoutChildren(recycler, state)
@@ -263,8 +262,6 @@ class TTLHomeFaqAdapter(
         private var vBottomDecoration: View = itemView.findViewById(R.id.v_bottom_decoration)
         private var pbContentResponseLoading: ProgressBar = itemView.findViewById(R.id.pb_content_response_loading)
         private var pbFileDownloadProgress: ProgressBar = itemView.findViewById(R.id.pb_file_download_progress)
-
-        private var fileUri: Uri? = null
 
         override fun onBind(item: TTLScfPathModel?, position: Int) {
             if (item == null) {
@@ -400,7 +397,7 @@ class TTLHomeFaqAdapter(
 
                             val fileUri = TAPFileDownloadManager.getInstance(TAPTALK_INSTANCE_KEY).getFileMessageUri(url)
                             if (fileUri != null) {
-                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_documents_white))
+                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.tap_ic_documents_white))
                                 pbFileDownloadProgress.visibility = View.GONE
                                 ivFileStatusIcon.setOnClickListener {
                                     listener?.onOpenFileButtonTapped(fileUri)
@@ -413,7 +410,7 @@ class TTLHomeFaqAdapter(
                                 ivFileStatusIcon.setOnClickListener(null)
                             }
                             else {
-                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.tap_ic_download_orange))
+                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.tap_ic_download_orange))
                                 pbFileDownloadProgress.visibility = View.GONE
                                 ivFileStatusIcon.setOnClickListener {
                                     listener?.onDownloadFileButtonTapped(message)
@@ -452,6 +449,7 @@ class TTLHomeFaqAdapter(
             // Content
             if (!item.content.isNullOrEmpty()) {
                 tvFaqContent.text = item.content
+                TTLUtil.setLinkDetection(activity, tvFaqContent)
             }
             else if (!item.apiURL.isNullOrEmpty()) {
                 if (!item.contentResponse.isNullOrEmpty()) {
@@ -531,7 +529,7 @@ class TTLHomeFaqAdapter(
             message.user = user
             message.created = item.createdTime
             TAPImageDetailPreviewActivity.start(
-                context,
+                activity,
                 TAPTALK_INSTANCE_KEY,
                 message,
                 ivImagePreview
@@ -540,7 +538,7 @@ class TTLHomeFaqAdapter(
 
         private fun playVideo(url: String) {
             TAPVideoPlayerActivity.start(
-                context,
+                activity,
                 TAPTALK_INSTANCE_KEY,
                 null,
                 url,
@@ -566,6 +564,7 @@ class TTLHomeFaqAdapter(
             if (!item.content.isNullOrEmpty()) {
                 tvFaqChildContent.text = item.content
                 tvFaqChildContent.visibility = View.VISIBLE
+                TTLUtil.setLinkDetection(activity, tvFaqChildContent)
             }
             else {
                 tvFaqChildContent.visibility = View.GONE
@@ -585,9 +584,6 @@ class TTLHomeFaqAdapter(
     }
 
     fun refreshLatestCaseList() {
-        if (context !is Activity) {
-            return
-        }
         TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).getRoomList(true, object: TAPDatabaseListener<TAPMessageEntity>() {
             override fun onSelectedRoomList(
                 entities: MutableList<TAPMessageEntity>?,
@@ -608,7 +604,7 @@ class TTLHomeFaqAdapter(
                     caseListArray?.add(caseList)
                 }
 
-                context.runOnUiThread {
+                activity.runOnUiThread {
                     notifyItemChanged(HEADER)
                 }
             }
@@ -616,9 +612,6 @@ class TTLHomeFaqAdapter(
     }
 
     fun setLastMessage(message: TAPMessageModel) {
-        if (context !is Activity) {
-            return
-        }
         if (caseListArray?.isNotEmpty() == true && caseListArray!![0].lastMessage.room.roomID == message.room.roomID) {
             // Received message in the same room as previous case list
             val previousCaseList = caseListArray!![0]
@@ -643,7 +636,7 @@ class TTLHomeFaqAdapter(
                 }
 
             }
-            context.runOnUiThread {
+            activity.runOnUiThread {
                 notifyItemChanged(HEADER)
             }
         }
@@ -666,7 +659,7 @@ class TTLHomeFaqAdapter(
                         caseListArray?.clear()
                         caseListArray?.add(caseList)
 
-                        context.runOnUiThread {
+                        activity.runOnUiThread {
                             notifyItemChanged(HEADER)
                         }
                     }

@@ -1,13 +1,27 @@
 package io.taptalk.taptalklive.helper
 
+import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
+import android.text.util.Linkify
+import android.text.util.Linkify.TransformFilter
+import android.widget.TextView
+import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import io.taptalk.TapTalk.Const.TAPDefaultConstant
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes
+import io.taptalk.TapTalk.Const.TAPDefaultConstant.LongPressBroadcastEvent
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
+import io.taptalk.TapTalk.Helper.TAPBetterLinkMovementMethod
+import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
 import io.taptalk.TapTalk.Listener.TapCommonListener
 import io.taptalk.TapTalk.Manager.TAPDataManager
 import io.taptalk.TapTalk.Manager.TAPEncryptorManager
+import io.taptalk.TapTalk.Model.TAPMessageModel
+import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
 import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.JSON_TASK_COMPLETED
@@ -17,6 +31,8 @@ import io.taptalk.taptalklive.Const.TTLConstant.ScfPathType.QNA_VIA_API
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.TapTalkLive
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 object TTLUtil {
     @JvmStatic
@@ -77,5 +93,51 @@ object TTLUtil {
             }
         }
         return scfMap
+    }
+
+    @JvmStatic
+    fun setLinkDetection(activity: Activity?, textView: TextView?) {
+        if (null == activity || null == textView) {
+            return
+        }
+        val movementMethod = TAPBetterLinkMovementMethod.newInstance()
+            .setOnLinkClickListener { _: TextView?, url: String?, _: String? ->
+                if (null != url) {
+                    // Open URL
+                    TAPUtils.openUrl(TAPTALK_INSTANCE_KEY, activity, url)
+                    return@setOnLinkClickListener true
+                }
+                false
+            }
+            .setOnLinkLongClickListener { _: TextView?, url: String?, _: String? ->
+                val clipboard = activity.getSystemService(TAPBaseActivity.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText(url, url)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(activity, "Link Copied", Toast.LENGTH_SHORT).show()
+                true
+            }
+        textView.movementMethod = movementMethod
+        textView.isClickable = false
+        textView.isLongClickable = false
+        Linkify.addLinks(textView, Linkify.WEB_URLS)
+
+//        val filter = TransformFilter { match: Matcher?, url: String ->
+//            url.replace("/".toRegex(), "")
+//        }
+//        val pattern = Pattern.compile("[0-9/]+")
+//        Linkify.addLinks(textView, pattern, "tel:",
+//            { s: CharSequence, start: Int, end: Int ->
+//                var digitCount = 0
+//                for (i in start until end) {
+//                    if (Character.isDigit(s[i])) {
+//                        digitCount++
+//                        if (digitCount >= 7) {
+//                            return@addLinks true
+//                        }
+//                    }
+//                }
+//                false
+//            }, filter
+//        )
     }
 }
