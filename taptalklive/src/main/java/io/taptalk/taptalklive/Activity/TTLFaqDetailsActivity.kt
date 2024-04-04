@@ -186,6 +186,14 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
                 }
             }
         }
+
+        override fun onFaqContentUrlTapped(scfPath: TTLScfPathModel, url: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentUrlTapped(this@TTLFaqDetailsActivity, scfPath, url)
+        }
+
+        override fun onFaqContentUrlLongPressed(scfPath: TTLScfPathModel, url: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentUrlLongPressed(this@TTLFaqDetailsActivity, scfPath, url)
+        }
     }
 
     private fun showDownloadFileDialog() {

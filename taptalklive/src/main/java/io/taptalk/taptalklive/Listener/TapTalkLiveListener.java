@@ -1,9 +1,14 @@
 package io.taptalk.taptalklive.Listener;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.widget.Toast;
 
+import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.TapTalk.Model.TAPRoomModel;
@@ -14,7 +19,6 @@ import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLFaqDetailsActivity;
 import io.taptalk.taptalklive.Interface.TapTalkLiveInterface;
-import io.taptalk.taptalklive.model.TTLCaseListModel;
 
 public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
     @Override
@@ -92,5 +96,18 @@ public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
     @Override
     public void onTalkToAgentButtonTapped(Activity activity, TTLScfPathModel scfPath) {
         TTLCreateCaseFormActivity.Companion.start(activity, true);
+    }
+
+    @Override
+    public void onFaqContentUrlTapped(Activity activity, TTLScfPathModel scfPath, String url) {
+        TAPUtils.openUrl(TAPTALK_INSTANCE_KEY, activity, url);
+    }
+
+    @Override
+    public void onFaqContentUrlLongPressed(Activity activity, TTLScfPathModel scfPath, String url) {
+        ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(url, url);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(activity, "Link Copied", Toast.LENGTH_SHORT).show();
     }
 }

@@ -42,4 +42,12 @@ interface TTLHomeAdapterInterface {
     fun onOpenFileButtonTapped(fileUri: Uri) {
 
     }
+
+    fun onFaqContentUrlTapped(scfPath: TTLScfPathModel, url: String) {
+
+    }
+
+    fun onFaqContentUrlLongPressed(scfPath: TTLScfPathModel, url: String) {
+
+    }
 }

@@ -6,7 +6,7 @@ import io.taptalk.taptalklive.Listener.TapTalkLiveListener
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklivesample.BuildConfig.GOOGLE_MAPS_API_KEY
 import io.taptalk.taptalklivesample.BuildConfig.TAPLIVE_SDK_APP_KEY_SECRET
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.ll_button_launch_live_chat
 
 class MainActivity : AppCompatActivity() {
 
@@ -87,6 +87,14 @@ class MainActivity : AppCompatActivity() {
 //        override fun onCaseListItemTapped(activity: Activity?, lastMessage: TAPMessageModel?) {
 //            super.onCaseListItemTapped(activity, lastMessage)
 //            Log.e(">>>>", "onCaseListItemTapped: ${lastMessage?.room?.name}")
+//        }
+//        
+//        override fun onFaqContentUrlTapped(activity: Activity?, scfPath: TTLScfPathModel?, url: String?) {
+//            Log.e(">>>>", "onFaqContentUrlTapped: $activity -  $url - ${scfPath?.title}")
+//        }
+//
+//        override fun onFaqContentUrlLongPressed(activity: Activity?, scfPath: TTLScfPathModel?, url: String?) {
+//            Log.e(">>>>", "onFaqContentUrlLongPressed: $activity -  $url - ${scfPath?.title}")
 //        }
     }
 

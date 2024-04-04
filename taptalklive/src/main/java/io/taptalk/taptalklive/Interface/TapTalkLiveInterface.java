@@ -34,4 +34,8 @@ public interface TapTalkLiveInterface {
     void onCloseButtonInFaqDetailsTapped(Activity activity, TTLScfPathModel scfPath);
 
     void onTalkToAgentButtonTapped (Activity activity, TTLScfPathModel scfPath);
+
+    void onFaqContentUrlTapped (Activity activity, TTLScfPathModel scfPath, String url);
+
+    void onFaqContentUrlLongPressed (Activity activity, TTLScfPathModel scfPath, String url);
 }

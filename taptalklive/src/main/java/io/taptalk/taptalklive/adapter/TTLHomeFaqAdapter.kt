@@ -449,7 +449,7 @@ class TTLHomeFaqAdapter(
             // Content
             if (!item.content.isNullOrEmpty()) {
                 tvFaqContent.text = item.content
-                TTLUtil.setLinkDetection(activity, tvFaqContent)
+                TTLUtil.setLinkDetection(activity, tvFaqContent, item, listener)
             }
             else if (!item.apiURL.isNullOrEmpty()) {
                 if (!item.contentResponse.isNullOrEmpty()) {
@@ -564,7 +564,7 @@ class TTLHomeFaqAdapter(
             if (!item.content.isNullOrEmpty()) {
                 tvFaqChildContent.text = item.content
                 tvFaqChildContent.visibility = View.VISIBLE
-                TTLUtil.setLinkDetection(activity, tvFaqChildContent)
+                TTLUtil.setLinkDetection(activity, tvFaqChildContent, item, listener)
             }
             else {
                 tvFaqChildContent.visibility = View.GONE

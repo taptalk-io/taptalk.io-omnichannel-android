@@ -171,6 +171,14 @@ class TTLHomeActivity : TAPBaseActivity() {
                 }
             }
         }
+
+        override fun onFaqContentUrlTapped(scfPath: TTLScfPathModel, url: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentUrlTapped(this@TTLHomeActivity, scfPath, url)
+        }
+
+        override fun onFaqContentUrlLongPressed(scfPath: TTLScfPathModel, url: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentUrlLongPressed(this@TTLHomeActivity, scfPath, url)
+        }
     }
 
     private fun openChannelUrl(channelLink: TTLChannelLinkModel) {
