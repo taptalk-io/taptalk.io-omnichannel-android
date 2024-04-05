@@ -44,6 +44,9 @@
     <string name="ttl_faq">FAQ</string>
     <string name="ttl_close_case">Close Case</string>
     <string name="ttl_close_case_dialog_message">This case will be closed and you wont be able to further send messages or receive assistance regarding this case. Would you like to proceed?</string>
+    <string name="ttl_url_copied_to_clipboard">Link copied to clipboard.</string>
+    <string name="ttl_email_copied_to_clipboard">Email copied to clipboard.</string>
+    <string name="ttl_phone_copied_to_clipboard">Phone copied to clipboard.</string>
 
     <string name="ttl_error">Error</string>
     <string name="ttl_error_message_general">Something went wrong, please try again.</string>

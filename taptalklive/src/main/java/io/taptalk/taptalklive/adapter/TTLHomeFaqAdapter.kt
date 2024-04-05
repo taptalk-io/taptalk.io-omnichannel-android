@@ -2,6 +2,7 @@ package io.taptalk.taptalklive.adapter
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -554,6 +555,8 @@ class TTLHomeFaqAdapter(
         private var tvFaqChildContent: TextView = itemView.findViewById(R.id.tv_faq_child_content)
         private var vBottomDecoration: View = itemView.findViewById(R.id.v_bottom_decoration)
 
+        private var scrollListener: View.OnScrollChangeListener? = null
+
         override fun onBind(item: TTLScfPathModel?, position: Int) {
             if (item == null) {
                 return
@@ -568,6 +571,21 @@ class TTLHomeFaqAdapter(
             }
             else {
                 tvFaqChildContent.visibility = View.GONE
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // Fix text view scrolling when truncated link is tapped
+                if (scrollListener == null) {
+                    scrollListener = View.OnScrollChangeListener { p0, p1, p2, p3, p4 ->
+                        run {
+                            tvFaqChildContent.setOnScrollChangeListener(null)
+                            tvFaqChildContent.scrollX = 0
+                            tvFaqChildContent.scrollY = 0
+                            tvFaqChildContent.setOnScrollChangeListener(scrollListener)
+                        }
+                    }
+                }
+                tvFaqChildContent.setOnScrollChangeListener(null)
+                tvFaqChildContent.setOnScrollChangeListener(scrollListener)
             }
 
             if (bindingAdapterPosition >= itemCount - 1) {

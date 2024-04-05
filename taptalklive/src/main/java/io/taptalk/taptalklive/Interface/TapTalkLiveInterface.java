@@ -38,4 +38,12 @@ public interface TapTalkLiveInterface {
     void onFaqContentUrlTapped (Activity activity, TTLScfPathModel scfPath, String url);
 
     void onFaqContentUrlLongPressed (Activity activity, TTLScfPathModel scfPath, String url);
+
+    void onFaqContentEmailTapped (Activity activity, TTLScfPathModel scfPath, String email);
+
+    void onFaqContentEmailLongPressed (Activity activity, TTLScfPathModel scfPath, String email);
+
+    void onFaqContentPhoneTapped (Activity activity, TTLScfPathModel scfPath, String phone);
+
+    void onFaqContentPhoneLongPressed (Activity activity, TTLScfPathModel scfPath, String phone);
 }

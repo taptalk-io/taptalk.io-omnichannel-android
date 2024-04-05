@@ -19,6 +19,7 @@ import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLFaqDetailsActivity;
 import io.taptalk.taptalklive.Interface.TapTalkLiveInterface;
+import io.taptalk.taptalklive.R;
 
 public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
     @Override
@@ -108,6 +109,32 @@ public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
         ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(url, url);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(activity, "Link Copied", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, activity.getString(R.string.ttl_url_copied_to_clipboard), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFaqContentEmailTapped(Activity activity, TTLScfPathModel scfPath, String email) {
+        TAPUtils.composeEmail(activity, email);
+    }
+
+    @Override
+    public void onFaqContentEmailLongPressed(Activity activity, TTLScfPathModel scfPath, String email) {
+        ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(email, email);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(activity, activity.getString(R.string.ttl_email_copied_to_clipboard), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFaqContentPhoneTapped(Activity activity, TTLScfPathModel scfPath, String phone) {
+        TAPUtils.openDialNumber(activity, phone);
+    }
+
+    @Override
+    public void onFaqContentPhoneLongPressed(Activity activity, TTLScfPathModel scfPath, String phone) {
+        ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(phone, phone);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(activity, activity.getString(R.string.ttl_phone_copied_to_clipboard), Toast.LENGTH_SHORT).show();
     }
 }

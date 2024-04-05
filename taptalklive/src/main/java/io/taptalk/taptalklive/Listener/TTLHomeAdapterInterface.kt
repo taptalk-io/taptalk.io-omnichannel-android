@@ -50,4 +50,20 @@ interface TTLHomeAdapterInterface {
     fun onFaqContentUrlLongPressed(scfPath: TTLScfPathModel, url: String) {
 
     }
+
+    fun onFaqContentEmailTapped(scfPath: TTLScfPathModel, email: String) {
+
+    }
+
+    fun onFaqContentEmailLongPressed(scfPath: TTLScfPathModel, email: String) {
+
+    }
+
+    fun onFaqContentPhoneTapped(scfPath: TTLScfPathModel, phone: String) {
+
+    }
+
+    fun onFaqContentPhoneLongPressed(scfPath: TTLScfPathModel, phone: String) {
+
+    }
 }

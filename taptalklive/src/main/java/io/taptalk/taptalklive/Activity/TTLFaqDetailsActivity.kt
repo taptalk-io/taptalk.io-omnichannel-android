@@ -194,6 +194,22 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
         override fun onFaqContentUrlLongPressed(scfPath: TTLScfPathModel, url: String) {
             TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentUrlLongPressed(this@TTLFaqDetailsActivity, scfPath, url)
         }
+
+        override fun onFaqContentEmailTapped(scfPath: TTLScfPathModel, email: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailTapped(this@TTLFaqDetailsActivity, scfPath, email)
+        }
+
+        override fun onFaqContentEmailLongPressed(scfPath: TTLScfPathModel, email: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailLongPressed(this@TTLFaqDetailsActivity, scfPath, email)
+        }
+
+        override fun onFaqContentPhoneTapped(scfPath: TTLScfPathModel, phone: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneTapped(this@TTLFaqDetailsActivity, scfPath, phone)
+        }
+
+        override fun onFaqContentPhoneLongPressed(scfPath: TTLScfPathModel, phone: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneLongPressed(this@TTLFaqDetailsActivity, scfPath, phone)
+        }
     }
 
     private fun showDownloadFileDialog() {

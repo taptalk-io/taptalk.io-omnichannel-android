@@ -179,6 +179,22 @@ class TTLHomeActivity : TAPBaseActivity() {
         override fun onFaqContentUrlLongPressed(scfPath: TTLScfPathModel, url: String) {
             TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentUrlLongPressed(this@TTLHomeActivity, scfPath, url)
         }
+
+        override fun onFaqContentEmailTapped(scfPath: TTLScfPathModel, email: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailTapped(this@TTLHomeActivity, scfPath, email)
+        }
+
+        override fun onFaqContentEmailLongPressed(scfPath: TTLScfPathModel, email: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailLongPressed(this@TTLHomeActivity, scfPath, email)
+        }
+
+        override fun onFaqContentPhoneTapped(scfPath: TTLScfPathModel, phone: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneTapped(this@TTLHomeActivity, scfPath, phone)
+        }
+
+        override fun onFaqContentPhoneLongPressed(scfPath: TTLScfPathModel, phone: String) {
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneLongPressed(this@TTLHomeActivity, scfPath, phone)
+        }
     }
 
     private fun openChannelUrl(channelLink: TTLChannelLinkModel) {
