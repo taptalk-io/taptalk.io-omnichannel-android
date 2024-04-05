@@ -181,19 +181,19 @@ class TTLHomeActivity : TAPBaseActivity() {
         }
 
         override fun onFaqContentEmailTapped(scfPath: TTLScfPathModel, email: String) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailTapped(this@TTLHomeActivity, scfPath, email)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailAddressTapped(this@TTLHomeActivity, scfPath, email)
         }
 
         override fun onFaqContentEmailLongPressed(scfPath: TTLScfPathModel, email: String) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailLongPressed(this@TTLHomeActivity, scfPath, email)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailAddressLongPressed(this@TTLHomeActivity, scfPath, email)
         }
 
         override fun onFaqContentPhoneTapped(scfPath: TTLScfPathModel, phone: String) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneTapped(this@TTLHomeActivity, scfPath, phone)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneNumberTapped(this@TTLHomeActivity, scfPath, phone)
         }
 
         override fun onFaqContentPhoneLongPressed(scfPath: TTLScfPathModel, phone: String) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneLongPressed(this@TTLHomeActivity, scfPath, phone)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneNumberLongPressed(this@TTLHomeActivity, scfPath, phone)
         }
     }
 

@@ -113,12 +113,12 @@ public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
     }
 
     @Override
-    public void onFaqContentEmailTapped(Activity activity, TTLScfPathModel scfPath, String email) {
+    public void onFaqContentEmailAddressTapped(Activity activity, TTLScfPathModel scfPath, String email) {
         TAPUtils.composeEmail(activity, email);
     }
 
     @Override
-    public void onFaqContentEmailLongPressed(Activity activity, TTLScfPathModel scfPath, String email) {
+    public void onFaqContentEmailAddressLongPressed(Activity activity, TTLScfPathModel scfPath, String email) {
         ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(email, email);
         clipboard.setPrimaryClip(clip);
@@ -126,12 +126,12 @@ public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
     }
 
     @Override
-    public void onFaqContentPhoneTapped(Activity activity, TTLScfPathModel scfPath, String phone) {
+    public void onFaqContentPhoneNumberTapped(Activity activity, TTLScfPathModel scfPath, String phone) {
         TAPUtils.openDialNumber(activity, phone);
     }
 
     @Override
-    public void onFaqContentPhoneLongPressed(Activity activity, TTLScfPathModel scfPath, String phone) {
+    public void onFaqContentPhoneNumberLongPressed(Activity activity, TTLScfPathModel scfPath, String phone) {
         ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(phone, phone);
         clipboard.setPrimaryClip(clip);

@@ -5,7 +5,6 @@ import android.app.Activity;
 import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel;
-import io.taptalk.taptalklive.model.TTLCaseListModel;
 
 public interface TapTalkLiveInterface {
 
@@ -39,11 +38,11 @@ public interface TapTalkLiveInterface {
 
     void onFaqContentUrlLongPressed (Activity activity, TTLScfPathModel scfPath, String url);
 
-    void onFaqContentEmailTapped (Activity activity, TTLScfPathModel scfPath, String email);
+    void onFaqContentEmailAddressTapped(Activity activity, TTLScfPathModel scfPath, String email);
 
-    void onFaqContentEmailLongPressed (Activity activity, TTLScfPathModel scfPath, String email);
+    void onFaqContentEmailAddressLongPressed(Activity activity, TTLScfPathModel scfPath, String email);
 
-    void onFaqContentPhoneTapped (Activity activity, TTLScfPathModel scfPath, String phone);
+    void onFaqContentPhoneNumberTapped(Activity activity, TTLScfPathModel scfPath, String phone);
 
-    void onFaqContentPhoneLongPressed (Activity activity, TTLScfPathModel scfPath, String phone);
+    void onFaqContentPhoneNumberLongPressed(Activity activity, TTLScfPathModel scfPath, String phone);
 }

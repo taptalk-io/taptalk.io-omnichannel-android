@@ -43,7 +43,7 @@
     <string name="ttl_mark_as_resolved">Akhiri percakapan</string>
     <string name="ttl_faq">FAQ</string>
     <string name="ttl_url_copied_to_clipboard">Link disalin ke papan klip.</string>
-    <string name="ttl_email_copied_to_clipboard">Email disalin ke papan klip.</string>
+    <string name="ttl_email_copied_to_clipboard">Alamat email disalin ke papan klip.</string>
     <string name="ttl_phone_copied_to_clipboard">Nomor telepon disalin ke papan klip.</string>
 
     <string name="ttl_error">Error</string>

@@ -196,19 +196,19 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
         }
 
         override fun onFaqContentEmailTapped(scfPath: TTLScfPathModel, email: String) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailTapped(this@TTLFaqDetailsActivity, scfPath, email)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailAddressTapped(this@TTLFaqDetailsActivity, scfPath, email)
         }
 
         override fun onFaqContentEmailLongPressed(scfPath: TTLScfPathModel, email: String) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailLongPressed(this@TTLFaqDetailsActivity, scfPath, email)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentEmailAddressLongPressed(this@TTLFaqDetailsActivity, scfPath, email)
         }
 
         override fun onFaqContentPhoneTapped(scfPath: TTLScfPathModel, phone: String) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneTapped(this@TTLFaqDetailsActivity, scfPath, phone)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneNumberTapped(this@TTLFaqDetailsActivity, scfPath, phone)
         }
 
         override fun onFaqContentPhoneLongPressed(scfPath: TTLScfPathModel, phone: String) {
-            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneLongPressed(this@TTLFaqDetailsActivity, scfPath, phone)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onFaqContentPhoneNumberLongPressed(this@TTLFaqDetailsActivity, scfPath, phone)
         }
     }
 
