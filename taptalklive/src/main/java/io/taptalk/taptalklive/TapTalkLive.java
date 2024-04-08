@@ -33,6 +33,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -70,6 +71,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetProjectConfigsResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetScfPathResponse;
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageRequest;
@@ -77,6 +79,7 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageResponse;
 import io.taptalk.taptalklive.API.Model.TTLCaseModel;
 import io.taptalk.taptalklive.API.Model.TTLMessageMediaModel;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
+import io.taptalk.taptalklive.API.Model.TTLTopicModel;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
 import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
@@ -85,7 +88,9 @@ import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
 import io.taptalk.taptalklive.Fragment.TTLCaseListFragment;
+import io.taptalk.taptalklive.Interface.TTLGetTopicListInterface;
 import io.taptalk.taptalklive.Listener.TTLCommonListener;
+import io.taptalk.taptalklive.Listener.TTLGetTopicListListener;
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.helper.TTLUtil;
@@ -382,6 +387,48 @@ public class TapTalkLive {
         else {
             onGetCaseListCompleted();
         }
+    }
+
+    public void getTopicList(TTLGetTopicListListener listener) {
+        TTLDataManager.getInstance().getTopicList(new TTLDefaultDataView<>() {
+            @Override
+            public void onSuccess(TTLGetTopicListResponse response) {
+                if (null != response) {
+                    TTLDataManager.getInstance().saveTopics(response.getTopics());
+                    if (null != listener) {
+                        listener.onSuccess(response.getTopics());
+                        Log.e(">>>>>", "getTopicList onSuccess: " + TAPUtils.toJsonString(response.getTopics()));
+                    }
+                }
+            }
+
+            @Override
+            public void onError(TTLErrorModel error) {
+                List<TTLTopicModel> topics = TTLDataManager.getInstance().getTopics();
+                if (null != listener) {
+                    if (null != topics) {
+                        listener.onSuccess(topics);
+                        Log.e(">>>>>", "getTopicList onError return local: " + TAPUtils.toJsonString(topics));
+                    }
+                    else {
+                        String errorMessage;
+                        if (TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).hasNetworkConnection(context)) {
+                            errorMessage = error.getMessage();
+                        }
+                        else {
+                            errorMessage = context.getString(R.string.tap_no_internet_show_error);
+                        }
+                        listener.onError(error.getCode(), errorMessage);
+                        Log.e(">>>>>", "getTopicList onError: " + error.getCode() + " - " + errorMessage);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                onError(new TTLErrorModel(ERROR_CODE_OTHERS, errorMessage, ""));
+            }
+        });
     }
 
     private void getCaseList(boolean triggerCompletion) {
