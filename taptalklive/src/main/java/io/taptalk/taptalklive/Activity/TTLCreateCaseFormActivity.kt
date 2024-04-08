@@ -37,7 +37,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.Extras.CASE_DETAILS
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Listener.TTLCommonListener
-import io.taptalk.taptalklive.Listener.TTLItemListInterface
+import io.taptalk.taptalklive.Interface.TTLItemListInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive

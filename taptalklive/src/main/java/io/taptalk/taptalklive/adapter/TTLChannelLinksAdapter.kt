@@ -1,6 +1,5 @@
 package io.taptalk.taptalklive.adapter
 
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
@@ -18,7 +17,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.TELEGRAM
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.TWITTER
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.WHATSAPP_BA
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.WHATSAPP_SME
-import io.taptalk.taptalklive.Listener.TTLItemListInterface
+import io.taptalk.taptalklive.Interface.TTLItemListInterface
 import io.taptalk.taptalklive.R
 
 class TTLChannelLinksAdapter(

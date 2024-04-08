@@ -2,11 +2,9 @@ package io.taptalk.taptalklive.adapter
 
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
-import io.taptalk.taptalklive.Listener.TTLItemListInterface
+import io.taptalk.taptalklive.Interface.TTLItemListInterface
 import io.taptalk.taptalklive.R
 
 class TTLItemDropdownAdapter(
