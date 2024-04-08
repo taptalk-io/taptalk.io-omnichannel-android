@@ -436,7 +436,6 @@ public class TapTalkLive {
 
             @Override
             public void onError(TTLErrorModel error) {
-                Log.e(">>>>>", "TTL getCaseList onError: " + error.getMessage());
                 onFinish();
                 if (null != listener) {
                     String errorMessage;
