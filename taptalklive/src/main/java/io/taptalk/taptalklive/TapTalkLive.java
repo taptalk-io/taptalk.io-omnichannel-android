@@ -1,6 +1,8 @@
 package io.taptalk.taptalklive;
 
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ApiErrorCode.OTHER_ERRORS;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_ACTIVE_USER_NOT_FOUND;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_INIT_TAPTALK;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes.ERROR_CODE_OTHERS;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.CAPTION;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageData.FILE_NAME;
@@ -11,6 +13,8 @@ import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageType.TYPE_VIDEO
 import static io.taptalk.TapTalk.Helper.TapTalk.TapTalkImplementationType.TapTalkImplementationTypeCombine;
 import static io.taptalk.taptalklive.Const.TTLConstant.Api.API_VERSION;
 import static io.taptalk.taptalklive.Const.TTLConstant.Broadcast.SCF_PATH_UPDATED;
+import static io.taptalk.taptalklive.Const.TTLConstant.ErrorMessage.ERROR_MESSAGE_ACTIVE_USER_NOT_FOUND;
+import static io.taptalk.taptalklive.Const.TTLConstant.ErrorMessage.ERROR_MESSAGE_TAPTALKLIVE_NOT_INITIALIZED;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_FILE_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_IMAGE_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_TEXT_MESSAGE;
@@ -90,6 +94,7 @@ import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
 import io.taptalk.taptalklive.Fragment.TTLCaseListFragment;
 import io.taptalk.taptalklive.Interface.TTLGetTopicListInterface;
 import io.taptalk.taptalklive.Listener.TTLCommonListener;
+import io.taptalk.taptalklive.Listener.TTLGetCaseListListener;
 import io.taptalk.taptalklive.Listener.TTLGetTopicListListener;
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
@@ -382,14 +387,20 @@ public class TapTalkLive {
         }
         else if (TTLDataManager.getInstance().checkActiveUserExists() && !isGetCaseListCompleted) {
             // Check if user has active case
-            getCaseList(true);
+            getCaseList(true, null);
         }
         else {
             onGetCaseListCompleted();
         }
     }
 
-    public void getTopicList(TTLGetTopicListListener listener) {
+    public static void getTopicList(TTLGetTopicListListener listener) {
+        if (null == tapTalkLive || !tapTalkLive.isTapTalkInitialized) {
+            if (null != listener) {
+                listener.onError(ERROR_CODE_INIT_TAPTALK, ERROR_MESSAGE_TAPTALKLIVE_NOT_INITIALIZED);
+            }
+            return;
+        }
         TTLDataManager.getInstance().getTopicList(new TTLDefaultDataView<>() {
             @Override
             public void onSuccess(TTLGetTopicListResponse response) {
@@ -397,7 +408,6 @@ public class TapTalkLive {
                     TTLDataManager.getInstance().saveTopics(response.getTopics());
                     if (null != listener) {
                         listener.onSuccess(response.getTopics());
-                        Log.e(">>>>>", "getTopicList onSuccess: " + TAPUtils.toJsonString(response.getTopics()));
                     }
                 }
             }
@@ -408,7 +418,6 @@ public class TapTalkLive {
                 if (null != listener) {
                     if (null != topics) {
                         listener.onSuccess(topics);
-                        Log.e(">>>>>", "getTopicList onError return local: " + TAPUtils.toJsonString(topics));
                     }
                     else {
                         String errorMessage;
@@ -419,7 +428,6 @@ public class TapTalkLive {
                             errorMessage = context.getString(R.string.tap_no_internet_show_error);
                         }
                         listener.onError(error.getCode(), errorMessage);
-                        Log.e(">>>>>", "getTopicList onError: " + error.getCode() + " - " + errorMessage);
                     }
                 }
             }
@@ -431,31 +439,65 @@ public class TapTalkLive {
         });
     }
 
-    private void getCaseList(boolean triggerCompletion) {
+    public static void getUserCaseList(TTLGetCaseListListener listener) {
+        if (null == tapTalkLive || !tapTalkLive.isTapTalkInitialized) {
+            if (null != listener) {
+                listener.onError(ERROR_CODE_INIT_TAPTALK, ERROR_MESSAGE_TAPTALKLIVE_NOT_INITIALIZED);
+            }
+            return;
+        }
+        if (!TTLDataManager.getInstance().checkActiveUserExists()) {
+            if (null != listener) {
+                listener.onError(ERROR_CODE_ACTIVE_USER_NOT_FOUND, ERROR_MESSAGE_ACTIVE_USER_NOT_FOUND);
+            }
+            return;
+        }
+        tapTalkLive.getCaseList(false, listener);
+    }
+
+    private void getCaseList(boolean triggerCompletion, TTLGetCaseListListener listener) {
         TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
             @Override
             public void onSuccess(TTLGetCaseListResponse response) {
+                Log.e(">>>>>", "TTL getCaseList onSuccess: " + response.getCases().size());
                 TTLUtil.processGetCaseListResponse(response, new TapCommonListener() {
                     @Override
                     public void onSuccess(String successMessage) {
                         onFinish();
+                        if (null != listener) {
+                            listener.onSuccess(response.getCases());
+                        }
                     }
 
                     @Override
                     public void onError(String errorCode, String errorMessage) {
                         onFinish();
+                        if (null != listener) {
+                            listener.onSuccess(response.getCases());
+                        }
                     }
                 });
             }
 
             @Override
             public void onError(TTLErrorModel error) {
+                Log.e(">>>>>", "TTL getCaseList onError: " + error.getMessage());
                 onFinish();
+                if (null != listener) {
+                    String errorMessage;
+                    if (TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).hasNetworkConnection(context)) {
+                        errorMessage = error.getMessage();
+                    }
+                    else {
+                        errorMessage = context.getString(R.string.tap_no_internet_show_error);
+                    }
+                    listener.onError(error.getCode(), errorMessage);
+                }
             }
 
             @Override
             public void onError(String errorMessage) {
-                onFinish();
+                onError(new TTLErrorModel(ERROR_CODE_OTHERS, errorMessage, ""));
             }
 
             private void onFinish() {

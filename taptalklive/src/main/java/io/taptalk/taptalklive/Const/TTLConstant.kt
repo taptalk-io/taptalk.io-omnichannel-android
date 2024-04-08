@@ -95,4 +95,9 @@ class TTLConstant {
         const val TOPICS = "kTapTalkLiveTopics"
         const val CASE_EXISTS = "kTapTalkLiveCaseExists"
     }
+
+    object ErrorMessage {
+        const val ERROR_MESSAGE_TAPTALKLIVE_NOT_INITIALIZED = "TapTalkLive instance is not initialized, please initialize by calling TapTalkLive.init()"
+        const val ERROR_MESSAGE_ACTIVE_USER_NOT_FOUND = "Active user not found, please authenticate by calling authenticateUser()"
+    }
 }
