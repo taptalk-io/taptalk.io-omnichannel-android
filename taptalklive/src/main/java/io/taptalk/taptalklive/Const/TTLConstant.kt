@@ -99,12 +99,16 @@ class TTLConstant {
     object ErrorCode {
         const val ERROR_CODE_INVALID_TOPIC_ID = "91001"
         const val ERROR_CODE_MESSAGE_REQUIRED = "91002"
+        const val ERROR_CODE_CONTEXT_REQUIRED = "91003"
+        const val ERROR_CODE_XC_ROOM_ID_REQUIRED = "91004"
     }
 
     object ErrorMessage {
         const val ERROR_MESSAGE_TAPTALKLIVE_NOT_INITIALIZED = "TapTalkLive instance is not initialized, please initialize by calling TapTalkLive.init()"
         const val ERROR_MESSAGE_ACTIVE_USER_NOT_FOUND = "Active user not found, please authenticate by calling authenticateUser()"
         const val ERROR_MESSAGE_INVALID_TOPIC_ID = "Invalid Topic ID"
-        const val ERROR_MESSAGE_MESSAGE_REQUIRED = "Message may not be empty"
+        const val ERROR_MESSAGE_MESSAGE_REQUIRED = "Message is required"
+        const val ERROR_MESSAGE_CONTEXT_REQUIRED = "Context is required"
+        const val ERROR_MESSAGE_XC_ROOM_ID_REQUIRED = "XC Room ID is required"
     }
 }
