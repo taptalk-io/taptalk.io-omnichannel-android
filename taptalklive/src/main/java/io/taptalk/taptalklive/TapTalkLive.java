@@ -1085,7 +1085,7 @@ public class TapTalkLive {
             return false;
         }
         if (TTLDataManager.getInstance().checkActiveUserExists() ||
-                TTLDataManager.getInstance().checkAccessTokenAvailable()
+            TTLDataManager.getInstance().checkAccessTokenAvailable()
         ) {
             // Open case list
             TTLCaseListActivity.Companion.start(activityContext);

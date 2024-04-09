@@ -97,10 +97,12 @@ class TTLConstant {
     }
 
     object ErrorCode {
-        const val ERROR_CODE_INVALID_TOPIC_ID = "91001"
-        const val ERROR_CODE_MESSAGE_REQUIRED = "91002"
-        const val ERROR_CODE_CONTEXT_REQUIRED = "91003"
-        const val ERROR_CODE_XC_ROOM_ID_REQUIRED = "91004"
+        const val ERROR_CODE_TAPTALKLIVE_NOT_INITIALIZED = "91000"
+        const val ERROR_CODE_ACTIVE_USER_NOT_FOUND = "91001"
+        const val ERROR_CODE_INVALID_TOPIC_ID = "91002"
+        const val ERROR_CODE_MESSAGE_REQUIRED = "91003"
+        const val ERROR_CODE_CONTEXT_REQUIRED = "91004"
+        const val ERROR_CODE_XC_ROOM_ID_REQUIRED = "91005"
     }
 
     object ErrorMessage {
