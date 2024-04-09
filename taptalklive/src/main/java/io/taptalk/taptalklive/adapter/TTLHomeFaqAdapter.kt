@@ -52,8 +52,8 @@ import io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.TEXT
 import io.taptalk.taptalklive.Const.TTLConstant.MessageTypeString.VIDEO
 import io.taptalk.taptalklive.Const.TTLConstant.ScfPathType.TALK_TO_AGENT
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
-import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
-import io.taptalk.taptalklive.Listener.TTLItemListInterface
+import io.taptalk.taptalklive.Interface.TTLHomeAdapterInterface
+import io.taptalk.taptalklive.Interface.TTLItemListInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive

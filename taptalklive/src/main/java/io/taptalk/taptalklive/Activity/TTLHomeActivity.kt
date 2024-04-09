@@ -32,7 +32,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.SCF_PATH_UPDATED
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_STRING
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_URL
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
-import io.taptalk.taptalklive.Listener.TTLHomeAdapterInterface
+import io.taptalk.taptalklive.Interface.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
