@@ -166,6 +166,12 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="ttlCaseListUnreadCountFontStyle" parent="ttlFontFamilyBold">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ttlCaseListUnreadCountFontColor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="ttlDefaultRoomAvatarSmallFontStyle" parent="ttlFontFamilyBold">
         <item name="android:letterSpacing">0.01</item>
         <item name="android:textColor">@color/ttlDefaultRoomAvatarSmallFontColor</item>

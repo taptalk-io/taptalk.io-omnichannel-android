@@ -118,6 +118,7 @@
     <color name="ttlCaseListSenderFontColor">@color/ttlColorTextSoft</color>
     <color name="ttlCaseListMessageFontColor">@color/ttlColorTextSoft</color>
     <color name="ttlCaseListTimestampFontColor">@color/ttlColorTextSoft</color>
+    <color name="ttlCaseListUnreadCountFontColor">@color/ttlColorTextLight</color>
     <color name="ttlDefaultRoomAvatarSmallFontColor">@color/ttlColorTextLight</color>
 
     <color name="ttlLeftBubbleSenderNameColor">@color/ttlColorTextPrimary</color>
