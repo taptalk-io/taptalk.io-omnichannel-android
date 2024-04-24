@@ -480,6 +480,20 @@ public class TapTalkLive {
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }
             }
+
+            @Override
+            public void onError(TTLErrorModel error) {
+                if (null != error.getCode() &&
+                    null != error.getMessage() &&
+                    error.getCode().equals("40401") &&
+                    error.getMessage().contains("not set")
+                ) {
+                    // SCF Path is empty
+                    TTLDataManager.getInstance().saveScfPath(null);
+                    Intent intent = new Intent(SCF_PATH_UPDATED);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                }
+            }
         });
     }
 

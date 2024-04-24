@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import io.taptalk.TapTalk.Helper.TAPBaseViewHolder
 import io.taptalk.TapTalk.View.Adapter.TAPBaseAdapter
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
+import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.EMAIL
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.FACEBOOK
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.GOOGLE_BUSINESS
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.INSTAGRAM
@@ -73,6 +74,9 @@ class TTLChannelLinksAdapter(
                 }
                 LINKEDIN -> {
                     ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_linkedin))
+                }
+                EMAIL -> {
+                    ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_email))
                 }
                 else -> {
                     ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_default))
