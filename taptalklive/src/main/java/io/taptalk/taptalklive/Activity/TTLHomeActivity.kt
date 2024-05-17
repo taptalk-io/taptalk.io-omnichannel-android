@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -198,12 +197,17 @@ class TTLHomeActivity : TAPBaseActivity() {
     }
 
     private fun openChannelUrl(channelLink: TTLChannelLinkModel) {
-        if (channelLink.url.isEmpty() || !Patterns.WEB_URL.matcher(channelLink.url).matches()) {
+        if (channelLink.url.isEmpty()) {
             return
         }
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(channelLink.url)
-        startActivity(intent)
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(channelLink.url)
+            startActivity(intent)
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initListeners() {
