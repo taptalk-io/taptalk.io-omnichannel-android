@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.taptalk.TapTalk.BuildConfig;
 import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Helper.TapTalkDialog;
@@ -117,6 +118,7 @@ public class TapTalkLive {
     public static boolean isTapTalkLiveInitialized;
     private static TapTalkLive tapTalkLive;
     private static String buildType;
+    public static String sdkVersion = ""; // FIXME: BuildConfig.VERSION_NAME NOT FOUND IN JITPACK BUILD
     private static final String releaseBaseApiUrl = "https://taplive-cstd.taptalk.io/api/visitor";
     private static final String stagingBaseApiUrl = "https://taplive-cstd-stg.taptalk.io/api/visitor";
     private static final String devBaseApiUrl = "https://taplive-api-dev.taptalk.io/api/visitor";
@@ -181,6 +183,12 @@ public class TapTalkLive {
         this.clientAppIcon = clientAppIcon;
         this.clientAppName = clientAppName;
         this.tapTalkLiveListener = tapTalkLiveListener;
+
+        if (sdkVersion.isEmpty()) {
+            // Use hard-coded string
+            String version = "2.4.2";
+            sdkVersion = String.format("%s-%s", version, BuildConfig.BUILD_TYPE);
+        }
 
         // Get project configs for TapTalk SDK
         getProjectConfigs();
