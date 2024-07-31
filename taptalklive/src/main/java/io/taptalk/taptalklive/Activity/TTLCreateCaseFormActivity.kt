@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import io.taptalk.TapTalk.Helper.TAPUtils
+import io.taptalk.TapTalk.Helper.TapCustomSnackbarView
 import io.taptalk.TapTalk.Helper.TapTalk
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Interface.TapTalkNetworkInterface
@@ -36,8 +37,8 @@ import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.NEW_CASE_CREATED
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.CASE_DETAILS
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
-import io.taptalk.taptalklive.Listener.TTLCommonListener
 import io.taptalk.taptalklive.Interface.TTLItemListInterface
+import io.taptalk.taptalklive.Listener.TTLCommonListener
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
@@ -60,6 +61,7 @@ import kotlinx.android.synthetic.main.ttl_activity_create_case_form.ll_full_name
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.pb_button_send_message_loading
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.pb_select_topic_loading
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.rv_topic_dropdown
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tap_custom_snackbar
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_button_send_message
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_email_address_error_message
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_topic
@@ -72,6 +74,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     private lateinit var topicAdapter: TTLItemDropdownAdapter
 
     private var selectedTopicIndex = -1
+    private var isShowTopicDropdownPending = false
 
     companion object {
         fun start(context: Context, showCloseButton: Boolean) {
@@ -132,6 +135,11 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         else {
             ll_full_name.visibility = View.GONE
             ll_email_address.visibility = View.GONE
+            val activeUser = TTLDataManager.getInstance().activeUser
+            if (activeUser != null) {
+                et_full_name.setText(activeUser.fullName)
+                et_email_address.setText(activeUser.email)
+            }
         }
         et_message.onFocusChangeListener = formFocusListener
 
@@ -221,14 +229,28 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 topicAdapter.items = vm.topics
 
                 showTopicLoadingFinished()
+
+                if (isShowTopicDropdownPending) {
+                    isShowTopicDropdownPending = false
+                    showTopicDropdown()
+                }
             }
         }
 
         override fun onError(error: TTLErrorModel?) {
-            setGetTopicListAsPending()
+            onError(error?.message)
         }
         override fun onError(errorMessage: String?) {
             setGetTopicListAsPending()
+
+            if (isShowTopicDropdownPending) {
+                isShowTopicDropdownPending = false
+                tap_custom_snackbar?.show(
+                    TapCustomSnackbarView.Companion.Type.ERROR,
+                    R.drawable.ttl_ic_info,
+                    errorMessage ?: getString(R.string.tap_error_message_general)
+                )
+            }
         }
     }
 
@@ -242,13 +264,17 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun showTopicLoadingFinished() {
-        cl_topic.background = ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_bg_text_field_inactive)
+        if (cl_topic_error.visibility != View.VISIBLE) {
+            cl_topic.background = ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_bg_text_field_inactive)
+        }
         pb_select_topic_loading.visibility = View.GONE
         iv_select_topic_drop_down.visibility = View.VISIBLE
     }
 
     private fun showTopicDropdown() {
         if (vm.topics.isEmpty() || cv_topic_dropdown.visibility == View.VISIBLE) {
+            isShowTopicDropdownPending = true
+            fetchTopicList(false)
             return
         }
         TAPUtils.dismissKeyboard(this)
@@ -445,6 +471,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
 
         override fun onError(error: TTLErrorModel?) {
+            if (error?.code?.contains("401") == true ||
+                TTLDataManager.getInstance().activeUser == null ||
+                TTLDataManager.getInstance().accessToken.isNullOrEmpty()
+            ) {
+                // Re-authenticate if refresh token is expired
+                TapTalkLive.authenticateUser(et_full_name.text.toString(), et_email_address.text.toString(), authenticationListener)
+                return
+            }
             showDefaultErrorDialog(error?.message)
         }
 
@@ -491,20 +525,32 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun showDefaultErrorDialog(errorMessage: String?) {
-        val message = if (!TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
-            getString(R.string.ttl_error_message_offline)
-        } else if (!errorMessage.isNullOrEmpty()) {
-            errorMessage
-        } else  {
-            getString(R.string.ttl_error_message_general)
+        val icon: Int
+        val message: String
+        if (!TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
+            icon = R.drawable.tap_ic_wifi_off_red
+            message = getString(R.string.ttl_error_message_offline)
         }
-        TapTalkDialog.Builder(this@TTLCreateCaseFormActivity)
-            .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-            .setCancelable(true)
-            .setTitle(getString(R.string.ttl_error))
-            .setMessage(message)
-            .setPrimaryButtonTitle(getString(R.string.ttl_ok))
-            .show()
+        else if (!errorMessage.isNullOrEmpty()) {
+            icon = R.drawable.ttl_ic_info
+            message = errorMessage
+        }
+        else {
+            icon = R.drawable.ttl_ic_info
+            message = getString(R.string.ttl_error_message_general)
+        }
+        tap_custom_snackbar?.show(
+            TapCustomSnackbarView.Companion.Type.ERROR,
+            icon,
+            message
+        )
+//        TapTalkDialog.Builder(this@TTLCreateCaseFormActivity)
+//            .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
+//            .setCancelable(true)
+//            .setTitle(getString(R.string.ttl_error))
+//            .setMessage(message)
+//            .setPrimaryButtonTitle(getString(R.string.ttl_ok))
+//            .show()
         ll_button_send_message.setOnClickListener { validateSendMessage() }
         hideLoading()
     }

@@ -552,18 +552,18 @@ public class TapTalkLive {
                 TTLDataManager.getInstance().saveTapTalkAuthTicket(response.getTicket());
                 authenticateTapTalkSDK(response.getTicket(), authenticateTapTalkSDKListener);
             } else {
-                clearAllTapLiveData();
+                clearTapLiveUserData();
             }
         }
 
         @Override
         public void onError(TTLErrorModel error) {
-            clearAllTapLiveData();
+            clearTapLiveUserData();
         }
 
         @Override
         public void onError(String errorMessage) {
-            clearAllTapLiveData();
+            clearTapLiveUserData();
         }
     };
 
@@ -575,7 +575,7 @@ public class TapTalkLive {
 
         @Override
         public void onError(String s, String s1) {
-            clearAllTapLiveData();
+            clearTapLiveUserData();
         }
     };
 
@@ -1228,6 +1228,12 @@ public class TapTalkLive {
                 }
             }
         });
+    }
+
+    public static void clearTapLiveUserData() {
+        TTLDataManager.getInstance().deleteUserPreferences();
+        TTLApiManager.getInstance().setLoggedOut(true);
+        TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
     }
 
     public static void clearAllTapLiveData() {

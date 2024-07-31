@@ -148,7 +148,7 @@ public class TTLApiManager {
                         updateSession(response);
                         Observable.error(new TTLAuthException(response.getError().getMessage()));
                     } else if (UNAUTHORIZED == response.getStatus()) {
-                        TapTalkLive.clearAllTapLiveData();
+                        TapTalkLive.clearTapLiveUserData();
                     } else {
                         Observable.error(new TTLAuthException(response.getError().getMessage()));
                     }

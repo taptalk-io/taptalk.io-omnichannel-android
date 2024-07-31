@@ -99,9 +99,10 @@
                     android:id="@+id/ll_full_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="24dp"
                     android:orientation="vertical"
                     android:visibility="gone"
+                    android:animateLayoutChanges="true"
                     tools:visibility="visible">
 
                     <TextView
@@ -168,9 +169,10 @@
                     android:id="@+id/ll_email_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="24dp"
                     android:orientation="vertical"
                     android:visibility="gone"
+                    android:animateLayoutChanges="true"
                     tools:visibility="visible">
 
                     <TextView
@@ -237,7 +239,8 @@
                     android:id="@+id/ll_topic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="24dp"
+                    android:animateLayoutChanges="true"
                     android:orientation="vertical">
 
                     <TextView
@@ -334,7 +337,8 @@
                     android:id="@+id/ll_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
+                    android:animateLayoutChanges="true"
+                    android:layout_marginBottom="24dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -412,7 +416,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ttl_ic_send_white"
-                        android:tint="@color/ttlButtonIconColor"
+                        app:tint="@color/ttlButtonIconColor"
                         android:visibility="gone" />
 
                     <ProgressBar
@@ -478,5 +482,17 @@
             android:scrollbars="vertical" />
 
     </androidx.cardview.widget.CardView>
+
+    <io.taptalk.TapTalk.Helper.TapCustomSnackbarView
+        android:id="@+id/tap_custom_snackbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="48dp"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
