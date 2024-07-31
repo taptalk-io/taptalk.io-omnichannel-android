@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import io.taptalk.TapTalk.Model.TAPMessageModel;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateCaseRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLGetCaseListRequest;
@@ -23,7 +22,6 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenRespo
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageRequest;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageResponse;
-import io.taptalk.taptalklive.API.Model.TTLMessageMediaModel;
 import io.taptalk.taptalklive.API.Service.TTLApiService;
 import io.taptalk.taptalklive.API.Service.TTLRefreshTokenApiService;
 import io.taptalk.taptalklive.BuildConfig;
@@ -148,7 +146,7 @@ public class TTLApiManager {
                         updateSession(response);
                         Observable.error(new TTLAuthException(response.getError().getMessage()));
                     } else if (UNAUTHORIZED == response.getStatus()) {
-                        TapTalkLive.clearTapLiveUserData();
+                        TapTalkLive.clearUserData();
                     } else {
                         Observable.error(new TTLAuthException(response.getError().getMessage()));
                     }
