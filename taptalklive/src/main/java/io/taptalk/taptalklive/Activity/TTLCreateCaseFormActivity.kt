@@ -47,6 +47,7 @@ import io.taptalk.taptalklive.adapter.TTLItemDropdownAdapter
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_email_address_error
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_full_name_error
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_message_error
+import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_scroll_view_content
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_topic
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_topic_error
 import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cv_topic_dropdown
@@ -145,6 +146,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
         initTopics()
 
+        cl_scroll_view_content.setOnClickListener { TAPUtils.dismissKeyboard(this) }
         ll_button_send_message.setOnClickListener { validateSendMessage() }
     }
 
