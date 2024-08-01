@@ -244,6 +244,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         }
         override fun onError(errorMessage: String?) {
             setGetTopicListAsPending()
+            showTopicLoadingFinished()
 
             if (isShowTopicDropdownPending) {
                 isShowTopicDropdownPending = false
