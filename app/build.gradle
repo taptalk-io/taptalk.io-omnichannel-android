@@ -1,7 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
+//    id 'kotlin-android-extensions'
 }
 
 if (file("${rootProject.rootDir}/environment.properties").exists()) {
@@ -9,14 +10,15 @@ if (file("${rootProject.rootDir}/environment.properties").exists()) {
 }
 
 android {
+    namespace = "io.taptalk.taptalklivesample"
     def globalConfig = rootProject.extensions.getByName("ext")
 
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "io.taptalk.taptalklivesample"
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         versionCode taptalklive_version_code
         versionName taptalklive_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -124,13 +126,22 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+        buildConfig = true
+    }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
+    }
+
+    lintOptions {
+        disable "Instantiatable"
     }
 }
 

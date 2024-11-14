@@ -44,32 +44,11 @@ import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
 import io.taptalk.taptalklive.adapter.TTLItemDropdownAdapter
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_email_address_error
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_full_name_error
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_message_error
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_scroll_view_content
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_topic
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cl_topic_error
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.cv_topic_dropdown
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.et_email_address
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.et_full_name
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.et_message
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.iv_button_close
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.iv_select_topic_drop_down
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.ll_button_send_message
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.ll_email_address
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.ll_full_name
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.pb_button_send_message_loading
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.pb_select_topic_loading
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.rv_topic_dropdown
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tap_custom_snackbar
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_button_send_message
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_email_address_error_message
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.tv_topic
-import kotlinx.android.synthetic.main.ttl_activity_create_case_form.v_dismiss_dropdown
+import io.taptalk.taptalklive.databinding.TtlActivityCreateCaseFormBinding
 
 class TTLCreateCaseFormActivity : AppCompatActivity() {
 
+    private lateinit var vb: TtlActivityCreateCaseFormBinding
     private lateinit var vm: TTLCreateCaseViewModel
     private lateinit var glide: RequestManager
     private lateinit var topicAdapter: TTLItemDropdownAdapter
@@ -86,14 +65,15 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             }
             context.startActivity(intent)
             if (context is Activity) {
-                context.overridePendingTransition(R.anim.tap_slide_left, R.anim.tap_stay)
+                context.overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_slide_left, io.taptalk.TapTalk.R.anim.tap_stay)
             }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ttl_activity_create_case_form)
+        vb = TtlActivityCreateCaseFormBinding.inflate(layoutInflater)
+        setContentView(vb.root)
 
         glide = Glide.with(this)
         initViewModel()
@@ -105,7 +85,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             return
         }
         super.onBackPressed()
-        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_right)
+        overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
         TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped(this)
     }
 
@@ -119,35 +99,35 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         window?.setBackgroundDrawable(null)
 
         if (vm.showCloseButton) {
-            iv_button_close.visibility = View.VISIBLE
-            iv_button_close.setOnClickListener {
+            vb.ivButtonClose.visibility = View.VISIBLE
+            vb.ivButtonClose.setOnClickListener {
                 onBackPressed()
             }
         }
 
         if (!TTLDataManager.getInstance().checkActiveUserExists() || TTLDataManager.getInstance().accessToken.isNullOrEmpty()) {
             // Show name and email fields if user does not exist
-            ll_full_name.visibility = View.VISIBLE
-            ll_email_address.visibility = View.VISIBLE
-            et_full_name.onFocusChangeListener = formFocusListener
-            et_email_address.onFocusChangeListener = formFocusListener
+            vb.llFullName.visibility = View.VISIBLE
+            vb.llEmailAddress.visibility = View.VISIBLE
+            vb.etFullName.onFocusChangeListener = formFocusListener
+            vb.etEmailAddress.onFocusChangeListener = formFocusListener
             vm.openRoomListOnComplete = true
         }
         else {
-            ll_full_name.visibility = View.GONE
-            ll_email_address.visibility = View.GONE
+            vb.llFullName.visibility = View.GONE
+            vb.llEmailAddress.visibility = View.GONE
             val activeUser = TTLDataManager.getInstance().activeUser
             if (activeUser != null) {
-                et_full_name.setText(activeUser.fullName)
-                et_email_address.setText(activeUser.email)
+                vb.etFullName.setText(activeUser.fullName)
+                vb.etEmailAddress.setText(activeUser.email)
             }
         }
-        et_message.onFocusChangeListener = formFocusListener
+        vb.etMessage.onFocusChangeListener = formFocusListener
 
         initTopics()
 
-        cl_scroll_view_content.setOnClickListener { TAPUtils.dismissKeyboard(this) }
-        ll_button_send_message.setOnClickListener { validateSendMessage() }
+        vb.clScrollViewContent.setOnClickListener { TAPUtils.dismissKeyboard(this) }
+        vb.llButtonSendMessage.setOnClickListener { validateSendMessage() }
     }
 
     private val formFocusListener = View.OnFocusChangeListener { view, hasFocus ->
@@ -158,14 +138,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         else {
             view.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
         }
-        if (view == et_full_name) {
-            cl_full_name_error.visibility = View.GONE
+        if (view == vb.etFullName) {
+            vb.clFullNameError.visibility = View.GONE
         }
-        else if (view == et_email_address) {
-            cl_email_address_error.visibility = View.GONE
+        else if (view == vb.etEmailAddress) {
+            vb.clEmailAddressError.visibility = View.GONE
         }
-        else if (view == et_message) {
-            cl_message_error.visibility = View.GONE
+        else if (view == vb.etMessage) {
+            vb.clMessageError.visibility = View.GONE
         }
     }
 
@@ -178,9 +158,9 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 override fun onItemSelected(position: Int) {
                     if (position > -1 && position <= vm.topics.size) {
                         selectedTopicIndex = position
-                        tv_topic.text = vm.topics[selectedTopicIndex]
+                        vb.tvTopic.text = vm.topics[selectedTopicIndex]
                         hideTopicDropdown()
-                        cl_topic_error.visibility = View.GONE
+                        vb.clTopicError.visibility = View.GONE
                     }
                 }
             }
@@ -195,10 +175,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                     }
                 }
             }
-        rv_topic_dropdown.adapter = topicAdapter
-        rv_topic_dropdown.layoutManager = layoutManager
-        rv_topic_dropdown.setMaxHeight(TAPUtils.dpToPx(resources, 144f))
-        cl_topic.setOnClickListener {
+        vb.rvTopicDropdown.adapter = topicAdapter
+        vb.rvTopicDropdown.layoutManager = layoutManager
+        vb.rvTopicDropdown.setMaxHeight(TAPUtils.dpToPx(resources, 144f))
+        vb.clTopic.setOnClickListener {
             showTopicDropdown()
         }
     }
@@ -248,10 +228,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 
             if (isShowTopicDropdownPending) {
                 isShowTopicDropdownPending = false
-                tap_custom_snackbar?.show(
+                vb.tapCustomSnackbar.show(
                     TapCustomSnackbarView.Companion.Type.ERROR,
                     R.drawable.ttl_ic_info,
-                    errorMessage ?: getString(R.string.tap_error_message_general)
+                    errorMessage ?: getString(io.taptalk.TapTalk.R.string.tap_error_message_general)
                 )
             }
         }
@@ -267,35 +247,35 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun showTopicLoadingFinished() {
-        if (cl_topic_error.visibility != View.VISIBLE) {
-            cl_topic.background = ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_bg_text_field_inactive)
+        if (vb.clTopicError.visibility != View.VISIBLE) {
+            vb.clTopic.background = ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_bg_text_field_inactive)
         }
-        pb_select_topic_loading.visibility = View.GONE
-        iv_select_topic_drop_down.visibility = View.VISIBLE
+        vb.pbSelectTopicLoading.visibility = View.GONE
+        vb.ivSelectTopicDropDown.visibility = View.VISIBLE
     }
 
     private fun showTopicDropdown() {
-        if (vm.topics.isEmpty() || cv_topic_dropdown.visibility == View.VISIBLE) {
+        if (vm.topics.isEmpty() || vb.cvTopicDropdown.visibility == View.VISIBLE) {
             isShowTopicDropdownPending = true
             fetchTopicList(false)
             return
         }
         TAPUtils.dismissKeyboard(this)
         val location = IntArray(2)
-        cl_topic.getLocationInWindow(location)
-        cv_topic_dropdown.translationY = location[1].toFloat() + (cl_topic.height.toFloat() / 2)
-        cv_topic_dropdown.visibility = View.VISIBLE
-        cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_active)
-        cl_topic.setOnClickListener {
+        vb.clTopic.getLocationInWindow(location)
+        vb.cvTopicDropdown.translationY = location[1].toFloat() + (vb.clTopic.height.toFloat() / 2)
+        vb.cvTopicDropdown.visibility = View.VISIBLE
+        vb.clTopic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_active)
+        vb.clTopic.setOnClickListener {
             hideTopicDropdown()
         }
-        iv_select_topic_drop_down.animate()
+        vb.ivSelectTopicDropDown.animate()
             .rotation(180f)
             .setDuration(200L)
             .setInterpolator(AccelerateDecelerateInterpolator())
             .withEndAction {
-                v_dismiss_dropdown.visibility = View.VISIBLE
-                v_dismiss_dropdown.setOnClickListener {
+                vb.vDismissDropdown.visibility = View.VISIBLE
+                vb.vDismissDropdown.setOnClickListener {
                     hideTopicDropdown()
                 }
             }
@@ -303,17 +283,17 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun hideTopicDropdown() {
-        if (cv_topic_dropdown.visibility != View.VISIBLE) {
+        if (vb.cvTopicDropdown.visibility != View.VISIBLE) {
             return
         }
-        cv_topic_dropdown.visibility = View.INVISIBLE
-        v_dismiss_dropdown.visibility = View.GONE
-        v_dismiss_dropdown.setOnClickListener(null)
-        cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
-        cl_topic.setOnClickListener {
+        vb.cvTopicDropdown.visibility = View.INVISIBLE
+        vb.vDismissDropdown.visibility = View.GONE
+        vb.vDismissDropdown.setOnClickListener(null)
+        vb.clTopic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        vb.clTopic.setOnClickListener {
             showTopicDropdown()
         }
-        iv_select_topic_drop_down.animate()
+        vb.ivSelectTopicDropDown.animate()
             .rotation(0f)
             .setDuration(200L)
             .setInterpolator(AccelerateDecelerateInterpolator())
@@ -321,33 +301,33 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun validateFullName(): Boolean {
-        return if (!et_full_name.text.isNullOrEmpty()) {
+        return if (!vb.etFullName.text.isNullOrEmpty()) {
             true
         } else {
 //            showValidationErrorDialog(getString(R.string.ttl_error_message_full_name_empty))
-            et_full_name.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
-            cl_full_name_error.visibility = View.VISIBLE
+            vb.etFullName.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+            vb.clFullNameError.visibility = View.VISIBLE
             false
         }
     }
 
     private fun validateEmail(): Boolean {
-//        if (et_email_address.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(et_email_address.text).matches()) {
+//        if (vb.etEmailAddress.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(vb.etEmailAddress.text).matches()) {
 //            return true
-//        } else if (et_email_address.text.isNotEmpty()) {
+//        } else if (vb.etEmailAddress.text.isNotEmpty()) {
 //            showValidationErrorDialog(getString(R.string.ttl_error_message_email_invalid))
 //        } else {
 //            showValidationErrorDialog(getString(R.string.ttl_error_message_email_empty))
 //        }
-        if (et_email_address.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(et_email_address.text).matches()) {
+        if (vb.etEmailAddress.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(vb.etEmailAddress.text).matches()) {
             return true
-        } else if (et_email_address.text.isNotEmpty()) {
-            tv_email_address_error_message.text = getString(R.string.ttl_error_message_email_invalid)
+        } else if (vb.etEmailAddress.text.isNotEmpty()) {
+            vb.tvEmailAddressErrorMessage.text = getString(R.string.ttl_error_message_email_invalid)
         } else {
-            tv_email_address_error_message.text = getString(R.string.ttl_error_field_required)
+            vb.tvEmailAddressErrorMessage.text = getString(R.string.ttl_error_field_required)
         }
-        et_email_address.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
-        cl_email_address_error.visibility = View.VISIBLE
+        vb.etEmailAddress.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+        vb.clEmailAddressError.visibility = View.VISIBLE
         return false
     }
 
@@ -356,19 +336,19 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             true
         } else {
 //            showValidationErrorDialog(getString(R.string.ttl_error_message_topic_empty))
-            cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
-            cl_topic_error.visibility = View.VISIBLE
+            vb.clTopic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+            vb.clTopicError.visibility = View.VISIBLE
             false
         }
     }
 
     private fun validateMessage(): Boolean {
-        return if (!et_message.text.isNullOrEmpty()) {
+        return if (!vb.etMessage.text.isNullOrEmpty()) {
             true
         } else {
 //            showValidationErrorDialog(getString(R.string.ttl_error_message_message_empty))
-            et_message.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
-            cl_message_error.visibility = View.VISIBLE
+            vb.etMessage.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+            vb.clMessageError.visibility = View.VISIBLE
             false
         }
     }
@@ -381,13 +361,13 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             val fullNameValidated = validateFullName()
             val emailValidated = validateEmail()
             if (fullNameValidated && emailValidated && topicValidated && messageValidated) {
-                ll_button_send_message.setOnClickListener(null)
+                vb.llButtonSendMessage.setOnClickListener(null)
                 showLoading()
-                TapTalkLive.authenticateUser(et_full_name.text.toString(), et_email_address.text.toString(), authenticationListener)
+                TapTalkLive.authenticateUser(vb.etFullName.text.toString(), vb.etEmailAddress.text.toString(), authenticationListener)
             }
         } else {
             if (topicValidated && messageValidated) {
-                ll_button_send_message.setOnClickListener(null)
+                vb.llButtonSendMessage.setOnClickListener(null)
                 showLoading()
                 if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
                     TapTalkLive.requestTapTalkAuthTicket(authenticationListener)
@@ -409,51 +389,51 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        tv_button_send_message.visibility = View.GONE
-        pb_button_send_message_loading.visibility = View.VISIBLE
-        et_full_name.isEnabled = false
-        et_email_address.isEnabled = false
-        et_message.isEnabled = false
-        cl_topic.setOnClickListener(null)
-        et_full_name.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
-        et_email_address.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
-        et_message.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
-        cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
-        et_full_name.setTextColor(ContextCompat.getColor(this, R.color.ttlColorTextMedium))
-        et_email_address.setTextColor(ContextCompat.getColor(this, R.color.ttlColorTextMedium))
-        et_message.setTextColor(ContextCompat.getColor(this, R.color.ttlColorTextMedium))
-        tv_topic.setTextColor(ContextCompat.getColor(this, R.color.ttlColorTextMedium))
+        vb.tvButtonSendMessage.visibility = View.GONE
+        vb.pbButtonSendMessageLoading.visibility = View.VISIBLE
+        vb.etFullName.isEnabled = false
+        vb.etEmailAddress.isEnabled = false
+        vb.etMessage.isEnabled = false
+        vb.clTopic.setOnClickListener(null)
+        vb.etFullName.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
+        vb.etEmailAddress.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
+        vb.etMessage.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
+        vb.clTopic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_disabled)
+        vb.etFullName.setTextColor(ContextCompat.getColor(this, R.color.ttlColorTextMedium))
+        vb.etEmailAddress.setTextColor(ContextCompat.getColor(this, R.color.ttlColorTextMedium))
+        vb.etMessage.setTextColor(ContextCompat.getColor(this, R.color.ttlColorTextMedium))
+        vb.tvTopic.setTextColor(ContextCompat.getColor(this, R.color.ttlColorTextMedium))
 //        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_loading_progress_circle_white))
 //        TAPUtils.rotateAnimateInfinitely(this@TTLCreateCaseFormActivity, iv_button_send_message)
-        ll_button_send_message.setOnClickListener { }
+        vb.llButtonSendMessage.setOnClickListener { }
     }
 
     private fun hideLoading() {
 //        iv_button_send_message.clearAnimation()
 //        iv_button_send_message.setImageDrawable(ContextCompat.getDrawable(this@TTLCreateCaseFormActivity, R.drawable.ttl_ic_send_white))
-        tv_button_send_message.visibility = View.VISIBLE
-        pb_button_send_message_loading.visibility = View.GONE
-        et_full_name.isEnabled = true
-        et_email_address.isEnabled = true
-        et_message.isEnabled = true
-        et_full_name.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
-        et_email_address.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
-        et_message.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
-        cl_topic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
-        et_full_name.setTextColor(ContextCompat.getColor(this, R.color.ttlFormTextFieldColor))
-        et_email_address.setTextColor(ContextCompat.getColor(this, R.color.ttlFormTextFieldColor))
-        et_message.setTextColor(ContextCompat.getColor(this, R.color.ttlFormTextFieldColor))
-        tv_topic.setTextColor(ContextCompat.getColor(this, R.color.ttlFormTextFieldColor))
-        cl_topic.setOnClickListener {
+        vb.tvButtonSendMessage.visibility = View.VISIBLE
+        vb.pbButtonSendMessageLoading.visibility = View.GONE
+        vb.etFullName.isEnabled = true
+        vb.etEmailAddress.isEnabled = true
+        vb.etMessage.isEnabled = true
+        vb.etFullName.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        vb.etEmailAddress.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        vb.etMessage.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        vb.clTopic.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_inactive)
+        vb.etFullName.setTextColor(ContextCompat.getColor(this, R.color.ttlFormTextFieldColor))
+        vb.etEmailAddress.setTextColor(ContextCompat.getColor(this, R.color.ttlFormTextFieldColor))
+        vb.etMessage.setTextColor(ContextCompat.getColor(this, R.color.ttlFormTextFieldColor))
+        vb.tvTopic.setTextColor(ContextCompat.getColor(this, R.color.ttlFormTextFieldColor))
+        vb.clTopic.setOnClickListener {
             showTopicDropdown()
         }
-        ll_button_send_message.setOnClickListener { validateSendMessage() }
+        vb.llButtonSendMessage.setOnClickListener { validateSendMessage() }
     }
 
     private fun createCase() {
         TTLDataManager.getInstance().createCase(
             vm.topicsMap[vm.topics[selectedTopicIndex]]?.id,
-            et_message.text.toString(),
+            vb.etMessage.text.toString(),
             createCaseDataView
         )
     }
@@ -479,14 +459,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 TTLDataManager.getInstance().accessToken.isNullOrEmpty()
             ) {
                 // Re-authenticate if refresh token is expired
-                TapTalkLive.authenticateUser(et_full_name.text.toString(), et_email_address.text.toString(), authenticationListener)
+                TapTalkLive.authenticateUser(vb.etFullName.text.toString(), vb.etEmailAddress.text.toString(), authenticationListener)
                 return
             }
             showDefaultErrorDialog(error?.message)
         }
 
         override fun onError(errorMessage: String?) {
-            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
+            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(io.taptalk.TapTalk.R.string.tap_error_message_general))
         }
     }
 
@@ -531,7 +511,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         val icon: Int
         val message: String
         if (!TAPNetworkStateManager.getInstance(TAPTALK_INSTANCE_KEY).hasNetworkConnection(this@TTLCreateCaseFormActivity)) {
-            icon = R.drawable.tap_ic_wifi_off_red
+            icon = io.taptalk.TapTalk.R.drawable.tap_ic_wifi_off_red
             message = getString(R.string.ttl_error_message_offline)
         }
         else if (!errorMessage.isNullOrEmpty()) {
@@ -542,7 +522,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             icon = R.drawable.ttl_ic_info
             message = getString(R.string.ttl_error_message_general)
         }
-        tap_custom_snackbar?.show(
+        vb.tapCustomSnackbar.show(
             TapCustomSnackbarView.Companion.Type.ERROR,
             icon,
             message
@@ -554,7 +534,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
 //            .setMessage(message)
 //            .setPrimaryButtonTitle(getString(R.string.ttl_ok))
 //            .show()
-        ll_button_send_message.setOnClickListener { validateSendMessage() }
+        vb.llButtonSendMessage.setOnClickListener { validateSendMessage() }
         hideLoading()
     }
 
@@ -565,7 +545,7 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             .setMessage(errorMessage)
             .setPrimaryButtonTitle(getString(R.string.ttl_ok))
             .show()
-        ll_button_send_message.setOnClickListener { validateSendMessage() }
+        vb.llButtonSendMessage.setOnClickListener { validateSendMessage() }
         hideLoading()
     }
 }

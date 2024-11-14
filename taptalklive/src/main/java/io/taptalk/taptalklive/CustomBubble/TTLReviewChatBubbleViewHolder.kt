@@ -182,10 +182,10 @@ class TTLReviewChatBubbleViewHolder internal constructor(
     }
 
     private fun showMessageFailedToSend() {
-        ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_ic_warning_red_circle_background))
-        ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.tapIconChatRoomMessageFailed)))
+        ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_ic_warning_red_circle_background))
+        ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, io.taptalk.TapTalk.R.color.tapIconChatRoomMessageFailed)))
         ivMessageStatus.visibility = View.VISIBLE
-        tvMessageStatus.text = itemView.context.getString(R.string.tap_message_send_failed)
+        tvMessageStatus.text = itemView.context.getString(io.taptalk.TapTalk.R.string.tap_message_send_failed)
         tvMessageStatus.visibility = View.VISIBLE
         ivSending.alpha = 0f
         flBubble.translationX = 0f

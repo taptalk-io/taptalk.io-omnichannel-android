@@ -6,15 +6,18 @@ import io.taptalk.taptalklive.Listener.TapTalkLiveListener
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklivesample.BuildConfig.GOOGLE_MAPS_API_KEY
 import io.taptalk.taptalklivesample.BuildConfig.TAPLIVE_SDK_APP_KEY_SECRET
-import kotlinx.android.synthetic.main.activity_main.ll_button_launch_live_chat
+import io.taptalk.taptalklivesample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var vb: ActivityMainBinding
 
     private var isOpenTapTalkLiveViewPending = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        vb = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(vb.root)
 
         TapTalkLive.init(applicationContext,
                 TAPLIVE_SDK_APP_KEY_SECRET,
@@ -22,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                 "TapTalk.live Sample App",
                 tapTalkLiveListener)
 
-        ll_button_launch_live_chat.setOnClickListener { openTapTalkLiveView() }
+        vb.llButtonLaunchLiveChat.setOnClickListener { openTapTalkLiveView() }
     }
 
     private val tapTalkLiveListener = object : TapTalkLiveListener() {

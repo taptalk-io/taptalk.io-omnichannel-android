@@ -328,14 +328,14 @@ public class TTLCaseListFragment extends Fragment {
                 if (null == userNullErrorDialog) {
                     userNullErrorDialog = new TapTalkDialog(new TapTalkDialog.Builder(activity)
                             .setDialogType(TapTalkDialog.DialogType.ERROR_DIALOG)
-                            .setTitle(getString(R.string.tap_error))
-                            .setMessage(getString(R.string.tap_error_active_user_is_null))
+                            .setTitle(getString(io.taptalk.TapTalk.R.string.tap_error))
+                            .setMessage(getString(io.taptalk.TapTalk.R.string.tap_error_active_user_is_null))
                             .setCancelable(false)
-                            .setPrimaryButtonTitle(getString(R.string.tap_ok)));
+                            .setPrimaryButtonTitle(getString(io.taptalk.TapTalk.R.string.tap_ok)));
                 }
                 userNullErrorDialog.show();
             }
-            Log.e(TAG, getString(R.string.tap_error_active_user_is_null));
+            Log.e(TAG, getString(io.taptalk.TapTalk.R.string.tap_error_active_user_is_null));
         }
     }
 

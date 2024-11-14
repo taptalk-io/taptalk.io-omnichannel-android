@@ -23,9 +23,11 @@ import io.taptalk.taptalklive.Fragment.TTLReviewBottomSheetFragment
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.ViewModel.TTLReviewViewModel
+import io.taptalk.taptalklive.databinding.TtlActivityReviewBinding
 
 class TTLReviewActivity : AppCompatActivity() {
 
+    private lateinit var vb: TtlActivityReviewBinding
     private lateinit var vm: TTLReviewViewModel
     private lateinit var reviewBottomSheetFragment: TTLReviewBottomSheetFragment
 
@@ -38,7 +40,7 @@ class TTLReviewActivity : AppCompatActivity() {
             intent.putExtra(MESSAGE, message)
             if (context is Activity) {
                 context.startActivityForResult(intent, REVIEW)
-                context.overridePendingTransition(R.anim.tap_fade_in, R.anim.tap_stay)
+                context.overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_fade_in, io.taptalk.TapTalk.R.anim.tap_stay)
             }
             else {
                 context.startActivity(intent)
@@ -48,7 +50,8 @@ class TTLReviewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ttl_activity_review)
+        vb = TtlActivityReviewBinding.inflate(layoutInflater)
+        setContentView(vb.root)
 
         initViewModel()
         initView()
@@ -56,7 +59,7 @@ class TTLReviewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        overridePendingTransition(R.anim.tap_stay, R.anim.tap_fade_out)
+        overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_fade_out)
     }
 
     override fun onBackPressed() {
@@ -126,7 +129,7 @@ class TTLReviewActivity : AppCompatActivity() {
 
         override fun onError(errorMessage: String?) {
             reviewBottomSheetFragment.onSubmitReviewFailed()
-            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(R.string.tap_error_message_general))
+            showDefaultErrorDialog(if (BuildConfig.DEBUG) errorMessage else getString(io.taptalk.TapTalk.R.string.tap_error_message_general))
         }
     }
 

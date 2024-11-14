@@ -439,7 +439,7 @@ public class TapTalkLive {
                         errorMessage = error.getMessage();
                     }
                     else {
-                        errorMessage = context.getString(R.string.tap_no_internet_show_error);
+                        errorMessage = context.getString(io.taptalk.TapTalk.R.string.tap_no_internet_show_error);
                     }
                     listener.onError(error.getCode(), errorMessage);
                 }
@@ -879,7 +879,7 @@ public class TapTalkLive {
                             errorMessage = error.getMessage();
                         }
                         else {
-                            errorMessage = context.getString(R.string.tap_no_internet_show_error);
+                            errorMessage = context.getString(io.taptalk.TapTalk.R.string.tap_no_internet_show_error);
                         }
                         listener.onError(error.getCode(), errorMessage);
                     }
@@ -979,7 +979,7 @@ public class TapTalkLive {
                         errorMessage = error.getMessage();
                     }
                     else {
-                        errorMessage = context.getString(R.string.tap_no_internet_show_error);
+                        errorMessage = context.getString(io.taptalk.TapTalk.R.string.tap_no_internet_show_error);
                     }
                     listener.onError(error.getCode(), errorMessage);
                 }
@@ -1067,7 +1067,7 @@ public class TapTalkLive {
                         message = errorMessage;
                     }
                     else {
-                        message = context.getString(R.string.tap_no_internet_show_error);
+                        message = context.getString(io.taptalk.TapTalk.R.string.tap_no_internet_show_error);
                     }
                     listener.onError(errorCode, message);
                 }

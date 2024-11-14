@@ -5,13 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
-import io.taptalk.taptalklive.Const.TTLConstant.Extras.SHOW_CLOSE_BUTTON
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
-import kotlinx.android.synthetic.main.ttl_activity_case_list.*
+import io.taptalk.taptalklive.databinding.TtlActivityCaseListBinding
 
 class TTLCaseListActivity : TAPBaseActivity() {
+
+    private lateinit var vb: TtlActivityCaseListBinding
 
     companion object {
         fun start(context: Context) {
@@ -21,14 +22,15 @@ class TTLCaseListActivity : TAPBaseActivity() {
             }
             context.startActivity(intent)
             if (context is Activity) {
-                context.overridePendingTransition(R.anim.tap_slide_left, R.anim.tap_stay)
+                context.overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_slide_left, io.taptalk.TapTalk.R.anim.tap_stay)
             }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ttl_activity_case_list)
+        vb = TtlActivityCaseListBinding.inflate(layoutInflater)
+        setContentView(vb.root)
 
         instanceKey = TAPTALK_INSTANCE_KEY
         initView()
@@ -37,13 +39,13 @@ class TTLCaseListActivity : TAPBaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_right)
+        overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
         TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCaseListTapped(this)
     }
 
     private fun initView() {
-        iv_button_close.setOnClickListener { onBackPressed() }
-        iv_button_new_message.setOnClickListener { openCreateCaseForm() }
+        vb.ivButtonClose.setOnClickListener { onBackPressed() }
+        vb.ivButtonNewMessage.setOnClickListener { openCreateCaseForm() }
     }
 
     private fun initFragment() {

@@ -36,12 +36,14 @@ import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.adapter.TTLHomeFaqAdapter
+import io.taptalk.taptalklive.databinding.TtlActivityHomeBinding
 import io.taptalk.taptalklive.helper.TTLUtil
 import io.taptalk.taptalklive.model.TTLCaseListModel
-import kotlinx.android.synthetic.main.ttl_activity_home.rv_home
 import java.io.File
 
 class TTLHomeActivity : TAPBaseActivity() {
+
+    private lateinit var vb: TtlActivityHomeBinding
 
     companion object {
         fun start(context: Context) {
@@ -51,7 +53,7 @@ class TTLHomeActivity : TAPBaseActivity() {
             }
             context.startActivity(intent)
             if (context is Activity) {
-                context.overridePendingTransition(R.anim.tap_slide_up, R.anim.tap_stay)
+                context.overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_slide_up, io.taptalk.TapTalk.R.anim.tap_stay)
             }
         }
     }
@@ -61,7 +63,8 @@ class TTLHomeActivity : TAPBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ttl_activity_home)
+        vb = TtlActivityHomeBinding.inflate(layoutInflater)
+        setContentView(vb.root)
 
         instanceKey = TAPTALK_INSTANCE_KEY
         initView()
@@ -81,14 +84,14 @@ class TTLHomeActivity : TAPBaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_down)
+        overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_down)
         TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInHomePageTapped(this)
     }
 
     private fun initView() {
         adapter = TTLHomeFaqAdapter(this, generateAdapterItems(), adapterListener, true)
-        rv_home.adapter = adapter
-        rv_home.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
+        vb.rvHome.adapter = adapter
+        vb.rvHome.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
             override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
                 try {
                     super.onLayoutChildren(recycler, state)
@@ -98,7 +101,7 @@ class TTLHomeActivity : TAPBaseActivity() {
                 }
             }
         }
-        val messageAnimator = rv_home.itemAnimator as SimpleItemAnimator?
+        val messageAnimator = vb.rvHome.itemAnimator as SimpleItemAnimator?
         messageAnimator?.supportsChangeAnimations = false
     }
 
@@ -278,11 +281,11 @@ class TTLHomeActivity : TAPBaseActivity() {
 
     private fun showDownloadFileDialog() {
         TapTalkDialog.Builder(this)
-            .setTitle(getString(R.string.tap_error_could_not_find_file))
-            .setMessage(getString(R.string.tap_error_redownload_file))
+            .setTitle(getString(io.taptalk.TapTalk.R.string.tap_error_could_not_find_file))
+            .setMessage(getString(io.taptalk.TapTalk.R.string.tap_error_redownload_file))
             .setCancelable(true)
-            .setPrimaryButtonTitle(getString(R.string.tap_ok))
-            .setSecondaryButtonTitle(getString(R.string.tap_cancel))
+            .setPrimaryButtonTitle(getString(io.taptalk.TapTalk.R.string.tap_ok))
+            .setSecondaryButtonTitle(getString(io.taptalk.TapTalk.R.string.tap_cancel))
             .setPrimaryButtonListener { v: View? ->
                 pendingDownloadMessage?.let { downloadFile(it) }
             }

@@ -1,7 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
+//    id 'kotlin-android-extensions'
     id 'maven-publish'
 }
 
@@ -10,13 +11,14 @@ if (file("${rootProject.rootDir}/environment.properties").exists()) {
 }
 
 android {
-    compileSdk 33
+    namespace = "io.taptalk.taptalklive"
+    compileSdk 34
 
     publishNonDefault true
 
     defaultConfig {
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         versionCode taptalklive_version_code
         versionName taptalklive_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -39,6 +41,8 @@ android {
         staging {
             minifyEnabled false
             debuggable true
+            consumerProguardFiles 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             if (project.hasProperty('STAGING_TAPLIVE_SDK_BASE_URL')) {
                 buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${STAGING_TAPLIVE_SDK_BASE_URL}\"")
             } else {
@@ -48,6 +52,8 @@ android {
         dev {
             minifyEnabled false
             debuggable true
+            consumerProguardFiles 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             if (project.hasProperty('DEV_TAPLIVE_SDK_BASE_URL')) {
                 buildConfigField("String", "TAPLIVE_SDK_BASE_URL", "\"${DEV_TAPLIVE_SDK_BASE_URL}\"")
             } else {
@@ -56,9 +62,25 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+        buildConfig = true
+    }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
+        }
     }
 }
 
@@ -85,7 +107,7 @@ dependencies {
 
     //GMS
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-maps:19.0.0'
     implementation 'com.google.android.libraries.places:places:2.6.0'
 
     //Glide
@@ -120,11 +142,12 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // TapTalk
-    api 'com.github.taptalk-io:taptalk.io-android:2.15.5'
+    api 'com.github.taptalk-io:taptalk.io-android:2.17.0'
 }
 
-task androidSourcesJar(type: Jar) {
-    classifier 'sources'
+tasks.register('androidSourcesJar', Jar) {
+//    classifier 'sources'
+    archiveClassifier.set("sources")
     from android.sourceSets.main.java.srcDirs
 }
 
@@ -133,10 +156,11 @@ project.afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                artifact androidSourcesJar // optional sources
+//                artifact androidSourcesJar // optional sources
                 groupId = 'com.github.taptalk-io'
                 artifactId = 'taptalk.io-omnichannel-android'
                 version = "$taptalklive_version_name"
+                generateMetadataFileForReleasePublication.dependsOn androidSourcesJar
             }
         }
     }
