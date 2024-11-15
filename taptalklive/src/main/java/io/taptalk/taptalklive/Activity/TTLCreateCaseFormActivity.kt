@@ -312,22 +312,23 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
     }
 
     private fun validateEmail(): Boolean {
-//        if (vb.etEmailAddress.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(vb.etEmailAddress.text).matches()) {
-//            return true
-//        } else if (vb.etEmailAddress.text.isNotEmpty()) {
-//            showValidationErrorDialog(getString(R.string.ttl_error_message_email_invalid))
-//        } else {
-//            showValidationErrorDialog(getString(R.string.ttl_error_message_email_empty))
-//        }
-        if (vb.etEmailAddress.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(vb.etEmailAddress.text).matches()) {
-            return true
-        } else if (vb.etEmailAddress.text.isNotEmpty()) {
-            vb.tvEmailAddressErrorMessage.text = getString(R.string.ttl_error_message_email_invalid)
-        } else {
-            vb.tvEmailAddressErrorMessage.text = getString(R.string.ttl_error_field_required)
+        try {
+            if (vb.etEmailAddress.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(vb.etEmailAddress.text).matches()) {
+                return true
+            }
+            else if (vb.etEmailAddress.text.isNotEmpty()) {
+                vb.tvEmailAddressErrorMessage.text = getString(R.string.ttl_error_message_email_invalid)
+            }
+            else {
+                vb.tvEmailAddressErrorMessage.text = getString(R.string.ttl_error_field_required)
+            }
+            vb.etEmailAddress.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
+            vb.clEmailAddressError.visibility = View.VISIBLE
         }
-        vb.etEmailAddress.background = ContextCompat.getDrawable(this, R.drawable.ttl_bg_text_field_error)
-        vb.clEmailAddressError.visibility = View.VISIBLE
+        catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
         return false
     }
 

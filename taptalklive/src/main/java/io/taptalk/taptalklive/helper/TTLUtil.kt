@@ -129,23 +129,28 @@ object TTLUtil {
         textView.isLongClickable = false
         Linkify.addLinks(textView, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS)
 
-        val filter = Linkify.TransformFilter { match: Matcher?, url: String ->
-            url.replace("/".toRegex(), "")
-        }
-        val pattern = Pattern.compile("[0-9/]+")
-        Linkify.addLinks(textView, pattern, "tel:",
-            { s: CharSequence, start: Int, end: Int ->
-                var digitCount = 0
-                for (i in start until end) {
-                    if (Character.isDigit(s[i])) {
-                        digitCount++
-                        if (digitCount >= 7) {
-                            return@addLinks true
+        try {
+            val filter = Linkify.TransformFilter { match: Matcher?, url: String ->
+                url.replace("/".toRegex(), "")
+            }
+            val pattern = Pattern.compile("[0-9/]+")
+            Linkify.addLinks(textView, pattern, "tel:",
+                { s: CharSequence, start: Int, end: Int ->
+                    var digitCount = 0
+                    for (i in start until end) {
+                        if (Character.isDigit(s[i])) {
+                            digitCount++
+                            if (digitCount >= 7) {
+                                return@addLinks true
+                            }
                         }
                     }
-                }
-                false
-            }, filter
-        )
+                    false
+                }, filter
+            )
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
