@@ -45,7 +45,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -61,7 +60,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.TapTalk.Helper.TapTalk;
 import io.taptalk.TapTalk.Helper.TapTalkDialog;
 import io.taptalk.TapTalk.Listener.TAPChatListener;
@@ -90,7 +88,6 @@ import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestAccessTokenResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLRequestTicketResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageRequest;
-import io.taptalk.taptalklive.API.Model.ResponseModel.TTLSendMessageResponse;
 import io.taptalk.taptalklive.API.Model.TTLCaseModel;
 import io.taptalk.taptalklive.API.Model.TTLMessageMediaModel;
 import io.taptalk.taptalklive.API.Model.TTLTapTalkProjectConfigsModel;
@@ -103,7 +100,6 @@ import io.taptalk.taptalklive.Activity.TTLReviewActivity;
 import io.taptalk.taptalklive.CustomBubble.TTLReviewChatBubbleClass;
 import io.taptalk.taptalklive.CustomBubble.TTLSystemMessageBubbleClass;
 import io.taptalk.taptalklive.Fragment.TTLCaseListFragment;
-import io.taptalk.taptalklive.Interface.TTLGetTopicListInterface;
 import io.taptalk.taptalklive.Listener.TTLCommonListener;
 import io.taptalk.taptalklive.Listener.TTLCreateCaseListener;
 import io.taptalk.taptalklive.Listener.TTLGetCaseListListener;
@@ -443,7 +439,7 @@ public class TapTalkLive {
                         errorMessage = error.getMessage();
                     }
                     else {
-                        errorMessage = context.getString(R.string.tap_no_internet_show_error);
+                        errorMessage = context.getString(io.taptalk.TapTalk.R.string.tap_no_internet_show_error);
                     }
                     listener.onError(error.getCode(), errorMessage);
                 }
@@ -552,18 +548,18 @@ public class TapTalkLive {
                 TTLDataManager.getInstance().saveTapTalkAuthTicket(response.getTicket());
                 authenticateTapTalkSDK(response.getTicket(), authenticateTapTalkSDKListener);
             } else {
-                clearAllTapLiveData();
+                clearUserData();
             }
         }
 
         @Override
         public void onError(TTLErrorModel error) {
-            clearAllTapLiveData();
+            clearUserData();
         }
 
         @Override
         public void onError(String errorMessage) {
-            clearAllTapLiveData();
+            clearUserData();
         }
     };
 
@@ -575,7 +571,7 @@ public class TapTalkLive {
 
         @Override
         public void onError(String s, String s1) {
-            clearAllTapLiveData();
+            clearUserData();
         }
     };
 
@@ -883,7 +879,7 @@ public class TapTalkLive {
                             errorMessage = error.getMessage();
                         }
                         else {
-                            errorMessage = context.getString(R.string.tap_no_internet_show_error);
+                            errorMessage = context.getString(io.taptalk.TapTalk.R.string.tap_no_internet_show_error);
                         }
                         listener.onError(error.getCode(), errorMessage);
                     }
@@ -983,7 +979,7 @@ public class TapTalkLive {
                         errorMessage = error.getMessage();
                     }
                     else {
-                        errorMessage = context.getString(R.string.tap_no_internet_show_error);
+                        errorMessage = context.getString(io.taptalk.TapTalk.R.string.tap_no_internet_show_error);
                     }
                     listener.onError(error.getCode(), errorMessage);
                 }
@@ -1071,7 +1067,7 @@ public class TapTalkLive {
                         message = errorMessage;
                     }
                     else {
-                        message = context.getString(R.string.tap_no_internet_show_error);
+                        message = context.getString(io.taptalk.TapTalk.R.string.tap_no_internet_show_error);
                     }
                     listener.onError(errorCode, message);
                 }
@@ -1193,13 +1189,7 @@ public class TapTalkLive {
             }
 
             private void onFinish() {
-                TTLDataManager.getInstance().deleteUserPreferences();
-                TTLApiManager.getInstance().setLoggedOut(true);
-                TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
-                if (tapTalkLive != null) {
-                    tapTalkLive.isTapTalkInitialized = false;
-                    tapTalkLive.isGetCaseListCompleted = false;
-                }
+                clearUserData();
             }
         });
     }
@@ -1228,6 +1218,16 @@ public class TapTalkLive {
                 }
             }
         });
+    }
+
+    public static void clearUserData() {
+        TTLDataManager.getInstance().deleteUserPreferences();
+        TTLApiManager.getInstance().setLoggedOut(true);
+        TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
+        if (tapTalkLive != null) {
+            tapTalkLive.isTapTalkInitialized = false;
+            tapTalkLive.isGetCaseListCompleted = false;
+        }
     }
 
     public static void clearAllTapLiveData() {

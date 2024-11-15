@@ -398,7 +398,7 @@ class TTLHomeFaqAdapter(
 
                             val fileUri = TAPFileDownloadManager.getInstance(TAPTALK_INSTANCE_KEY).getFileMessageUri(url)
                             if (fileUri != null) {
-                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.tap_ic_documents_white))
+                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(activity, io.taptalk.TapTalk.R.drawable.tap_ic_documents_white))
                                 pbFileDownloadProgress.visibility = View.GONE
                                 ivFileStatusIcon.setOnClickListener {
                                     listener?.onOpenFileButtonTapped(fileUri)
@@ -411,7 +411,7 @@ class TTLHomeFaqAdapter(
                                 ivFileStatusIcon.setOnClickListener(null)
                             }
                             else {
-                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.tap_ic_download_orange))
+                                ivFileStatusIcon.setImageDrawable(ContextCompat.getDrawable(activity, io.taptalk.TapTalk.R.drawable.tap_ic_download_orange))
                                 pbFileDownloadProgress.visibility = View.GONE
                                 ivFileStatusIcon.setOnClickListener {
                                     listener?.onDownloadFileButtonTapped(message)

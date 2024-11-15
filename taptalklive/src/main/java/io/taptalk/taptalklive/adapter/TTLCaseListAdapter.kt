@@ -88,7 +88,7 @@ class TTLCaseListAdapter(
                         if (itemView.context is Activity) {
                             (itemView.context as Activity).runOnUiThread {
                                 ImageViewCompat.setImageTintList(civAvatar, ColorStateList.valueOf(item.defaultAvatarBackgroundColor))
-                                civAvatar.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_bg_circle_9b9b9b))
+                                civAvatar.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_bg_circle_9b9b9b))
                                 tvAvatarLabel.text = TAPUtils.getInitials(room.name, 1)
                                 tvAvatarLabel.visibility = View.VISIBLE
                             }
@@ -107,7 +107,7 @@ class TTLCaseListAdapter(
                 // Show initial
                 glide.clear(civAvatar)
                 ImageViewCompat.setImageTintList(civAvatar, ColorStateList.valueOf(item.defaultAvatarBackgroundColor))
-                civAvatar.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_bg_circle_9b9b9b))
+                civAvatar.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_bg_circle_9b9b9b))
                 tvAvatarLabel.text = TAPUtils.getInitials(room.name, 1)
                 tvAvatarLabel.visibility = View.VISIBLE
             }
@@ -138,7 +138,7 @@ class TTLCaseListAdapter(
 
             // Set sender name
             if (message.user.userID == activeUser.userID) {
-                tvSender.text = itemView.context.getString(R.string.tap_you)
+                tvSender.text = itemView.context.getString(io.taptalk.TapTalk.R.string.tap_you)
             }
             else {
                 tvSender.text = message.user.fullname
@@ -150,25 +150,25 @@ class TTLCaseListAdapter(
             val draft = TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).getMessageFromDraft(message.room.roomID)
             if (!draft.isNullOrEmpty()) {
                 // Show draft
-                tvLastMessage.text = String.format(itemView.context.getString(R.string.tap_format_s_draft), draft)
+                tvLastMessage.text = String.format(itemView.context.getString(io.taptalk.TapTalk.R.string.tap_format_s_draft), draft)
                 ivPersonalRoomTypingIndicator.visibility = View.GONE
             }
             else if (0 < item.typingUsers.size) {
                 // Set message to Typing
-                tvLastMessage.text = itemView.context.getString(R.string.tap_typing)
+                tvLastMessage.text = itemView.context.getString(io.taptalk.TapTalk.R.string.tap_typing)
                 ivPersonalRoomTypingIndicator.visibility = View.VISIBLE
                 if (null == ivPersonalRoomTypingIndicator.drawable) {
-                    glide.load(R.raw.gif_typing_indicator).into(ivPersonalRoomTypingIndicator)
+                    glide.load(io.taptalk.TapTalk.R.raw.gif_typing_indicator).into(ivPersonalRoomTypingIndicator)
                 }
             }
             else if (null != message.user && activeUser.userID == message.user.userID && null != message.isDeleted && message.isDeleted!!) {
                 // Show last message deleted by active user
-                tvLastMessage.text = itemView.resources.getString(R.string.tap_you_deleted_this_message)
+                tvLastMessage.text = itemView.resources.getString(io.taptalk.TapTalk.R.string.tap_you_deleted_this_message)
                 ivPersonalRoomTypingIndicator.visibility = View.GONE
             }
             else if (null != message.isDeleted && message.isDeleted!!) {
                 // Show last message deleted by sender
-                tvLastMessage.text = itemView.resources.getString(R.string.tap_this_deleted_message)
+                tvLastMessage.text = itemView.resources.getString(io.taptalk.TapTalk.R.string.tap_this_deleted_message)
                 ivPersonalRoomTypingIndicator.visibility = View.GONE
             }
             else {
@@ -178,7 +178,7 @@ class TTLCaseListAdapter(
             }
             
             ivMute.visibility = View.GONE
-            tvBadgeUnread.background = ContextCompat.getDrawable(itemView.context, R.drawable.tap_bg_room_list_unread_badge)
+            tvBadgeUnread.background = ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_bg_room_list_unread_badge)
 
             // Change Status Message Icon
             // Message sender is not the active user / last message is system message / room draft exists
@@ -188,29 +188,29 @@ class TTLCaseListAdapter(
                 ivMessageStatus.setImageDrawable(null)
             }
             else if (message.isDeleted == true) {
-                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_ic_block_red))
+                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_ic_block_red))
                 ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.tapIconRoomListMessageDeleted)))
             }
             else if (message.isRead == true &&
                 !TapUI.getInstance(TAPTALK_INSTANCE_KEY).isReadStatusHidden
             ) {
-                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_ic_read_orange))
+                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_ic_read_orange))
                 ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.tapIconRoomListMessageRead)))
             }
             else if (message.isDelivered == true) {
-                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_ic_delivered_grey))
+                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_ic_delivered_grey))
                 ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.tapIconRoomListMessageDelivered)))
             }
             else if (message.isFailedSend == true) {
-                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_ic_warning_red_circle_background))
+                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_ic_warning_red_circle_background))
                 ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.tapIconRoomListMessageFailed)))
             }
             else if (message.isSending == true) {
-                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_ic_sending_grey))
+                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_ic_sending_grey))
                 ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.tapIconRoomListMessageSending)))
             }
             else {
-                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.tap_ic_sent_grey))
+                ivMessageStatus.setImageDrawable(ContextCompat.getDrawable(itemView.context, io.taptalk.TapTalk.R.drawable.tap_ic_sent_grey))
                 ImageViewCompat.setImageTintList(ivMessageStatus, ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.tapIconRoomListMessageSent)))
             }
 
@@ -220,20 +220,20 @@ class TTLCaseListAdapter(
                 if (unreadCount == 0) {
                     tvBadgeUnread.text = ""
                 } else if (unreadCount >= 100) {
-                    tvBadgeUnread.setText(R.string.tap_over_99)
+                    tvBadgeUnread.setText(io.taptalk.TapTalk.R.string.tap_over_99)
                 } else {
                     tvBadgeUnread.text = unreadCount.toString()
                 }
                 ivMessageStatus.visibility = View.GONE
                 tvBadgeUnread.visibility = View.VISIBLE
-                //glide.load(R.drawable.tap_ic_mark_read_white).fitCenter().into(ivMarkRead)
-                //tvMarkRead.setText(R.string.tap_read)
+                //glide.load(io.taptalk.TapTalk.R.drawable.tap_ic_mark_read_white).fitCenter().into(ivMarkRead)
+                //tvMarkRead.setText(io.taptalk.TapTalk.R.string.tap_read)
             }
             else {
                 ivMessageStatus.visibility = View.VISIBLE
                 tvBadgeUnread.visibility = View.GONE
-                //glide.load(R.drawable.tap_ic_mark_unread_white).fitCenter().into(ivMarkRead)
-                //tvMarkRead.setText(R.string.tap_unread)
+                //glide.load(io.taptalk.TapTalk.R.drawable.tap_ic_mark_unread_white).fitCenter().into(ivMarkRead)
+                //tvMarkRead.setText(io.taptalk.TapTalk.R.string.tap_unread)
             }
 
             // Show mention badge

@@ -11,6 +11,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.EMAIL
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.FACEBOOK
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.GOOGLE_BUSINESS
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.INSTAGRAM
+import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.KATA_AI
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.LAUNCHER
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.LINE
 import io.taptalk.taptalklive.Const.TTLConstant.CaseMedium.LINKEDIN
@@ -77,6 +78,9 @@ class TTLChannelLinksAdapter(
                 }
                 EMAIL -> {
                     ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_email))
+                }
+                KATA_AI -> {
+                    ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_kata_ai))
                 }
                 else -> {
                     ivChannelIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ttl_ic_channel_default))

@@ -32,11 +32,13 @@ import io.taptalk.taptalklive.Interface.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.adapter.TTLHomeFaqAdapter
+import io.taptalk.taptalklive.databinding.TtlActivityHomeBinding
 import io.taptalk.taptalklive.helper.TTLUtil
-import kotlinx.android.synthetic.main.ttl_activity_home.rv_home
 import java.io.File
 
 class TTLFaqDetailsActivity : TAPBaseActivity() {
+
+    private lateinit var vb: TtlActivityHomeBinding
 
     companion object {
         fun start(context: Context, scfPath: TTLScfPathModel) {
@@ -44,7 +46,7 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
             intent.putExtra(SCF_PATH, scfPath)
             context.startActivity(intent)
             if (context is Activity) {
-                context.overridePendingTransition(R.anim.tap_slide_left, R.anim.tap_stay)
+                context.overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_slide_left, io.taptalk.TapTalk.R.anim.tap_stay)
             }
         }
     }
@@ -54,7 +56,8 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ttl_activity_home)
+        vb = TtlActivityHomeBinding.inflate(layoutInflater)
+        setContentView(vb.root)
 
         instanceKey = TAPTALK_INSTANCE_KEY
         initView()
@@ -68,7 +71,7 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.tap_stay, R.anim.tap_slide_right)
+        overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
         TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInFaqDetailsTapped(this, intent.getParcelableExtra(SCF_PATH))
     }
 
@@ -85,8 +88,8 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
 
     private fun initView() {
         adapter = TTLHomeFaqAdapter(this, generateAdapterItems(), adapterListener, false)
-        rv_home?.adapter = adapter
-        rv_home?.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
+        vb.rvHome.adapter = adapter
+        vb.rvHome.layoutManager = object : LinearLayoutManager(this, VERTICAL, false) {
             override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
                 try {
                     super.onLayoutChildren(recycler, state)
@@ -96,7 +99,7 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
                 }
             }
         }
-        val messageAnimator = rv_home?.itemAnimator as SimpleItemAnimator?
+        val messageAnimator = vb.rvHome.itemAnimator as SimpleItemAnimator?
         messageAnimator?.supportsChangeAnimations = false
     }
 
@@ -118,7 +121,7 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
             when (intent?.action) {
                 NEW_CASE_CREATED -> {
                     finish()
-                    overridePendingTransition(R.anim.tap_stay, R.anim.tap_stay)
+                    overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_stay)
                 }
                 JSON_TASK_COMPLETED -> {
                     val jsonUrl = intent.getStringExtra(JSON_URL)
@@ -214,11 +217,11 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
 
     private fun showDownloadFileDialog() {
         TapTalkDialog.Builder(this)
-            .setTitle(getString(R.string.tap_error_could_not_find_file))
-            .setMessage(getString(R.string.tap_error_redownload_file))
+            .setTitle(getString(io.taptalk.TapTalk.R.string.tap_error_could_not_find_file))
+            .setMessage(getString(io.taptalk.TapTalk.R.string.tap_error_redownload_file))
             .setCancelable(true)
-            .setPrimaryButtonTitle(getString(R.string.tap_ok))
-            .setSecondaryButtonTitle(getString(R.string.tap_cancel))
+            .setPrimaryButtonTitle(getString(io.taptalk.TapTalk.R.string.tap_ok))
+            .setSecondaryButtonTitle(getString(io.taptalk.TapTalk.R.string.tap_cancel))
             .setPrimaryButtonListener { v: View? ->
                 pendingDownloadMessage?.let { downloadFile(it) }
             }

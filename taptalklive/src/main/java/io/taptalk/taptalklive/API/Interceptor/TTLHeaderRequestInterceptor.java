@@ -2,9 +2,11 @@ package io.taptalk.taptalklive.API.Interceptor;
 
 import android.content.Context;
 import android.provider.Settings;
+import android.util.Log;
 
 import java.io.IOException;
 
+import io.taptalk.TapTalk.Helper.TAPUtils;
 import io.taptalk.taptalklive.Manager.TTLDataManager;
 import io.taptalk.taptalklive.TapTalkLive;
 import okhttp3.Interceptor;
@@ -34,18 +36,22 @@ public class TTLHeaderRequestInterceptor implements Interceptor {
                 .addHeader("Device-Model", android.os.Build.MODEL)
                 .addHeader("Device-OS-Version", deviceOsVersion)
                 .addHeader("Device-Platform", "android")
-                .addHeader("SDK-Version", "2.1.0")
+                .addHeader("SDK-Version", "2.4.4") // FIXME: BuildConfig.VERSION_NAME NOT FOUND IN JITPACK BUILD
                 .addHeader("Secret-Key", TTLDataManager.getInstance().getAppKeySecret())
                 .addHeader("User-Agent", "android")
                 .method(original.method(), original.body())
                 .build();
 
-        if (null == original.headers().get("Authorization")) {
+        if (null == original.headers().get("Authorization") &&
+            null != TTLDataManager.getInstance().getAccessToken() &&
+            !TTLDataManager.getInstance().getAccessToken().isEmpty()
+        ) {
             request = request
                     .newBuilder()
                     .addHeader("Authorization", "Bearer " + TTLDataManager.getInstance().getAccessToken())
                     .build();
         }
+        Log.e(")))))) okhttp", "intercept: " + TAPUtils.toJsonString(request.headers()));
 
         return chain.proceed(request);
     }
