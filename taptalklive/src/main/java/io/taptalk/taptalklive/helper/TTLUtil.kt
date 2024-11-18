@@ -39,18 +39,22 @@ object TTLUtil {
             val entities = ArrayList<TAPMessageEntity>()
             for (caseModel in cases) {
                 TapTalkLive.getCaseMap()[caseModel.tapTalkXCRoomID] = caseModel
-                val lastMessage = TAPEncryptorManager.getInstance().decryptMessage(caseModel.tapTalkRoom.lastMessage)
-                entities.add(TAPMessageEntity.fromMessageModel(lastMessage))
+                if (caseModel.tapTalkRoom.lastMessage != null) {
+                    val lastMessage = TAPEncryptorManager.getInstance().decryptMessage(caseModel.tapTalkRoom.lastMessage)
+                    entities.add(TAPMessageEntity.fromMessageModel(lastMessage))
+                }
             }
-            TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).insertToDatabase(entities, false, object : TAPDatabaseListener<Any?>() {
-                override fun onInsertFinished() {
-                    listener?.onSuccess("Successfully saved messages.")
-                }
+            if (entities.isNotEmpty()) {
+                TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).insertToDatabase(entities, false, object : TAPDatabaseListener<Any?>() {
+                    override fun onInsertFinished() {
+                        listener?.onSuccess("Successfully saved messages.")
+                    }
 
-                override fun onInsertFailed(errorMessage: String) {
-                    listener?.onError(ClientErrorCodes.ERROR_CODE_OTHERS, "Failed to save messages.")
-                }
-            })
+                    override fun onInsertFailed(errorMessage: String) {
+                        listener?.onError(ClientErrorCodes.ERROR_CODE_OTHERS, "Failed to save messages.")
+                    }
+                })
+            }
         }
         else {
             listener?.onSuccess("Result is empty.")
