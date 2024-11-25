@@ -6,7 +6,7 @@ buildscript {
     ext.taptalklive_version_code = 29
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.5.1'
