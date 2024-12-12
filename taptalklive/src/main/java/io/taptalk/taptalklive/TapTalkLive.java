@@ -27,6 +27,9 @@ import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAS
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_IMAGE_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_TEXT_MESSAGE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_BROADCAST_VIDEO_MESSAGE;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CASE_AGENT_CHANGED;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CASE_CREATED;
+import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CASE_DETAILS_UPDATED;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE;
 import static io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REVIEW;
@@ -260,6 +263,9 @@ public class TapTalkLive {
 
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(closeCaseCustomBubble);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reopenCaseCustomBubble);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(caseCreatedCustomBubble);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(caseAgentChangedCustomBubble);
+        TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(caseDetailsUpdatedCustomBubble);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reviewCustomBubble);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).addCustomBubble(reviewSubmittedCustomBubble);
         TapUI.getInstance(TAPTALK_INSTANCE_KEY).removeCustomKeyboardListener(customKeyboardListener);
@@ -650,6 +656,21 @@ public class TapTalkLive {
     private final TTLSystemMessageBubbleClass reopenCaseCustomBubble = new TTLSystemMessageBubbleClass(
             R.layout.ttl_cell_chat_system_message,
             TYPE_REOPEN_CASE, (context, message) -> {}
+    );
+
+    private final TTLSystemMessageBubbleClass caseCreatedCustomBubble = new TTLSystemMessageBubbleClass(
+            R.layout.ttl_cell_chat_system_message,
+            TYPE_CASE_CREATED, (context, message) -> {}
+    );
+
+    private final TTLSystemMessageBubbleClass caseAgentChangedCustomBubble = new TTLSystemMessageBubbleClass(
+            R.layout.ttl_cell_chat_system_message,
+            TYPE_CASE_AGENT_CHANGED, (context, message) -> {}
+    );
+
+    private final TTLSystemMessageBubbleClass caseDetailsUpdatedCustomBubble = new TTLSystemMessageBubbleClass(
+            R.layout.ttl_cell_chat_system_message,
+            TYPE_CASE_DETAILS_UPDATED, (context, message) -> {}
     );
 
     private final TTLReviewChatBubbleClass reviewCustomBubble = new TTLReviewChatBubbleClass(
