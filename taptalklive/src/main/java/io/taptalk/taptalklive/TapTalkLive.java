@@ -818,6 +818,7 @@ public class TapTalkLive {
             @Override
             public void onSuccess(TTLCreateUserResponse response) {
                 if (null != response) {
+                    clearUserData();
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
                     requestAccessToken(response.getTicket(), listener);
                 } else {
