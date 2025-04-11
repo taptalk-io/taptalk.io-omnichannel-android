@@ -95,9 +95,14 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
         if (!vm.showCloseButton) {
             return
         }
-        super.onBackPressed()
-        overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
-        TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped(this)
+        try {
+            super.onBackPressed()
+            overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped(this)
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun applyWindowInsets() {

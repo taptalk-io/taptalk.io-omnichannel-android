@@ -32,9 +32,6 @@ class TTLReviewActivity : TAPBaseActivity() {
     private lateinit var vm: TTLReviewViewModel
     private lateinit var reviewBottomSheetFragment: TTLReviewBottomSheetFragment
 
-    private var pendingRating = 0
-    private var pendingComment = ""
-
     companion object {
         fun start(context: Context, message: TAPMessageModel) {
             val intent = Intent(context, TTLReviewActivity::class.java)
@@ -110,8 +107,8 @@ class TTLReviewActivity : TAPBaseActivity() {
             if (vm.isReviewSubmitting || vm.caseID == -1) {
                 return
             }
-            pendingRating = rating
-            pendingComment = comment
+            vm.pendingRating = rating
+            vm.pendingComment = comment
             vm.isReviewSubmitting = true
             TTLDataManager.getInstance().rateConversation(vm.caseID, rating, comment, reviewDataView)
         }
