@@ -81,6 +81,16 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
         initView()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("topic", selectedTopicIndex)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        selectedTopicIndex = savedInstanceState.getInt("topic", -1)
+    }
+
     override fun onBackPressed() {
         if (!vm.showCloseButton) {
             return
@@ -257,6 +267,10 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
         }
         vb.pbSelectTopicLoading.visibility = View.GONE
         vb.ivSelectTopicDropDown.visibility = View.VISIBLE
+
+        if (selectedTopicIndex > -1 && selectedTopicIndex <= vm.topics.size) {
+            vb.tvTopic.text = vm.topics[selectedTopicIndex]
+        }
     }
 
     private fun showTopicDropdown() {
