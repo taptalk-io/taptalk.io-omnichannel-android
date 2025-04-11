@@ -243,9 +243,10 @@ public class TTLCaseListFragment extends Fragment {
     private void initView() {
         activity = getActivity();
 
-        if (null != activity) {
-            activity.getWindow().setBackgroundDrawable(null);
+        if (null == activity || null == getContext()) {
+            return;
         }
+        activity.getWindow().setBackgroundDrawable(null);
 
         glide = Glide.with(this);
 
@@ -361,7 +362,7 @@ public class TTLCaseListFragment extends Fragment {
     }
 
     private void reloadLocalDataAndUpdateUILogic(boolean isAnimated) {
-        if (null != activity) {
+        if (null != activity && null != getContext()) {
             activity.runOnUiThread(() -> {
                 if (adapter != null) {
                     adapter.setItems(caseLists, false);

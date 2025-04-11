@@ -64,8 +64,14 @@ class TTLReviewActivity : TAPBaseActivity() {
     }
 
     override fun onBackPressed() {
-        setResult(Activity.RESULT_CANCELED)
-        reviewBottomSheetFragment.dismiss()
+        try {
+            setResult(Activity.RESULT_CANCELED)
+            reviewBottomSheetFragment.dismiss()
+            super.onBackPressed()
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun applyWindowInsets() {
@@ -155,7 +161,7 @@ class TTLReviewActivity : TAPBaseActivity() {
             .setPrimaryButtonTitle(getString(R.string.ttl_ok))
             .setPrimaryButtonListener {
                 vm.isReviewSubmitting = false
-                reviewBottomSheetFragment = TTLReviewBottomSheetFragment(reviewBottomSheetListener, pendingRating, pendingComment)
+                reviewBottomSheetFragment = TTLReviewBottomSheetFragment(reviewBottomSheetListener, vm.pendingRating, vm.pendingComment)
                 reviewBottomSheetFragment.show(supportFragmentManager, "")
             }
             .show()
