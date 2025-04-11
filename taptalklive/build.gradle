@@ -12,13 +12,13 @@ if (file("${rootProject.rootDir}/environment.properties").exists()) {
 
 android {
     namespace = "io.taptalk.taptalklive"
-    compileSdk 34
+    compileSdk 35
 
     publishNonDefault true
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
         versionCode taptalklive_version_code
         versionName taptalklive_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -142,7 +142,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // TapTalk
-    api 'com.github.taptalk-io:taptalk.io-android:2.17.0'
+    api 'com.github.taptalk-io:taptalk.io-android:feature~KR-2025-01-24_sdk35-SNAPSHOT'
 }
 
 tasks.register('androidSourcesJar', Jar) {
