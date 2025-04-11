@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
@@ -84,6 +85,10 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
                 }
             }
         }
+    }
+
+    override fun applyWindowInsets() {
+        applyWindowInsets(ContextCompat.getColor(this, R.color.ttlDefaultNavBarBackgroundColor))
     }
 
     private fun initView() {

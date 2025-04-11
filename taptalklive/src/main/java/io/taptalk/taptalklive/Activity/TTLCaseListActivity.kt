@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.R
@@ -41,6 +42,10 @@ class TTLCaseListActivity : TAPBaseActivity() {
         super.onBackPressed()
         overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
         TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCaseListTapped(this)
+    }
+
+    override fun applyWindowInsets() {
+        applyWindowInsets(ContextCompat.getColor(this, R.color.ttlDefaultNavBarBackgroundColor))
     }
 
     private fun initView() {

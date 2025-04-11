@@ -27,6 +27,7 @@ import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
 import io.taptalk.TapTalk.Manager.TapCoreChatRoomManager
 import io.taptalk.TapTalk.Manager.TapUI
 import io.taptalk.TapTalk.Model.TAPRoomModel
+import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse
@@ -46,7 +47,7 @@ import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
 import io.taptalk.taptalklive.adapter.TTLItemDropdownAdapter
 import io.taptalk.taptalklive.databinding.TtlActivityCreateCaseFormBinding
 
-class TTLCreateCaseFormActivity : AppCompatActivity() {
+class TTLCreateCaseFormActivity : TAPBaseActivity() {
 
     private lateinit var vb: TtlActivityCreateCaseFormBinding
     private lateinit var vm: TTLCreateCaseViewModel
@@ -87,6 +88,10 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
         super.onBackPressed()
         overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
         TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped(this)
+    }
+
+    override fun applyWindowInsets() {
+        applyWindowInsets(ContextCompat.getColor(this, R.color.ttlDefaultNavBarBackgroundColor))
     }
 
     private fun initViewModel() {

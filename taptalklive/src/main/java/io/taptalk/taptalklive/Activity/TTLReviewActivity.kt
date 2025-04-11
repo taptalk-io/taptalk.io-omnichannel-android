@@ -12,6 +12,7 @@ import io.taptalk.TapTalk.Helper.TapTalkDialog.DialogType.DEFAULT
 import io.taptalk.TapTalk.Helper.TapTalkDialog.DialogType.ERROR_DIALOG
 import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
+import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
@@ -25,7 +26,7 @@ import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.ViewModel.TTLReviewViewModel
 import io.taptalk.taptalklive.databinding.TtlActivityReviewBinding
 
-class TTLReviewActivity : AppCompatActivity() {
+class TTLReviewActivity : TAPBaseActivity() {
 
     private lateinit var vb: TtlActivityReviewBinding
     private lateinit var vm: TTLReviewViewModel
@@ -65,6 +66,10 @@ class TTLReviewActivity : AppCompatActivity() {
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
         reviewBottomSheetFragment.dismiss()
+    }
+
+    override fun applyWindowInsets() {
+        applyWindowInsets(ContextCompat.getColor(this, R.color.ttlTransparentBlack1980))
     }
 
     private fun initViewModel() {
