@@ -69,7 +69,7 @@ class TTLReviewActivity : TAPBaseActivity() {
     }
 
     override fun applyWindowInsets() {
-        applyWindowInsets(ContextCompat.getColor(this, R.color.ttlTransparentBlack1980))
+        applyWindowInsets(ContextCompat.getColor(this, R.color.ttlTransparentBlack1940))
     }
 
     private fun initViewModel() {
@@ -86,7 +86,7 @@ class TTLReviewActivity : TAPBaseActivity() {
     }
 
     private fun initView() {
-        window?.setBackgroundDrawable(ContextCompat.getDrawable(this@TTLReviewActivity, R.color.ttlTransparentBlack1980))
+        window?.setBackgroundDrawable(ContextCompat.getDrawable(this@TTLReviewActivity, R.color.ttlTransparentBlack1940))
 
         reviewBottomSheetFragment = TTLReviewBottomSheetFragment(reviewBottomSheetListener)
         reviewBottomSheetFragment.show(supportFragmentManager, "")

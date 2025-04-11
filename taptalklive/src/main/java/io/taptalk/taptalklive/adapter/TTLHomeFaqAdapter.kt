@@ -1,6 +1,7 @@
 package io.taptalk.taptalklive.adapter
 
 import android.app.Activity
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
@@ -171,7 +172,13 @@ class TTLHomeFaqAdapter(
                 rvChannelLinks.visibility = View.VISIBLE
                 rvChannelLinks.adapter = channelLinksAdapter
                 if (rvChannelLinks.layoutManager == null) {
-                    rvChannelLinks.layoutManager = object : GridLayoutManager(activity, 5) {
+                    val spanCount = if (activity.resources.configuration.orientation == ORIENTATION_LANDSCAPE) {
+                        12
+                    }
+                    else {
+                        5
+                    }
+                    rvChannelLinks.layoutManager = object : GridLayoutManager(activity, spanCount) {
                         override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
                             try {
                                 super.onLayoutChildren(recycler, state)
