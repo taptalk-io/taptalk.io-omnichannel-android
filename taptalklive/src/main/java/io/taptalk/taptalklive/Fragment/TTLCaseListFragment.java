@@ -529,15 +529,16 @@ public class TTLCaseListFragment extends Fragment {
                 for (HashMap<String, Object> messageMap : response.getMessages()) {
                     try {
                         TAPMessageModel message = TAPEncryptorManager.getInstance().decryptMessage(messageMap);
-                        TAPMessageEntity entity = TAPMessageEntity.fromMessageModel(message);
-                        tempMessage.add(entity);
+                        if (message != null) {
+                            TAPMessageEntity entity = TAPMessageEntity.fromMessageModel(message);
+                            tempMessage.add(entity);
 
-                        // Save undelivered messages to list
-                        if (null == message.getIsDelivered() || (null != message.getIsDelivered() && !message.getIsDelivered())) {
-                            deliveredMessages.add(message);
-                        }
+                            // Save undelivered messages to list
+                            if (null == message.getIsDelivered() || (null != message.getIsDelivered() && !message.getIsDelivered())) {
+                                deliveredMessages.add(message);
+                            }
 
-                        // Update Contact
+                            // Update Contact
 //                        if (message.getUser().getUserID().equals(TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).getActiveUser().getUserID())) {
 //                            // User is self, get other user data from API
 //                            userIds.add(TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).getOtherUserIdFromRoom(message.getRoom().getRoomID()));
@@ -546,8 +547,9 @@ public class TTLCaseListFragment extends Fragment {
 //                            userModels.add(message.getUser());
 //                        }
 
-                        if (null != message.getIsDeleted() && message.getIsDeleted()) {
-                            TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).deletePhysicalFile(entity);
+                            if (null != message.getIsDeleted() && message.getIsDeleted()) {
+                                TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).deletePhysicalFile(entity);
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
