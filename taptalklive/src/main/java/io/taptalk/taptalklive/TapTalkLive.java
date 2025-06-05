@@ -597,6 +597,7 @@ public class TapTalkLive {
                     TTLDataManager.getInstance().saveRefreshTokenExpiry(response.getRefreshTokenExpiry());
                     TTLDataManager.getInstance().saveAccessTokenExpiry(response.getAccessTokenExpiry());
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
+                    TTLApiManager.getInstance().setLoggedOut(false);
                     if (tapTalkLive != null) {
                         TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
                             @Override
@@ -775,29 +776,32 @@ public class TapTalkLive {
                 tapTalkLiveListener
             );
         }
-        else if (tapTalkLive != null) {
-            if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
-                TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
-                TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()
-            ) {
-                tapTalkLive.initializeTapTalkSDK(
-                    TTLDataManager.getInstance().getTapTalkAppKeyID(),
-                    TTLDataManager.getInstance().getTapTalkAppKeySecret(),
-                    TTLDataManager.getInstance().getTapTalkApiUrl()
+        else {
+            if (tapTalkLive != null) {
+                if (TTLDataManager.getInstance().checkTapTalkAppKeyIDAvailable() &&
+                    TTLDataManager.getInstance().checkTapTalkAppKeySecretAvailable() &&
+                    TTLDataManager.getInstance().checkTapTalkApiUrlAvailable()
+                ) {
+                    tapTalkLive.initializeTapTalkSDK(
+                        TTLDataManager.getInstance().getTapTalkAppKeyID(),
+                        TTLDataManager.getInstance().getTapTalkAppKeySecret(),
+                        TTLDataManager.getInstance().getTapTalkApiUrl()
+                    );
+                }
+                else {
+                    tapTalkLive.getProjectConfigs();
+                }
+            }
+
+            if (BuildConfig.DEBUG) {
+                Stetho.initialize(
+                    Stetho.newInitializerBuilder(context)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(context))
+                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(context))
+                        .build()
                 );
             }
-            else {
-                tapTalkLive.getProjectConfigs();
-            }
-        }
-
-        if (BuildConfig.DEBUG) {
-            Stetho.initialize(
-                Stetho.newInitializerBuilder(context)
-                    .enableDumpapp(Stetho.defaultDumperPluginsProvider(context))
-                    .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(context))
-                    .build()
-            );
+            tapTalkLiveListener.onInitializationCompleted();
         }
     }
 

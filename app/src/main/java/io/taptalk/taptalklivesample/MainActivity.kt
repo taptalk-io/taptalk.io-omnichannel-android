@@ -58,6 +58,10 @@ class MainActivity : AppCompatActivity() {
             Log.e(">>>>", "onInitializationFailed: ${error?.message}")
         }
 
+        override fun onTapTalkLiveRefreshTokenExpired() {
+
+        }
+
 //        override fun onNotificationReceived(message: TAPMessageModel?) {
 //            Log.e(">>>>", "onNotificationReceived: ${message?.body}")
 //        }

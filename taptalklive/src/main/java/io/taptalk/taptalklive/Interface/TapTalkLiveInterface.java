@@ -12,6 +12,8 @@ public interface TapTalkLiveInterface {
 
     void onInitializationFailed(TTLErrorModel error);
 
+    void onTapTalkLiveRefreshTokenExpired();
+
     void onNotificationReceived(TAPMessageModel message);
 
     void onCloseButtonInHomePageTapped(Activity activity);
