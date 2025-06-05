@@ -1,8 +1,4 @@
 <resources>
-    <!--Sample App-->
-    <string name="ttl_get_started">Memulai dengan TapTalk.io</string>
-    <string name="ttl_launch_live_chat">Tampilkan live chat</string>
-
     <string name="ttl_home_title">Butuh Bantuan?</string>
     <string name="ttl_home_description">Pilih salah satu channel di bawah atau kirim pesan langsung.</string>
     <string name="ttl_home_channel_description">Pilih salah satu channel untuk memulai</string>

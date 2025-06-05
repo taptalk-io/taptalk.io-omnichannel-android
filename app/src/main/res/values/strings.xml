@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">TapTalkLive</string>
+
+    <string name="ttl_get_started">Get started with TapTalk.io</string>
+    <string name="ttl_initializing_taptalklive">Initializing TapTalkLive</string>
+    <string name="ttl_launch_live_chat">Launch live chat</string>
 </resources>

@@ -1,8 +1,4 @@
 <resources>
-    <!--Sample App-->
-    <string name="ttl_get_started">Get started with TapTalk.io</string>
-    <string name="ttl_launch_live_chat">Launch live chat</string>
-
     <string name="ttl_home_title">Need help with anything?</string>
     <string name="ttl_home_description">Select your preferred channel or message us directly from here.</string>
     <string name="ttl_home_channel_description">Click on one of the channels to get started</string>
