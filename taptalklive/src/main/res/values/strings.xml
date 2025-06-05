@@ -58,6 +58,7 @@
     <string name="ttl_error_field_required">This field is required</string>
     <string name="ttl_error_failed_to_submit">Failed to Submit</string>
     <string name="ttl_error_message_submit_review">There’s an error while submitting, please try to resubmit your rating of this conversation.</string>
+    <string name="ttl_case_created_chat_room_error">Case successfully created, but there was an error while fetching chat room data, please reopen the live chat if it does not show up.</string>
 
     <string name="ttl_rating_0">No Rating</string>
     <string name="ttl_rating_1">Horrible</string>

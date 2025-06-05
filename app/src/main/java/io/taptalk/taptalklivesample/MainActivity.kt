@@ -137,16 +137,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        isInitializing = true
-        vb.tvButtonLaunchLiveChat.text = getString(R.string.ttl_initializing_taptalklive)
-        vb.ivButtonLaunchLiveChat.visibility = View.GONE
-        vb.pbButtonLaunchLiveChat.visibility = View.VISIBLE
+        runOnUiThread {
+            isInitializing = true
+            vb.tvButtonLaunchLiveChat.text = getString(R.string.ttl_initializing_taptalklive)
+            vb.ivButtonLaunchLiveChat.visibility = View.GONE
+            vb.pbButtonLaunchLiveChat.visibility = View.VISIBLE
+        }
     }
 
     private fun hideLoading() {
-        isInitializing = false
-        vb.tvButtonLaunchLiveChat.text = getString(R.string.ttl_launch_live_chat)
-        vb.ivButtonLaunchLiveChat.visibility = View.VISIBLE
-        vb.pbButtonLaunchLiveChat.visibility = View.GONE
+        runOnUiThread {
+            isInitializing = false
+            vb.tvButtonLaunchLiveChat.text = getString(R.string.ttl_launch_live_chat)
+            vb.ivButtonLaunchLiveChat.visibility = View.VISIBLE
+            vb.pbButtonLaunchLiveChat.visibility = View.GONE
+        }
     }
 }

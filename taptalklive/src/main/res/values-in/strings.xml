@@ -56,6 +56,7 @@
     <string name="ttl_error_field_required">Bagian ini diperlukan</string>
     <string name="ttl_error_failed_to_submit">Gagal Mengirim</string>
     <string name="ttl_error_message_submit_review">Terjadi kesalahan saat mengirimkan ulasan, harap coba kirim ulang ulasan Anda untuk percakapan ini.</string>
+    <string name="ttl_case_created_chat_room_error">Pesan berhasil terkirim, tetapi ada terjadi kesalahan saat mengambil data, mohon buka ulang halaman ini bila chat tidak muncul.</string>
 
     <string name="ttl_rating_0">Tidak ada rating</string>
     <string name="ttl_rating_1">Mengecewakan</string>
