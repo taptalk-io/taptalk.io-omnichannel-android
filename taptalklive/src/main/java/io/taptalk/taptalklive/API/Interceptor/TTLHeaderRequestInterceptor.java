@@ -36,7 +36,7 @@ public class TTLHeaderRequestInterceptor implements Interceptor {
                 .addHeader("Device-Model", android.os.Build.MODEL)
                 .addHeader("Device-OS-Version", deviceOsVersion)
                 .addHeader("Device-Platform", "android")
-                .addHeader("SDK-Version", "2.4.4") // FIXME: BuildConfig.VERSION_NAME NOT FOUND IN JITPACK BUILD
+                .addHeader("SDK-Version", "2.4.5") // FIXME: BuildConfig.VERSION_NAME NOT FOUND IN JITPACK BUILD
                 .addHeader("Secret-Key", TTLDataManager.getInstance().getAppKeySecret())
                 .addHeader("User-Agent", "android")
                 .method(original.method(), original.body())

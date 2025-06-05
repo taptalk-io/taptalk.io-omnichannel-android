@@ -2,11 +2,11 @@
 
 buildscript {
     ext.kotlin_version = '1.9.24'
-    ext.taptalklive_version_name = '2.4.4'
+    ext.taptalklive_version_name = '2.4.5'
     ext.taptalklive_version_code = 29
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.5.1'

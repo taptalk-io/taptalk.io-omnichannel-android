@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
@@ -445,8 +446,13 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
                 openCaseChatRoom(response?.caseResponse)
             }
             else {
-                onError(getString(R.string.ttl_error_xc_room_id_empty))
+                Toast.makeText(
+                    TapTalkLive.context,
+                    getString(R.string.ttl_case_created_chat_room_error),
+                    Toast.LENGTH_LONG
+                ).show()
                 sendCaseCreatedBroadcast(response?.caseResponse)
+                finish()
             }
             response?.caseResponse?.let {
                 // Save case to map
@@ -497,7 +503,14 @@ class TTLCreateCaseFormActivity : AppCompatActivity() {
             }
 
             override fun onError(errorCode: String?, errorMessage: String?) {
-                showDefaultErrorDialog(errorMessage)
+                //showDefaultErrorDialog(errorMessage)
+                Toast.makeText(
+                    TapTalkLive.context,
+                    getString(R.string.ttl_case_created_chat_room_error),
+                    Toast.LENGTH_LONG
+                ).show()
+                sendCaseCreatedBroadcast(caseModel)
+                finish()
             }
         })
     }

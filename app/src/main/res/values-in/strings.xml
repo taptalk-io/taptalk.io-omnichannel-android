@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name" translatable="false">TapTalkLive</string>
+
+    <string name="ttl_get_started">Memulai dengan TapTalk.io</string>
+    <string name="ttl_initializing_taptalklive">Menginisialisasi TapTalkLive</string>
+    <string name="ttl_launch_live_chat">Tampilkan live chat</string>
+</resources>
