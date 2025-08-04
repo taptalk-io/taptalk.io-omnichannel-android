@@ -23,10 +23,7 @@ import io.taptalk.taptalklive.API.Model.TTLTopicModel;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
-import io.taptalk.taptalklive.TapTalkLive;
 
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.K_USER;
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ProjectConfigType.CORE;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN_EXPIRY;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACTIVE_USER;
@@ -42,9 +39,6 @@ import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_AUTH_TICKET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TOPICS;
-import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
-
-import android.util.Log;
 
 import java.util.List;
 
@@ -202,21 +196,14 @@ public class TTLDataManager {
      * APP KEY SECRET
      */
     public String getAppKeySecret() {
-//        if (TapTalkLive.getInstance() != null && !TapTalkLive.getInstance().getAppKeySecret().isEmpty()) {
-//            Log.e(">>>>>>>>>>>>>", "getAppKeySecret from taptalklive: " + TapTalkLive.getInstance().getAppKeySecret());
-//            return TapTalkLive.getInstance().getAppKeySecret();
-//        }
-        Log.e(">>>>>>>>>>>>>", "getAppKeySecret from pref: " + getStringPreference(APP_KEY_SECRET));
         return getStringPreference(APP_KEY_SECRET);
     }
 
     public void saveAppKeySecret(String appKeySecret) {
-        Log.e(">>>>>>>>>>>>>", "saveAppKeySecret: " + appKeySecret);
         saveStringPreference(APP_KEY_SECRET, appKeySecret);
     }
 
     public void removeAppKeySecret() {
-        Log.e(">>>>>>>>>>>>>", "removeAppKeySecret: ");
         removePreference(APP_KEY_SECRET);
     }
 
@@ -413,13 +400,11 @@ public class TTLDataManager {
      */
 
     public TTLScfPathModel getScfPath() {
-        Log.e(">>>>>>>>>>>>>", "getScfPath: " + TapPreferenceUtils.getPreference(SCF_PATH, new TypeReference<>() {}));
         return TapPreferenceUtils.getPreference(SCF_PATH, new TypeReference<>() {});
     }
 
     public void saveScfPath(TTLScfPathModel scfPath) {
         TapPreferenceUtils.savePreference(SCF_PATH, scfPath);
-        Log.e(">>>>>>>>>>>>>", "saveScfPath: " + TapPreferenceUtils.getPreference(SCF_PATH, new TypeReference<>() {}));
     }
 
     public void removeScfPath() {
