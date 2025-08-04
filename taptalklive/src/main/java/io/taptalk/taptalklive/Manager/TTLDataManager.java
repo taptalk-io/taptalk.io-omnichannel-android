@@ -1,7 +1,9 @@
 package io.taptalk.taptalklive.Manager;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.orhanobut.hawk.Hawk;
 
+import io.taptalk.TapTalk.Helper.TapPreferenceUtils;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse;
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse;
@@ -21,7 +23,10 @@ import io.taptalk.taptalklive.API.Model.TTLTopicModel;
 import io.taptalk.taptalklive.API.Model.TTLUserModel;
 import io.taptalk.taptalklive.API.Subscriber.TTLDefaultSubscriber;
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView;
+import io.taptalk.taptalklive.TapTalkLive;
 
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.K_USER;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.ProjectConfigType.CORE;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACCESS_TOKEN_EXPIRY;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.ACTIVE_USER;
@@ -37,6 +42,9 @@ import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_APP_KEY_SECRET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TAPTALK_AUTH_TICKET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.TOPICS;
+import static io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY;
+
+import android.util.Log;
 
 import java.util.List;
 
@@ -56,42 +64,43 @@ public class TTLDataManager {
      */
 
     private void saveBooleanPreference(String key, boolean bool) {
-        Hawk.put(key, bool);
+        TapPreferenceUtils.saveBooleanPreference(key, bool);
     }
 
     private void saveStringPreference(String key, String string) {
-        Hawk.put(key, string);
+        TapPreferenceUtils.saveStringPreference(key, string);
     }
 
     private void saveFloatPreference(String key, Float flt) {
-        Hawk.put(key, flt);
+        TapPreferenceUtils.saveFloatPreference(key, flt);
     }
 
     private void saveLongTimestampPreference(String key, Long timestamp) {
-        Hawk.put(key, timestamp);
+        TapPreferenceUtils.saveLongPreference(key, timestamp);
     }
 
     private Boolean getBooleanPreference(String key) {
-        return Hawk.get(key, false);
+        return TapPreferenceUtils.getBooleanPreference(key);
     }
 
     private String getStringPreference(String key) {
-        return Hawk.get(key, "");
+        return TapPreferenceUtils.getStringPreference(key);
     }
 
     private Float getFloatPreference(String key) {
-        return Hawk.get(key, null);
+        return TapPreferenceUtils.getFloatPreference(key);
     }
 
     private Long getLongTimestampPreference(String key) {
-        return Hawk.get(key, 0L);
+        return TapPreferenceUtils.getLongPreference(key);
     }
 
     private Boolean checkPreferenceKeyAvailable(String key) {
-        return Hawk.contains(key);
+        return TapPreferenceUtils.checkPreferenceKeyAvailable(key);
     }
 
     private void removePreference(String key) {
+        TapPreferenceUtils.removePreference(key);
         Hawk.delete(key);
     }
 
@@ -124,21 +133,90 @@ public class TTLDataManager {
         removeTopics();
     }
 
+    public void migratePreferences() {
+        if (Hawk.count() > 0) {
+            if (Hawk.contains(APP_KEY_SECRET)) {
+                saveAppKeySecret(Hawk.get(APP_KEY_SECRET));
+                Hawk.delete(APP_KEY_SECRET);
+            }
+            if (Hawk.contains(AUTH_TICKET)) {
+                saveAuthTicket(Hawk.get(AUTH_TICKET));
+                Hawk.delete(AUTH_TICKET);
+            }
+            if (Hawk.contains(ACCESS_TOKEN)) {
+                saveAccessToken(Hawk.get(ACCESS_TOKEN));
+                Hawk.delete(ACCESS_TOKEN);
+            }
+            if (Hawk.contains(ACCESS_TOKEN_EXPIRY)) {
+                saveAccessTokenExpiry(Hawk.get(ACCESS_TOKEN_EXPIRY));
+                Hawk.delete(ACCESS_TOKEN_EXPIRY);
+            }
+            if (Hawk.contains(REFRESH_TOKEN)) {
+                saveRefreshToken(Hawk.get(REFRESH_TOKEN));
+                Hawk.delete(REFRESH_TOKEN);
+            }
+            if (Hawk.contains(REFRESH_TOKEN_EXPIRY)) {
+                saveRefreshTokenExpiry(Hawk.get(REFRESH_TOKEN_EXPIRY));
+                Hawk.delete(REFRESH_TOKEN_EXPIRY);
+            }
+            if (Hawk.contains(ACTIVE_USER)) {
+                saveActiveUser(Hawk.get(ACTIVE_USER));
+                Hawk.delete(ACTIVE_USER);
+            }
+            if (Hawk.contains(TAPTALK_API_URL)) {
+                saveTapTalkApiUrl(Hawk.get(TAPTALK_API_URL));
+                Hawk.delete(TAPTALK_API_URL);
+            }
+            if (Hawk.contains(TAPTALK_APP_KEY_ID)) {
+                saveTapTalkAppKeyID(Hawk.get(TAPTALK_APP_KEY_ID));
+                Hawk.delete(TAPTALK_APP_KEY_ID);
+            }
+            if (Hawk.contains(TAPTALK_APP_KEY_SECRET)) {
+                saveTapTalkAppKeySecret(Hawk.get(TAPTALK_APP_KEY_SECRET));
+                Hawk.delete(TAPTALK_APP_KEY_SECRET);
+            }
+            if (Hawk.contains(TAPTALK_AUTH_TICKET)) {
+                saveTapTalkAuthTicket(Hawk.get(TAPTALK_AUTH_TICKET));
+                Hawk.delete(TAPTALK_AUTH_TICKET);
+            }
+            if (Hawk.contains(CHANNEL_LINKS)) {
+                saveChannelLinks(Hawk.get(CHANNEL_LINKS));
+                Hawk.delete(CHANNEL_LINKS);
+            }
+            if (Hawk.contains(SCF_PATH)) {
+                saveScfPath(Hawk.get(SCF_PATH));
+                Hawk.delete(SCF_PATH);
+            }
+            if (Hawk.contains(TOPICS)) {
+                saveTopics(Hawk.get(TOPICS));
+                Hawk.delete(TOPICS);
+            }
+            if (Hawk.contains(CASE_EXISTS)) {
+                saveActiveUserHasExistingCase(Hawk.get(CASE_EXISTS));
+                Hawk.delete(CASE_EXISTS);
+            }
+        }
+    }
+
     /**
      * APP KEY SECRET
      */
     public String getAppKeySecret() {
-//        return !TapTalkLive.getAppKeySecret().isEmpty() ?
-//                TapTalkLive.getAppKeySecret() :
-//                getStringPreference(APP_KEY_SECRET);
+//        if (TapTalkLive.getInstance() != null && !TapTalkLive.getInstance().getAppKeySecret().isEmpty()) {
+//            Log.e(">>>>>>>>>>>>>", "getAppKeySecret from taptalklive: " + TapTalkLive.getInstance().getAppKeySecret());
+//            return TapTalkLive.getInstance().getAppKeySecret();
+//        }
+        Log.e(">>>>>>>>>>>>>", "getAppKeySecret from pref: " + getStringPreference(APP_KEY_SECRET));
         return getStringPreference(APP_KEY_SECRET);
     }
 
     public void saveAppKeySecret(String appKeySecret) {
+        Log.e(">>>>>>>>>>>>>", "saveAppKeySecret: " + appKeySecret);
         saveStringPreference(APP_KEY_SECRET, appKeySecret);
     }
 
     public void removeAppKeySecret() {
+        Log.e(">>>>>>>>>>>>>", "removeAppKeySecret: ");
         removePreference(APP_KEY_SECRET);
     }
 
@@ -231,11 +309,11 @@ public class TTLDataManager {
     }
 
     public TTLUserModel getActiveUser() {
-        return Hawk.get(ACTIVE_USER, null);
+        return TapPreferenceUtils.getPreference(ACTIVE_USER, new TypeReference<>() {});
     }
 
     public void saveActiveUser(TTLUserModel user) {
-        Hawk.put(ACTIVE_USER, user);
+        TapPreferenceUtils.savePreference(ACTIVE_USER, user);
     }
 
     public void removeActiveUser() {
@@ -319,11 +397,11 @@ public class TTLDataManager {
      */
 
     public List<TTLChannelLinkModel> getChannelLinks() {
-        return Hawk.get(CHANNEL_LINKS, null);
+        return TapPreferenceUtils.getPreference(CHANNEL_LINKS, new TypeReference<>() {});
     }
 
     public void saveChannelLinks(List<TTLChannelLinkModel> channelLinks) {
-        Hawk.put(CHANNEL_LINKS, channelLinks);
+        TapPreferenceUtils.savePreference(CHANNEL_LINKS, channelLinks);
     }
 
     public void removeChannelLinks() {
@@ -335,11 +413,13 @@ public class TTLDataManager {
      */
 
     public TTLScfPathModel getScfPath() {
-        return Hawk.get(SCF_PATH, null);
+        Log.e(">>>>>>>>>>>>>", "getScfPath: " + TapPreferenceUtils.getPreference(SCF_PATH, new TypeReference<>() {}));
+        return TapPreferenceUtils.getPreference(SCF_PATH, new TypeReference<>() {});
     }
 
     public void saveScfPath(TTLScfPathModel scfPath) {
-        Hawk.put(SCF_PATH, scfPath);
+        TapPreferenceUtils.savePreference(SCF_PATH, scfPath);
+        Log.e(">>>>>>>>>>>>>", "saveScfPath: " + TapPreferenceUtils.getPreference(SCF_PATH, new TypeReference<>() {}));
     }
 
     public void removeScfPath() {
@@ -347,15 +427,15 @@ public class TTLDataManager {
     }
 
     /**
-     * CHANNEL LINKS
+     * TOPICS
      */
 
     public List<TTLTopicModel> getTopics() {
-        return Hawk.get(TOPICS, null);
+        return TapPreferenceUtils.getPreference(TOPICS, new TypeReference<>() {});
     }
 
     public void saveTopics(List<TTLTopicModel> topics) {
-        Hawk.put(TOPICS, topics);
+        TapPreferenceUtils.savePreference(TOPICS, topics);
     }
 
     public void removeTopics() {
