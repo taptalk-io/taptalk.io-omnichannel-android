@@ -56,8 +56,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
             android:src="@drawable/ttl_ic_arrow_top_right"
-            android:tint="@color/ttlButtonIconColor" />
+            app:tint="@color/ttlButtonIconColor" />
 
         <TextView
             android:id="@+id/tv_button_launch_live_chat"
@@ -65,11 +66,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
             android:gravity="center"
             android:text="@string/ttl_launch_live_chat" />
 
+        <ProgressBar
+            android:id="@+id/pb_button_launch_live_chat"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="4dp"
+            android:indeterminateTint="@color/tapWhite"
+            android:visibility="gone" />
+
     </LinearLayout>
+
+    <io.taptalk.TapTalk.Helper.TapCustomSnackbarView
+        android:id="@+id/tap_custom_snackbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="48dp"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

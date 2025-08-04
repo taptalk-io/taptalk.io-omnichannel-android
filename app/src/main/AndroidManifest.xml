@@ -3,14 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.taptalk.taptalklivesample">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <!--Permission for media messages-->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <queries>
+        <!-- Camera -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <!-- Gallery -->
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
 
     <application
         android:name="SampleApplication"

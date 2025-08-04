@@ -4,6 +4,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import io.taptalk.TapTalk.Exception.TAPApiRefreshTokenRunningException;
+import io.taptalk.TapTalk.Exception.TAPApiSessionExpiredException;
+import io.taptalk.TapTalk.Exception.TAPAuthException;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateCaseRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLGetCaseListRequest;
@@ -39,6 +42,8 @@ import rx.schedulers.Schedulers;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.HttpResponseStatusCode.RESPONSE_SUCCESS;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.HttpResponseStatusCode.UNAUTHORIZED;
 
+import java.util.concurrent.TimeUnit;
+
 public class TTLApiManager {
     private static final String TAG = TTLApiManager.class.getSimpleName();
 
@@ -47,8 +52,8 @@ public class TTLApiManager {
     private TTLApiService ttlApiService;
     private TTLRefreshTokenApiService ttlRefreshTokenApiService;
     private static TTLApiManager instance;
-    private int isShouldRefreshToken = 0;
-    private boolean isLoggedOut = false;
+    private boolean isLoggedOut = true;
+    private boolean isRefreshTokenRunning = false;
 
     public static TTLApiManager getInstance() {
         return instance == null ? instance = new TTLApiManager() : instance;
@@ -105,29 +110,45 @@ public class TTLApiManager {
 
     private <T> Observable validateResponse(T t) {
         TTLBaseResponse br = (TTLBaseResponse) t;
-
         int code = br.getStatus();
-        if (BuildConfig.DEBUG && code != 200)
-            Log.d(TAG, "validateResponse: XX HAS ERROR XX: __error_code:" + code);
 
-        if (code == 200 && BuildConfig.DEBUG) {
-            Log.d(TAG, "validateResponse: √√ NO ERROR √√");
-        } else if (code == 401 && 0 < isShouldRefreshToken && !isLoggedOut) {
-            return raiseApiRefreshTokenRunningException();
-        } else if (code == 401 && !isLoggedOut) {
-            isShouldRefreshToken++;
-            return raiseApiSessionExpiredException(br);
+        if (code == RESPONSE_SUCCESS && BuildConfig.DEBUG) {
+            Log.d(TAG, "√√ API CALL SUCCESS √√");
+            return Observable.just(t);
         }
-        isShouldRefreshToken = 0;
+        else if (code == UNAUTHORIZED) {
+            Log.e(TAG, String.format(String.format("[Err %s - %s] %s", br.getStatus(), br.getError().getCode(), br.getError().getMessage()), code));
+            Log.e(TAG, "validateResponse: isLoggedOut " + isLoggedOut);
+            if (!isLoggedOut) {
+                if (isRefreshTokenRunning) {
+                    Log.e(TAG, "validateResponse: raiseApiRefreshTokenRunningException");
+                    return raiseApiRefreshTokenRunningException();
+                }
+                else {
+                    Log.e(TAG, "validateResponse: raiseApiSessionExpiredException");
+                    return raiseApiSessionExpiredException(br);
+                }
+            }
+        }
+        else {
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG, String.format(String.format("[%s - %s] %s", br.getStatus(), br.getError().getCode(), br.getError().getMessage()), code));
+            }
+            return Observable.just(t);
+        }
         return Observable.just(t);
     }
 
     private Observable validateException(Throwable t) {
-        Log.e(TAG, "call: retryWhen(), cause: " + t.getMessage());
-        return (t instanceof TTLApiSessionExpiredException && 1 == isShouldRefreshToken && !isLoggedOut) ? refreshAccessToken() :
-                ((t instanceof TTLApiRefreshTokenRunningException || (t instanceof TTLApiSessionExpiredException && 1 < isShouldRefreshToken)) && !isLoggedOut) ?
-                        Observable.just(Boolean.TRUE) : Observable.error(t);
-//        return Observable.just(true);
+        if (t instanceof TAPApiSessionExpiredException && !isRefreshTokenRunning && !isLoggedOut) {
+            return refreshAccessToken();
+        }
+        else if (t instanceof TAPApiRefreshTokenRunningException || (t instanceof TAPApiSessionExpiredException && isRefreshTokenRunning) && !isLoggedOut) {
+            return Observable.just(Boolean.TRUE).delay(1000, TimeUnit.MILLISECONDS);
+        }
+        else {
+            return Observable.error(t);
+        }
     }
 
     private Observable<Throwable> raiseApiSessionExpiredException(TTLBaseResponse br) {
@@ -139,20 +160,31 @@ public class TTLApiManager {
     }
 
     public Observable<TTLBaseResponse<TTLRequestAccessTokenResponse>> refreshAccessToken() {
-        return ttlRefreshTokenApiService.refreshAccessToken("Bearer " + TTLDataManager.getInstance().getRefreshToken())
-                .compose(this.applyIOMainThreadSchedulers())
-                .doOnNext(response -> {
-                    if (RESPONSE_SUCCESS == response.getStatus()) {
-                        updateSession(response);
-                        Observable.error(new TTLAuthException(response.getError().getMessage()));
-                    } else if (UNAUTHORIZED == response.getStatus()) {
-                        TapTalkLive.clearUserData();
-                    } else {
-                        Observable.error(new TTLAuthException(response.getError().getMessage()));
+        final String lastRefreshToken = TTLDataManager.getInstance().getRefreshToken();
+        isRefreshTokenRunning = true;
+        if (BuildConfig.DEBUG) {
+            Log.e("-->", "Refresh Token is Running");
+        }
+        return ttlRefreshTokenApiService.refreshAccessToken(String.format("Bearer %s", TTLDataManager.getInstance().getRefreshToken()))
+            .compose(this.applyIOMainThreadSchedulers())
+            .doOnNext(response -> {
+                if (RESPONSE_SUCCESS == response.getStatus()) {
+                    updateSession(response);
+                    Observable.error(new TAPAuthException(response.getError().getMessage()));
+                }
+                else if (UNAUTHORIZED == response.getStatus() && lastRefreshToken.equals(TTLDataManager.getInstance().getRefreshToken())) {
+                    if (null != TapTalkLive.getInstance()) {
+                        TapTalkLive.getInstance().tapTalkLiveListener.onTapTalkLiveRefreshTokenExpired();
                     }
-                }).doOnError(throwable -> {
+                    TapTalkLive.clearUserData();
+                }
+                else {
+                    Observable.error(new TAPAuthException(response.getError().getMessage()));
+                }
+            })
+            .doOnError(throwable -> {
 
-                });
+            });
     }
 
     private void updateSession(TTLBaseResponse<TTLRequestAccessTokenResponse> r) {
