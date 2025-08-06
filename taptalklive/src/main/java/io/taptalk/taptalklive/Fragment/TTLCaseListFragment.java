@@ -115,12 +115,15 @@ public class TTLCaseListFragment extends Fragment {
         bindViews(view);
         initView();
         viewLoadedSequence();
-        TAPBroadcastManager.register(activity, roomListBroadcastReceiver,
-                REFRESH_TOKEN_RENEWED,
-                RELOAD_ROOM_LIST,
-                CLEAR_ROOM_LIST_BADGE,
-                CLEAR_ROOM_LIST,
-                OPEN_CHAT);
+        TAPBroadcastManager.register(
+            activity,
+            roomListBroadcastReceiver,
+            REFRESH_TOKEN_RENEWED,
+            RELOAD_ROOM_LIST,
+            CLEAR_ROOM_LIST_BADGE,
+            CLEAR_ROOM_LIST,
+            OPEN_CHAT
+        );
     }
 
     @Override
