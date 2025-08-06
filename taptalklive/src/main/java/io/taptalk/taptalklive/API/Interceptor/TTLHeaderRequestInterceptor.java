@@ -52,9 +52,9 @@ public class TTLHeaderRequestInterceptor implements Interceptor {
                     .addHeader("Authorization", "Bearer " + TTLDataManager.getInstance().getAccessToken())
                     .build();
         }
-        if (BuildConfig.DEBUG) {
-            Log.e(")))))) okhttp", "intercept: " + TAPUtils.toJsonString(request.headers()));
-        }
+//        if (BuildConfig.DEBUG) {
+//            Log.e(")))))) okhttp", "intercept: " + TAPUtils.toJsonString(request.headers()));
+//        }
 
         return chain.proceed(request);
     }
