@@ -4,9 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import io.taptalk.TapTalk.Exception.TAPApiRefreshTokenRunningException;
-import io.taptalk.TapTalk.Exception.TAPApiSessionExpiredException;
-import io.taptalk.TapTalk.Exception.TAPAuthException;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateCaseRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLCreateUserRequest;
 import io.taptalk.taptalklive.API.Model.RequestModel.TTLGetCaseListRequest;
@@ -112,13 +109,16 @@ public class TTLApiManager {
         TTLBaseResponse br = (TTLBaseResponse) t;
         int code = br.getStatus();
 
+        if (code == RESPONSE_SUCCESS && isRefreshTokenRunning) {
+            isRefreshTokenRunning = false;
+        }
+
         if (code == RESPONSE_SUCCESS && BuildConfig.DEBUG) {
             Log.d(TAG, "√√ API CALL SUCCESS √√");
             return Observable.just(t);
         }
         else if (code == UNAUTHORIZED) {
             Log.e(TAG, String.format(String.format("[Err %s - %s] %s", br.getStatus(), br.getError().getCode(), br.getError().getMessage()), code));
-            Log.e(TAG, "validateResponse: isLoggedOut " + isLoggedOut);
             if (!isLoggedOut) {
                 if (isRefreshTokenRunning) {
                     Log.e(TAG, "validateResponse: raiseApiRefreshTokenRunningException");
@@ -140,10 +140,10 @@ public class TTLApiManager {
     }
 
     private Observable validateException(Throwable t) {
-        if (t instanceof TAPApiSessionExpiredException && !isRefreshTokenRunning && !isLoggedOut) {
+        if (t instanceof TTLApiSessionExpiredException && !isRefreshTokenRunning && !isLoggedOut) {
             return refreshAccessToken();
         }
-        else if (t instanceof TAPApiRefreshTokenRunningException || (t instanceof TAPApiSessionExpiredException && isRefreshTokenRunning) && !isLoggedOut) {
+        else if (t instanceof TTLApiRefreshTokenRunningException || (t instanceof TTLApiSessionExpiredException && isRefreshTokenRunning) && !isLoggedOut) {
             return Observable.just(Boolean.TRUE).delay(1000, TimeUnit.MILLISECONDS);
         }
         else {
@@ -169,17 +169,26 @@ public class TTLApiManager {
             .compose(this.applyIOMainThreadSchedulers())
             .doOnNext(response -> {
                 if (RESPONSE_SUCCESS == response.getStatus()) {
+                    if (BuildConfig.DEBUG) {
+                        Log.e(TAG, "refreshAccessToken: RESPONSE_SUCCESS");
+                    }
                     updateSession(response);
-                    Observable.error(new TAPAuthException(response.getError().getMessage()));
+                    Observable.error(new TTLAuthException(response.getError().getMessage()));
                 }
                 else if (UNAUTHORIZED == response.getStatus() && lastRefreshToken.equals(TTLDataManager.getInstance().getRefreshToken())) {
                     if (null != TapTalkLive.getInstance()) {
+                        if (BuildConfig.DEBUG) {
+                            Log.e(TAG, "refreshAccessToken: UNAUTHORIZED - onTapTalkLiveRefreshTokenExpired");
+                        }
                         TapTalkLive.getInstance().tapTalkLiveListener.onTapTalkLiveRefreshTokenExpired();
                     }
                     TapTalkLive.clearUserData();
                 }
                 else {
-                    Observable.error(new TAPAuthException(response.getError().getMessage()));
+                    if (BuildConfig.DEBUG) {
+                        Log.e(TAG, "refreshAccessToken: AuthException");
+                    }
+                    Observable.error(new TTLAuthException(response.getError().getMessage()));
                 }
             })
             .doOnError(throwable -> {
