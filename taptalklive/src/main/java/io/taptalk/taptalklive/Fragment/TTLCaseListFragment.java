@@ -1,13 +1,13 @@
 package io.taptalk.taptalklive.Fragment;
 
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.CLEAR_ROOM_LIST;
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.CLEAR_ROOM_LIST_BADGE;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.BroadcastEvent.CLEAR_ROOM_LIST;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.BroadcastEvent.CLEAR_ROOM_LIST_BADGE;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.Extras.MESSAGE;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.Extras.ROOM_ID;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.MessageType.TYPE_SYSTEM_MESSAGE;
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.OPEN_CHAT;
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.REFRESH_TOKEN_RENEWED;
-import static io.taptalk.TapTalk.Const.TAPDefaultConstant.RELOAD_ROOM_LIST;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.BroadcastEvent.OPEN_CHAT;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.BroadcastEvent.REFRESH_TOKEN_RENEWED;
+import static io.taptalk.TapTalk.Const.TAPDefaultConstant.BroadcastEvent.RELOAD_ROOM_LIST;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.SystemMessageAction.UPDATE_ROOM;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.SystemMessageAction.UPDATE_USER;
 import static io.taptalk.TapTalk.Const.TAPDefaultConstant.TYPING_INDICATOR_TIMEOUT;

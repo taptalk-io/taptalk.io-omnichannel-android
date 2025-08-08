@@ -142,7 +142,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // TapTalk
-    api 'com.github.taptalk-io:taptalk.io-android:feature~KR-2025-07-22_sdk35v3-SNAPSHOT'
+    api 'com.github.taptalk-io:taptalk.io-android:feature~KR-2025-08-07_sdk35v4-SNAPSHOT'
 }
 
 tasks.register('androidSourcesJar', Jar) {
