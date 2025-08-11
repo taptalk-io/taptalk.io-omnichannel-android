@@ -259,7 +259,7 @@ public class TTLCaseListFragment extends Fragment {
                 try {
                     super.onLayoutChildren(recycler, state);
                 }
-                catch (IndexOutOfBoundsException e) {
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -346,20 +346,24 @@ public class TTLCaseListFragment extends Fragment {
     }
 
     private void reloadLocalDataAndUpdateUILogic(boolean isAnimated) {
-        if (null != activity && null != getContext()) {
-            activity.runOnUiThread(() -> {
-                if (adapter != null) {
-                    adapter.setItems(vm.getCaseLists(), false);
-                    while (rvCaseList.getItemDecorationCount() > 0) {
-                        rvCaseList.removeItemDecorationAt(0);
-                    }
-                    rvCaseList.addItemDecoration(new TAPVerticalDecoration(0, TAPUtils.dpToPx(getResources(), 16f), adapter.getItemCount() - 1));
-                }
-                if (!TAPRoomListViewModel.isShouldNotLoadFromAPI(TAPTALK_INSTANCE_KEY)) {
-                    fetchDataFromAPI();
-                }
-            });
+        if (null == activity || null == getContext()) {
+            return;
         }
+        activity.runOnUiThread(() -> {
+            if (null == activity || null == getContext()) {
+                return;
+            }
+            if (adapter != null) {
+                adapter.setItems(vm.getCaseLists(), false);
+                while (rvCaseList.getItemDecorationCount() > 0) {
+                    rvCaseList.removeItemDecorationAt(0);
+                }
+                rvCaseList.addItemDecoration(new TAPVerticalDecoration(0, TAPUtils.dpToPx(getResources(), 16f), adapter.getItemCount() - 1));
+            }
+            if (!TAPRoomListViewModel.isShouldNotLoadFromAPI(TAPTALK_INSTANCE_KEY)) {
+                fetchDataFromAPI();
+            }
+        });
     }
 
     private void processMessageFromSocket(TAPMessageModel message) {
@@ -767,7 +771,9 @@ public class TTLCaseListFragment extends Fragment {
     }
 
     private void addSocketListener() {
-        if (TapTalk.getTapTalkSocketConnectionMode(TAPTALK_INSTANCE_KEY) == TapTalk.TapTalkSocketConnectionMode.CONNECT_IF_NEEDED) {
+        if (TapTalk.getTapTalkInstance(TAPTALK_INSTANCE_KEY) != null &&
+            TapTalk.getTapTalkSocketConnectionMode(TAPTALK_INSTANCE_KEY) == TapTalk.TapTalkSocketConnectionMode.CONNECT_IF_NEEDED
+        ) {
             socketListener = new TAPSocketListener() {
                 @Override
                 public void onSocketDisconnected() {
