@@ -16,8 +16,8 @@
 
     <ImageView
         android:id="@+id/iv_button_close"
-        android:layout_width="?android:attr/actionBarSize"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:background="?attr/actionBarItemBackground"
         android:padding="16dp"
         android:src="@drawable/ttl_ic_close_grey"

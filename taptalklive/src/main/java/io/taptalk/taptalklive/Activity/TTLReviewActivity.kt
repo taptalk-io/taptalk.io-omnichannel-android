@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import io.taptalk.TapTalk.Helper.TapTalkDialog
@@ -12,6 +11,7 @@ import io.taptalk.TapTalk.Helper.TapTalkDialog.DialogType.DEFAULT
 import io.taptalk.TapTalk.Helper.TapTalkDialog.DialogType.ERROR_DIALOG
 import io.taptalk.TapTalk.Manager.TAPNetworkStateManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
+import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCommonResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
@@ -25,14 +25,11 @@ import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.ViewModel.TTLReviewViewModel
 import io.taptalk.taptalklive.databinding.TtlActivityReviewBinding
 
-class TTLReviewActivity : AppCompatActivity() {
+class TTLReviewActivity : TAPBaseActivity() {
 
     private lateinit var vb: TtlActivityReviewBinding
     private lateinit var vm: TTLReviewViewModel
     private lateinit var reviewBottomSheetFragment: TTLReviewBottomSheetFragment
-
-    private var pendingRating = 0
-    private var pendingComment = ""
 
     companion object {
         fun start(context: Context, message: TAPMessageModel) {
@@ -63,8 +60,18 @@ class TTLReviewActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        setResult(Activity.RESULT_CANCELED)
-        reviewBottomSheetFragment.dismiss()
+        try {
+            setResult(Activity.RESULT_CANCELED)
+            reviewBottomSheetFragment.dismiss()
+            super.onBackPressed()
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun applyWindowInsets() {
+        applyWindowInsets(ContextCompat.getColor(this, R.color.ttlTransparentBlack1940))
     }
 
     private fun initViewModel() {
@@ -81,7 +88,7 @@ class TTLReviewActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        window?.setBackgroundDrawable(ContextCompat.getDrawable(this@TTLReviewActivity, R.color.ttlTransparentBlack1980))
+        window?.setBackgroundDrawable(ContextCompat.getDrawable(this@TTLReviewActivity, R.color.ttlTransparentBlack1940))
 
         reviewBottomSheetFragment = TTLReviewBottomSheetFragment(reviewBottomSheetListener)
         reviewBottomSheetFragment.show(supportFragmentManager, "")
@@ -99,8 +106,8 @@ class TTLReviewActivity : AppCompatActivity() {
             if (vm.isReviewSubmitting || vm.caseID == -1) {
                 return
             }
-            pendingRating = rating
-            pendingComment = comment
+            vm.pendingRating = rating
+            vm.pendingComment = comment
             vm.isReviewSubmitting = true
             TTLDataManager.getInstance().rateConversation(vm.caseID, rating, comment, reviewDataView)
         }
@@ -150,7 +157,7 @@ class TTLReviewActivity : AppCompatActivity() {
             .setPrimaryButtonTitle(getString(R.string.ttl_ok))
             .setPrimaryButtonListener {
                 vm.isReviewSubmitting = false
-                reviewBottomSheetFragment = TTLReviewBottomSheetFragment(reviewBottomSheetListener, pendingRating, pendingComment)
+                reviewBottomSheetFragment = TTLReviewBottomSheetFragment(reviewBottomSheetListener, vm.pendingRating, vm.pendingComment)
                 reviewBottomSheetFragment.show(supportFragmentManager, "")
             }
             .show()

@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
@@ -83,9 +84,19 @@ class TTLHomeActivity : TAPBaseActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_down)
-        TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInHomePageTapped(this)
+        try {
+            super.onBackPressed()
+            overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_down)
+            TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInHomePageTapped(this)
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    override fun applyWindowInsets() {
+        applyWindowInsets(ContextCompat.getColor(this, R.color.ttlDefaultNavBarBackgroundColor))
     }
 
     private fun initView() {

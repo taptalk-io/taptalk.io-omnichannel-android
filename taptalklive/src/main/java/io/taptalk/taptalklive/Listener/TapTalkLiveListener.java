@@ -33,6 +33,11 @@ public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
     }
 
     @Override
+    public void onTapTalkLiveRefreshTokenExpired() {
+
+    }
+
+    @Override
     public void onNotificationReceived(TAPMessageModel message) {
         TapTalk.showTapTalkNotification(TAPTALK_INSTANCE_KEY, message);
     }

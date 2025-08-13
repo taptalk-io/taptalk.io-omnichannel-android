@@ -1,9 +1,10 @@
 package io.taptalk.taptalklivesample
 
 import android.os.Bundle
+import androidx.core.content.ContextCompat
+import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import io.taptalk.TapTalk.Helper.TapCustomSnackbarView
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener
@@ -12,7 +13,7 @@ import io.taptalk.taptalklivesample.BuildConfig.GOOGLE_MAPS_API_KEY
 import io.taptalk.taptalklivesample.BuildConfig.TAPLIVE_SDK_APP_KEY_SECRET
 import io.taptalk.taptalklivesample.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : TAPBaseActivity() {
 
     private lateinit var vb: ActivityMainBinding
 
@@ -26,6 +27,10 @@ class MainActivity : AppCompatActivity() {
 
         initTapTalkLive()
         vb.llButtonLaunchLiveChat.setOnClickListener { openTapTalkLiveView() }
+    }
+
+    override fun applyWindowInsets() {
+        applyWindowInsets(ContextCompat.getColor(this, io.taptalk.taptalklive.R.color.ttlDefaultBackgroundColor))
     }
 
     private fun initTapTalkLive() {

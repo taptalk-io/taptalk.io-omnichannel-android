@@ -7,8 +7,17 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
 import android.text.TextWatcher
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
@@ -20,7 +29,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.Form.REVIEW_CHARACTER_LIMIT
 import io.taptalk.taptalklive.R
 
 class TTLReviewBottomSheetFragment(
-    private val reviewBottomSheetListener: ReviewBottomSheetListener,
+    private val reviewBottomSheetListener: ReviewBottomSheetListener?,
     private var rating: Int = 0,
     private val comment: String = ""
 ) : BottomSheetDialogFragment() {
@@ -43,6 +52,8 @@ class TTLReviewBottomSheetFragment(
 
 //    private var rating = 0
 
+    constructor() : this(null, 0, "")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
@@ -56,6 +67,10 @@ class TTLReviewBottomSheetFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (reviewBottomSheetListener == null) {
+            dismiss()
+        }
 
         clReviewLayoutContainer = view.findViewById(R.id.cl_review_layout_container)
         clCommentError = view.findViewById(R.id.cl_comment_error)
@@ -103,7 +118,7 @@ class TTLReviewBottomSheetFragment(
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        reviewBottomSheetListener.onBottomSheetCollapsed()
+        reviewBottomSheetListener?.onBottomSheetCollapsed()
     }
 
     private fun updateRating(rating: Int) {
@@ -287,7 +302,7 @@ class TTLReviewBottomSheetFragment(
             etReviewComment.background = ContextCompat.getDrawable(it, R.drawable.ttl_bg_text_field_disabled)
         }
         pbButtonSubmitReviewLoading.visibility = View.VISIBLE
-        reviewBottomSheetListener.onSubmitReviewButtonTapped(rating, etReviewComment.text.toString())
+        reviewBottomSheetListener?.onSubmitReviewButtonTapped(rating, etReviewComment.text.toString())
     }
 
     fun onSubmitReviewFailed() {

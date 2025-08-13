@@ -56,6 +56,7 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.facebook.stetho.Stetho;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
@@ -145,6 +146,7 @@ public class TapTalkLive {
     ) {
         tapTalkLive = this;
         TapTalkLive.context = appContext;
+        TapTalk.appContext = appContext; // Init app context for preferences before TapTalk is initialized
 
         // Init Hawk for preference
         if (!Hawk.isBuilt()) {
@@ -155,8 +157,10 @@ public class TapTalkLive {
                 Hawk.init(appContext).build();
             }
         }
+        TTLDataManager.getInstance().migratePreferences();
 
         TTLDataManager.getInstance().saveAppKeySecret(appKeySecret);
+
 //        TTLApiManager.setApiBaseUrl(generateApiBaseUrl(TAPLIVE_SDK_BASE_URL));
         // FIXME: TAPLIVE_SDK_BASE_URL NOT FOUND IN BUILD CONFIG WHEN BUILDING JITPACK LIBRARY
 //        if (BuildConfig.BUILD_TYPE.equals("release")) {
@@ -597,7 +601,6 @@ public class TapTalkLive {
                     TTLDataManager.getInstance().saveRefreshTokenExpiry(response.getRefreshTokenExpiry());
                     TTLDataManager.getInstance().saveAccessTokenExpiry(response.getAccessTokenExpiry());
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
-                    TTLApiManager.getInstance().setLoggedOut(false);
                     if (tapTalkLive != null) {
                         TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
                             @Override
@@ -1248,7 +1251,6 @@ public class TapTalkLive {
 
     public static void clearUserData() {
         TTLDataManager.getInstance().deleteUserPreferences();
-        TTLApiManager.getInstance().setLoggedOut(true);
         TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
         if (tapTalkLive != null) {
             tapTalkLive.isTapTalkInitialized = false;
@@ -1261,7 +1263,6 @@ public class TapTalkLive {
         tapTalkLive = null;
         isTapTalkLiveInitialized = false;
         TTLDataManager.getInstance().deleteAllPreference();
-        TTLApiManager.getInstance().setLoggedOut(true);
         TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
     }
 }
