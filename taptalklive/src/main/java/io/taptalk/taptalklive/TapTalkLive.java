@@ -180,10 +180,6 @@ public class TapTalkLive {
             TTLApiManager.setApiBaseUrl(generateApiBaseUrl(releaseBaseApiUrl));
         }
 
-        if (TTLDataManager.getInstance().checkActiveUserExists()) {
-            TTLApiManager.getInstance().setLoggedOut(false);
-        }
-
         //this.appKeySecret = appKeySecret;
         this.clientAppIcon = clientAppIcon;
         this.clientAppName = clientAppName;
@@ -605,7 +601,6 @@ public class TapTalkLive {
                     TTLDataManager.getInstance().saveRefreshTokenExpiry(response.getRefreshTokenExpiry());
                     TTLDataManager.getInstance().saveAccessTokenExpiry(response.getAccessTokenExpiry());
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
-                    TTLApiManager.getInstance().setLoggedOut(false);
                     if (tapTalkLive != null) {
                         TTLDataManager.getInstance().getCaseList(new TTLDefaultDataView<>() {
                             @Override
@@ -1256,7 +1251,6 @@ public class TapTalkLive {
 
     public static void clearUserData() {
         TTLDataManager.getInstance().deleteUserPreferences();
-        TTLApiManager.getInstance().setLoggedOut(true);
         TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
         if (tapTalkLive != null) {
             tapTalkLive.isTapTalkInitialized = false;
@@ -1269,7 +1263,6 @@ public class TapTalkLive {
         tapTalkLive = null;
         isTapTalkLiveInitialized = false;
         TTLDataManager.getInstance().deleteAllPreference();
-        TTLApiManager.getInstance().setLoggedOut(true);
         TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
     }
 }

@@ -49,7 +49,6 @@ public class TTLApiManager {
     private TTLApiService ttlApiService;
     private TTLRefreshTokenApiService ttlRefreshTokenApiService;
     private static TTLApiManager instance;
-    private boolean isLoggedOut = true;
     private boolean isRefreshTokenRunning = false;
 
     public static TTLApiManager getInstance() {
@@ -63,11 +62,7 @@ public class TTLApiManager {
     }
 
     public boolean isLoggedOut() {
-        return isLoggedOut;
-    }
-
-    public void setLoggedOut(boolean loggedOut) {
-        isLoggedOut = loggedOut;
+        return !TTLDataManager.getInstance().checkAccessTokenAvailable();
     }
 
     @NonNull
@@ -119,7 +114,7 @@ public class TTLApiManager {
         }
         else if (code == UNAUTHORIZED) {
             Log.e(TAG, String.format(String.format("[Err %s - %s] %s", br.getStatus(), br.getError().getCode(), br.getError().getMessage()), code));
-            if (!isLoggedOut) {
+            if (!isLoggedOut()) {
                 if (isRefreshTokenRunning) {
                     Log.e(TAG, "validateResponse: raiseApiRefreshTokenRunningException");
                     return raiseApiRefreshTokenRunningException();
@@ -140,10 +135,10 @@ public class TTLApiManager {
     }
 
     private Observable validateException(Throwable t) {
-        if (t instanceof TTLApiSessionExpiredException && !isRefreshTokenRunning && !isLoggedOut) {
+        if (t instanceof TTLApiSessionExpiredException && !isRefreshTokenRunning && !isLoggedOut()) {
             return refreshAccessToken();
         }
-        else if (t instanceof TTLApiRefreshTokenRunningException || (t instanceof TTLApiSessionExpiredException && isRefreshTokenRunning) && !isLoggedOut) {
+        else if (t instanceof TTLApiRefreshTokenRunningException || (t instanceof TTLApiSessionExpiredException && isRefreshTokenRunning) && !isLoggedOut()) {
             return Observable.just(Boolean.TRUE).delay(1000, TimeUnit.MILLISECONDS);
         }
         else {
