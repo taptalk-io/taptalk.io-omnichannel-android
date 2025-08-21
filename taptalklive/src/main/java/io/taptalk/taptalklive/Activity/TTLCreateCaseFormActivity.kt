@@ -566,7 +566,7 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
     private fun createCase() {
         TTLDataManager.getInstance().createCase(
             vm.topicsMap[vm.topics[vm.selectedTopicIndex]]?.id,
-            vb.etMessage.text.toString(),
+            vb.etMessage.text.toString().trim(),
             createCaseDataView
         )
     }
@@ -616,6 +616,7 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
                     TTLCaseListActivity.start(this@TTLCreateCaseFormActivity)
                 }
                 if (TapTalk.isConnected(TAPTALK_INSTANCE_KEY)) {
+                    //TTLCaseListActivity.start(this@TTLCreateCaseFormActivity)
                     TapUI.getInstance(TAPTALK_INSTANCE_KEY).openChatRoomWithRoomModel(this@TTLCreateCaseFormActivity, roomModel)
                 }
                 else {

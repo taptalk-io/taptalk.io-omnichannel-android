@@ -25,6 +25,7 @@ import io.taptalk.TapTalk.Manager.TapCoreMessageManager
 import io.taptalk.TapTalk.Manager.TapCoreRoomListManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
+import io.taptalk.taptalklive.API.Model.TTLCaseModel
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
 import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.JSON_TASK_COMPLETED
@@ -33,6 +34,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_STRING
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_URL
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Interface.TTLHomeAdapterInterface
+import io.taptalk.taptalklive.Listener.TTLGetCaseListListener
 import io.taptalk.taptalklive.Manager.TTLDataManager
 import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
@@ -263,8 +265,21 @@ class TTLHomeActivity : TAPBaseActivity() {
         if (!TTLDataManager.getInstance().checkActiveUserExists()) {
             return
         }
+        TapTalkLive.getUserCaseList(object : TTLGetCaseListListener() {
+            override fun onSuccess(cases: MutableList<TTLCaseModel>?) {
+                adapter.refreshLatestCaseList()
+            }
+
+            override fun onError(errorCode: String?, errorMessage: String?) {
+                adapter.refreshLatestCaseList()
+            }
+        })
         TapCoreRoomListManager.getInstance(instanceKey).fetchNewMessageToDatabase(object : TapCommonListener() {
             override fun onSuccess(successMessage: String?) {
+                adapter.refreshLatestCaseList()
+            }
+
+            override fun onError(p0: String?, p1: String?) {
                 adapter.refreshLatestCaseList()
             }
         })
