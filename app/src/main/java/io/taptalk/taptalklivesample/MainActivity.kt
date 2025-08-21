@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import io.taptalk.TapTalk.Helper.TapCustomSnackbarView
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
+import io.taptalk.taptalklive.Listener.TTLCommonListener
 import io.taptalk.taptalklive.Listener.TapTalkLiveListener
 import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklivesample.BuildConfig.GOOGLE_MAPS_API_KEY
@@ -51,6 +52,17 @@ class MainActivity : TAPBaseActivity() {
                 isOpenTapTalkLiveViewPending = false
                 openTapTalkLiveView()
             }
+
+//            // Authentication test
+//            TapTalkLive.authenticateUser("tesdev", "tesdev@tapta.lk", object : TTLCommonListener() {
+//                override fun onSuccess(successMessage: String?) {
+//                    Log.e(">>>>", "TEST authenticateUser onSuccess: $successMessage")
+//                }
+//
+//                override fun onError(errorCode: String?, errorMessage: String?) {
+//                    Log.e(">>>>", "TEST authenticateUser onError: $errorMessage")
+//                }
+//            })
         }
 
         override fun onInitializationFailed(error: TTLErrorModel?) {
@@ -63,66 +75,66 @@ class MainActivity : TAPBaseActivity() {
             Log.e(">>>>", "onInitializationFailed: ${error?.message}")
         }
 
-        override fun onTapTalkLiveRefreshTokenExpired() {
-
-        }
-
+//        override fun onTapTalkLiveRefreshTokenExpired() {
+//
+//        }
+//
 //        override fun onNotificationReceived(message: TAPMessageModel?) {
-//            Log.e(">>>>", "onNotificationReceived: ${message?.body}")
+//
 //        }
 //
 //        override fun onCloseButtonInHomePageTapped(activity: Activity?) {
-//            Log.e(">>>>", "onCloseButtonInHomePageTapped:")
+//
 //        }
 //
 //        override fun onCloseButtonInCreateCaseFormTapped(activity: Activity?) {
-//            Log.e(">>>>", "onCloseButtonInCreateCaseFormTapped:")
+//
 //        }
 //
 //        override fun onCloseButtonInCaseListTapped(activity: Activity?) {
-//            Log.e(">>>>", "onCloseButtonInCaseListTapped:")
+//
 //        }
 //
 //        override fun onTaskRootChatRoomClosed(activity: Activity?) {
-//            Log.e(">>>>", "onTaskRootChatRoomClosed:")
+//
 //        }
 //
 //        override fun onSeeAllMessagesButtonTapped(activity: Activity?) {
 //            super.onSeeAllMessagesButtonTapped(activity)
-//            Log.e(">>>>", "onSeeAllMessagesButtonTapped:")
+//
 //        }
 //
 //        override fun onCreateNewMessageButtonTapped(activity: Activity?) {
 //            super.onCreateNewMessageButtonTapped(activity)
-//            Log.e(">>>>", "onCreateNewMessageButtonTapped:")
+//
 //        }
 //
 //        override fun onFaqChildTapped(activity: Activity?, scfPath: TTLScfPathModel?) {
 //            super.onFaqChildTapped(activity, scfPath)
-//            Log.e(">>>>", "onFaqChildTapped: ${scfPath?.title}")
+//
 //        }
 //
 //        override fun onCloseButtonInFaqDetailsTapped(activity: Activity?, scfPath: TTLScfPathModel?) {
 //            super.onCloseButtonInFaqDetailsTapped(activity, scfPath)
-//            Log.e(">>>>", "onCloseButtonInFaqDetailsTapped: ${scfPath?.title}")
+//
 //        }
 //
 //        override fun onTalkToAgentButtonTapped(activity: Activity?, scfPath: TTLScfPathModel?) {
 //            super.onTalkToAgentButtonTapped(activity, scfPath)
-//            Log.e(">>>>", "onTalkToAgentButtonTapped: ${scfPath?.title}")
+//
 //        }
 //
 //        override fun onCaseListItemTapped(activity: Activity?, lastMessage: TAPMessageModel?) {
 //            super.onCaseListItemTapped(activity, lastMessage)
-//            Log.e(">>>>", "onCaseListItemTapped: ${lastMessage?.room?.name}")
+//
 //        }
 //        
 //        override fun onFaqContentUrlTapped(activity: Activity?, scfPath: TTLScfPathModel?, url: String?) {
-//            Log.e(">>>>", "onFaqContentUrlTapped: $activity -  $url - ${scfPath?.title}")
+//
 //        }
 //
 //        override fun onFaqContentUrlLongPressed(activity: Activity?, scfPath: TTLScfPathModel?, url: String?) {
-//            Log.e(">>>>", "onFaqContentUrlLongPressed: $activity -  $url - ${scfPath?.title}")
+//
 //        }
     }
 

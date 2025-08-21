@@ -56,7 +56,6 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.facebook.stetho.Stetho;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.NoEncryption;
 
@@ -153,7 +152,8 @@ public class TapTalkLive {
             if (BuildConfig.BUILD_TYPE.equals("dev")) {
                 // No encryption for dev build
                 Hawk.init(appContext).setEncryption(new NoEncryption()).build();
-            } else {
+            }
+            else {
                 Hawk.init(appContext).build();
             }
         }
@@ -165,9 +165,11 @@ public class TapTalkLive {
         // FIXME: TAPLIVE_SDK_BASE_URL NOT FOUND IN BUILD CONFIG WHEN BUILDING JITPACK LIBRARY
 //        if (BuildConfig.BUILD_TYPE.equals("release")) {
 //            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(releaseBaseApiUrl));
-//        } else if (BuildConfig.BUILD_TYPE.equals("staging")) {
+//        }
+//        else if (BuildConfig.BUILD_TYPE.equals("staging")) {
 //            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(stagingBaseApiUrl));
-//        } else {
+//        }
+//        else {
 //            TTLApiManager.setApiBaseUrl(generateApiBaseUrl(devBaseApiUrl));
 //        }
         if (buildType.equals("dev")) {
@@ -306,7 +308,7 @@ public class TapTalkLive {
         TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).removeChatListener(chatListener);
         TAPChatManager.getInstance(TAPTALK_INSTANCE_KEY).addChatListener(chatListener);
 
-        if (!TapTalk.isConnected(TAPTALK_INSTANCE_KEY)) {
+        if (!TapTalk.isConnected(TAPTALK_INSTANCE_KEY) && TapTalk.isForeground) {
             TapTalk.connect(TAPTALK_INSTANCE_KEY, new TapCommonListener() {
                 @Override
                 public void onSuccess(String s) {
@@ -527,16 +529,29 @@ public class TapTalkLive {
      */
 
     private void authenticateTapTalkSDK(String authTicket, TTLCommonListener listener) {
-        if (TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
-            listener.onSuccess("TapTalk SDK is already authenticated.");
-            TTLDataManager.getInstance().removeTapTalkAuthTicket();
-            return;
-        }
+//        if (TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
+//            listener.onSuccess("TapTalk SDK is already authenticated.");
+//            TTLDataManager.getInstance().removeTapTalkAuthTicket();
+//            return;
+//        }
         TapTalk.authenticateWithAuthTicket(TAPTALK_INSTANCE_KEY, authTicket, true, new TapCommonListener() {
             @Override
             public void onSuccess(String successMessage) {
                 listener.onSuccess(successMessage);
                 TTLDataManager.getInstance().removeTapTalkAuthTicket();
+                if (!TapTalk.isConnected(TAPTALK_INSTANCE_KEY) && TapTalk.isForeground) {
+                    TapTalk.connect(TAPTALK_INSTANCE_KEY, new TapCommonListener() {
+                        @Override
+                        public void onSuccess(String s) {
+
+                        }
+
+                        @Override
+                        public void onError(String s, String s1) {
+
+                        }
+                    });
+                }
             }
 
             @Override
@@ -557,7 +572,8 @@ public class TapTalkLive {
             if (null != response) {
                 TTLDataManager.getInstance().saveTapTalkAuthTicket(response.getTicket());
                 authenticateTapTalkSDK(response.getTicket(), authenticateTapTalkSDKListener);
-            } else {
+            }
+            else {
                 clearUserData();
             }
         }
@@ -621,7 +637,8 @@ public class TapTalkLive {
                             }
                         });
                     }
-                } else {
+                }
+                else {
                     onError("No response when requesting access token.");
                 }
             }
@@ -637,11 +654,12 @@ public class TapTalkLive {
             }
 
             private void onFinish() {
-                if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
+//                if (!TapTalk.isAuthenticated(TAPTALK_INSTANCE_KEY)) {
                     requestTapTalkAuthTicket(listener);
-                } else {
-                    listener.onSuccess(context.getString(R.string.ttl_successfully_logged_in));
-                }
+//                }
+//                else {
+//                    listener.onSuccess(context.getString(R.string.ttl_successfully_logged_in));
+//                }
             }
         });
     }
@@ -828,7 +846,8 @@ public class TapTalkLive {
                     clearUserData();
                     TTLDataManager.getInstance().saveActiveUser(response.getUser());
                     requestAccessToken(response.getTicket(), listener);
-                } else {
+                }
+                else {
                     onError("No response when registering user.");
                 }
             }
@@ -854,10 +873,12 @@ public class TapTalkLive {
                     TTLDataManager.getInstance().saveTapTalkAuthTicket(response.getTicket());
                     if (tapTalkLive != null) {
                         tapTalkLive.authenticateTapTalkSDK(response.getTicket(), listener);
-                    } else {
+                    }
+                    else {
                         onError(context.getString(R.string.ttl_error_not_initialized));
                     }
-                } else {
+                }
+                else {
                     onError(context.getString(R.string.ttl_error_taptalk_auth_ticket_empty));
                 }
             }
@@ -1251,9 +1272,9 @@ public class TapTalkLive {
 
     public static void clearUserData() {
         TTLDataManager.getInstance().deleteUserPreferences();
-        TapTalk.logoutAndClearAllTapTalkData(TAPTALK_INSTANCE_KEY);
+        TapTalk.clearAllTapTalkData(TAPTALK_INSTANCE_KEY);
         if (tapTalkLive != null) {
-            tapTalkLive.isTapTalkInitialized = false;
+            //tapTalkLive.isTapTalkInitialized = false;
             tapTalkLive.isGetCaseListCompleted = false;
         }
     }
