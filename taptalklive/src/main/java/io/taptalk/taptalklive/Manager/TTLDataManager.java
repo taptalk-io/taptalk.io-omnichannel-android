@@ -31,6 +31,8 @@ import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.APP_KEY_SEC
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.AUTH_TICKET;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.CASE_EXISTS;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.CHANNEL_LINKS;
+import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.MAX_OPEN_CASES;
+import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.OPEN_CASE_LIST_COUNT;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.REFRESH_TOKEN_EXPIRY;
 import static io.taptalk.taptalklive.Const.TTLConstant.PreferenceKey.SCF_PATH;
@@ -114,6 +116,7 @@ public class TTLDataManager {
         removeActiveUser();
         removeTapTalkAuthTicket();
         removeActiveUserHasExistingCase();
+        removeOpenCaseCount();
     }
 
     public void deleteAllPreference() {
@@ -123,6 +126,7 @@ public class TTLDataManager {
         removeTapTalkAppKeyID();
         removeTapTalkAppKeySecret();
         removeChannelLinks();
+        removeMaxOpenCases();
         removeScfPath();
         removeTopics();
     }
@@ -396,6 +400,22 @@ public class TTLDataManager {
     }
 
     /**
+     * MAX OPEN CASES
+     */
+
+    public int getMaxOpenCases() {
+        return TapPreferenceUtils.getLongPreference(MAX_OPEN_CASES).intValue();
+    }
+
+    public void saveMaxOpenCases(int maxOpenCases) {
+        TapPreferenceUtils.saveLongPreference(MAX_OPEN_CASES, (long) maxOpenCases);
+    }
+
+    public void removeMaxOpenCases() {
+        removePreference(MAX_OPEN_CASES);
+    }
+
+    /**
      * SCF PATH
      */
 
@@ -430,6 +450,7 @@ public class TTLDataManager {
     /**
      * USER HAS EXISTING CASE
      */
+
     public boolean activeUserHasExistingCase() {
         Boolean caseExists = getBooleanPreference(CASE_EXISTS);
         return null != caseExists ? caseExists : false;
@@ -441,6 +462,22 @@ public class TTLDataManager {
 
     public void removeActiveUserHasExistingCase() {
         removePreference(CASE_EXISTS);
+    }
+
+    /**
+     * USER OPEN CASE COUNT
+     */
+
+    public int getOpenCaseCount() {
+        return TapPreferenceUtils.getLongPreference(OPEN_CASE_LIST_COUNT).intValue();
+    }
+
+    public void saveOpenCaseCount(int openCaseCount) {
+        TapPreferenceUtils.saveLongPreference(OPEN_CASE_LIST_COUNT, (long) openCaseCount);
+    }
+
+    public void removeOpenCaseCount() {
+        removePreference(OPEN_CASE_LIST_COUNT);
     }
 
     /**

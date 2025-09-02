@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -274,11 +273,11 @@ public class TTLCaseModel implements Parcelable {
 //        this.labelIDs = labelIDs;
 //    }
 
-    public Boolean getClosed() {
+    public Boolean getIsClosed() {
         return isClosed;
     }
 
-    public void setClosed(Boolean closed) {
+    public void setIsClosed(Boolean closed) {
         isClosed = closed;
     }
 

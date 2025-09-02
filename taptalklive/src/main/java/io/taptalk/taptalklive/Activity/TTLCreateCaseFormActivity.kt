@@ -34,6 +34,7 @@ import io.taptalk.TapTalk.Model.TAPRoomModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLCreateCaseResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLErrorModel
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse
 import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetTopicListResponse
 import io.taptalk.taptalklive.API.Model.TTLCaseModel
 import io.taptalk.taptalklive.API.View.TTLDefaultDataView
@@ -50,6 +51,7 @@ import io.taptalk.taptalklive.TapTalkLive
 import io.taptalk.taptalklive.ViewModel.TTLCreateCaseViewModel
 import io.taptalk.taptalklive.adapter.TTLItemDropdownAdapter
 import io.taptalk.taptalklive.databinding.TtlActivityCreateCaseFormBinding
+import io.taptalk.taptalklive.helper.TTLUtil
 
 class TTLCreateCaseFormActivity : TAPBaseActivity() {
 
@@ -589,6 +591,12 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
                 // Save case to map
                 TapTalkLive.getCaseMap()[it.tapTalkXCRoomID] = it
             }
+            // Refresh case list count
+            TTLDataManager.getInstance().getCaseList(object : TTLDefaultDataView<TTLGetCaseListResponse>() {
+                override fun onSuccess(response: TTLGetCaseListResponse?) {
+                    TTLUtil.processGetCaseListResponse(response, null)
+                }
+            })
         }
 
         override fun onError(error: TTLErrorModel?) {

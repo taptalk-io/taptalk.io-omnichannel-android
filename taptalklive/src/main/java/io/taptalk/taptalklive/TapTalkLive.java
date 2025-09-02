@@ -224,6 +224,9 @@ public class TapTalkLive {
                 if (null != response.getChannelLinks()) {
                     TTLDataManager.getInstance().saveChannelLinks(response.getChannelLinks());
                 }
+                if (null != response.getLauncherConfigs()) {
+                    TTLDataManager.getInstance().saveMaxOpenCases(response.getLauncherConfigs().getMaxOpenCases());
+                }
             }
 
             @Override

@@ -93,9 +93,11 @@ class TTLConstant {
         const val TAPTALK_APP_KEY_SECRET = "kTapTalkLiveTapTalkAppKeySecret"
         const val TAPTALK_AUTH_TICKET = "kTapTalkLiveTapTalkAuthenticationTicket"
         const val CHANNEL_LINKS = "kTapTalkLiveChannelLinks"
+        const val MAX_OPEN_CASES = "kTapTalkLiveMaxOpenCases"
         const val SCF_PATH = "kTapTalkLiveScfPath"
         const val TOPICS = "kTapTalkLiveTopics"
         const val CASE_EXISTS = "kTapTalkLiveCaseExists"
+        const val OPEN_CASE_LIST_COUNT = "kTapTalkLiveOpenCaseListCount"
     }
 
     object ErrorCode {
