@@ -39,7 +39,7 @@ import java.io.File
 
 class TTLFaqDetailsActivity : TAPBaseActivity() {
 
-    private lateinit var vb: TtlActivityHomeBinding
+    lateinit var vb: TtlActivityHomeBinding
 
     companion object {
         fun start(context: Context, scfPath: TTLScfPathModel) {

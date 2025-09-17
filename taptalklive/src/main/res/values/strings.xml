@@ -43,6 +43,7 @@
     <string name="ttl_url_copied_to_clipboard">Link copied to clipboard.</string>
     <string name="ttl_email_copied_to_clipboard">Email address copied to clipboard.</string>
     <string name="ttl_phone_copied_to_clipboard">Phone number copied to clipboard.</string>
+    <string name="ttl_format_d_max_open_cases">You can only have maximum %d open cases at the same time.</string>
 
     <string name="ttl_error">Error</string>
     <string name="ttl_error_message_general">Something went wrong, please try again.</string>

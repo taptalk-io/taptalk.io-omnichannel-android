@@ -25,13 +25,18 @@ import io.taptalk.TapTalk.Manager.TapCoreMessageManager
 import io.taptalk.TapTalk.Manager.TapCoreRoomListManager
 import io.taptalk.TapTalk.Model.TAPMessageModel
 import io.taptalk.TapTalk.View.Activity.TAPBaseActivity
+import io.taptalk.taptalklive.API.Model.ResponseModel.TTLGetCaseListResponse
 import io.taptalk.taptalklive.API.Model.TTLCaseModel
 import io.taptalk.taptalklive.API.Model.TTLChannelLinkModel
 import io.taptalk.taptalklive.API.Model.TTLScfPathModel
+import io.taptalk.taptalklive.API.View.TTLDefaultDataView
 import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.JSON_TASK_COMPLETED
 import io.taptalk.taptalklive.Const.TTLConstant.Broadcast.SCF_PATH_UPDATED
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_STRING
 import io.taptalk.taptalklive.Const.TTLConstant.Extras.JSON_URL
+import io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CASE_CREATED
+import io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_CLOSE_CASE
+import io.taptalk.taptalklive.Const.TTLConstant.MessageType.TYPE_REOPEN_CASE
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Interface.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.Listener.TTLGetCaseListListener
@@ -46,7 +51,7 @@ import java.io.File
 
 class TTLHomeActivity : TAPBaseActivity() {
 
-    private lateinit var vb: TtlActivityHomeBinding
+    lateinit var vb: TtlActivityHomeBinding
 
     companion object {
         fun start(context: Context) {
@@ -78,6 +83,7 @@ class TTLHomeActivity : TAPBaseActivity() {
     override fun onResume() {
         super.onResume()
         fetchNewMessages()
+        refreshCaseList()
     }
 
     override fun onDestroy() {
@@ -285,9 +291,18 @@ class TTLHomeActivity : TAPBaseActivity() {
         })
     }
 
+    private fun refreshCaseList() {
+        TTLDataManager.getInstance().getCaseList(object : TTLDefaultDataView<TTLGetCaseListResponse>() {
+            override fun onSuccess(response: TTLGetCaseListResponse?) {
+                TTLUtil.processGetCaseListResponse(response, null)
+            }
+        })
+    }
+
     private val messageListener = object : TapCoreMessageListener() {
         override fun onReceiveNewMessage(message: TAPMessageModel?) {
             processNewMessageFromSocket(message)
+            checkCaseClosedMessage(message)
         }
 
         override fun onReceiveUpdatedMessage(message: TAPMessageModel?) {
@@ -302,6 +317,13 @@ class TTLHomeActivity : TAPBaseActivity() {
     private fun processNewMessageFromSocket(message: TAPMessageModel?) {
         if (message != null && message.isHidden == false) {
             adapter.setLastMessage(message)
+        }
+    }
+
+    private fun checkCaseClosedMessage(message: TAPMessageModel?) {
+        if (message?.type == TYPE_CLOSE_CASE || message?.type == TYPE_REOPEN_CASE || message?.type == TYPE_CASE_CREATED) {
+            // Refresh case list count
+            refreshCaseList()
         }
     }
 

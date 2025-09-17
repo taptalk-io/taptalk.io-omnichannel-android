@@ -13,7 +13,7 @@ import io.taptalk.taptalklive.databinding.TtlActivityCaseListBinding
 
 class TTLCaseListActivity : TAPBaseActivity() {
 
-    private lateinit var vb: TtlActivityCaseListBinding
+    lateinit var vb: TtlActivityCaseListBinding
 
     companion object {
         fun start(context: Context) {

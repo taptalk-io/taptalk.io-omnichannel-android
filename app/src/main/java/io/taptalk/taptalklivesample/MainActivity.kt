@@ -53,9 +53,14 @@ class MainActivity : TAPBaseActivity() {
                 openTapTalkLiveView()
             }
 
-//            // Authentication test
+            // Authentication test
 //            TapTalkLive.authenticateUser("tesdev", "tesdev@tapta.lk", object : TTLCommonListener() {
 //                override fun onSuccess(successMessage: String?) {
+//                    hideLoading()
+//                    if (isOpenTapTalkLiveViewPending) {
+//                        isOpenTapTalkLiveViewPending = false
+//                        openTapTalkLiveView()
+//                    }
 //                    Log.e(">>>>", "TEST authenticateUser onSuccess: $successMessage")
 //                }
 //

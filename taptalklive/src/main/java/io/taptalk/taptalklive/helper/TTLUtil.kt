@@ -1,6 +1,7 @@
 package io.taptalk.taptalklive.helper
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.text.util.Linkify
 import android.widget.TextView
@@ -8,6 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.taptalk.TapTalk.Const.TAPDefaultConstant.ClientErrorCodes
 import io.taptalk.TapTalk.Data.Message.TAPMessageEntity
 import io.taptalk.TapTalk.Helper.TAPBetterLinkMovementMethod
+import io.taptalk.TapTalk.Helper.TapCustomSnackbarView
 import io.taptalk.TapTalk.Listener.TAPDatabaseListener
 import io.taptalk.TapTalk.Listener.TapCommonListener
 import io.taptalk.TapTalk.Manager.TAPDataManager
@@ -21,6 +23,7 @@ import io.taptalk.taptalklive.Const.TTLConstant.ScfPathType.QNA_VIA_API
 import io.taptalk.taptalklive.Const.TTLConstant.TapTalkInstanceKey.TAPTALK_INSTANCE_KEY
 import io.taptalk.taptalklive.Interface.TTLHomeAdapterInterface
 import io.taptalk.taptalklive.Manager.TTLDataManager
+import io.taptalk.taptalklive.R
 import io.taptalk.taptalklive.TapTalkLive
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -33,6 +36,7 @@ object TTLUtil {
             return
         }
         val cases = response.cases
+        var openCaseCount = 0
         val hasActiveCase = !cases.isNullOrEmpty()
         TTLDataManager.getInstance().saveActiveUserHasExistingCase(hasActiveCase)
         if (hasActiveCase) {
@@ -50,6 +54,9 @@ object TTLUtil {
                         e.printStackTrace()
                     }
                 }
+                if (!caseModel.isClosed) {
+                    openCaseCount++
+                }
             }
             if (entities.isNotEmpty()) {
                 TAPDataManager.getInstance(TAPTALK_INSTANCE_KEY).insertToDatabase(entities, false, object : TAPDatabaseListener<Any?>() {
@@ -66,6 +73,7 @@ object TTLUtil {
         else {
             listener?.onSuccess("Result is empty.")
         }
+        TTLDataManager.getInstance().saveOpenCaseCount(openCaseCount)
     }
 
     @JvmStatic
@@ -163,5 +171,25 @@ object TTLUtil {
         catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    @JvmStatic
+    fun getCreateNewCaseBlockingMessage(context: Context, showSnackBar: TapCustomSnackbarView?): String {
+        val maxOpenCases = TTLDataManager.getInstance().maxOpenCases
+        val caseListCount = TTLDataManager.getInstance().openCaseCount
+        val isLimitAllowed = maxOpenCases == 0 || maxOpenCases > caseListCount
+        if (!isLimitAllowed) {
+            val message = String.format(context.getString(R.string.ttl_format_d_max_open_cases), maxOpenCases)
+            if (showSnackBar != null) {
+                showSnackBar.setContainerBackground(R.drawable.ttl_bg_snackbar_warning)
+                showSnackBar.setIcon(io.taptalk.TapTalk.R.drawable.tap_ic_warning_triangle_red)
+                showSnackBar.setIconTintColor(R.color.ttlColorPrimaryIcon)
+                showSnackBar.setText(message)
+                showSnackBar.setTextColor(R.color.ttlColorPrimary)
+                showSnackBar.show()
+            }
+            return message
+        }
+        return ""
     }
 }

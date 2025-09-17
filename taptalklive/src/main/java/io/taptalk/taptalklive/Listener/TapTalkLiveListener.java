@@ -18,8 +18,10 @@ import io.taptalk.taptalklive.API.Model.TTLScfPathModel;
 import io.taptalk.taptalklive.Activity.TTLCaseListActivity;
 import io.taptalk.taptalklive.Activity.TTLCreateCaseFormActivity;
 import io.taptalk.taptalklive.Activity.TTLFaqDetailsActivity;
+import io.taptalk.taptalklive.Activity.TTLHomeActivity;
 import io.taptalk.taptalklive.Interface.TapTalkLiveInterface;
 import io.taptalk.taptalklive.R;
+import io.taptalk.taptalklive.helper.TTLUtil;
 
 public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
     @Override
@@ -69,6 +71,19 @@ public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
 
     @Override
     public void onCreateNewMessageButtonTapped(Activity activity) {
+        if (activity instanceof TTLHomeActivity) {
+            if (!TTLUtil.getCreateNewCaseBlockingMessage(activity, ((TTLHomeActivity) activity).vb.tapCustomSnackbar).isEmpty()) {
+                return;
+            }
+        }
+        else if (activity instanceof TTLCaseListActivity) {
+            if (!TTLUtil.getCreateNewCaseBlockingMessage(activity, ((TTLCaseListActivity) activity).vb.tapCustomSnackbar).isEmpty()) {
+                return;
+            }
+        }
+        else if (!TTLUtil.getCreateNewCaseBlockingMessage(activity, null).isEmpty()) {
+            return;
+        }
         TTLCreateCaseFormActivity.Companion.start(activity, true);
     }
 
@@ -101,6 +116,19 @@ public abstract class TapTalkLiveListener implements TapTalkLiveInterface {
 
     @Override
     public void onTalkToAgentButtonTapped(Activity activity, TTLScfPathModel scfPath) {
+        if (activity instanceof TTLHomeActivity) {
+            if (!TTLUtil.getCreateNewCaseBlockingMessage(activity, ((TTLHomeActivity) activity).vb.tapCustomSnackbar).isEmpty()) {
+                return;
+            }
+        }
+        else if (activity instanceof TTLFaqDetailsActivity) {
+            if (!TTLUtil.getCreateNewCaseBlockingMessage(activity, ((TTLFaqDetailsActivity) activity).vb.tapCustomSnackbar).isEmpty()) {
+                return;
+            }
+        }
+        else if (!TTLUtil.getCreateNewCaseBlockingMessage(activity, null).isEmpty()) {
+            return;
+        }
         TTLCreateCaseFormActivity.Companion.start(activity, true);
     }
 
