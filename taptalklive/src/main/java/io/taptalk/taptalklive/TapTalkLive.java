@@ -56,8 +56,6 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.facebook.stetho.Stetho;
-import com.orhanobut.hawk.Hawk;
-import com.orhanobut.hawk.NoEncryption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -146,18 +144,6 @@ public class TapTalkLive {
         tapTalkLive = this;
         TapTalkLive.context = appContext;
         TapTalk.appContext = appContext; // Init app context for preferences before TapTalk is initialized
-
-        // Init Hawk for preference
-        if (!Hawk.isBuilt()) {
-            if (BuildConfig.BUILD_TYPE.equals("dev")) {
-                // No encryption for dev build
-                Hawk.init(appContext).setEncryption(new NoEncryption()).build();
-            }
-            else {
-                Hawk.init(appContext).build();
-            }
-        }
-        TTLDataManager.getInstance().migratePreferences();
 
         TTLDataManager.getInstance().saveAppKeySecret(appKeySecret);
 

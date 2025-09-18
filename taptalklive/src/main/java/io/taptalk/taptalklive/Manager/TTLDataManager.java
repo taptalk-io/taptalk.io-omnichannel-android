@@ -1,7 +1,6 @@
 package io.taptalk.taptalklive.Manager;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.orhanobut.hawk.Hawk;
 
 import io.taptalk.TapTalk.Helper.TapPreferenceUtils;
 import io.taptalk.taptalklive.API.Api.TTLApiManager;
@@ -97,7 +96,6 @@ public class TTLDataManager {
 
     private void removePreference(String key) {
         TapPreferenceUtils.removePreference(key);
-        Hawk.delete(key);
     }
 
     /**
@@ -129,71 +127,6 @@ public class TTLDataManager {
         removeMaxOpenCases();
         removeScfPath();
         removeTopics();
-    }
-
-    public void migratePreferences() {
-        if (Hawk.count() > 0) {
-            if (Hawk.contains(APP_KEY_SECRET)) {
-                saveAppKeySecret(Hawk.get(APP_KEY_SECRET));
-                Hawk.delete(APP_KEY_SECRET);
-            }
-            if (Hawk.contains(AUTH_TICKET)) {
-                saveAuthTicket(Hawk.get(AUTH_TICKET));
-                Hawk.delete(AUTH_TICKET);
-            }
-            if (Hawk.contains(ACCESS_TOKEN)) {
-                saveAccessToken(Hawk.get(ACCESS_TOKEN));
-                Hawk.delete(ACCESS_TOKEN);
-            }
-            if (Hawk.contains(ACCESS_TOKEN_EXPIRY)) {
-                saveAccessTokenExpiry(Hawk.get(ACCESS_TOKEN_EXPIRY));
-                Hawk.delete(ACCESS_TOKEN_EXPIRY);
-            }
-            if (Hawk.contains(REFRESH_TOKEN)) {
-                saveRefreshToken(Hawk.get(REFRESH_TOKEN));
-                Hawk.delete(REFRESH_TOKEN);
-            }
-            if (Hawk.contains(REFRESH_TOKEN_EXPIRY)) {
-                saveRefreshTokenExpiry(Hawk.get(REFRESH_TOKEN_EXPIRY));
-                Hawk.delete(REFRESH_TOKEN_EXPIRY);
-            }
-            if (Hawk.contains(ACTIVE_USER)) {
-                saveActiveUser(Hawk.get(ACTIVE_USER));
-                Hawk.delete(ACTIVE_USER);
-            }
-            if (Hawk.contains(TAPTALK_API_URL)) {
-                saveTapTalkApiUrl(Hawk.get(TAPTALK_API_URL));
-                Hawk.delete(TAPTALK_API_URL);
-            }
-            if (Hawk.contains(TAPTALK_APP_KEY_ID)) {
-                saveTapTalkAppKeyID(Hawk.get(TAPTALK_APP_KEY_ID));
-                Hawk.delete(TAPTALK_APP_KEY_ID);
-            }
-            if (Hawk.contains(TAPTALK_APP_KEY_SECRET)) {
-                saveTapTalkAppKeySecret(Hawk.get(TAPTALK_APP_KEY_SECRET));
-                Hawk.delete(TAPTALK_APP_KEY_SECRET);
-            }
-            if (Hawk.contains(TAPTALK_AUTH_TICKET)) {
-                saveTapTalkAuthTicket(Hawk.get(TAPTALK_AUTH_TICKET));
-                Hawk.delete(TAPTALK_AUTH_TICKET);
-            }
-            if (Hawk.contains(CHANNEL_LINKS)) {
-                saveChannelLinks(Hawk.get(CHANNEL_LINKS));
-                Hawk.delete(CHANNEL_LINKS);
-            }
-            if (Hawk.contains(SCF_PATH)) {
-                saveScfPath(Hawk.get(SCF_PATH));
-                Hawk.delete(SCF_PATH);
-            }
-            if (Hawk.contains(TOPICS)) {
-                saveTopics(Hawk.get(TOPICS));
-                Hawk.delete(TOPICS);
-            }
-            if (Hawk.contains(CASE_EXISTS)) {
-                saveActiveUserHasExistingCase(Hawk.get(CASE_EXISTS));
-                Hawk.delete(CASE_EXISTS);
-            }
-        }
     }
 
     /**

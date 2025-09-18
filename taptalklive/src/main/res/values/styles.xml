@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/ttlColorPrimary</item>
         <item name="colorPrimaryDark">@color/ttlColorPrimaryDark</item>
         <item name="colorAccent">@color/ttlColorAccent</item>
-        <item name="android:statusBarColor">@color/ttlColorPrimary</item>
     </style>
 
     <style name="Theme.AppCompat.Transparent.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -19,7 +18,6 @@
     <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/TransparentBottomSheetStyle</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
