@@ -139,7 +139,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // TapTalk
-    api 'com.github.taptalk-io:taptalk.io-android:2.18.1'
+    api 'com.github.taptalk-io:taptalk.io-android:2.18.3'
 }
 
 tasks.register('androidSourcesJar', Jar) {
