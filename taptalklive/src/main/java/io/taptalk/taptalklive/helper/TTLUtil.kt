@@ -43,7 +43,7 @@ object TTLUtil {
             val entities = ArrayList<TAPMessageEntity>()
             for (caseModel in cases) {
                 TapTalkLive.getCaseMap()[caseModel.tapTalkXCRoomID] = caseModel
-                if (caseModel.tapTalkRoom.lastMessage != null) {
+                if (caseModel.tapTalkRoom?.lastMessage != null) {
                     try {
                         val lastMessage = TAPEncryptorManager.getInstance().decryptMessage(caseModel.tapTalkRoom.lastMessage)
                         if (lastMessage != null) {
