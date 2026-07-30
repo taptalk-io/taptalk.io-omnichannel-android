@@ -13,12 +13,12 @@ android {
     namespace = "io.taptalk.taptalklivesample"
     def globalConfig = rootProject.extensions.getByName("ext")
 
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "io.taptalk.taptalklivesample"
         minSdk 21
-        targetSdk 35
+        targetSdk 36
         versionCode taptalklive_version_code
         versionName taptalklive_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
