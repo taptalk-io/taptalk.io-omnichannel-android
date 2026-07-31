@@ -38,9 +38,9 @@ class TTLCaseListActivity : TAPBaseActivity() {
         initFragment()
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         try {
-            super.onBackPressed()
+            super.onBack()
             overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
             TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCaseListTapped(this)
         }
@@ -54,7 +54,7 @@ class TTLCaseListActivity : TAPBaseActivity() {
     }
 
     private fun initView() {
-        vb.ivButtonClose.setOnClickListener { onBackPressed() }
+        vb.ivButtonClose.setOnClickListener { onBack() }
         vb.ivButtonNewMessage.setOnClickListener { openCreateCaseForm() }
     }
 

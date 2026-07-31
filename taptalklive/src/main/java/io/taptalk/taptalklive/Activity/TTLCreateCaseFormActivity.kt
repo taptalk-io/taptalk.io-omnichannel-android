@@ -94,12 +94,12 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
         vm.selectedTopicIndex = savedInstanceState.getInt("topic", -1)
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (!vm.showCloseButton) {
             return
         }
         try {
-            super.onBackPressed()
+            super.onBack()
             overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
             TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped(this)
         }
@@ -124,7 +124,7 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
         if (vm.showCloseButton) {
             vb.ivButtonClose.visibility = View.VISIBLE
             vb.ivButtonClose.setOnClickListener {
-                onBackPressed()
+                onBack()
             }
         }
 

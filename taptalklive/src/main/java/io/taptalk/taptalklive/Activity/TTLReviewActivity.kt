@@ -59,11 +59,11 @@ class TTLReviewActivity : TAPBaseActivity() {
         overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_fade_out)
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         try {
             setResult(Activity.RESULT_CANCELED)
             reviewBottomSheetFragment.dismiss()
-            super.onBackPressed()
+            super.onBack()
         }
         catch (e: Exception) {
             e.printStackTrace()

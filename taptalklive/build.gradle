@@ -71,7 +71,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    // TODO: REMOVE?
     publishing {
         singleVariant("release") {
             withJavadocJar()
@@ -100,7 +99,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // TapTalk
-    api 'com.github.taptalk-io:taptalk.io-android:2.18.6'
+    api 'com.github.taptalk-io:taptalk.io-android:2.19.0-7'
 
     // Lifecycle components
     api "android.arch.lifecycle:extensions:1.1.1"
