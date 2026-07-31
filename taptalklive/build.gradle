@@ -22,7 +22,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        consumerProguardFiles 'consumer-rules.pro'
         consumerProguardFiles 'proguard-rules.pro'
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -151,9 +150,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:21.1.1'
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-messaging:23.4.1'
-
-    // Multidex
-    implementation 'com.android.support:multidex:1.0.3'
 }
 
 tasks.register('androidSourcesJar', Jar) {

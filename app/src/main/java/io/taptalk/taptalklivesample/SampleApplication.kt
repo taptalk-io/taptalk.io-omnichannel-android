@@ -1,5 +1,5 @@
 package io.taptalk.taptalklivesample
 
-import androidx.multidex.MultiDexApplication
+import android.app.Application
 
-class SampleApplication : MultiDexApplication()
+class SampleApplication : Application()

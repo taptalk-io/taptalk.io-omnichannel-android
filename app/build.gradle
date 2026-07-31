@@ -22,7 +22,6 @@ android {
         versionCode taptalklive_version_code
         versionName taptalklive_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
 
     signingConfigs {
@@ -169,7 +168,4 @@ dependencies {
 
     // TapTalkLive
     implementation project(":taptalklive")
-
-    // Multidex
-    implementation 'androidx.multidex:multidex:2.0.1'
 }
