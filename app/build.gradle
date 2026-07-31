@@ -1,8 +1,8 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
     id 'kotlin-parcelize'
-//    id 'kotlin-android-extensions'
 }
 
 if (file("${rootProject.rootDir}/environment.properties").exists()) {
@@ -23,7 +23,6 @@ android {
         versionName taptalklive_version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        setProperty("archivesBaseName", applicationId + "-" + versionName)
     }
 
     signingConfigs {
@@ -46,26 +45,31 @@ android {
                             storePassword props[globalConfig.keystorePasswordName]
                             keyAlias props[globalConfig.keyAliasName]
                             keyPassword props[globalConfig.keyPasswordName]
-                        } else {
+                        }
+                        else {
                             println("[GRADLE BUILD ERR]: Keystore file not found: " + props[globalConfig.keystoreFileName])
                             android.buildTypes.release.signingConfig = null
                         }
-                    } else {
+                    }
+                    else {
                         println("[GRADLE BUILD ERR]: File signing.properties found but some entries missing")
                         android.buildTypes.release.signingConfig = null
                     }
-                } else {
+                }
+                else {
                     println("[GRADLE BUILD ERR]: File signing.properties not found")
                     android.buildTypes.release.signingConfig = null
                 }
-            } catch (ex) {
+            }
+            catch (ex) {
                 try {
                     // Bitrise keystore
                     storeFile file(System.getenv("HOME") + "/keystores/taptalklive.jks")
                     storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
                     keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
                     keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-                } catch (ex2) {
+                }
+                catch (ex2) {
                     throw new InvalidUserDataException("[GRADLE BUILD ERR]: Signing FAILED. Check signing config." + ex2.message)
                 }
             }
@@ -81,12 +85,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             if (project.hasProperty('RELEASE_GOOGLE_MAPS_API_KEY')) {
                 buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${RELEASE_GOOGLE_MAPS_API_KEY}\"")
-            } else {
+            }
+            else {
                 buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"\"")
             }
             if (project.hasProperty('RELEASE_TAPLIVE_SDK_APP_KEY_SECRET')) {
                 buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"${RELEASE_TAPLIVE_SDK_APP_KEY_SECRET}\"")
-            } else {
+            }
+            else {
                 buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"\"")
             }
         }
@@ -98,12 +104,14 @@ android {
             versionNameSuffix '-STAGING'
             if (project.hasProperty('STAGING_GOOGLE_MAPS_API_KEY')) {
                 buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${STAGING_GOOGLE_MAPS_API_KEY}\"")
-            } else {
+            }
+            else {
                 buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"\"")
             }
             if (project.hasProperty('STAGING_TAPLIVE_SDK_APP_KEY_SECRET')) {
                 buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"${STAGING_TAPLIVE_SDK_APP_KEY_SECRET}\"")
-            } else {
+            }
+            else {
                 buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"\"")
             }
         }
@@ -115,12 +123,14 @@ android {
             versionNameSuffix '-DEV'
             if (project.hasProperty('DEV_GOOGLE_MAPS_API_KEY')) {
                 buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${DEV_GOOGLE_MAPS_API_KEY}\"")
-            } else {
+            }
+            else {
                 buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"\"")
             }
             if (project.hasProperty('DEV_TAPLIVE_SDK_APP_KEY_SECRET')) {
                 buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"${DEV_TAPLIVE_SDK_APP_KEY_SECRET}\"")
-            } else {
+            }
+            else {
                 buildConfigField("String", "TAPLIVE_SDK_APP_KEY_SECRET", "\"\"")
             }
         }
@@ -136,13 +146,19 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-
     lintOptions {
         disable "Instantiatable"
     }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
+base {
+    archivesName = android.defaultConfig.applicationId + "-" + android.defaultConfig.versionName
 }
 
 dependencies {
