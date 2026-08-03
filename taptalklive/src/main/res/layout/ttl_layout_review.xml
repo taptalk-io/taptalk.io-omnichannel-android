@@ -14,7 +14,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:background="?attr/actionBarItemBackground"
         android:padding="8dp"
@@ -30,7 +29,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
         android:gravity="center"
         android:text="@string/ttl_rate_your_conversation"
         app:layout_constrainedWidth="true"
@@ -55,18 +53,16 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconReviewStarInactive" />
+            app:tint="@color/ttlIconReviewStarInactive" />
 
         <ImageView
             android:id="@+id/iv_review_star_2"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconReviewStarInactive" />
+            app:tint="@color/ttlIconReviewStarInactive" />
 
 
         <ImageView
@@ -74,9 +70,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconReviewStarInactive" />
+            app:tint="@color/ttlIconReviewStarInactive" />
 
 
         <ImageView
@@ -84,9 +79,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconReviewStarInactive" />
+            app:tint="@color/ttlIconReviewStarInactive" />
 
 
         <ImageView
@@ -94,7 +88,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ttl_ic_star_inactive"
-            android:tint="@color/ttlIconReviewStarInactive" />
+            app:tint="@color/ttlIconReviewStarInactive" />
 
 
     </LinearLayout>
@@ -119,7 +113,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -137,9 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2sp"
-        android:layout_marginLeft="2sp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text="@string/ttl_optional"
         app:layout_constraintBottom_toBottomOf="@id/tv_label_comment"
         app:layout_constraintEnd_toStartOf="@id/tv_label_character_count"
@@ -152,9 +143,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2sp"
-        android:layout_marginLeft="2sp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         app:layout_constraintBottom_toBottomOf="@id/tv_label_comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
@@ -214,7 +203,6 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginEnd="4dp"
-                android:layout_marginRight="4dp"
                 android:src="@drawable/ttl_ic_info"
                 android:tint="@color/ttlColorDestructiveIcon"
                 app:layout_constraintEnd_toStartOf="@id/tv_comment_error_message"
@@ -256,7 +244,6 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
             android:indeterminateTint="@color/ttlIconLoadingProgressWhite"
             android:visibility="gone"
             tools:visibility="visible" />
