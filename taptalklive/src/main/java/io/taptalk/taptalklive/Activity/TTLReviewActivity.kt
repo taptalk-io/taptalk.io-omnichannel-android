@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Helper.TapTalkDialog.DialogType.DEFAULT
 import io.taptalk.TapTalk.Helper.TapTalkDialog.DialogType.ERROR_DIALOG
@@ -75,7 +75,7 @@ class TTLReviewActivity : TAPBaseActivity() {
     }
 
     private fun initViewModel() {
-        vm = ViewModelProviders.of(this@TTLReviewActivity).get(TTLReviewViewModel::class.java)
+        vm = ViewModelProvider(this)[TTLReviewViewModel::class.java]
 
         vm.message = intent.getParcelableExtra(MESSAGE)!!
 
