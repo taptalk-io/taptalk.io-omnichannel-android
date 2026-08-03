@@ -3,14 +3,16 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven {
-            url "https://jitpack.io"
+            url = "https://s3.amazonaws.com/repo.commonsware.com"
+        }
+        maven {
+            url =  "https://jitpack.io"
         }
     }
 }
 
-rootProject.name='TapTalkLiveSample'
+rootProject.name = "TapTalkLiveSample"
 
 if (!System.env.JITPACK) {
     include ':app'
