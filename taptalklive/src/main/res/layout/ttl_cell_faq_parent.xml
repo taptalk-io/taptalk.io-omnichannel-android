@@ -20,19 +20,16 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
         android:background="?attr/actionBarItemBackground"
         android:padding="16dp"
         android:src="@drawable/tap_ic_chevron_left_white"
         android:tint="@color/ttlIconNavBarCloseButtonColor"
-        app:layout_constraintBottom_toTopOf="@id/tv_label_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:ignore="UseAppTint"
-        tools:targetApi="lollipop" />
+        tools:ignore="UseAppTint" />
 
     <LinearLayout
         android:id="@+id/ll_faq_container"
@@ -141,14 +138,14 @@
                 android:layout_gravity="center"
                 android:indeterminate="false"
                 android:max="100"
-                android:visibility="gone"
-                tools:visibility="visible"
-                app:layout_constraintTop_toTopOf="@id/iv_file_status_icon"
-                app:layout_constraintBottom_toBottomOf="@id/iv_file_status_icon"
-                app:layout_constraintStart_toStartOf="@id/iv_file_status_icon"
-                app:layout_constraintEnd_toEndOf="@id/iv_file_status_icon"
                 android:progressDrawable="@drawable/tap_file_circular_progress_white"
-                tools:progress="65" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_file_status_icon"
+                app:layout_constraintEnd_toEndOf="@id/iv_file_status_icon"
+                app:layout_constraintStart_toStartOf="@id/iv_file_status_icon"
+                app:layout_constraintTop_toTopOf="@id/iv_file_status_icon"
+                tools:progress="65"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/tv_file_name"
@@ -218,7 +215,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ttl_ic_chat_bubble"
-                android:tint="@color/ttlColorPrimaryIcon" />
+                app:tint="@color/ttlColorPrimaryIcon" />
 
             <TextView
                 android:id="@+id/tv_button_talk_to_agent"
@@ -227,7 +224,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
                 android:gravity="center"
                 android:text="@string/ttl_talk_to_agent" />
 

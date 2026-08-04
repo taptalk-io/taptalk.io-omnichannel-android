@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.taptalk.TapTalk.Helper.TapTalkDialog
 import io.taptalk.TapTalk.Helper.TapTalkDialog.DialogType.DEFAULT
 import io.taptalk.TapTalk.Helper.TapTalkDialog.DialogType.ERROR_DIALOG
@@ -59,11 +59,11 @@ class TTLReviewActivity : TAPBaseActivity() {
         overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_fade_out)
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         try {
             setResult(Activity.RESULT_CANCELED)
             reviewBottomSheetFragment.dismiss()
-            super.onBackPressed()
+            super.onBack()
         }
         catch (e: Exception) {
             e.printStackTrace()
@@ -75,7 +75,7 @@ class TTLReviewActivity : TAPBaseActivity() {
     }
 
     private fun initViewModel() {
-        vm = ViewModelProviders.of(this@TTLReviewActivity).get(TTLReviewViewModel::class.java)
+        vm = ViewModelProvider(this)[TTLReviewViewModel::class.java]
 
         vm.message = intent.getParcelableExtra(MESSAGE)!!
 

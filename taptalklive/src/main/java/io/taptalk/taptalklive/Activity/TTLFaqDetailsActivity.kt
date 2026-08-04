@@ -70,9 +70,9 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
         unregisterBroadcastReceiver()
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         try {
-            super.onBackPressed()
+            super.onBack()
             overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
             TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInFaqDetailsTapped(this, intent.getParcelableExtra(SCF_PATH))
         }
@@ -169,14 +169,14 @@ class TTLFaqDetailsActivity : TAPBaseActivity() {
             TTLUtil.fetchScfPathContentResponse(scfPath, true)
         }
         if (itemList.isEmpty()) {
-            onBackPressed()
+            onBack()
         }
         return itemList
     }
 
     private val adapterListener = object: TTLHomeAdapterInterface {
         override fun onCloseButtonTapped() {
-            onBackPressed()
+            onBack()
         }
 
         override fun onFaqChildTapped(scfPath: TTLScfPathModel) {

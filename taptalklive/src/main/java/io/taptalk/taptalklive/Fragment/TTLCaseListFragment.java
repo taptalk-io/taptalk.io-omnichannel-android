@@ -266,7 +266,6 @@ public class TTLCaseListFragment extends Fragment {
         };
         rvCaseList.setAdapter(adapter);
         rvCaseList.setLayoutManager(llm);
-        rvCaseList.setHasFixedSize(true);
         OverScrollDecoratorHelper.setUpOverScroll(rvCaseList, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         SimpleItemAnimator messageAnimator = (SimpleItemAnimator) rvCaseList.getItemAnimator();
         if (null != messageAnimator) messageAnimator.setSupportsChangeAnimations(false);

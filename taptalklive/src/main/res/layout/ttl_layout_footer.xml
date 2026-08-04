@@ -11,17 +11,14 @@
     android:paddingBottom="6dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    tools:targetApi="lollipop">
+    app:layout_constraintStart_toStartOf="parent">
 
     <TextView
         android:id="@+id/tv_powered_by"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
         android:fontFamily="@font/ttl_font_pt_root_medium"
         android:gravity="center"
         android:letterSpacing="-0.01"
@@ -42,7 +39,6 @@
         android:layout_height="20dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:src="@drawable/taptalk_logo_with_name_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -3,26 +3,26 @@ package io.taptalk.taptalklive.API.Model.ResponseModel
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.taptalk.taptalklive.API.Model.TTLMessageMediaModel
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TTLSendMessageRequest(
-    @JsonProperty("id")
+    @field:JsonProperty("id")
     var id: Long?,
-    @JsonProperty("createdTime")
+    @field:JsonProperty("createdTime")
     var createdTime: Long?,
-    @JsonProperty("localID")
+    @field:JsonProperty("localID")
     var localID: String?,
-    @JsonProperty("replyToLocalID")
+    @field:JsonProperty("replyToLocalID")
     var replyToLocalID: String?,
-    @JsonProperty("messageType")
+    @field:JsonProperty("messageType")
     var messageType: String?,
-    @JsonProperty("text")
+    @field:JsonProperty("text")
     var text: String?,
-    @JsonProperty("image")
+    @field:JsonProperty("image")
     var image: TTLMessageMediaModel?,
-    @JsonProperty("video")
+    @field:JsonProperty("video")
     var video: TTLMessageMediaModel?,
-    @JsonProperty("file")
+    @field:JsonProperty("file")
     var file: TTLMessageMediaModel?
 ) : Parcelable

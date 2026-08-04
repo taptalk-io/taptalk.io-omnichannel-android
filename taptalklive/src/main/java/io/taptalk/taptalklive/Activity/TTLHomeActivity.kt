@@ -91,9 +91,9 @@ class TTLHomeActivity : TAPBaseActivity() {
         removeListeners()
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         try {
-            super.onBackPressed()
+            super.onBack()
             overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_down)
             TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInHomePageTapped(this)
         }
@@ -153,7 +153,7 @@ class TTLHomeActivity : TAPBaseActivity() {
 
     private val adapterListener = object: TTLHomeAdapterInterface {
         override fun onCloseButtonTapped() {
-            onBackPressed()
+            onBack()
         }
 
         override fun onChannelLinkSelected(channelLink: TTLChannelLinkModel, position: Int) {

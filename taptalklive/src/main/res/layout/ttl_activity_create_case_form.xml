@@ -37,7 +37,6 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:background="?attr/actionBarItemBackground"
                 android:padding="8dp"
@@ -45,8 +44,7 @@
                 android:tint="@color/ttlIconNavBarCloseButtonColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="UseAppTint"
-                tools:targetApi="lollipop" />
+                tools:ignore="UseAppTint" />
 
             <TextView
                 android:id="@+id/tv_label_title"
@@ -55,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:text="@string/ttl_create_form_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/iv_button_close"
@@ -101,9 +98,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
+                    android:animateLayoutChanges="true"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    android:animateLayoutChanges="true"
                     tools:visibility="visible">
 
                     <TextView
@@ -143,7 +140,6 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="4dp"
-                            android:layout_marginRight="4dp"
                             android:src="@drawable/ttl_ic_info"
                             android:tint="@color/ttlColorDestructiveIcon"
                             app:layout_constraintEnd_toStartOf="@id/tv_full_name_error_message"
@@ -171,9 +167,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
+                    android:animateLayoutChanges="true"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    android:animateLayoutChanges="true"
                     tools:visibility="visible">
 
                     <TextView
@@ -213,7 +209,6 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="4dp"
-                            android:layout_marginRight="4dp"
                             android:src="@drawable/ttl_ic_info"
                             android:tint="@color/ttlColorDestructiveIcon"
                             app:layout_constraintEnd_toStartOf="@id/tv_email_address_error_message"
@@ -268,10 +263,11 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
                             android:hint="@string/ttl_select_topic"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/iv_select_topic_drop_down"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_goneMarginEnd="16dp"
                             app:layout_goneMarginRight="16dp" />
 
@@ -280,11 +276,11 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ttl_ic_chevron_down_orange"
-                            android:tint="@color/ttlColorDarkIcon"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/ttlColorDarkIcon"
                             tools:visibility="visible" />
 
                         <ProgressBar
@@ -311,7 +307,6 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="4dp"
-                            android:layout_marginRight="4dp"
                             android:src="@drawable/ttl_ic_info"
                             android:tint="@color/ttlColorDestructiveIcon"
                             app:layout_constraintEnd_toStartOf="@id/tv_topic_error_message"
@@ -338,8 +333,8 @@
                     android:id="@+id/ll_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
                     android:layout_marginBottom="24dp"
+                    android:animateLayoutChanges="true"
                     android:orientation="vertical">
 
                     <TextView
@@ -380,7 +375,6 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="4dp"
-                            android:layout_marginRight="4dp"
                             android:src="@drawable/ttl_ic_info"
                             android:tint="@color/ttlColorDestructiveIcon"
                             app:layout_constraintEnd_toStartOf="@id/tv_message_error_message"
@@ -417,8 +411,8 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ttl_ic_send_white"
-                        app:tint="@color/ttlButtonIconColor"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        app:tint="@color/ttlButtonIconColor" />
 
                     <ProgressBar
                         android:id="@+id/pb_button_send_message_loading"
@@ -426,7 +420,6 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="4dp"
-                        android:layout_marginRight="4dp"
                         android:indeterminateTint="@color/ttlWhite"
                         android:tint="@color/ttlIconLoadingProgressWhite"
                         android:visibility="gone"

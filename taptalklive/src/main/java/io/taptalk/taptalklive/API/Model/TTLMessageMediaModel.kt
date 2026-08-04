@@ -2,14 +2,14 @@ package io.taptalk.taptalklive.API.Model
 
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TTLMessageMediaModel(
-    @JsonProperty("fileURL")
+    @field:JsonProperty("fileURL")
     var fileURL: String?,
-    @JsonProperty("caption")
+    @field:JsonProperty("caption")
     var caption: String?,
-    @JsonProperty("filename")
+    @field:JsonProperty("filename")
     var filename: String?
 ) : Parcelable

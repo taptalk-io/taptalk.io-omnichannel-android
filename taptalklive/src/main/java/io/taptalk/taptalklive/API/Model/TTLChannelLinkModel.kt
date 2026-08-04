@@ -2,7 +2,7 @@ package io.taptalk.taptalklive.API.Model
 
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize data class TTLChannelLinkModel(
     @field:JsonProperty("id") var id: Long = 0L,

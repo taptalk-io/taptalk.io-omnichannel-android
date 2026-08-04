@@ -14,7 +14,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -94,12 +94,12 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
         vm.selectedTopicIndex = savedInstanceState.getInt("topic", -1)
     }
 
-    override fun onBackPressed() {
+    override fun onBack() {
         if (!vm.showCloseButton) {
             return
         }
         try {
-            super.onBackPressed()
+            super.onBack()
             overridePendingTransition(io.taptalk.TapTalk.R.anim.tap_stay, io.taptalk.TapTalk.R.anim.tap_slide_right)
             TapTalkLive.getInstance()?.tapTalkLiveListener?.onCloseButtonInCreateCaseFormTapped(this)
         }
@@ -113,7 +113,7 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
     }
 
     private fun initViewModel() {
-        vm = ViewModelProviders.of(this).get(TTLCreateCaseViewModel::class.java)
+        vm = ViewModelProvider(this)[TTLCreateCaseViewModel::class.java]
 
         vm.showCloseButton = intent.getBooleanExtra(SHOW_CLOSE_BUTTON, false)
     }
@@ -124,7 +124,7 @@ class TTLCreateCaseFormActivity : TAPBaseActivity() {
         if (vm.showCloseButton) {
             vb.ivButtonClose.visibility = View.VISIBLE
             vb.ivButtonClose.setOnClickListener {
-                onBackPressed()
+                onBack()
             }
         }
 
