@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.taptalk.TapTalk.Helper.TAPUtils
 import io.taptalk.taptalklive.Const.TTLConstant.Form.REVIEW_CHARACTER_LIMIT
 import io.taptalk.taptalklive.R
+import androidx.core.view.isVisible
 
 class TTLReviewBottomSheetFragment(
     private val reviewBottomSheetListener: ReviewBottomSheetListener?,
@@ -246,8 +247,14 @@ class TTLReviewBottomSheetFragment(
             val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             view.background = ContextCompat.getDrawable(requireContext(), R.drawable.ttl_bg_text_field_active)
-        } else {
-            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.ttl_bg_text_field_inactive)
+        }
+        else {
+            if (clCommentError.isVisible) {
+                view.background = ContextCompat.getDrawable(requireContext(), R.drawable.ttl_bg_text_field_error)
+            }
+            else {
+                view.background = ContextCompat.getDrawable(requireContext(), R.drawable.ttl_bg_text_field_inactive)
+            }
         }
     }
 
