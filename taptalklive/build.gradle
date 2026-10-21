@@ -105,7 +105,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
 
     // TapTalk
-    api("com.github.taptalk-io:taptalk.io-android:3.0.0")
+    api("com.github.taptalk-io:taptalk.io-android:3.0.1")
 
     // Lifecycle components
     api("androidx.lifecycle:lifecycle-extensions:2.2.0")
